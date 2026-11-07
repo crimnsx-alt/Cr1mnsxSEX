@@ -126,11 +126,21 @@
         </div>
       </section>
 
-      <!-- Scroll Down Cue to Game Hub -->
-      <div id="scrollDownCue" class="scroll-cue" role="button" tabindex="0" title="Нажмите для перехода в Game Hub">
-        <span class="cue-chevron">↓</span>
-        <span class="cue-text">Нажмите <strong>↓</strong> или прокрутите колесо для перехода в Game Hub</span>
-      </div>
+      <!-- Home Footer Bar with Controller Hints -->
+      <footer class="home-footer-bar">
+        <div id="scrollDownCue" class="scroll-cue" role="button" tabindex="0" title="Нажмите для перехода в Game Hub">
+          <span class="cue-chevron">↓</span>
+          <span class="cue-text">Нажмите <strong>↓</strong> или прокрутите колесо для перехода в Game Hub</span>
+        </div>
+
+        <div class="controller-hints" aria-label="Подсказки управления">
+          <span class="c-hint"><kbd class="c-btn-ps">PS</kbd> Control Center (Пробел)</span>
+          <span class="c-hint"><kbd class="c-btn-circle cross">✕</kbd> Запустить (Enter)</span>
+          <span class="c-hint"><kbd class="c-btn-circle triangle">△</kbd> Поиск (/)</span>
+          <span class="c-hint"><kbd class="c-btn-pill">TAB</kbd> Вкладка</span>
+          <span class="c-hint"><kbd class="c-btn-circle circle">◯</kbd> Назад (ESC)</span>
+        </div>
+      </footer>
     </main>
 
     <!-- LEVEL 1: Game Hub View (Scrolled Down) -->
@@ -178,6 +188,14 @@
         </div>
         <div id="hubTrophies" class="hub-trophies-row"></div>
       </div>
+
+      <!-- Game Hub Controller Hints Bar -->
+      <footer class="hub-footer-hints" aria-label="Подсказки управления">
+        <span class="c-hint"><kbd class="c-btn-arrow">↑</kbd> В главное меню (↑ / Колесо вверх)</span>
+        <span class="c-hint"><kbd class="c-btn-circle cross">✕</kbd> Выбрать (Enter)</span>
+        <span class="c-hint"><kbd class="c-btn-ps">PS</kbd> Control Center (Пробел)</span>
+        <span class="c-hint"><kbd class="c-btn-circle circle">◯</kbd> Назад (ESC)</span>
+      </footer>
     </section>
 
   </div>

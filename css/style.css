@@ -547,6 +547,103 @@ body.hub-active .stage-game-hub {
   transform: scale(1.05);
 }
 
+/* Home Footer Bar */
+.home-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+}
+
+.controller-hints,
+.hub-footer-hints {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  flex-wrap: wrap;
+}
+
+.hub-footer-hints {
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.c-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.c-hint kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: 0.76rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.c-btn-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+}
+
+.c-btn-circle.cross {
+  color: #00d4ff;
+  border-color: rgba(0, 212, 255, 0.4);
+}
+
+.c-btn-circle.circle {
+  color: #ff5252;
+  border-color: rgba(255, 82, 82, 0.4);
+}
+
+.c-btn-circle.triangle {
+  color: #2ecc71;
+  border-color: rgba(46, 204, 113, 0.4);
+}
+
+.c-btn-circle.square {
+  color: #e056fd;
+  border-color: rgba(224, 86, 253, 0.4);
+}
+
+.c-btn-ps {
+  padding: 3px 7px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #00439c, #0070d1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  font-weight: 900;
+  letter-spacing: -0.5px;
+}
+
+.c-btn-pill {
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.c-btn-arrow {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
 /* Scroll Down Cue (Подсказка для перехода в Game Hub) */
 .scroll-cue {
   display: flex;
@@ -1586,6 +1683,139 @@ body.hub-active .stage-game-hub {
   background: rgba(255, 255, 255, 0.2);
 }
 
+.modal-card.wide {
+  max-width: 880px;
+}
+
+/* ============================================================
+   PS5 Game Library Modal Styles
+   ============================================================ */
+.library-filter-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.lib-tab-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lib-tab-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.lib-tab-btn.active {
+  background: #ffffff;
+  color: #07090f;
+  border-color: #ffffff;
+  font-weight: 800;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.45);
+}
+
+.library-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  max-height: 52vh;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.lib-game-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.22s var(--ps-ease);
+  position: relative;
+}
+
+.lib-game-card:hover,
+.lib-game-card:focus-visible {
+  border-color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.35);
+  transform: translateY(-4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lib-card-thumb {
+  width: 100%;
+  height: 110px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.lib-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  color: var(--accent-neon);
+  border: 1px solid rgba(0, 212, 255, 0.4);
+}
+
+.lib-card-info {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.lib-card-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.lib-card-tag {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.lib-card-action {
+  padding: 8px 14px 12px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lib-run-btn {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--accent-neon);
+  background: rgba(0, 212, 255, 0.12);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.lib-game-card:hover .lib-run-btn {
+  background: var(--accent-neon);
+  color: #07090f;
+}
+
 /* ============================================================
    PS5 Toast Notification System
    ============================================================ */
@@ -1702,11 +1932,25 @@ body.hub-active .stage-game-hub {
     border-right: none;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
+  .home-footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }
 
 @media (max-width: 560px) {
   .stage-home {
     padding: 16px;
+  }
+  .home-footer-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .controller-hints {
+    font-size: 0.76rem;
+    gap: 10px;
   }
   .hero-title {
     font-size: 1.8rem;

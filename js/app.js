@@ -654,8 +654,13 @@ function handleContextAction(act) {
 // ============================================================
 // PS5 Modal / Drawer System (Без внешних редиректов)
 // ============================================================
-function openModal({ tag, title, subtitle, content, actions = [] }) {
+function openModal({ tag, title, subtitle, content, actions = [], isWide = false }) {
   closeControlCenter();
+  const card = dom.modalOverlay.querySelector(".modal-card");
+  if (card) {
+    card.classList.toggle("wide", !!isWide);
+  }
+
   dom.modalTag.textContent = tag || "PLAYSTATION 5";
   dom.modalTitle.textContent = title || "";
   dom.modalSubtitle.textContent = subtitle || "";
@@ -699,6 +704,10 @@ function closeModal() {
   if (!dom.modalOverlay.classList.contains("active")) return;
   dom.modalOverlay.classList.remove("active");
   dom.modalOverlay.setAttribute("aria-hidden", "true");
+  const card = dom.modalOverlay.querySelector(".modal-card");
+  if (card) {
+    card.classList.remove("wide");
+  }
   SoundEngine.modalClose();
 }
 
@@ -708,6 +717,89 @@ function closeAllOverlays() {
   closeSettings();
   closeContextMenu();
   closeControlCenter();
+}
+
+// ============================================================
+// PS5 Game Library Modal (Библиотека всех проектов)
+// ============================================================
+function openGameLibraryModal() {
+  const allProjects = portfolioData.projects.map((p, idx) => ({ ...p, category: "projects", catIndex: idx }));
+  const allLinks = portfolioData.link.map((l, idx) => ({ ...l, category: "link", catIndex: idx }));
+  const combined = [...allProjects, ...allLinks];
+
+  let activeTab = "all";
+
+  function renderLibraryContent() {
+    const list = activeTab === "all" ? combined : combined.filter((it) => it.category === activeTab);
+    return `
+      <div class="library-filter-tabs">
+        <button class="lib-tab-btn ${activeTab === "all" ? "active" : ""}" data-tab="all" type="button">Ваша коллекция (${combined.length})</button>
+        <button class="lib-tab-btn ${activeTab === "projects" ? "active" : ""}" data-tab="projects" type="button">Проекты (${allProjects.length})</button>
+        <button class="lib-tab-btn ${activeTab === "link" ? "active" : ""}" data-tab="link" type="button">Link & Сетап (${allLinks.length})</button>
+      </div>
+      <div class="library-cards-grid">
+        ${list
+          .map(
+            (item) => `
+          <div class="lib-game-card" data-cat="${item.category}" data-idx="${item.catIndex}" role="button" tabindex="0">
+            <div class="lib-card-thumb" style="background-image: url('${item.thumb}')">
+              <span class="lib-badge">${item.badge}</span>
+            </div>
+            <div class="lib-card-info">
+              <div class="lib-card-title">${item.title}</div>
+              <div class="lib-card-tag">${item.tag}</div>
+            </div>
+            <div class="lib-card-action">
+              <span class="lib-run-btn">Выбрать ✕</span>
+            </div>
+          </div>
+        `
+          )
+          .join("")}
+      </div>
+    `;
+  }
+
+  function attachLibraryEvents() {
+    const tabs = dom.modalBody.querySelectorAll(".lib-tab-btn");
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        activeTab = tab.dataset.tab;
+        SoundEngine.navigate();
+        dom.modalBody.innerHTML = renderLibraryContent();
+        attachLibraryEvents();
+      });
+    });
+
+    const cards = dom.modalBody.querySelectorAll(".lib-game-card");
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const cat = card.dataset.cat;
+        const idx = parseInt(card.dataset.idx, 10);
+        closeModal();
+        if (currentCategory !== cat) {
+          switchCategory(cat);
+        }
+        selectItem(idx);
+        SoundEngine.confirm();
+        showToast("Библиотека проектов", `Выбран проект «${portfolioData[cat][idx].title}»`, "🎮");
+      });
+    });
+  }
+
+  openModal({
+    tag: "PS5 GAME LIBRARY",
+    title: "Библиотека проектов Дмитрия (cr1mnsx)",
+    subtitle: "Полная коллекция разработок, конфигураций и открытого кода",
+    content: renderLibraryContent(),
+    isWide: true,
+    actions: [
+      { text: "Скопировать VK", action: "copy:vk", primary: true },
+      { text: "Открыть профиль GitHub", link: "https://github.com/crimnsx-alt", primary: false }
+    ]
+  });
+
+  attachLibraryEvents();
 }
 
 // ============================================================
@@ -860,6 +952,11 @@ function handleAction(actionString) {
         { text: "Скопировать профиль", action: "copy:vk", primary: true }
       ]
     });
+    return;
+  }
+
+  if (actionString === "modal:library") {
+    openGameLibraryModal();
     return;
   }
 

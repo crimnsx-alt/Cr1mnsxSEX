@@ -308,6 +308,77 @@ export const portfolioData = {
           { text: "Открыть профиль GitHub", link: "https://github.com/crimnsx-alt", primary: false }
         ]
       }
+    },
+    {
+      id: "project-library",
+      title: "Библиотека проектов",
+      publisher: "PlayStation Network • cr1mnsx",
+      badge: "LIBRARY",
+      tag: "Коллекция • Все проекты и репозитории",
+      desc: "Полный каталог всех проектов, карьерных этапов, 1С-разработок, VR-концептов и открытых репозиториев Дмитрия (cr1mnsx).",
+      btnText: "Открыть библиотеку",
+      btnAction: "modal:library",
+      secText: "Мой GitHub",
+      secLink: "https://github.com/crimnsx-alt",
+      thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80",
+      bg: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1920&q=80",
+      activities: [
+        {
+          id: "act-lib-1",
+          title: "Вся коллекция проектов cr1mnsx",
+          type: "Каталог",
+          progress: 100,
+          timeEst: "Коллекция активна",
+          thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=640&q=80",
+          action: "modal:library"
+        },
+        {
+          id: "act-lib-2",
+          title: "Открытый код на GitHub",
+          type: "GitHub",
+          progress: 100,
+          timeEst: "github.com/crimnsx-alt",
+          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
+          link: "https://github.com/crimnsx-alt"
+        }
+      ],
+      news: [
+        {
+          date: "Коллекция",
+          title: "Game Library активна",
+          desc: "Доступны все интерактивные карточки, спецификации и репозитории."
+        }
+      ],
+      trophies: { platinum: 1, gold: 12, silver: 28, bronze: 58 },
+      modalData: {
+        badge: "GAME LIBRARY • ALL PROJECTS",
+        title: "Библиотека проектов Дмитрия (cr1mnsx)",
+        subtitle: "Вся коллекция: веб-разработка, 1С, VR, сетап и контакты",
+        content: `
+          <div class="modal-spec-grid">
+            <div class="modal-spec-box">
+              <span class="spec-label">Веб-разработка</span>
+              <span class="spec-val">PS5 UI, JavaScript ESNext, Audio API</span>
+            </div>
+            <div class="modal-spec-box">
+              <span class="spec-label">1С:Предприятие</span>
+              <span class="spec-val">Консалтинг, УЦ №1, КГ «РУНА»</span>
+            </div>
+            <div class="modal-spec-box">
+              <span class="spec-label">Виртуальная реальность</span>
+              <span class="spec-val">«По ту сторону яви» (VR 3D)</span>
+            </div>
+            <div class="modal-spec-box">
+              <span class="spec-label">Железо & Сетап</span>
+              <span class="spec-val">Ryzen 5600X, RTX 3060 Ti, MacBook Air</span>
+            </div>
+          </div>
+        `,
+        actions: [
+          { text: "Скопировать VK", action: "copy:vk", primary: true },
+          { text: "Открыть профиль GitHub", link: "https://github.com/crimnsx-alt", primary: false }
+        ]
+      }
     }
   ],
   link: [
@@ -626,6 +697,7 @@ export const searchCatalog = [
   { title: "Боевой Сетап & ПК", category: "Сетап", desc: "Ryzen 5600X, RTX 3060 Ti, MacBook Air", action: "modal:setup" },
   { title: "PlayStation 5 Гейминг", category: "Консоль", desc: "PS5, DualSense, GTA V RT 60FPS", action: "modal:gaming" },
   { title: "Трофеи и Достижения", category: "PSN", desc: "★ 1 Платина, 12 Золото, Уровень 99", action: "modal:trophy" },
+  { title: "Библиотека проектов", category: "Коллекция", desc: "Все проекты, репозитории и разработки", action: "modal:library" },
   { title: "GitHub Репозиторий", category: "Код", desc: "github.com/crimnsx-alt", link: "https://github.com/crimnsx-alt" },
   { title: "ВКонтакте", category: "Связь", desc: "vk.ru/cr1mnsx", action: "copy:vk" }
 ];
