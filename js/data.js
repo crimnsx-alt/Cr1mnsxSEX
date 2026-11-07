@@ -1,96 +1,92 @@
 /**
- * PS5 Welcome Hub & Home Menu — Data Store
- * Содержит данные проектов, категорий, Bento-виджетов, тем,
- * настроек системы PS5, Control Center и поискового индекса.
- * Никаких упоминаний старых консолей.
+ * PS5 Home Menu & Game Hub — Data Store (spllitz baCpOEqBMSA Reference)
+ * Полный набор данных: проекты с активностями (Activity Cards 16:9),
+ * новостями, трофеями, настройками PS5 и Control Center.
+ * Исключены любые упоминания старых консолей.
  */
-
-export const bgThemes = [
-  {
-    id: "ps5-deep-blue",
-    name: "PlayStation Deep Blue",
-    url: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=1920&q=80",
-    tag: "Оригинальная тема PS5"
-  },
-  {
-    id: "cyber-neon",
-    name: "Cyber City & Neon",
-    url: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80",
-    tag: "Неоновый мегаполис"
-  },
-  {
-    id: "dark-workstation",
-    name: "Workstation Darkness",
-    url: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1920&q=80",
-    tag: "Студийный сетап"
-  },
-  {
-    id: "quantum-vr",
-    name: "Quantum VR Horizon",
-    url: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=1920&q=80",
-    tag: "Виртуальное пространство"
-  },
-  {
-    id: "cosmic-console",
-    name: "Cosmic Ray Tracing",
-    url: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=1920&q=80",
-    tag: "Атмосфера некстгена"
-  }
-];
 
 export const portfolioData = {
   projects: [
     {
       id: "hub-profile",
       title: "Дмитрий (cr1mnsx)",
-      badge: "WELCOME HUB",
-      tag: "Next-Gen Dashboard • Личный хаб",
-      desc: "Персональное интерактивное пространство Дмитрия (cr1mnsx): современные веб-проекты, экспертиза в 1С:Предприятие, передовой фронтенд и прямые контакты.",
-      btnText: "Обо мне & Стек",
+      publisher: "PlayStation Studios • cr1mnsx",
+      badge: "CREATOR",
+      tag: "Личный хаб • Разработчик & Консультант",
+      desc: "Персональное пространство Дмитрия (cr1mnsx): современные веб-проекты, экспертиза в 1С:Предприятие, передовой фронтенд и прямые контакты.",
+      btnText: "Запустить хаб",
       btnAction: "modal:bio",
       secText: "Скопировать контакт",
       secAction: "copy:vk",
       thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "Информация",
-          title: "Профиль cr1mnsx & Биография",
-          progress: "Frontend • 1С Консалтинг • UI/UX",
+          id: "act-bio-1",
+          title: "Профиль cr1mnsx & Навыки",
+          type: "Основная цель",
+          progress: 100,
+          timeEst: "Завершено",
+          thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=640&q=80",
           action: "modal:bio"
         },
         {
-          type: "Репозиторий",
+          id: "act-bio-2",
           title: "Исходный код на GitHub",
-          progress: "github.com/crimnsx-alt",
+          type: "Репозиторий",
+          progress: 95,
+          timeEst: "В сети",
+          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
           link: "https://github.com/crimnsx-alt"
+        },
+        {
+          id: "act-bio-3",
+          title: "Прямая связь ВКонтакте",
+          type: "Контакт",
+          progress: 100,
+          timeEst: "Нажмите для копирования",
+          thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=640&q=80",
+          action: "copy:vk"
         }
       ],
+      news: [
+        {
+          date: "Ноябрь 2026",
+          title: "Релиз Next-Gen дашборда PlayStation 5",
+          desc: "Полная интеграция двухуровневого Game Hub, Activity Cards и Control Center."
+        },
+        {
+          date: "Октябрь 2026",
+          title: "Сертификация 1С & Расширение компетенций",
+          desc: "Успешное завершение курса УЦ №1 и внедрение стандартов в КГ «РУНА»."
+        }
+      ],
+      trophies: { platinum: 1, gold: 12, silver: 28, bronze: 58 },
       modalData: {
         badge: "USER PROFILE • LEVEL 99",
         title: "Дмитрий — Разработчик & Консультант 1С",
-        subtitle: "Никнейм: cr1mnsx | Город: Россия | Статус: В сети",
+        subtitle: "Никнейм: cr1mnsx | Платформа: PS5 Dashboard | Статус: В сети",
         content: `
-          <p class="modal-p">Привет! Я <strong>Дмитрий (cr1mnsx)</strong> — специалист на стыке современного веб-инжиниринга и корпоративных бизнес-систем 1С:Предприятие.</p>
+          <p class="modal-p">Привет! Я <strong>Дмитрий (cr1mnsx)</strong> — специалист на стыке веб-разработки и корпоративных бизнес-систем 1С:Предприятие.</p>
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
               <span class="spec-label">Квалификация</span>
-              <span class="spec-val">1С Консультант & Web Dev</span>
+              <span class="spec-val">1С Консультант & Web Engineer</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Компания</span>
               <span class="spec-val">КГ «РУНА»</span>
             </div>
             <div class="modal-spec-box">
-              <span class="spec-label">Интерфейс</span>
-              <span class="spec-val">PS5 Welcome Hub & Home Menu</span>
+              <span class="spec-label">Архитектура UI</span>
+              <span class="spec-val">PlayStation 5 Home Menu</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Стек</span>
-              <span class="spec-val">1С:Предприятие, JS (ESNext), CSS3, Web Audio</span>
+              <span class="spec-val">1С:Предприятие 8.3, JS ESNext, Web Audio API</span>
             </div>
           </div>
-          <p class="modal-p">Фокус на создании эргономичных интерфейсов с реалистичным аудио-откликом (Web Audio API), оптимизации рабочих процессов и внедрении стандартов разработки.</p>
+          <p class="modal-p">Фокусируюсь на создании иммерсивных интерфейсов с естественной физикой, реалистичным звуком и глубокой проработкой логики.</p>
         `,
         actions: [
           { text: "Скопировать VK (cr1mnsx)", action: "copy:vk", primary: true },
@@ -101,35 +97,50 @@ export const portfolioData = {
     {
       id: "career-1c",
       title: "1С Консалтинг & Бизнес",
+      publisher: "КГ «РУНА» • 1C Enterprise",
       badge: "CAREER",
       tag: "КГ «РУНА» • Экспертиза и Учет",
       desc: "Профессиональное развитие в сфере консалтинга и сопровождения систем 1С:Предприятие. Работа с ключевыми клиентами в КГ «РУНА», освоение стандартов УЦ №1 и решение задач автоматизации учета.",
-      btnText: "Детали карьеры",
+      btnText: "Открыть карточку",
       btnAction: "modal:career",
       secText: "Учебный центр 1С",
       secLink: "https://uc1.1c.ru/",
       thumb: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "Компания",
-          title: "Консалтинговая Группа «РУНА»",
-          progress: "Коммуникации, сопровождение и аудит",
+          id: "act-1c-1",
+          title: "Сопровождение клиентов в КГ «РУНА»",
+          type: "Текущая активность",
+          progress: 88,
+          timeEst: "В процессе",
+          thumb: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=640&q=80",
           action: "modal:career"
         },
         {
+          id: "act-1c-2",
+          title: "Сертификация: Консультант 1С",
           type: "Квалификация",
-          title: "Специализация: Консультант 1С",
-          progress: "Сертифицированная база УЦ №1",
+          progress: 100,
+          timeEst: "Пройдено",
+          thumb: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=640&q=80",
           link: "https://uc1.1c.ru/"
         }
       ],
+      news: [
+        {
+          date: "2026",
+          title: "Автоматизация регламентного учета",
+          desc: "Оптимизация закрытия месяца и аудит баз данных клиентов."
+        }
+      ],
+      trophies: { platinum: 1, gold: 5, silver: 8, bronze: 14 },
       modalData: {
         badge: "CAREER TRACK • 1C CONSULTING",
         title: "1С:Предприятие — Экспертиза и Консалтинг",
         subtitle: "Практический опыт в КГ «РУНА» & База Учебного Центра №1",
         content: `
-          <p class="modal-p">Моя профессиональная деятельность сосредоточена на автоматизации бизнес-процессов, настройке и консультировании пользователей по типовым и отраслевым конфигурациям 1С.</p>
+          <p class="modal-p">Автоматизация бизнес-процессов, сопровождение и настройка типовых и отраслевых конфигураций 1С:Предприятие.</p>
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
               <span class="spec-label">Направление</span>
@@ -137,18 +148,17 @@ export const portfolioData = {
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Обучение</span>
-              <span class="spec-val">Учебный Центр №1 1С (Пройдено)</span>
+              <span class="spec-val">Учебный Центр №1 (Пройдено)</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Фокус</span>
-              <span class="spec-val">Анализ учета, регламентные операции</span>
+              <span class="spec-val">Анализ учета, закрытие месяца</span>
             </div>
             <div class="modal-spec-box">
-              <span class="spec-label">Формат</span>
-              <span class="spec-val">Комплексная клиентская поддержка</span>
+              <span class="spec-label">Клиенты</span>
+              <span class="spec-val">Корпоративный сектор</span>
             </div>
           </div>
-          <p class="modal-p">Глубокое понимание бизнес-требований и умение трансформировать их в надежные рабочие алгоритмы.</p>
         `,
         actions: [
           { text: "Скопировать контакт для связи", action: "copy:vk", primary: true },
@@ -159,6 +169,7 @@ export const portfolioData = {
     {
       id: "project-vr",
       title: "«По ту сторону яви»",
+      publisher: "Independent VR Studio",
       badge: "VR 3D",
       tag: "Специальный гость • VR Game Dev",
       desc: "Атмосферный 3D-проект виртуальной реальности нового поколения, создаваемый моей девушкой. Исследование тонких граней восприятия, детализированное окружение и полное погружение.",
@@ -168,34 +179,44 @@ export const portfolioData = {
       secAction: "copy:vk",
       thumb: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "Жанр и Движок",
-          title: "3D Virtual Reality Adventure",
-          progress: "Интерактивная среда и пространственный звук",
+          id: "act-vr-1",
+          title: "Пространственное окружение и 3D Audio",
+          type: "VR Разработка",
+          progress: 75,
+          timeEst: "В разработке",
+          thumb: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=640&q=80",
           action: "modal:vr"
         },
         {
-          type: "Текущий статус",
-          title: "В активном продакшене",
-          progress: "Левел-дизайн, освещение и физика взаимодействия",
+          id: "act-vr-2",
+          title: "Физика взаимодействия 6DOF",
+          type: "Игровая механика",
+          progress: 60,
+          timeEst: "Тестирование механик",
+          thumb: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=640&q=80",
           action: "modal:vr"
         }
       ],
+      news: [
+        {
+          date: "2026",
+          title: "Прототипирование локаций виртуальной реальности",
+          desc: "Создание эффекта полного присутствия и реалистичного освещения."
+        }
+      ],
+      trophies: { platinum: 0, gold: 2, silver: 6, bronze: 10 },
       modalData: {
         badge: "FEATURED SHOWCASE • VR PROJECT",
         title: "«По ту сторону яви» (VR Experience)",
-        subtitle: "Авторский VR-проект: разработка глубокого интерактивного пространства",
+        subtitle: "Авторский VR-проект: интерактивное 3D-пространство и психологический нарратив",
         content: `
-          <p class="modal-p">Уникальный 3D-проект для виртуальной реальности, разрабатываемый моей девушкой с акцентом на психологическую атмосферу, нарратив окружения и эффект полного присутствия.</p>
+          <p class="modal-p">Атмосферный VR-проект моей девушки с акцентом на исследование границ восприятия, детальное окружение и бинауральный 3D-звук.</p>
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
               <span class="spec-label">Платформа</span>
               <span class="spec-val">VR Headsets (6DOF)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Атмосфера</span>
-              <span class="spec-val">Мистический реализм & Тайна</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Звук</span>
@@ -203,7 +224,11 @@ export const portfolioData = {
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Статус</span>
-              <span class="spec-val">Прототипирование механик</span>
+              <span class="spec-val">Активный продакшен</span>
+            </div>
+            <div class="modal-spec-box">
+              <span class="spec-label">Роль</span>
+              <span class="spec-val">Технический консалтинг и тесты</span>
             </div>
           </div>
         `,
@@ -215,6 +240,7 @@ export const portfolioData = {
     {
       id: "connect-hub",
       title: "Связь и Контакты",
+      publisher: "PlayStation Network • cr1mnsx",
       badge: "CONNECT",
       tag: "PlayStation Network • Контакты",
       desc: "Всегда открыт для конструктивного диалога, предложений в сфере 1С, веб-разработки, UI/UX и технологических коллабораций. Выбирайте удобный канал для связи.",
@@ -224,20 +250,34 @@ export const portfolioData = {
       secAction: "copy:vk",
       thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "ВКонтакте",
-          title: "Профиль @cr1mnsx",
-          progress: "Нажмите для копирования контакта",
+          id: "act-con-1",
+          title: "ВКонтакте: vk.ru/cr1mnsx",
+          type: "Личные сообщения",
+          progress: 100,
+          timeEst: "Кликните для копирования",
+          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
           action: "copy:vk"
         },
         {
-          type: "GitHub",
-          title: "Профиль @crimnsx-alt",
-          progress: "Репозитории и открытый код",
+          id: "act-con-2",
+          title: "GitHub: github.com/crimnsx-alt",
+          type: "Репозитории",
+          progress: 100,
+          timeEst: "В сети",
+          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
           link: "https://github.com/crimnsx-alt"
         }
       ],
+      news: [
+        {
+          date: "Онлайн",
+          title: "Статус в сети: Готов к общению",
+          desc: "Открыт для обсуждения веб-проектов, 1С-автоматизации и UI-дизайна."
+        }
+      ],
+      trophies: { platinum: 1, gold: 4, silver: 10, bronze: 20 },
       modalData: {
         badge: "NETWORK & COMMUNICATION",
         title: "Связь с Дмитрием (cr1mnsx)",
@@ -274,6 +314,7 @@ export const portfolioData = {
     {
       id: "link-setup",
       title: "Боевой Сетап & Железо",
+      publisher: "Hardware & Workstation",
       badge: "SETUP",
       tag: "Workstation & Мобильность",
       desc: "Моя рабочая и творческая экосистема: производительный десктоп для моделирования, компиляции и рендеринга + легкий MacBook Air для мобильной разработки.",
@@ -283,20 +324,34 @@ export const portfolioData = {
       secAction: "copy:setup",
       thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "Основной ПК",
-          title: "AMD Ryzen 5 5600X • RTX 3060 Ti",
-          progress: "32 GB DDR4 • 2 TB NVMe SSD",
+          id: "act-set-1",
+          title: "Основной ПК: Ryzen 5600X • RTX 3060 Ti",
+          type: "Спецификация",
+          progress: 100,
+          timeEst: "32 GB ОЗУ • 2 TB SSD",
+          thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=640&q=80",
           action: "modal:setup"
         },
         {
-          type: "Ноутбук",
-          title: "Apple MacBook Air",
-          progress: "macOS • Выездная работа и код",
+          id: "act-set-2",
+          title: "Apple MacBook Air (macOS)",
+          type: "Мобильность",
+          progress: 100,
+          timeEst: "Apple Silicon",
+          thumb: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=640&q=80",
           action: "modal:setup"
         }
       ],
+      news: [
+        {
+          date: "Hardware Status",
+          title: "Рабочая станция откалибрована",
+          desc: "NVMe SSD скорость 3500 МБ/с, стабильное охлаждение и двойной монитор."
+        }
+      ],
+      trophies: { platinum: 1, gold: 3, silver: 4, bronze: 10 },
       modalData: {
         badge: "HARDWARE & WORKSTATION",
         title: "Конфигурация рабочей станции cr1mnsx",
@@ -305,7 +360,7 @@ export const portfolioData = {
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
               <span class="spec-label">Процессор</span>
-              <span class="spec-val">AMD Ryzen 5 5600X (6c/12t)</span>
+              <span class="spec-val">AMD Ryzen 5 5600X (6 ядер, 12 потоков)</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Видеокарта</span>
@@ -321,7 +376,7 @@ export const portfolioData = {
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Ноутбук</span>
-              <span class="spec-val">Apple MacBook Air (Apple Silicon)</span>
+              <span class="spec-val">Apple MacBook Air (macOS)</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Периферия</span>
@@ -337,6 +392,7 @@ export const portfolioData = {
     {
       id: "link-gaming",
       title: "PlayStation 5 Экосистема",
+      publisher: "Sony Interactive Entertainment",
       badge: "PS5",
       tag: "PlayStation 5 • 60 FPS Ray Tracing",
       desc: "Игровая атмосфера некстгена: кинематографичная графика, плавный фреймрейт 60 FPS, тактильный отклик DualSense и эстетика фирменного интерфейса Sony.",
@@ -346,26 +402,40 @@ export const portfolioData = {
       secAction: "copy:vk",
       thumb: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
+          id: "act-game-1",
+          title: "Grand Theft Auto V Expanded",
           type: "Текущая игра",
-          title: "Grand Theft Auto V Next-Gen",
-          progress: "PS5 Edition • Режим «Быстродействие RT» 60 FPS",
+          progress: 90,
+          timeEst: "60 FPS Ray Tracing",
+          thumb: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=640&q=80",
           action: "modal:gaming"
         },
         {
-          type: "Аксессуары",
+          id: "act-game-2",
           title: "DualSense Wireless Controller",
-          progress: "Адаптивные триггеры & Haptic Feedback",
+          type: "Аксессуар",
+          progress: 88,
+          timeEst: "Haptic Feedback активен",
+          thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=640&q=80",
           action: "modal:gaming"
         }
       ],
+      news: [
+        {
+          date: "PS5 System",
+          title: "Обновление прошивки консоли",
+          desc: "Поддержка 120 FPS, VRR и Tempest 3D Audio."
+        }
+      ],
+      trophies: { platinum: 1, gold: 5, silver: 12, bronze: 30 },
       modalData: {
         badge: "CONSOLE GAMING • PS5 ECOSYSTEM",
         title: "PlayStation 5 Experience",
         subtitle: "Любимые игры, тактильный отклик и консольный отдых",
         content: `
-          <p class="modal-p">PlayStation 5 для меня — это источник вдохновения для визуального дизайна, чистого звукового сопровождения и образцового пользовательского опыта (UX).</p>
+          <p class="modal-p">PlayStation 5 — эталон визуального дизайна, тактильного погружения и плавности интерфейса.</p>
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
               <span class="spec-label">Консоль</span>
@@ -377,11 +447,11 @@ export const portfolioData = {
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Геймпад</span>
-              <span class="spec-val">DualSense White & Midnight Black</span>
+              <span class="spec-val">DualSense Wireless Controller</span>
             </div>
             <div class="modal-spec-box">
-              <span class="spec-label">Любимый жанр</span>
-              <span class="spec-val">Открытый мир, сюжетные экшены</span>
+              <span class="spec-label">Аудио</span>
+              <span class="spec-val">Tempest 3D AudioTech</span>
             </div>
           </div>
         `,
@@ -393,6 +463,7 @@ export const portfolioData = {
     {
       id: "link-hub",
       title: "Быстрые Ссылки (Link Hub)",
+      publisher: "Link Catalog • cr1mnsx",
       badge: "LINK HUB",
       tag: "Единый каталог • Прямой доступ",
       desc: "Централизованный хаб ссылок: аккаунты, репозитории, профили и способы связаться в один клик без лишних переходов.",
@@ -402,20 +473,34 @@ export const portfolioData = {
       secAction: "copy:all_links",
       thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80",
       bg: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80",
-      cards: [
+      activities: [
         {
-          type: "ВКонтакте",
-          title: "vk.ru/cr1mnsx",
-          progress: "Кликните для копирования ссылки",
+          id: "act-lnk-1",
+          title: "Профиль ВКонтакте",
+          type: "Социальная сеть",
+          progress: 100,
+          timeEst: "vk.ru/cr1mnsx",
+          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
           action: "copy:vk"
         },
         {
-          type: "GitHub",
-          title: "github.com/crimnsx-alt",
-          progress: "Открыть репозиторий",
+          id: "act-lnk-2",
+          title: "Профиль на GitHub",
+          type: "Открытый код",
+          progress: 100,
+          timeEst: "github.com/crimnsx-alt",
+          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
           link: "https://github.com/crimnsx-alt"
         }
       ],
+      news: [
+        {
+          date: "Каталог",
+          title: "Актуальные контакты проверены",
+          desc: "Все каналы связи активны."
+        }
+      ],
+      trophies: { platinum: 1, gold: 2, silver: 4, bronze: 8 },
       modalData: {
         badge: "DIRECT LINK CATALOG",
         title: "Каталог ссылок и профилей",
@@ -449,211 +534,8 @@ export const portfolioData = {
   ]
 };
 
-export const welcomeWidgets = [
-  {
-    id: "widget-trophy",
-    title: "Трофеи и Достижения",
-    badge: "PSN LEVEL 99",
-    type: "blue",
-    defaultSpan: "widget-2x1",
-    icon: "trophy",
-    headerRight: "100% Завершено",
-    content: `
-      <div class="widget-trophy-display">
-        <div class="trophy-cup-huge">🏆</div>
-        <div class="trophy-stats">
-          <div class="trophy-row">
-            <span class="t-badge platinum">★ 1 Платина</span>
-            <span class="t-badge gold">🥇 12 Золото</span>
-          </div>
-          <div class="trophy-row">
-            <span class="t-badge silver">🥈 28 Серебро</span>
-            <span class="t-badge bronze">🥉 58 Бронза</span>
-          </div>
-          <div class="trophy-progress-wrap">
-            <div class="trophy-bar"><div class="trophy-bar-fill" style="width: 99.4%;"></div></div>
-            <span class="trophy-percent">Уровень 99 (99.4%)</span>
-          </div>
-        </div>
-      </div>
-    `,
-    footerNote: "Последнее достижение: «Master of Next-Gen UI & 1C Consulting»"
-  },
-  {
-    id: "widget-storage",
-    title: "Стек & Хранилище Навыков",
-    badge: "ULTRA NVMe SSD",
-    type: "glass",
-    defaultSpan: "widget-2x1",
-    icon: "storage",
-    headerRight: "825 GB / 1000 GB",
-    content: `
-      <div class="storage-meters">
-        <div class="meter-item">
-          <div class="meter-label"><span>1С:Предприятие & Консалтинг</span><span class="meter-val">90%</span></div>
-          <div class="meter-track"><div class="meter-bar c-blue" style="width: 90%;"></div></div>
-        </div>
-        <div class="meter-item">
-          <div class="meter-label"><span>JavaScript (ESNext) & Модули</span><span class="meter-val">95%</span></div>
-          <div class="meter-track"><div class="meter-bar c-accent" style="width: 95%;"></div></div>
-        </div>
-        <div class="meter-item">
-          <div class="meter-label"><span>UI/UX Glassmorphism & Audio API</span><span class="meter-val">92%</span></div>
-          <div class="meter-track"><div class="meter-bar c-white" style="width: 92%;"></div></div>
-        </div>
-        <div class="meter-item">
-          <div class="meter-label"><span>Бизнес-анализ & Учет в КГ «РУНА»</span><span class="meter-val">88%</span></div>
-          <div class="meter-track"><div class="meter-bar c-purple" style="width: 88%;"></div></div>
-        </div>
-      </div>
-    `,
-    footerNote: "Скорость отклика интерфейса: 0.12 мс • SSD оптимизирован"
-  },
-  {
-    id: "widget-controller",
-    title: "DualSense Аккумулятор & Фокус",
-    badge: "HAPTIC FEEDBACK",
-    type: "glass",
-    defaultSpan: "widget-1x1",
-    icon: "controller",
-    headerRight: "88% Заряд",
-    content: `
-      <div class="battery-card-content">
-        <div class="battery-visual">
-          <div class="battery-icon">🔋</div>
-          <div class="battery-meta">
-            <span class="battery-pct">88%</span>
-            <span class="battery-status">Беспроводной контроллер</span>
-          </div>
-        </div>
-        <div class="controller-features">
-          <div class="feature-tag active"><span>● Тактильная отдача: ВКЛ</span></div>
-          <div class="feature-tag active"><span>● Адаптивные триггеры: ВКЛ</span></div>
-          <div class="feature-tag mode"><span>⚡ Режим глубокой работы</span></div>
-        </div>
-      </div>
-    `,
-    footerNote: "Контроллер подключен по Bluetooth • Низкая задержка"
-  },
-  {
-    id: "widget-online",
-    title: "Статус cr1mnsx в PSN",
-    badge: "PLAYSTATION NETWORK",
-    type: "blue",
-    defaultSpan: "widget-1x1",
-    icon: "network",
-    headerRight: "Online",
-    content: `
-      <div class="psn-status-card">
-        <div class="psn-user-bar">
-          <div class="psn-avatar-big">Д</div>
-          <div class="psn-user-info">
-            <div class="psn-name">cr1mnsx <span class="online-dot"></span></div>
-            <div class="psn-game">Программирование & 1С</div>
-          </div>
-        </div>
-        <div class="psn-quick-actions">
-          <button class="btn-psn-pill" data-action="modal:bio">Открыть профиль</button>
-          <button class="btn-psn-pill outline" data-action="copy:vk">Копировать ID</button>
-        </div>
-      </div>
-    `,
-    footerNote: "Статус: Готов к общению и интересным проектам"
-  },
-  {
-    id: "widget-links",
-    title: "Быстрый Link Хаб",
-    badge: "DIRECT CONNECTIONS",
-    type: "glass",
-    defaultSpan: "widget-1x1",
-    icon: "links",
-    headerRight: "3 Канала",
-    content: `
-      <div class="quick-links-list">
-        <div class="q-link-row" data-action="copy:vk">
-          <span class="q-icon">💬</span>
-          <div class="q-info">
-            <span class="q-title">ВКонтакте</span>
-            <span class="q-desc">vk.ru/cr1mnsx (клик = скопировать)</span>
-          </div>
-          <span class="q-copy-btn">📋</span>
-        </div>
-        <a href="https://github.com/crimnsx-alt" target="_blank" rel="noopener" class="q-link-row">
-          <span class="q-icon">🐙</span>
-          <div class="q-info">
-            <span class="q-title">GitHub Профиль</span>
-            <span class="q-desc">github.com/crimnsx-alt</span>
-          </div>
-          <span class="q-arrow">↗</span>
-        </a>
-      </div>
-    `,
-    footerNote: "Клик по контакту мгновенно копирует ссылку"
-  },
-  {
-    id: "widget-media",
-    title: "Галерея Сетапа & Медиа",
-    badge: "MEDIA CAPTURE",
-    type: "glass",
-    defaultSpan: "widget-1x1",
-    icon: "media",
-    headerRight: "4K HDR",
-    content: `
-      <div class="media-preview-grid">
-        <div class="media-thumb" style="background-image: url('https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=400&q=80');" data-action="modal:setup" title="Workstation PC"></div>
-        <div class="media-thumb" style="background-image: url('https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=400&q=80');" data-action="modal:gaming" title="PS5 Gaming"></div>
-        <div class="media-thumb" style="background-image: url('https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=400&q=80');" data-action="modal:vr" title="VR Project"></div>
-        <div class="media-thumb" style="background-image: url('https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=400&q=80');" data-action="modal:bio" title="PS5 Welcome Hub"></div>
-      </div>
-    `,
-    footerNote: "Скриншоты и концепты в высоком разрешении"
-  }
-];
-
-export const layoutPresets = [
-  {
-    id: "balanced",
-    name: "Стандартный Hub",
-    description: "Сбалансированная Bento-сетка с акцентом на трофеи и стек",
-    spans: {
-      "widget-trophy": "widget-2x1",
-      "widget-storage": "widget-2x1",
-      "widget-controller": "widget-1x1",
-      "widget-online": "widget-1x1",
-      "widget-links": "widget-1x1",
-      "widget-media": "widget-1x1"
-    }
-  },
-  {
-    id: "career-focus",
-    name: "Стек & Карьера",
-    description: "Максимальный приоритет технологического хранилища и статуса",
-    spans: {
-      "widget-trophy": "widget-1x1",
-      "widget-storage": "widget-2x1",
-      "widget-controller": "widget-1x1",
-      "widget-online": "widget-2x1",
-      "widget-links": "widget-1x1",
-      "widget-media": "widget-1x1"
-    }
-  },
-  {
-    id: "media-links",
-    name: "Медиа & Ссылки",
-    description: "Расширенный блок быстрых связей и скриншотов сетапа",
-    spans: {
-      "widget-trophy": "widget-1x1",
-      "widget-storage": "widget-1x1",
-      "widget-controller": "widget-1x1",
-      "widget-online": "widget-1x1",
-      "widget-links": "widget-2x1",
-      "widget-media": "widget-2x1"
-    }
-  }
-];
-
 /**
- * Аутентичные категории настроек PS5 Settings
+ * Разделы системных настроек PS5 Settings
  */
 export const settingsSections = [
   {
@@ -661,9 +543,9 @@ export const settingsSections = [
     title: "Учетные записи и профиль",
     icon: "👤",
     items: [
-      { label: "Основной аккаунт", val: "cr1mnsx (Дмитрий)", action: "modal:bio" },
+      { label: "Основной пользователь", val: "cr1mnsx (Дмитрий)", action: "modal:bio" },
       { label: "Уровень PlayStation Network", val: "Уровень 99 • ★ Платина", action: "modal:trophy" },
-      { label: "Конфиденциальность & Контакты", val: "Открыт к предложениям", action: "copy:vk" }
+      { label: "Контакты & Связь", val: "vk.ru/cr1mnsx", action: "copy:vk" }
     ]
   },
   {
@@ -671,9 +553,9 @@ export const settingsSections = [
     title: "Память и Хранилище SSD",
     icon: "💾",
     items: [
-      { label: "Сверхскоростной накопитель", val: "825 GB NVMe SSD (Доступно 667 GB)" },
-      { label: "Стек разработки", val: "1С:Предприятие 8.3, JavaScript, Web Audio API" },
-      { label: "Анализ баз данных & Учет", val: "КГ «РУНА» Экспертиза" }
+      { label: "Ultra-High Speed SSD", val: "825 GB (Доступно 667 GB)" },
+      { label: "Стек разработки", val: "1С:Предприятие 8.3, JavaScript ESNext, Web Audio" },
+      { label: "Бизнес-учет & Экспертиза", val: "КГ «РУНА»" }
     ]
   },
   {
@@ -681,9 +563,9 @@ export const settingsSections = [
     title: "Звук и Аудиосистема",
     icon: "🔊",
     items: [
-      { label: "Фоновая музыка PS5", val: "Генеративный Ambient Synthesizer", toggle: "ambient" },
-      { label: "Звуковые эффекты интерфейса", val: "Синтез Web Audio API (Активны)", toggle: "sfx" },
-      { label: "3D Audio Tempest Engine", val: "Откалибровано для наушников" }
+      { label: "Фоновая музыка PS5", val: "Генеративный синтезатор меню", toggle: "ambient" },
+      { label: "Звуковые эффекты интерфейса", val: "Синтез щелчков и аккордов", toggle: "sfx" },
+      { label: "Tempest 3D Audio", val: "Откалибровано для стереонаушников" }
     ]
   },
   {
@@ -692,8 +574,8 @@ export const settingsSections = [
     icon: "🖥️",
     items: [
       { label: "Разрешение вывода", val: "3840 x 2160 (4K UHD) 60 FPS" },
-      { label: "Трассировка лучей (Ray Tracing)", val: "Включена • Режим быстродействия" },
-      { label: "Визуальный стиль", val: "PS5 Glassmorphism UI" }
+      { label: "Трассировка лучей", val: "Ray Tracing Performance Mode" },
+      { label: "Интерфейс консоли", val: "Sony PS5 Dashboard UI" }
     ]
   },
   {
@@ -701,9 +583,9 @@ export const settingsSections = [
     title: "Аксессуары (DualSense)",
     icon: "🎮",
     items: [
-      { label: "Беспроводной контроллер", val: "DualSense Wireless Controller" },
-      { label: "Уровень заряда аккумулятора", val: "88% (Подключено по Bluetooth)" },
-      { label: "Тактильная отдача & Триггеры", val: "Максимальная чувствительность" }
+      { label: "Контроллер", val: "DualSense Wireless Controller" },
+      { label: "Уровень заряда аккумулятора", val: "88% • Подключено по Bluetooth" },
+      { label: "Haptic Feedback & Триггеры", val: "Тактильный отклик активен" }
     ]
   },
   {
@@ -711,8 +593,8 @@ export const settingsSections = [
     title: "Система",
     icon: "ℹ️",
     items: [
-      { label: "Версия ПО консоли", val: "PlayStation 5 OS v24.8 (Welcome Hub)" },
-      { label: "Имя устройства", val: "PS5-CR1MNSX" },
+      { label: "Версия ПО консоли", val: "PlayStation 5 OS v24.8" },
+      { label: "Устройство", val: "PS5-CR1MNSX" },
       { label: "Репозиторий", val: "crimnsx-alt/Cr1mnsxSEX" }
     ]
   }
@@ -734,11 +616,11 @@ export const controlCenterItems = [
 ];
 
 /**
- * Поисковый индекс для мгновенного поиска по всему сайту
+ * Каталог для мгновенного поиска
  */
 export const searchCatalog = [
-  { title: "Дмитрий (cr1mnsx)", category: "Профиль", desc: "Главный хаб, биография, контакты", action: "modal:bio" },
-  { title: "1С:Предприятие & Консалтинг", category: "Карьера", desc: "Опыт в КГ «РУНА», УЦ №1", action: "modal:career" },
+  { title: "Дмитрий (cr1mnsx)", category: "Профиль", desc: "Главный хаб, биография, стек", action: "modal:bio" },
+  { title: "1С:Предприятие & Консалтинг", category: "Карьера", desc: "Опыт в КГ «РУНА», база УЦ №1", action: "modal:career" },
   { title: "«По ту сторону яви»", category: "VR Проект", desc: "3D Virtual Reality Adventure", action: "modal:vr" },
   { title: "Связь и Контакты", category: "Контакты", desc: "VK: vk.ru/cr1mnsx, GitHub", action: "modal:contacts" },
   { title: "Боевой Сетап & ПК", category: "Сетап", desc: "Ryzen 5600X, RTX 3060 Ti, MacBook Air", action: "modal:setup" },

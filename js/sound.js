@@ -1,9 +1,10 @@
 /**
  * PS5 UI Sound Engine & Ambient Music Synthesizer (Web Audio API)
  * Синтезирует фирменную звуковую среду интерфейса PlayStation 5:
- * - Генеративная эмбиент-музыка главного меню (PS5 Home Ambient Drone)
- * - Навигационные щелчки курсора
+ * - Генеративная эмбиент-музыка меню (Emaj9 / Bmaj)
+ * - Навигационный щелчок курсора
  * - Подтверждение выбора и открытие карточек
+ * - Двухуровневый спуск / подъем (Game Hub Whoosh)
  * - Открытие / закрытие Control Center (PS Button)
  * - Звук трофеев и уведомлений (Trophy Chime)
  * - Звук возврата / отмены (Back / Cancel)
@@ -16,8 +17,8 @@ class PS5SoundEngine {
     this._ambientPlaying = false;
     this._ambientGain = null;
     this._ambientOscs = [];
-    this._musicVolume = 0.25;
-    this._sfxVolume = 0.7;
+    this._musicVolume = 0.28;
+    this._sfxVolume = 0.75;
   }
 
   _ensureContext() {
@@ -40,10 +41,6 @@ class PS5SoundEngine {
     return this._ambientPlaying;
   }
 
-  get musicVolume() {
-    return this._musicVolume;
-  }
-
   toggle() {
     this._muted = !this._muted;
     if (this._muted) {
@@ -64,7 +61,7 @@ class PS5SoundEngine {
 
   /**
    * Генеративная эмбиент-музыка главного меню PS5
-   * Мягкие обертоны (Emaj9 / Bmaj) с низкочастотной фильтрацией
+   * Теплые обертоны (E2, B2, E3, G#3, B3) с LFO и мягким фильтром
    */
   startAmbient() {
     if (this._muted || this._ambientPlaying) return;
@@ -77,17 +74,16 @@ class PS5SoundEngine {
 
       const masterGain = ctx.createGain();
       masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(this._musicVolume * 0.12, ctx.currentTime + 2.5);
+      masterGain.gain.exponentialRampToValueAtTime(this._musicVolume * 0.12, ctx.currentTime + 2.0);
 
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.setValueAtTime(420, ctx.currentTime);
+      filter.frequency.setValueAtTime(450, ctx.currentTime);
 
       masterGain.connect(filter);
       filter.connect(ctx.destination);
       this._ambientGain = masterGain;
 
-      // Теплый созвучный аккорд PS5 Home Menu (E2, B2, E3, G#3, B3)
       const freqs = [82.41, 123.47, 164.81, 207.65, 246.94];
       this._ambientOscs = [];
 
@@ -98,11 +94,10 @@ class PS5SoundEngine {
         osc.type = idx % 2 === 0 ? "sine" : "triangle";
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
-        // Легкая расстройка (LFO effect) для живого движения
         const lfo = ctx.createOscillator();
         const lfoGain = ctx.createGain();
-        lfo.frequency.setValueAtTime(0.1 + idx * 0.05, ctx.currentTime);
-        lfoGain.gain.setValueAtTime(1.2, ctx.currentTime);
+        lfo.frequency.setValueAtTime(0.08 + idx * 0.04, ctx.currentTime);
+        lfoGain.gain.setValueAtTime(1.5, ctx.currentTime);
         lfo.connect(osc.frequency);
         lfo.start();
 
@@ -122,14 +117,14 @@ class PS5SoundEngine {
     if (!this._ambientPlaying) return;
     this._ambientPlaying = false;
     if (this._ambientGain && this._ctx) {
-      this._ambientGain.gain.setTargetAtTime(0.0001, this._ctx.currentTime, 0.5);
+      this._ambientGain.gain.setTargetAtTime(0.0001, this._ctx.currentTime, 0.4);
     }
     setTimeout(() => {
       this._ambientOscs.forEach(({ osc, lfo }) => {
         try { osc.stop(); lfo.stop(); } catch (e) {}
       });
       this._ambientOscs = [];
-    }, 600);
+    }, 500);
   }
 
   toggleAmbient() {
@@ -141,7 +136,7 @@ class PS5SoundEngine {
     return this._ambientPlaying;
   }
 
-  /** Навигационный щелчок курсора PS5 */
+  /** Навигационный щелчок курсора PS5 (при смене плитки в доке) */
   navigate() {
     if (this._muted) return;
     this._ensureContext();
@@ -154,20 +149,20 @@ class PS5SoundEngine {
     const gain = ctx.createGain();
 
     osc.type = "sine";
-    osc.frequency.setValueAtTime(1220, now);
-    osc.frequency.exponentialRampToValueAtTime(760, now + 0.05);
+    osc.frequency.setValueAtTime(1240, now);
+    osc.frequency.exponentialRampToValueAtTime(740, now + 0.048);
 
     gain.gain.setValueAtTime(0.12 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.065);
+    osc.stop(now + 0.06);
   }
 
-  /** Подтверждение выбора (Confirm / Select) */
+  /** Подтверждение выбора (Enter / Кнопка X) */
   confirm() {
     if (this._muted) return;
     this._ensureContext();
@@ -190,17 +185,17 @@ class PS5SoundEngine {
     const osc2 = ctx.createOscillator();
     const gain2 = ctx.createGain();
     osc2.type = "sine";
-    osc2.frequency.setValueAtTime(1320, now + 0.04);
+    osc2.frequency.setValueAtTime(1320, now + 0.035);
     gain2.gain.setValueAtTime(0.001, now);
-    gain2.gain.linearRampToValueAtTime(0.11 * this._sfxVolume, now + 0.04);
+    gain2.gain.linearRampToValueAtTime(0.11 * this._sfxVolume, now + 0.035);
     gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
     osc2.connect(gain2);
     gain2.connect(ctx.destination);
-    osc2.start(now + 0.035);
+    osc2.start(now + 0.03);
     osc2.stop(now + 0.18);
   }
 
-  /** Назад / Отмена (Cancel / Back) */
+  /** Назад / Отмена (ESC / Кнопка O) */
   back() {
     if (this._muted) return;
     this._ensureContext();
@@ -214,19 +209,77 @@ class PS5SoundEngine {
 
     osc.type = "sine";
     osc.frequency.setValueAtTime(940, now);
-    osc.frequency.exponentialRampToValueAtTime(440, now + 0.11);
+    osc.frequency.exponentialRampToValueAtTime(420, now + 0.1);
 
     gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.11);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
     osc.start(now);
-    osc.stop(now + 0.12);
+    osc.stop(now + 0.11);
   }
 
-  /** Открытие / закрытие Control Center (PS Button) */
+  /** Спуск в Game Hub (Стрелка вниз ↓) */
+  whooshDown() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(600, now);
+    filter.frequency.exponentialRampToValueAtTime(200, now + 0.22);
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(420, now);
+    osc.frequency.exponentialRampToValueAtTime(160, now + 0.22);
+
+    gain.gain.setValueAtTime(0.11 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  /** Возврат из Game Hub в главное меню (Стрелка вверх ↑) */
+  whooshUp() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(240, now);
+    osc.frequency.exponentialRampToValueAtTime(780, now + 0.18);
+
+    gain.gain.setValueAtTime(0.1 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  /** Открытие / закрытие Control Center (Кнопка PS) */
   controlCenter(isOpen = true) {
     if (this._muted) return;
     this._ensureContext();
@@ -257,7 +310,7 @@ class PS5SoundEngine {
     osc.stop(now + 0.17);
   }
 
-  /** Трофей / Уведомление (PS5 Trophy Chime) */
+  /** Трофей / Уведомление (Легендарный звон PS5: C6 -> E6 -> G6) */
   chime() {
     if (this._muted) return;
     this._ensureContext();
@@ -295,39 +348,6 @@ class PS5SoundEngine {
 
   modalClose() {
     this.back();
-  }
-
-  themeChange() {
-    this.confirm();
-  }
-
-  resize() {
-    if (this._muted) return;
-    this._ensureContext();
-    if (!this._ctx) return;
-
-    const ctx = this._ctx;
-    const now = ctx.currentTime;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(750, now);
-    osc.frequency.setValueAtTime(1150, now + 0.045);
-
-    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.1);
-  }
-
-  showcase() {
-    this.controlCenter(true);
   }
 }
 

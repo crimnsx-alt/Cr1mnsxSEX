@@ -1,20 +1,17 @@
 /**
- * PS5 Home Menu & Welcome Hub — Main Application Controller
- * Реализует все функции оригинального интерфейса PlayStation 5:
- * - Панель быстрого доступа Control Center (кнопка PS)
- * - Полнотекстовый поиск (Search Overlay)
+ * PS5 Home Menu & Game Hub — Master Application Controller
+ * Реализует аутентичную механику консоли PlayStation 5 (spllitz baCpOEqBMSA):
+ * - Двухуровневая вертикальная навигация: Home View (Level 0) <-> Game Hub (Level 1)
+ * - Карусель Activity Cards (16:9) с индикаторами прогресса и таймерами
+ * - Полноценный Control Center (кнопка PS / Пробел)
  * - Экран настроек системы PS5 (Settings Screen)
- * - Генеративная эмбиент-музыка главного меню
- * - Контекстное меню игры / проекта (Three-dots Options)
- * - Модульная Bento-сетка виджетов (Welcome Hub)
- * - Пресеты, сменяемые темы и режим обзора фона
+ * - Быстрый поиск (Search Screen)
+ * - Контекстное меню игры (•••)
+ * - Генеративная эмбиент-музыка меню (Web Audio API)
  */
 
 import {
   portfolioData,
-  welcomeWidgets,
-  layoutPresets,
-  bgThemes,
   settingsSections,
   controlCenterItems,
   searchCatalog
@@ -26,14 +23,10 @@ import { SoundEngine } from "./sound.js";
 // ============================================================
 let currentCategory = "projects"; // "projects" | "link"
 let activeIndex = 0;
-let bgThemeIndex = 0;
-let currentPresetIndex = 0;
+let isGameHubActive = false;
+let isControlCenterOpen = false;
 let currentSettingsSection = "accounts";
 let bgFlip = false;
-let isShowcase = false;
-let isControlCenterOpen = false;
-
-const widgetSpans = { ...layoutPresets[0].spans };
 
 // ============================================================
 // DOM Elements Cache
@@ -53,9 +46,14 @@ const dom = {
   heroSecBtn: $("#heroSecondaryBtn"),
   btnOptionsMenu: $("#btnOptionsMenu"),
   contextMenu: $("#contextMenu"),
-  activityCards: $("#activityCards"),
-  welcomeHubGrid: $("#welcomeHubGrid"),
-  presetChips: $("#presetChips"),
+  scrollDownCue: $("#scrollDownCue"),
+  scrollUpCue: $("#scrollUpCue"),
+  hubGameThumb: $("#hubGameThumb"),
+  hubGameTitle: $("#hubGameTitle"),
+  hubGamePublisher: $("#hubGamePublisher"),
+  activityCarousel: $("#activityCarousel"),
+  hubNewsFeed: $("#hubNewsFeed"),
+  hubTrophies: $("#hubTrophies"),
   navTabs: $$(".nav-tab"),
   clock: $("#clock"),
   muteBtn: $("#muteBtn"),
@@ -64,13 +62,6 @@ const dom = {
   btnPS: $("#btnPS"),
   btnSearch: $("#btnSearch"),
   btnSettings: $("#btnSettings"),
-  btnPreset: $("#btnPreset"),
-  presetLabel: $("#presetLabel"),
-  btnBgTheme: $("#btnBgTheme"),
-  themeLabel: $("#themeLabel"),
-  btnShowcase: $("#btnShowcase"),
-  showcaseBanner: $("#showcaseBanner"),
-  btnExitShowcase: $("#btnExitShowcase"),
   toastContainer: $("#toastContainer"),
   modalOverlay: $("#modalOverlay"),
   modalCloseBtn: $("#modalCloseBtn"),
@@ -87,8 +78,13 @@ const dom = {
   settingsCloseBtn: $("#settingsCloseBtn"),
   settingsNav: $("#settingsNav"),
   settingsDetail: $("#settingsDetail"),
-  controlCenterBar: $("#controlCenterBar"),
-  controlCenterTrack: $("#controlCenterTrack")
+  controlCenterOverlay: $("#controlCenterOverlay"),
+  controlCenterTrack: $("#controlCenterTrack"),
+  ccCardTitle: $("#ccCardTitle"),
+  ccBtnResume: $("#ccBtnResume"),
+  ccBtnProfile: $("#ccBtnProfile"),
+  ccMusicToggle: $("#ccMusicToggle"),
+  ccMusicVolume: $("#ccMusicVolume")
 };
 
 // ============================================================
@@ -136,7 +132,7 @@ async function copyToClipboard(text, label) {
 }
 
 // ============================================================
-// Dynamic Background Cross-fade
+// Dynamic 4K Background Cross-fade
 // ============================================================
 function setBackground(url) {
   const incoming = bgFlip ? dom.bgA : dom.bgB;
@@ -149,36 +145,207 @@ function setBackground(url) {
   bgFlip = !bgFlip;
 }
 
-function cycleBackgroundTheme() {
-  bgThemeIndex = (bgThemeIndex + 1) % bgThemes.length;
-  const theme = bgThemes[bgThemeIndex];
-  setBackground(theme.url);
-  dom.themeLabel.textContent = `Фон: ${theme.name}`;
-  showToast("Тема фона", `Применена тема: «${theme.name}»`, "🎨");
-  SoundEngine.themeChange();
+// ============================================================
+// TWO-TIER VERTICAL NAVIGATION (Home View <-> Game Hub)
+// ============================================================
+function openGameHub() {
+  if (isGameHubActive) return;
+  isGameHubActive = true;
+  document.body.classList.add("hub-active");
+  renderGameHubContent();
+  SoundEngine.whooshDown();
+}
+
+function closeGameHub() {
+  if (!isGameHubActive) return;
+  isGameHubActive = false;
+  document.body.classList.remove("hub-active");
+  SoundEngine.whooshUp();
+}
+
+function toggleGameHub() {
+  if (isGameHubActive) {
+    closeGameHub();
+  } else {
+    openGameHub();
+  }
+}
+
+function renderGameHubContent() {
+  const currentItem = portfolioData[currentCategory][activeIndex];
+  if (!currentItem) return;
+
+  // 1. Mini-Header
+  dom.hubGameThumb.style.backgroundImage = `url('${currentItem.thumb}')`;
+  dom.hubGameTitle.textContent = currentItem.title;
+  dom.hubGamePublisher.textContent = currentItem.publisher || "PlayStation Studios";
+
+  // 2. Activity Cards Carousel (16:9)
+  dom.activityCarousel.innerHTML = "";
+  (currentItem.activities || []).forEach((act) => {
+    const card = document.createElement("div");
+    card.className = "activity-card-ps5";
+    card.innerHTML = `
+      <div class="act-bg" style="background-image: url('${act.thumb}')"></div>
+      <div class="act-gradient"></div>
+      <div class="act-content">
+        <span class="act-type-tag">${act.type}</span>
+        <span class="act-title">${act.title}</span>
+        <div class="act-meta">
+          <span>${act.timeEst}</span>
+          <span style="font-weight: 700; color: #fff;">${act.progress}%</span>
+        </div>
+        <div class="act-bar-wrap">
+          <div class="act-bar-fill" style="width: ${act.progress}%;"></div>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener("click", () => {
+      if (act.action) {
+        handleAction(act.action);
+      } else if (act.link) {
+        window.open(act.link, "_blank", "noopener");
+      }
+    });
+
+    dom.activityCarousel.appendChild(card);
+  });
+
+  // 3. Official News Feed
+  dom.hubNewsFeed.innerHTML = "";
+  (currentItem.news || []).forEach((n) => {
+    const newsCard = document.createElement("div");
+    newsCard.className = "news-card-ps5";
+    newsCard.innerHTML = `
+      <span class="news-date">${n.date}</span>
+      <h4 class="news-title">${n.title}</h4>
+      <p class="news-desc">${n.desc}</p>
+    `;
+    dom.hubNewsFeed.appendChild(newsCard);
+  });
+
+  // 4. Trophies Row
+  dom.hubTrophies.innerHTML = "";
+  const t = currentItem.trophies || { platinum: 1, gold: 5, silver: 10, bronze: 20 };
+  const trophiesList = [
+    { label: "★ 1 Платина", count: t.platinum, color: "#00d4ff" },
+    { label: "🥇 Золото", count: t.gold, color: "#f1c40f" },
+    { label: "🥈 Серебро", count: t.silver, color: "#bdc3c7" },
+    { label: "🥉 Бронза", count: t.bronze, color: "#e67e22" }
+  ];
+
+  trophiesList.forEach((tr) => {
+    const badge = document.createElement("div");
+    badge.className = "hub-trophy-badge";
+    badge.style.color = tr.color;
+    badge.textContent = `${tr.label}: ${tr.count}`;
+    dom.hubTrophies.appendChild(badge);
+  });
 }
 
 // ============================================================
-// Showcase Mode (Чистый обзор фона)
+// Top App Dock (Games Row)
 // ============================================================
-function toggleShowcase(forceState) {
-  isShowcase = typeof forceState === "boolean" ? forceState : !isShowcase;
+function renderDock() {
+  const items = portfolioData[currentCategory];
+  dom.dock.innerHTML = "";
 
-  if (isShowcase) {
-    closeControlCenter();
-    closeAllModals();
-    document.body.classList.add("showcase-active");
-    dom.showcaseBanner.setAttribute("aria-hidden", "false");
-  } else {
-    document.body.classList.remove("showcase-active");
-    dom.showcaseBanner.setAttribute("aria-hidden", "true");
+  items.forEach((item, idx) => {
+    const tile = document.createElement("div");
+    tile.className = `game-tile ${idx === activeIndex ? "active" : ""}`;
+    tile.style.backgroundImage = `url('${item.thumb}')`;
+    tile.setAttribute("role", "button");
+    tile.setAttribute("tabindex", "0");
+    tile.setAttribute("aria-label", item.title);
+
+    tile.innerHTML = `
+      <span class="tile-badge">${item.badge}</span>
+      <span class="tile-label">${item.title}</span>
+    `;
+
+    tile.addEventListener("click", () => {
+      if (idx !== activeIndex) {
+        selectItem(idx);
+        SoundEngine.navigate();
+      } else {
+        handleAction(item.btnAction || "modal:bio");
+      }
+    });
+
+    dom.dock.appendChild(tile);
+  });
+}
+
+// ============================================================
+// Hero Section Updates
+// ============================================================
+function updateHero(item) {
+  dom.heroSection.classList.add("transitioning");
+
+  setTimeout(() => {
+    dom.heroTag.textContent = item.tag;
+    dom.heroTitle.textContent = item.title;
+    dom.heroDesc.textContent = item.desc;
+
+    dom.heroBtn.textContent = item.btnText;
+    dom.heroBtn.onclick = () => {
+      handleAction(item.btnAction);
+    };
+
+    dom.heroSecBtn.textContent = item.secText;
+    dom.heroSecBtn.onclick = () => {
+      if (item.secAction) {
+        handleAction(item.secAction);
+      } else if (item.secLink) {
+        window.open(item.secLink, "_blank", "noopener");
+      }
+    };
+
+    // Обновляем Control Center Card
+    dom.ccCardTitle.textContent = item.title;
+
+    dom.heroSection.classList.remove("transitioning");
+  }, 160);
+}
+
+function selectItem(index) {
+  const items = portfolioData[currentCategory];
+  activeIndex = index;
+  const item = items[index];
+
+  renderDock();
+  setBackground(item.bg);
+  updateHero(item);
+
+  if (isGameHubActive) {
+    renderGameHubContent();
+  }
+}
+
+// ============================================================
+// Category Tabs Switching
+// ============================================================
+function switchCategory(cat) {
+  if (cat === currentCategory) return;
+  currentCategory = cat;
+  activeIndex = 0;
+
+  dom.navTabs.forEach((t) => {
+    t.classList.toggle("active", t.dataset.category === cat);
+  });
+
+  if (isGameHubActive) {
+    closeGameHub();
   }
 
-  SoundEngine.showcase();
+  selectItem(0);
+  SoundEngine.confirm();
+  showToast("Раздел изменен", cat === "projects" ? "Раздел: Проекты (Games)" : "Раздел: Link (Media)", "📂");
 }
 
 // ============================================================
-// PS5 Control Center (Quick Menu • Кнопка PS)
+// PS5 Control Center (PS Button)
 // ============================================================
 function renderControlCenter() {
   dom.controlCenterTrack.innerHTML = "";
@@ -203,8 +370,8 @@ function renderControlCenter() {
 function toggleControlCenter() {
   isControlCenterOpen = !isControlCenterOpen;
   if (isControlCenterOpen) {
-    dom.controlCenterBar.classList.add("active");
-    dom.controlCenterBar.setAttribute("aria-hidden", "false");
+    dom.controlCenterOverlay.classList.add("active");
+    dom.controlCenterOverlay.setAttribute("aria-hidden", "false");
     SoundEngine.controlCenter(true);
   } else {
     closeControlCenter();
@@ -214,29 +381,29 @@ function toggleControlCenter() {
 function closeControlCenter() {
   if (!isControlCenterOpen) return;
   isControlCenterOpen = false;
-  dom.controlCenterBar.classList.remove("active");
-  dom.controlCenterBar.setAttribute("aria-hidden", "true");
+  dom.controlCenterOverlay.classList.remove("active");
+  dom.controlCenterOverlay.setAttribute("aria-hidden", "true");
   SoundEngine.controlCenter(false);
 }
 
 function handleControlCenterAction(action) {
   switch (action) {
     case "home":
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      selectItem(0);
       closeControlCenter();
+      if (isGameHubActive) closeGameHub();
+      selectItem(0);
       break;
 
     case "switcher":
       closeControlCenter();
       selectItem((activeIndex + 1) % portfolioData[currentCategory].length);
       SoundEngine.navigate();
-      showToast("Переключатель", "Переключено на следующий проект", "🔀");
+      showToast("Переключатель", "Выбран следующий проект", "🔀");
       break;
 
     case "notifications":
       closeControlCenter();
-      showToast("PlayStation Network", "Все службы сети cr1mnsx функционируют нормально", "🔔");
+      showToast("PlayStation Network", "Все сетевые службы функционируют штатно", "🔔");
       break;
 
     case "gamebase":
@@ -246,19 +413,20 @@ function handleControlCenterAction(action) {
 
     case "music":
       const playing = SoundEngine.toggleAmbient();
-      showToast("Фоновая музыка PS5", playing ? "Воспроизведение включено" : "Воспроизведение приостановлено", "🎵");
+      dom.ccMusicToggle.textContent = playing ? "⏸ Пауза" : "▶ Играть";
+      showToast("Фоновая музыка PS5", playing ? "Воспроизведение включено" : "Пауза", "🎵");
       break;
 
     case "sound":
       SoundEngine.toggle();
       dom.muteBtn.textContent = SoundEngine.muted ? "🔇" : "🔊";
       dom.muteBtn.classList.toggle("muted", SoundEngine.muted);
-      showToast("Аудио", SoundEngine.muted ? "Звук отключен" : "Звук активен", SoundEngine.muted ? "🔇" : "🔊");
+      showToast("Звук", SoundEngine.muted ? "Звуковые эффекты выключены" : "Звуковые эффекты активны", SoundEngine.muted ? "🔇" : "🔊");
       break;
 
     case "accessories":
       closeControlCenter();
-      showToast("DualSense Controller", "Заряд 88% • Haptic Feedback активен • Bluetooth", "🎮");
+      showToast("DualSense Controller", "Заряд аккумулятора: 88% • Haptic Feedback", "🎮");
       break;
 
     case "power":
@@ -268,21 +436,20 @@ function handleControlCenterAction(action) {
         title: "Питание системы",
         subtitle: "Управление состоянием дашборда",
         content: `
-          <p class="modal-p">Выберите действие с интерфейсом:</p>
           <div class="modal-spec-grid">
             <div class="modal-spec-box">
-              <span class="spec-label">Режим отдыха</span>
-              <span class="spec-val">Включить Showcase (обзор фона)</span>
+              <span class="spec-label">Сброс позиции</span>
+              <span class="spec-val">Вернуться на начальный экран</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Аудиосистема</span>
-              <span class="spec-val">Выключить звук и музыку</span>
+              <span class="spec-val">Выключить звук и фоновую музыку</span>
             </div>
           </div>
         `,
         actions: [
-          { text: "Включить режим отдыха (Showcase)", action: "showcase", primary: true },
-          { text: "Выключить звук", action: "sound_mute", primary: false }
+          { text: "Вернуться в главное меню", action: "home_reset", primary: true },
+          { text: "Отключить звук", action: "sound_mute", primary: false }
         ]
       });
       break;
@@ -297,7 +464,7 @@ function handleControlCenterAction(action) {
 }
 
 // ============================================================
-// PS5 Search Overlay (Мгновенный поиск)
+// PS5 Search Overlay (Live Quick Search)
 // ============================================================
 function openSearch() {
   closeControlCenter();
@@ -397,8 +564,8 @@ function renderSettingsNav() {
 function renderSettingsDetail(sectionId) {
   const section = settingsSections.find((s) => s.id === sectionId) || settingsSections[0];
   dom.settingsDetail.innerHTML = `
-    <h3 style="font-size: 1.3rem; font-weight: 800; margin-bottom: 8px;">${section.icon} ${section.title}</h3>
-    <div style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 18px;">Параметры и конфигурация рабочей среды cr1mnsx</div>
+    <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 6px;">${section.icon} ${section.title}</h3>
+    <div style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 20px;">Конфигурация консольной рабочей среды cr1mnsx</div>
   `;
 
   section.items.forEach((it) => {
@@ -422,7 +589,6 @@ function renderSettingsDetail(sectionId) {
       ${actionHTML}
     `;
 
-    // Слушатель для кнопок в настройках
     const btn = card.querySelector("button");
     if (btn) {
       btn.addEventListener("click", () => {
@@ -431,6 +597,7 @@ function renderSettingsDetail(sectionId) {
         } else if (btn.dataset.toggle === "ambient") {
           const playing = SoundEngine.toggleAmbient();
           btn.textContent = playing ? "Выключить" : "Включить";
+          dom.ccMusicToggle.textContent = playing ? "⏸ Пауза" : "▶ Играть";
           showToast("Фоновая музыка", playing ? "Включена" : "Выключена", "🎵");
         } else if (btn.dataset.toggle === "sfx") {
           SoundEngine.toggle();
@@ -474,12 +641,12 @@ function handleContextAction(act) {
       break;
 
     case "share":
-      copyToClipboard(window.location.href, "Ссылка на дашборд");
+      copyToClipboard(window.location.href, "Ссылка на проект");
       break;
 
     case "fav":
       SoundEngine.chime();
-      showToast("Избранное", `Проект «${currentItem.title}» закреплен в избранном`, "⭐");
+      showToast("Избранное", `Проект «${currentItem.title}» закреплен в быстром доступе`, "⭐");
       break;
   }
 }
@@ -489,7 +656,7 @@ function handleContextAction(act) {
 // ============================================================
 function openModal({ tag, title, subtitle, content, actions = [] }) {
   closeControlCenter();
-  dom.modalTag.textContent = tag || "PS5 WELCOME HUB";
+  dom.modalTag.textContent = tag || "PLAYSTATION 5";
   dom.modalTitle.textContent = title || "";
   dom.modalSubtitle.textContent = subtitle || "";
   dom.modalBody.innerHTML = content || "";
@@ -535,11 +702,12 @@ function closeModal() {
   SoundEngine.modalClose();
 }
 
-function closeAllModals() {
+function closeAllOverlays() {
   closeModal();
   closeSearch();
   closeSettings();
   closeContextMenu();
+  closeControlCenter();
 }
 
 // ============================================================
@@ -561,12 +729,13 @@ function handleAction(actionString) {
     return;
   }
   if (actionString === "copy:all_links") {
-    copyToClipboard("VK: https://vk.ru/cr1mnsx | GitHub: https://github.com/crimnsx-alt | PS5 Hub: https://crimnsx-alt.github.io/Cr1mnsxSEX/", "Все ссылки хаба");
+    copyToClipboard("VK: https://vk.ru/cr1mnsx | GitHub: https://github.com/crimnsx-alt | PS5 Hub: https://crimnsx-alt.github.io/Cr1mnsxSEX/", "Все ссылки");
     return;
   }
-  if (actionString === "showcase") {
+  if (actionString === "home_reset") {
     closeModal();
-    toggleShowcase(true);
+    if (isGameHubActive) closeGameHub();
+    selectItem(0);
     return;
   }
   if (actionString === "sound_mute") {
@@ -663,7 +832,7 @@ function handleAction(actionString) {
 
   if (actionString === "modal:trophy") {
     openModal({
-      tag: "PSN TROPHY SHOWCASE",
+      tag: "PSN TROPHY COLLECTION",
       title: "Коллекция трофеев cr1mnsx",
       subtitle: "PlayStation Network • Статус Уровня 99",
       content: `
@@ -685,7 +854,7 @@ function handleAction(actionString) {
             <span class="spec-val" style="color: #e67e22;">58 Трофеев</span>
           </div>
         </div>
-        <p class="modal-p">Ключевое разблокированное достижение: <strong>«Next-Gen Master: Архитектура Welcome Hub и Консалтинг 1С»</strong>.</p>
+        <p class="modal-p">Главное достижение: <strong>«Master of Next-Gen Architecture & 1C Consulting»</strong>.</p>
       `,
       actions: [
         { text: "Скопировать профиль", action: "copy:vk", primary: true }
@@ -708,251 +877,32 @@ function handleAction(actionString) {
 }
 
 // ============================================================
-// Bento Grid & Widgets System
-// ============================================================
-function getWidgetIconSVG(iconName) {
-  switch (iconName) {
-    case "trophy": return "🏆";
-    case "storage": return "💾";
-    case "controller": return "🎮";
-    case "network": return "🌐";
-    case "links": return "🔗";
-    case "media": return "🖼️";
-    default: return "⚡";
-  }
-}
-
-function renderWidgets() {
-  dom.welcomeHubGrid.innerHTML = "";
-
-  welcomeWidgets.forEach((w) => {
-    const spanClass = widgetSpans[w.id] || w.defaultSpan || "widget-1x1";
-    const themeClass = w.type === "blue" ? "widget-blue" : "widget-glass";
-
-    const card = document.createElement("div");
-    card.className = `widget-card ${themeClass} ${spanClass}`;
-    card.dataset.widgetId = w.id;
-
-    card.innerHTML = `
-      <div class="widget-header">
-        <div class="widget-icon-title">
-          <div class="widget-icon-badge">${getWidgetIconSVG(w.icon)}</div>
-          <div class="widget-title-group">
-            <span class="widget-title">${w.title}</span>
-            <span class="widget-badge">${w.badge}</span>
-          </div>
-        </div>
-        <div class="widget-header-actions">
-          <span class="widget-meta-tag">${w.headerRight}</span>
-          <button class="btn-widget-resize" type="button" title="Изменить размер виджета" aria-label="Размер виджета">⤢</button>
-        </div>
-      </div>
-      <div class="widget-body">
-        ${w.content}
-      </div>
-      <div class="widget-footer-note">${w.footerNote}</div>
-    `;
-
-    const resizeBtn = card.querySelector(".btn-widget-resize");
-    resizeBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      cycleWidgetSize(w.id);
-    });
-
-    card.addEventListener("click", (e) => {
-      const targetAction = e.target.closest("[data-action]");
-      if (targetAction) {
-        e.preventDefault();
-        e.stopPropagation();
-        handleAction(targetAction.dataset.action);
-      }
-    });
-
-    dom.welcomeHubGrid.appendChild(card);
-  });
-}
-
-function cycleWidgetSize(widgetId) {
-  const current = widgetSpans[widgetId] || "widget-1x1";
-  let next = "widget-1x1";
-
-  if (current === "widget-1x1") next = "widget-2x1";
-  else if (current === "widget-2x1") next = "widget-1x2";
-  else next = "widget-1x1";
-
-  widgetSpans[widgetId] = next;
-  renderWidgets();
-  SoundEngine.resize();
-  showToast("Виджет обновлен", `Новый размер: ${next.replace("widget-", "")}`, "📐");
-}
-
-function renderPresetChips() {
-  dom.presetChips.innerHTML = "";
-  layoutPresets.forEach((p, idx) => {
-    const chip = document.createElement("button");
-    chip.className = `chip-btn ${idx === currentPresetIndex ? "active" : ""}`;
-    chip.type = "button";
-    chip.textContent = p.name;
-    chip.addEventListener("click", () => applyPreset(idx));
-    dom.presetChips.appendChild(chip);
-  });
-}
-
-function applyPreset(index) {
-  currentPresetIndex = index;
-  const preset = layoutPresets[index];
-  Object.assign(widgetSpans, preset.spans);
-  dom.presetLabel.textContent = `Раскладка: ${preset.name}`;
-  renderPresetChips();
-  renderWidgets();
-  SoundEngine.confirm();
-  showToast("Раскладка изменена", preset.name, "🍱");
-}
-
-function cyclePreset() {
-  const nextIdx = (currentPresetIndex + 1) % layoutPresets.length;
-  applyPreset(nextIdx);
-}
-
-// ============================================================
-// Top App Dock
-// ============================================================
-function renderDock() {
-  const items = portfolioData[currentCategory];
-  dom.dock.innerHTML = "";
-
-  items.forEach((item, idx) => {
-    const tile = document.createElement("div");
-    tile.className = `game-tile ${idx === activeIndex ? "active" : ""}`;
-    tile.style.backgroundImage = `url('${item.thumb}')`;
-    tile.setAttribute("role", "button");
-    tile.setAttribute("tabindex", "0");
-    tile.setAttribute("aria-label", item.title);
-
-    tile.innerHTML = `
-      <span class="tile-badge">${item.badge}</span>
-      <span class="tile-label">${item.title}</span>
-    `;
-
-    tile.addEventListener("click", () => {
-      if (idx !== activeIndex) {
-        selectItem(idx);
-        SoundEngine.navigate();
-      } else {
-        handleAction(item.btnAction || "modal:bio");
-      }
-    });
-
-    dom.dock.appendChild(tile);
-  });
-}
-
-// ============================================================
-// Hero Section & Activity Cards Update
-// ============================================================
-function updateHero(item) {
-  dom.heroSection.classList.add("transitioning");
-
-  setTimeout(() => {
-    dom.heroTag.textContent = item.tag;
-    dom.heroTitle.textContent = item.title;
-    dom.heroDesc.textContent = item.desc;
-
-    dom.heroBtn.textContent = item.btnText;
-    dom.heroBtn.onclick = () => {
-      handleAction(item.btnAction);
-    };
-
-    dom.heroSecBtn.textContent = item.secText;
-    dom.heroSecBtn.onclick = () => {
-      if (item.secAction) {
-        handleAction(item.secAction);
-      } else if (item.secLink) {
-        window.open(item.secLink, "_blank", "noopener");
-      }
-    };
-
-    dom.activityCards.innerHTML = item.cards.map((c) => `
-      <div class="activity-card" data-action="${c.action || ''}" data-link="${c.link || ''}">
-        <div class="card-type">${c.type}</div>
-        <div class="card-title">${c.title}</div>
-        <div class="card-progress">${c.progress}</div>
-      </div>
-    `).join("");
-
-    dom.activityCards.querySelectorAll(".activity-card").forEach((card) => {
-      card.addEventListener("click", () => {
-        if (card.dataset.action) {
-          handleAction(card.dataset.action);
-        } else if (card.dataset.link) {
-          window.open(card.dataset.link, "_blank", "noopener");
-        }
-      });
-    });
-
-    dom.heroSection.classList.remove("transitioning");
-  }, 160);
-}
-
-function selectItem(index) {
-  const items = portfolioData[currentCategory];
-  activeIndex = index;
-  const item = items[index];
-
-  renderDock();
-  setBackground(item.bg);
-  updateHero(item);
-}
-
-// ============================================================
-// Category Tabs Switching
-// ============================================================
-function switchCategory(cat) {
-  if (cat === currentCategory) return;
-  currentCategory = cat;
-  activeIndex = 0;
-
-  dom.navTabs.forEach((t) => {
-    t.classList.toggle("active", t.dataset.category === cat);
-  });
-
-  selectItem(0);
-  SoundEngine.confirm();
-  showToast("Раздел изменен", cat === "projects" ? "Раздел: Проекты" : "Раздел: Link", "📂");
-}
-
-// ============================================================
-// Keyboard Navigation (PS5 Controller & Keyboard Mapping)
+// Keyboard Navigation (PS5 Controller Mapping)
 // ============================================================
 function handleKeyboard(e) {
-  // Запуск эмбиент-музыки по первому нажатию
   if (!SoundEngine.ambientPlaying && !SoundEngine.muted) {
     SoundEngine.startAmbient();
   }
 
-  // 1. Showcase
-  if (isShowcase) {
-    e.preventDefault();
-    toggleShowcase(false);
-    return;
-  }
-
-  // 2. Escape closes modals / search / settings / control center
+  // Escape closes any active overlay or returns from Game Hub
   if (e.key === "Escape") {
     e.preventDefault();
-    if (isControlCenterOpen) {
+    if (dom.modalOverlay.classList.contains("active")) {
+      closeModal();
+    } else if (dom.searchOverlay.classList.contains("active")) {
+      closeSearch();
+    } else if (dom.settingsOverlay.classList.contains("active")) {
+      closeSettings();
+    } else if (isControlCenterOpen) {
       closeControlCenter();
-    } else {
-      closeAllModals();
+    } else if (isGameHubActive) {
+      closeGameHub();
     }
     return;
   }
 
-  // Если открыт поиск или настройки — стрелки и Enter обрабатываются локально
-  if (dom.searchOverlay.classList.contains("active")) {
-    return;
-  }
-  if (dom.settingsOverlay.classList.contains("active") || dom.modalOverlay.classList.contains("active")) {
+  // Если открыт поиск или настройки — локальный фокус
+  if (dom.searchOverlay.classList.contains("active") || dom.settingsOverlay.classList.contains("active") || dom.modalOverlay.classList.contains("active")) {
     return;
   }
 
@@ -960,7 +910,7 @@ function handleKeyboard(e) {
 
   switch (e.key) {
     case " ":
-      // Пробел — вызов Control Center (аналог кнопки PS)
+      // Пробел — вызов Control Center (кнопка PS)
       e.preventDefault();
       toggleControlCenter();
       break;
@@ -970,16 +920,34 @@ function handleKeyboard(e) {
       openSearch();
       break;
 
+    case "ArrowDown":
+      e.preventDefault();
+      if (!isGameHubActive) {
+        openGameHub();
+      }
+      break;
+
+    case "ArrowUp":
+      e.preventDefault();
+      if (isGameHubActive) {
+        closeGameHub();
+      }
+      break;
+
     case "ArrowRight":
       e.preventDefault();
-      selectItem((activeIndex + 1) % items.length);
-      SoundEngine.navigate();
+      if (!isGameHubActive) {
+        selectItem((activeIndex + 1) % items.length);
+        SoundEngine.navigate();
+      }
       break;
 
     case "ArrowLeft":
       e.preventDefault();
-      selectItem((activeIndex - 1 + items.length) % items.length);
-      SoundEngine.navigate();
+      if (!isGameHubActive) {
+        selectItem((activeIndex - 1 + items.length) % items.length);
+        SoundEngine.navigate();
+      }
       break;
 
     case "Tab":
@@ -991,28 +959,21 @@ function handleKeyboard(e) {
       e.preventDefault();
       handleAction(items[activeIndex].btnAction);
       break;
+  }
+}
 
-    case "p":
-    case "P":
-    case "a":
-    case "A":
-      e.preventDefault();
-      cyclePreset();
-      break;
+// ============================================================
+// Mouse Wheel Two-Tier Scroll
+// ============================================================
+function handleWheel(e) {
+  if (isControlCenterOpen || dom.searchOverlay.classList.contains("active") || dom.settingsOverlay.classList.contains("active")) {
+    return;
+  }
 
-    case "b":
-    case "B":
-      e.preventDefault();
-      cycleBackgroundTheme();
-      break;
-
-    case "s":
-    case "S":
-    case "c":
-    case "C":
-      e.preventDefault();
-      toggleShowcase();
-      break;
+  if (e.deltaY > 35 && !isGameHubActive) {
+    openGameHub();
+  } else if (e.deltaY < -35 && isGameHubActive && dom.stageGameHub.scrollTop <= 0) {
+    closeGameHub();
   }
 }
 
@@ -1067,18 +1028,17 @@ function initAudioUnlock() {
 // Application Bootstrapper
 // ============================================================
 function init() {
-  // Вкладки
+  // 1. Вкладки навигации
   dom.navTabs.forEach((tab) => {
     tab.addEventListener("click", () => switchCategory(tab.dataset.category));
   });
 
-  // Кнопки управления в шапке
-  dom.btnPreset.addEventListener("click", cyclePreset);
-  dom.btnBgTheme.addEventListener("click", cycleBackgroundTheme);
-  dom.btnShowcase.addEventListener("click", () => toggleShowcase(true));
-  dom.btnExitShowcase.addEventListener("click", () => toggleShowcase(false));
+  // 2. Двухуровневый спуск / подъем
+  dom.scrollDownCue.addEventListener("click", openGameHub);
+  dom.scrollUpCue.addEventListener("click", closeGameHub);
+  window.addEventListener("wheel", handleWheel, { passive: true });
 
-  // Поиск, Настройки, Кнопка PS
+  // 3. Поиск, Настройки, Кнопка PS
   dom.btnSearch.addEventListener("click", openSearch);
   dom.searchCloseBtn.addEventListener("click", closeSearch);
   dom.searchInput.addEventListener("input", (e) => renderSearchResults(e.target.value));
@@ -1088,7 +1048,24 @@ function init() {
 
   dom.btnPS.addEventListener("click", toggleControlCenter);
 
-  // Контекстное меню игры (•••)
+  // 4. Control Center Cards
+  dom.ccBtnResume.addEventListener("click", () => {
+    closeControlCenter();
+    handleAction(portfolioData[currentCategory][activeIndex].btnAction);
+  });
+  dom.ccBtnProfile.addEventListener("click", () => {
+    closeControlCenter();
+    handleAction("modal:bio");
+  });
+  dom.ccMusicToggle.addEventListener("click", () => {
+    const playing = SoundEngine.toggleAmbient();
+    dom.ccMusicToggle.textContent = playing ? "⏸ Пауза" : "▶ Играть";
+  });
+  dom.ccMusicVolume.addEventListener("input", (e) => {
+    SoundEngine.setMusicVolume(parseFloat(e.target.value));
+  });
+
+  // 5. Контекстное меню игры (•••)
   dom.btnOptionsMenu.addEventListener("click", (e) => {
     e.stopPropagation();
     toggleContextMenu();
@@ -1106,11 +1083,11 @@ function init() {
     }
   });
 
-  // Плашка трофеев и профиль
+  // 6. Плашка трофеев и профиль
   dom.trophyPill.addEventListener("click", () => handleAction("modal:trophy"));
   dom.profilePill.addEventListener("click", () => handleAction("modal:bio"));
 
-  // Модальные окна
+  // 7. Модальные окна закрытия
   dom.modalCloseBtn.addEventListener("click", closeModal);
   dom.modalOverlay.addEventListener("click", (e) => {
     if (e.target === dom.modalOverlay) closeModal();
@@ -1121,30 +1098,29 @@ function init() {
   dom.settingsOverlay.addEventListener("click", (e) => {
     if (e.target === dom.settingsOverlay) closeSettings();
   });
+  dom.controlCenterOverlay.addEventListener("click", (e) => {
+    if (e.target === dom.controlCenterOverlay) closeControlCenter();
+  });
 
-  // Клавиатура
+  // 8. Клавиатура
   window.addEventListener("keydown", handleKeyboard);
 
-  // Часы
+  // 9. Часы
   updateClock();
   setInterval(updateClock, 1000);
 
-  // Звук & Control Center
+  // 10. Звук и Control Center
   initMuteButton();
   initAudioUnlock();
   renderControlCenter();
 
-  // Виджеты Bento Grid
-  renderPresetChips();
-  renderWidgets();
-
-  // Первый элемент
+  // 11. Первоначальный рендер
   selectItem(0);
 
-  // Приветственный тост
+  // 12. Приветственный тост
   setTimeout(() => {
-    showToast("PlayStation 5", "Вход выполнен: cr1mnsx (Уровень 99)", "⭐");
-  }, 1000);
+    showToast("PlayStation 5", "Вход выполнен: cr1mnsx • Нажмите ↓ для перехода в Game Hub", "⭐");
+  }, 900);
 }
 
 document.addEventListener("DOMContentLoaded", init);
