@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Личное портфолио Дмитрия (cr1mnsx) в стиле PlayStation 5 Dashboard">
+  <meta name="theme-color" content="#07090f">
+  <title>cr1mnsx • PS5 Portfolio Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Dynamic Background (dual-layer cross-fade) -->
+  <div id="bgLayerA" class="bg-layer-a"></div>
+  <div id="bgLayerB" class="bg-layer-b"></div>
+  <div class="bg-overlay"></div>
+
+  <main class="dashboard">
+    <div>
+      <!-- ====== Top Bar ====== -->
+      <header class="top-bar">
+        <nav class="nav-tabs" aria-label="Категории">
+          <span class="nav-tab active" data-category="projects" role="tab" tabindex="0">Проекты</span>
+          <span class="nav-tab" data-category="media" role="tab" tabindex="0">Медиа и Сетап</span>
+        </nav>
+
+        <div class="status-bar">
+          <!-- Mute / Unmute -->
+          <button id="muteBtn" class="mute-btn" type="button" aria-label="Выключить звук">🔊</button>
+
+          <!-- Trophy Pill -->
+          <div class="trophy-pill" title="Достижения портфолио">
+            ★ Платина • Уровень 99
+          </div>
+
+          <!-- Profile -->
+          <a href="https://vk.ru/cr1mnsx" target="_blank" rel="noopener" class="profile-pill">
+            <div class="avatar">Д</div>
+            <span style="font-weight:600;">cr1mnsx</span>
+          </a>
+
+          <!-- Live Clock -->
+          <span id="clock">00:00</span>
+        </div>
+      </header>
+
+      <!-- ====== Games Dock ====== -->
+      <nav id="gamesDock" class="games-dock" aria-label="Плитки проектов"></nav>
+    </div>
+
+    <!-- ====== Hero Section ====== -->
+    <section class="hero-section" aria-live="polite">
+      <span id="heroTag" class="hero-tag">PS5 Portfolio</span>
+      <h1 id="heroTitle" class="hero-title">Загрузка…</h1>
+      <p id="heroDesc" class="hero-desc">Выберите проект из панели выше.</p>
+      <div class="hero-actions">
+        <a id="heroBtn" href="#" target="_blank" rel="noopener" class="btn-play">Запустить</a>
+        <a id="heroSecondaryBtn" href="#" target="_blank" rel="noopener" class="btn-secondary">Связаться</a>
+      </div>
+    </section>
+
+    <!-- ====== Bottom Row ====== -->
+    <footer class="bottom-row">
+      <div id="activityCards" class="activity-cards"></div>
+      <div class="controller-hints">
+        <span><span class="hint-badge">TAB</span>Категория</span>
+        <span><span class="hint-badge">← →</span>Выбор</span>
+        <span><span class="hint-badge">ENTER</span>Открыть</span>
+      </div>
+    </footer>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
+
