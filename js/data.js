@@ -681,6 +681,7 @@ export const controlCenterItems = [
   { id: "cc-gamebase", icon: "👥", label: "Game Base", action: "gamebase" },
   { id: "cc-music", icon: "🎵", label: "Музыка", action: "music" },
   { id: "cc-sound", icon: "🔊", label: "Звук", action: "sound" },
+  { id: "cc-mic", icon: "🎤", label: "Микрофон", action: "mic" },
   { id: "cc-accessories", icon: "🎮", label: "Аксессуары", action: "accessories" },
   { id: "cc-profile", icon: "👤", label: "cr1mnsx", action: "modal:bio" },
   { id: "cc-power", icon: "⚡", label: "Питание", action: "power" }

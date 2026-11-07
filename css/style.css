@@ -42,7 +42,7 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background-color: var(--body-bg);
   color: var(--text-main);
   height: 100vh;
@@ -71,12 +71,12 @@ body {
 .bg-layer-a,
 .bg-layer-b {
   position: fixed;
-  inset: 0;
+  inset: -20px;
   background-size: cover;
   background-position: center;
   z-index: 1;
-  transform: scale(1.02);
-  transition: opacity 0.7s ease, filter 0.45s var(--ps-ease), transform 0.45s var(--ps-ease);
+  transform: scale(1.04);
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.45s var(--ps-ease), transform 0.8s var(--ps-ease);
   will-change: opacity, filter, transform;
 }
 
@@ -86,16 +86,16 @@ body {
 
 body.hub-active .bg-layer-a,
 body.hub-active .bg-layer-b {
-  filter: blur(10px) brightness(0.65);
-  transform: scale(1.05);
+  filter: blur(12px) brightness(0.6);
+  transform: scale(1.08);
 }
 
 .bg-overlay {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 75% 25%, rgba(7, 9, 15, 0.15) 0%, rgba(7, 9, 15, 0.88) 75%),
-    linear-gradient(to top, rgba(7, 9, 15, 0.96) 6%, rgba(7, 9, 15, 0.6) 40%, rgba(7, 9, 15, 0.3) 100%);
+    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0) 35%, rgba(4, 7, 14, 0.45) 70%, rgba(2, 4, 8, 0.85) 100%),
+    linear-gradient(to bottom, rgba(7, 9, 15, 0) 0%, rgba(7, 9, 15, 0.45) 45%, rgba(7, 9, 15, 0.92) 80%, rgba(7, 9, 15, 1) 100%);
   z-index: 2;
   pointer-events: none;
 }
@@ -377,24 +377,28 @@ body.hub-active .stage-game-hub {
   cursor: pointer;
   position: relative;
   transition: all 0.26s var(--ps-ease);
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   flex-shrink: 0;
-  overflow: visible;
+  opacity: 0.7;
 }
 
 .game-tile:hover {
+  opacity: 0.92;
   border-color: rgba(255, 255, 255, 0.45);
-  transform: translateY(-4px);
+  transform: translateY(-3px);
 }
 
 .game-tile.active {
-  width: 106px;
-  height: 106px;
-  border-color: var(--ps-glow);
+  width: 108px;
+  height: 108px;
+  border-radius: 22px;
+  opacity: 1;
+  border: 3px solid #ffffff;
   box-shadow:
-    0 0 28px rgba(255, 255, 255, 0.45),
-    0 16px 36px rgba(0, 0, 0, 0.75);
+    0 0 28px rgba(255, 255, 255, 0.55),
+    0 0 60px rgba(0, 112, 209, 0.45),
+    0 16px 36px rgba(0, 0, 0, 0.85);
   transform: translateY(-4px);
 }
 
@@ -402,33 +406,19 @@ body.hub-active .stage-game-hub {
   position: absolute;
   top: 6px;
   left: 6px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.82);
+  color: var(--ps-accent);
   font-size: 0.65rem;
-  font-weight: 700;
-  padding: 2px 7px;
+  font-weight: 800;
+  padding: 3px 8px;
   border-radius: 5px;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(4px);
+  letter-spacing: 0.6px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0, 212, 255, 0.35);
 }
 
 .tile-label {
-  position: absolute;
-  left: 122px;
-  bottom: 8px;
-  white-space: nowrap;
-  font-size: 1.15rem;
-  font-weight: 800;
-  color: var(--text-main);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
-  z-index: 10;
-}
-
-.game-tile.active .tile-label {
-  opacity: 1;
+  display: none; /* In authentic PS5, the active game title is rendered prominently in the Hero section below */
 }
 
 /* ---- Hero Section ---- */
@@ -446,24 +436,26 @@ body.hub-active .stage-game-hub {
 
 .hero-tag {
   display: inline-block;
-  font-size: 0.76rem;
+  font-size: 0.74rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1.4px;
-  background: rgba(0, 112, 209, 0.35);
+  letter-spacing: 1.5px;
+  background: rgba(0, 112, 209, 0.28);
   border: 1px solid rgba(0, 212, 255, 0.45);
-  padding: 5px 12px;
+  color: var(--ps-accent);
+  padding: 5px 14px;
   border-radius: 6px;
   margin-bottom: 12px;
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 3.2rem;
   font-weight: 900;
   line-height: 1.1;
   margin-bottom: 12px;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.025em;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.9);
 }
 
 .hero-desc {
@@ -471,6 +463,7 @@ body.hub-active .stage-game-hub {
   color: var(--text-muted);
   line-height: 1.55;
   margin-bottom: 24px;
+  max-width: 680px;
 }
 
 .hero-actions {
@@ -796,12 +789,14 @@ body.hub-active .stage-game-hub {
 
 .activity-card-ps5 {
   flex: 0 0 320px;
-  height: 185px;
-  border-radius: var(--radius-md);
+  width: 320px;
+  height: 180px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
   transition: transform 0.25s var(--ps-ease), border-color 0.25s ease, box-shadow 0.25s ease;
   scroll-snap-align: start;
@@ -813,8 +808,8 @@ body.hub-active .stage-game-hub {
 
 .activity-card-ps5:hover {
   transform: translateY(-6px) scale(1.03);
-  border-color: #fff;
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.35), 0 16px 36px rgba(0, 0, 0, 0.75);
+  border-color: #ffffff;
+  box-shadow: 0 0 28px rgba(255, 255, 255, 0.4), 0 16px 36px rgba(0, 112, 209, 0.45);
 }
 
 .act-bg {
@@ -822,7 +817,7 @@ body.hub-active .stage-game-hub {
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.4s ease;
+  transition: transform 0.4s var(--ps-ease);
   z-index: 1;
 }
 

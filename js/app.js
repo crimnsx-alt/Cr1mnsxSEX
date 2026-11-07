@@ -424,6 +424,11 @@ function handleControlCenterAction(action) {
       showToast("Звук", SoundEngine.muted ? "Звуковые эффекты выключены" : "Звуковые эффекты активны", SoundEngine.muted ? "🔇" : "🔊");
       break;
 
+    case "mic":
+      showToast("Микрофон DualSense", "Микрофон контроллера отключен (Mute)", "🎤");
+      SoundEngine.navigate();
+      break;
+
     case "accessories":
       closeControlCenter();
       showToast("DualSense Controller", "Заряд аккумулятора: 88% • Haptic Feedback", "🎮");
