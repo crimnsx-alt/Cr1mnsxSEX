@@ -25,7 +25,7 @@
   <div id="searchOverlay" class="search-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="search-modal">
       <div class="search-input-wrap">
-        <span class="search-lens">🔍</span>
+        <span class="search-lens"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
         <input id="searchInput" class="search-input" type="search" placeholder="Поиск проектов, навыков, 1С, сетапа, контактов…" autocomplete="off">
         <button id="searchCloseBtn" class="search-close" type="button" aria-label="Закрыть поиск">✕</button>
       </div>
@@ -65,9 +65,9 @@
 
   <!-- Game Hub Context Menu (Three Dots) -->
   <div id="contextMenu" class="context-menu" aria-hidden="true">
-    <button class="context-item" data-action="info" type="button">ℹ️ Информация о проекте</button>
-    <button class="context-item" data-action="share" type="button">🔗 Скопировать ссылку</button>
-    <button class="context-item" data-action="fav" type="button">⭐ Добавить в избранное</button>
+    <button class="context-item" data-action="info" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Информация о проекте</button>
+    <button class="context-item" data-action="share" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Скопировать ссылку</button>
+    <button class="context-item" data-action="fav" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Добавить в избранное</button>
   </div>
 
   <!-- ====== Master Viewport Stage (Two-Tier Viewport) ====== -->
@@ -84,10 +84,14 @@
 
         <div class="status-bar">
           <!-- Search -->
-          <button id="btnSearch" class="btn-top-icon" type="button" title="Поиск (Клавиша /)" aria-label="Поиск">🔍</button>
+          <button id="btnSearch" class="btn-top-icon" type="button" title="Поиск (Клавиша /)" aria-label="Поиск">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </button>
 
           <!-- Settings -->
-          <button id="btnSettings" class="btn-top-icon" type="button" title="Настройки системы PS5" aria-label="Настройки">⚙️</button>
+          <button id="btnSettings" class="btn-top-icon" type="button" title="Настройки системы PS5" aria-label="Настройки">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
 
           <!-- PS Button -->
           <button id="btnPS" class="btn-ps-home" type="button" title="PlayStation Button • Control Center (Пробел)" aria-label="Control Center">
@@ -95,11 +99,14 @@
           </button>
 
           <!-- Audio Toggle -->
-          <button id="muteBtn" class="mute-btn" type="button" title="Звук и фоновая музыка" aria-label="Звук">🔊</button>
+          <button id="muteBtn" class="mute-btn" type="button" title="Звук и фоновая музыка" aria-label="Звук">
+            <span id="muteIcon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
+          </button>
           
           <!-- Trophy Pill -->
           <div id="trophyPill" class="trophy-pill" role="button" tabindex="0" title="Открыть трофеи">
-            ★ Платина • Уровень 99
+            <svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+            <span>Платина • Уровень 99</span>
           </div>
 
           <!-- Profile -->
@@ -220,7 +227,7 @@
         <div class="cc-card cc-music-card">
           <div class="cc-card-tag">МУЗЫКА PS5</div>
           <div class="cc-music-info">
-            <span class="music-note">🎵</span>
+            <span class="music-note"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
             <div>
               <div class="music-title">PS5 Home Menu Ambient Synth</div>
               <div class="music-artist">Emaj9 Relaxing Soundtrack</div>

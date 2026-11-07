@@ -5,6 +5,8 @@
  * Исключены любые упоминания старых консолей.
  */
 
+import { PS5Icons } from "./icons.js";
+
 export const portfolioData = {
   projects: [
     {
@@ -612,17 +614,17 @@ export const settingsSections = [
   {
     id: "accounts",
     title: "Учетные записи и профиль",
-    icon: "👤",
+    icon: PS5Icons.profile,
     items: [
       { label: "Основной пользователь", val: "cr1mnsx (Дмитрий)", action: "modal:bio" },
-      { label: "Уровень PlayStation Network", val: "Уровень 99 • ★ Платина", action: "modal:trophy" },
+      { label: "Уровень PlayStation Network", val: "Уровень 99 • Платина", action: "modal:trophy" },
       { label: "Контакты & Связь", val: "vk.ru/cr1mnsx", action: "copy:vk" }
     ]
   },
   {
     id: "storage",
     title: "Память и Хранилище SSD",
-    icon: "💾",
+    icon: PS5Icons.storage,
     items: [
       { label: "Ultra-High Speed SSD", val: "825 GB (Доступно 667 GB)" },
       { label: "Стек разработки", val: "1С:Предприятие 8.3, JavaScript ESNext, Web Audio" },
@@ -632,7 +634,7 @@ export const settingsSections = [
   {
     id: "sound",
     title: "Звук и Аудиосистема",
-    icon: "🔊",
+    icon: PS5Icons.soundOn,
     items: [
       { label: "Фоновая музыка PS5", val: "Генеративный синтезатор меню", toggle: "ambient" },
       { label: "Звуковые эффекты интерфейса", val: "Синтез щелчков и аккордов", toggle: "sfx" },
@@ -642,7 +644,7 @@ export const settingsSections = [
   {
     id: "display",
     title: "Экран и Видео",
-    icon: "🖥️",
+    icon: PS5Icons.display,
     items: [
       { label: "Разрешение вывода", val: "3840 x 2160 (4K UHD) 60 FPS" },
       { label: "Трассировка лучей", val: "Ray Tracing Performance Mode" },
@@ -652,7 +654,7 @@ export const settingsSections = [
   {
     id: "accessories",
     title: "Аксессуары (DualSense)",
-    icon: "🎮",
+    icon: PS5Icons.controller,
     items: [
       { label: "Контроллер", val: "DualSense Wireless Controller" },
       { label: "Уровень заряда аккумулятора", val: "88% • Подключено по Bluetooth" },
@@ -662,7 +664,7 @@ export const settingsSections = [
   {
     id: "system",
     title: "Система",
-    icon: "ℹ️",
+    icon: PS5Icons.info,
     items: [
       { label: "Версия ПО консоли", val: "PlayStation 5 OS v24.8" },
       { label: "Устройство", val: "PS5-CR1MNSX" },
@@ -675,16 +677,16 @@ export const settingsSections = [
  * Элементы Control Center (PS Button)
  */
 export const controlCenterItems = [
-  { id: "cc-home", icon: "🏠", label: "Начало", action: "home" },
-  { id: "cc-switcher", icon: "🔀", label: "Переключатель", action: "switcher" },
-  { id: "cc-notifications", icon: "🔔", label: "Уведомления", action: "notifications" },
-  { id: "cc-gamebase", icon: "👥", label: "Game Base", action: "gamebase" },
-  { id: "cc-music", icon: "🎵", label: "Музыка", action: "music" },
-  { id: "cc-sound", icon: "🔊", label: "Звук", action: "sound" },
-  { id: "cc-mic", icon: "🎤", label: "Микрофон", action: "mic" },
-  { id: "cc-accessories", icon: "🎮", label: "Аксессуары", action: "accessories" },
-  { id: "cc-profile", icon: "👤", label: "cr1mnsx", action: "modal:bio" },
-  { id: "cc-power", icon: "⚡", label: "Питание", action: "power" }
+  { id: "cc-home", icon: PS5Icons.home, label: "Начало", action: "home" },
+  { id: "cc-switcher", icon: PS5Icons.switcher, label: "Переключатель", action: "switcher" },
+  { id: "cc-notifications", icon: PS5Icons.notifications, label: "Уведомления", action: "notifications" },
+  { id: "cc-gamebase", icon: PS5Icons.gamebase, label: "Game Base", action: "gamebase" },
+  { id: "cc-music", icon: PS5Icons.music, label: "Музыка", action: "music" },
+  { id: "cc-sound", icon: PS5Icons.soundOn, label: "Звук", action: "sound" },
+  { id: "cc-mic", icon: PS5Icons.mic, label: "Микрофон", action: "mic" },
+  { id: "cc-accessories", icon: PS5Icons.controller, label: "Аксессуары", action: "accessories" },
+  { id: "cc-profile", icon: PS5Icons.profile, label: "cr1mnsx", action: "modal:bio" },
+  { id: "cc-power", icon: PS5Icons.power, label: "Питание", action: "power" }
 ];
 
 /**

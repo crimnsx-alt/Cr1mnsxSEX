@@ -19,3 +19,4 @@ description: Директива эффективности и борьбы с н
 ## 3. Execution Strategy
 - Think through edge cases silently; do not output verbose chains of thought into the response unless debugging is requested.
 - If an error occurs, pinpoint the exact line, state the root cause in 1-2 bullet points, and provide the fix.
+

@@ -17,6 +17,7 @@ import {
   searchCatalog
 } from "./data.js";
 import { SoundEngine } from "./sound.js";
+import { PS5Icons } from "./icons.js";
 
 // ============================================================
 // State
@@ -90,7 +91,7 @@ const dom = {
 // ============================================================
 // Toast Notification System (PS5 Style)
 // ============================================================
-function showToast(title, message, icon = "🎮") {
+function showToast(title, message, icon = PS5Icons.controller) {
   const toast = document.createElement("div");
   toast.className = "ps5-toast";
   toast.innerHTML = `
@@ -229,17 +230,17 @@ function renderGameHubContent() {
   dom.hubTrophies.innerHTML = "";
   const t = currentItem.trophies || { platinum: 1, gold: 5, silver: 10, bronze: 20 };
   const trophiesList = [
-    { label: "★ 1 Платина", count: t.platinum, color: "#00d4ff" },
-    { label: "🥇 Золото", count: t.gold, color: "#f1c40f" },
-    { label: "🥈 Серебро", count: t.silver, color: "#bdc3c7" },
-    { label: "🥉 Бронза", count: t.bronze, color: "#e67e22" }
+    { label: "Платина", count: t.platinum, color: "#00d4ff" },
+    { label: "Золото", count: t.gold, color: "#f1c40f" },
+    { label: "Серебро", count: t.silver, color: "#bdc3c7" },
+    { label: "Бронза", count: t.bronze, color: "#e67e22" }
   ];
 
   trophiesList.forEach((tr) => {
     const badge = document.createElement("div");
     badge.className = "hub-trophy-badge";
     badge.style.color = tr.color;
-    badge.textContent = `${tr.label}: ${tr.count}`;
+    badge.innerHTML = `<span style="display:inline-flex; align-items:center; gap:6px;">${PS5Icons.trophy} ${tr.label}: ${tr.count}</span>`;
     dom.hubTrophies.appendChild(badge);
   });
 }
@@ -398,12 +399,12 @@ function handleControlCenterAction(action) {
       closeControlCenter();
       selectItem((activeIndex + 1) % portfolioData[currentCategory].length);
       SoundEngine.navigate();
-      showToast("Переключатель", "Выбран следующий проект", "🔀");
+      showToast("Переключатель", "Выбран следующий проект", PS5Icons.switcher);
       break;
 
     case "notifications":
       closeControlCenter();
-      showToast("PlayStation Network", "Все сетевые службы функционируют штатно", "🔔");
+      showToast("PlayStation Network", "Все сетевые службы функционируют штатно", PS5Icons.notifications);
       break;
 
     case "gamebase":
@@ -414,24 +415,23 @@ function handleControlCenterAction(action) {
     case "music":
       const playing = SoundEngine.toggleAmbient();
       dom.ccMusicToggle.textContent = playing ? "⏸ Пауза" : "▶ Играть";
-      showToast("Фоновая музыка PS5", playing ? "Воспроизведение включено" : "Пауза", "🎵");
+      showToast("Фоновая музыка PS5", playing ? "Воспроизведение включено" : "Пауза", PS5Icons.music);
       break;
 
     case "sound":
       SoundEngine.toggle();
-      dom.muteBtn.textContent = SoundEngine.muted ? "🔇" : "🔊";
-      dom.muteBtn.classList.toggle("muted", SoundEngine.muted);
-      showToast("Звук", SoundEngine.muted ? "Звуковые эффекты выключены" : "Звуковые эффекты активны", SoundEngine.muted ? "🔇" : "🔊");
+      updateMuteButtonUI();
+      showToast("Звук", SoundEngine.muted ? "Звуковые эффекты выключены" : "Звуковые эффекты активны", SoundEngine.muted ? PS5Icons.soundMuted : PS5Icons.soundOn);
       break;
 
     case "mic":
-      showToast("Микрофон DualSense", "Микрофон контроллера отключен (Mute)", "🎤");
+      showToast("Микрофон DualSense", "Микрофон контроллера отключен (Mute)", PS5Icons.mic);
       SoundEngine.navigate();
       break;
 
     case "accessories":
       closeControlCenter();
-      showToast("DualSense Controller", "Заряд аккумулятора: 88% • Haptic Feedback", "🎮");
+      showToast("DualSense Controller", "Заряд аккумулятора: 88% • Haptic Feedback", PS5Icons.controller);
       break;
 
     case "power":
@@ -603,12 +603,11 @@ function renderSettingsDetail(sectionId) {
           const playing = SoundEngine.toggleAmbient();
           btn.textContent = playing ? "Выключить" : "Включить";
           dom.ccMusicToggle.textContent = playing ? "⏸ Пауза" : "▶ Играть";
-          showToast("Фоновая музыка", playing ? "Включена" : "Выключена", "🎵");
+          showToast("Фоновая музыка", playing ? "Включена" : "Выключена", PS5Icons.music);
         } else if (btn.dataset.toggle === "sfx") {
           SoundEngine.toggle();
           btn.textContent = SoundEngine.muted ? "Включить" : "Выключить";
-          dom.muteBtn.textContent = SoundEngine.muted ? "🔇" : "🔊";
-          dom.muteBtn.classList.toggle("muted", SoundEngine.muted);
+          updateMuteButtonUI();
         }
       });
     }
@@ -651,7 +650,7 @@ function handleContextAction(act) {
 
     case "fav":
       SoundEngine.chime();
-      showToast("Избранное", `Проект «${currentItem.title}» закреплен в быстром доступе`, "⭐");
+      showToast("Избранное", `Проект «${currentItem.title}» закреплен в быстром доступе`, PS5Icons.star);
       break;
   }
 }
@@ -787,7 +786,7 @@ function openGameLibraryModal() {
         }
         selectItem(idx);
         SoundEngine.confirm();
-        showToast("Библиотека проектов", `Выбран проект «${portfolioData[cat][idx].title}»`, "🎮");
+        showToast("Библиотека проектов", `Выбран проект «${portfolioData[cat][idx].title}»`, PS5Icons.controller);
       });
     });
   }
@@ -805,6 +804,11 @@ function openGameLibraryModal() {
   });
 
   attachLibraryEvents();
+}
+
+function updateMuteButtonUI() {
+  dom.muteBtn.innerHTML = SoundEngine.muted ? PS5Icons.soundMuted : PS5Icons.soundOn;
+  dom.muteBtn.classList.toggle("muted", SoundEngine.muted);
 }
 
 // ============================================================
@@ -838,8 +842,7 @@ function handleAction(actionString) {
   if (actionString === "sound_mute") {
     closeModal();
     SoundEngine.toggle();
-    dom.muteBtn.textContent = SoundEngine.muted ? "🔇" : "🔊";
-    dom.muteBtn.classList.toggle("muted", SoundEngine.muted);
+    updateMuteButtonUI();
     return;
   }
 
@@ -935,19 +938,19 @@ function handleAction(actionString) {
       content: `
         <div class="modal-spec-grid">
           <div class="modal-spec-box">
-            <span class="spec-label">★ Платиновые</span>
+            <span class="spec-label" style="display:flex; align-items:center; gap:6px;">${PS5Icons.trophy} Платиновые</span>
             <span class="spec-val" style="color: #00d4ff;">1 Трофей (100% зачистка)</span>
           </div>
           <div class="modal-spec-box">
-            <span class="spec-label">🥇 Золотые</span>
+            <span class="spec-label" style="display:flex; align-items:center; gap:6px;">${PS5Icons.trophy} Золотые</span>
             <span class="spec-val" style="color: #f1c40f;">12 Трофеев</span>
           </div>
           <div class="modal-spec-box">
-            <span class="spec-label">🥈 Серебряные</span>
+            <span class="spec-label" style="display:flex; align-items:center; gap:6px;">${PS5Icons.trophy} Серебряные</span>
             <span class="spec-val" style="color: #bdc3c7;">28 Трофеев</span>
           </div>
           <div class="modal-spec-box">
-            <span class="spec-label">🥉 Бронзовые</span>
+            <span class="spec-label" style="display:flex; align-items:center; gap:6px;">${PS5Icons.trophy} Бронзовые</span>
             <span class="spec-val" style="color: #e67e22;">58 Трофеев</span>
           </div>
         </div>
@@ -1097,7 +1100,7 @@ function initMuteButton() {
   const btn = dom.muteBtn;
 
   function updateIcon() {
-    btn.textContent = SoundEngine.muted ? "🔇" : "🔊";
+    btn.innerHTML = SoundEngine.muted ? PS5Icons.soundMuted : PS5Icons.soundOn;
     btn.classList.toggle("muted", SoundEngine.muted);
     btn.setAttribute("aria-label", SoundEngine.muted ? "Включить звук" : "Выключить звук");
   }
@@ -1105,7 +1108,7 @@ function initMuteButton() {
   btn.addEventListener("click", () => {
     SoundEngine.toggle();
     updateIcon();
-    showToast("Аудио PS5", SoundEngine.muted ? "Звук выключен" : "Звук включен", SoundEngine.muted ? "🔇" : "🔊");
+    showToast("Аудио PS5", SoundEngine.muted ? "Звук выключен" : "Звук включен", SoundEngine.muted ? PS5Icons.soundMuted : PS5Icons.soundOn);
   });
 
   updateIcon();

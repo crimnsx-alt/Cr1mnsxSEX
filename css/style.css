@@ -1983,3 +1983,52 @@ body.hub-active .stage-game-hub {
     font-size: 1rem;
   }
 }
+
+/* ============================================================
+   Vector Icon System & Anti-Slop Tactile Feedback
+   ============================================================ */
+.icon-inline {
+  display: inline-block;
+  vertical-align: -2px;
+  stroke: currentColor;
+}
+
+.btn-top-icon svg,
+.mute-btn svg,
+.cc-item-btn svg,
+.settings-nav-btn svg {
+  display: block;
+  stroke: currentColor;
+}
+
+.toast-icon svg {
+  display: block;
+  stroke: #ffffff;
+}
+
+/* Tactile Active States */
+.btn-play:active,
+.btn-secondary:active,
+.btn-top-icon:active,
+.btn-ps-home:active,
+.mute-btn:active,
+.trophy-pill:active,
+.profile-pill:active,
+.game-tile:active,
+.activity-card-ps5:active,
+.cc-item-btn:active,
+.btn-modal:active {
+  transform: scale(0.96) !important;
+}
+
+/* Prefers Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
