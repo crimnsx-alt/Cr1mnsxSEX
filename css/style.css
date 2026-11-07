@@ -1,7 +1,7 @@
 /* ============================================================
-   PS5 Welcome Hub — Design System & Layout
-   PlayStation 5 Bento-grid, glassmorphism, dynamic themes,
-   modal drawer, toast notifications, controller hints.
+   PS5 Home Menu & Welcome Hub — Complete Design System
+   PlayStation 5 Dashboard aesthetics, Bento grid, Control Center,
+   Settings screen, Search overlay, Ambient sound engine styling.
    ============================================================ */
 
 /* ---- Custom Properties ---- */
@@ -12,11 +12,11 @@
   --ps-accent: #00d4ff;
   --ps-glow: rgba(255, 255, 255, 0.9);
   --glass-bg: rgba(16, 20, 32, 0.72);
-  --glass-bg-hover: rgba(26, 32, 50, 0.85);
+  --glass-bg-hover: rgba(26, 32, 50, 0.88);
   --glass-border: rgba(255, 255, 255, 0.14);
-  --glass-border-hover: rgba(255, 255, 255, 0.42);
-  --card-blue-bg: linear-gradient(135deg, rgba(0, 67, 156, 0.82) 0%, rgba(0, 112, 209, 0.72) 100%);
-  --card-blue-border: rgba(0, 212, 255, 0.35);
+  --glass-border-hover: rgba(255, 255, 255, 0.45);
+  --card-blue-bg: linear-gradient(135deg, rgba(0, 67, 156, 0.84) 0%, rgba(0, 112, 209, 0.74) 100%);
+  --card-blue-border: rgba(0, 212, 255, 0.38);
   --text-main: #ffffff;
   --text-muted: rgba(255, 255, 255, 0.68);
   --text-dim: rgba(255, 255, 255, 0.45);
@@ -102,7 +102,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 32px 56px 48px;
+  padding: 32px 56px 64px;
   gap: 36px;
   transition: opacity 0.4s ease, filter 0.4s ease;
 }
@@ -253,9 +253,62 @@ body.showcase-active .showcase-banner {
 .status-bar {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
   font-size: 1.05rem;
   color: var(--text-muted);
+}
+
+/* Circular Top Icons (Search, Settings) */
+.btn-top-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+  color: var(--text-main);
+  font-size: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-top-icon:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.16);
+  transform: scale(1.08);
+}
+
+/* PS Button */
+.btn-ps-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00439c, #0070d1);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(0, 112, 209, 0.55);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-ps-home:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.85);
+  border-color: #fff;
+}
+
+.ps-logo-icon {
+  font-weight: 900;
+  font-size: 0.88rem;
+  color: #fff;
+  letter-spacing: -0.5px;
 }
 
 .mute-btn {
@@ -318,7 +371,6 @@ body.showcase-active .showcase-banner {
   color: var(--text-main);
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.2s ease;
-  border: none;
   font: inherit;
 }
 
@@ -479,6 +531,7 @@ body.showcase-active .showcase-banner {
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
+  position: relative;
 }
 
 .btn-play {
@@ -525,6 +578,77 @@ body.showcase-active .showcase-banner {
   background: rgba(255, 255, 255, 0.16);
   border-color: rgba(255, 255, 255, 0.45);
   transform: scale(1.02);
+}
+
+/* Three Dots Context Button */
+.btn-dots-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  transition: all 0.2s ease;
+}
+
+.btn-dots-menu:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.05);
+}
+
+/* Floating Context Menu */
+.context-menu {
+  position: absolute;
+  top: 60px;
+  left: 280px;
+  background: rgba(16, 20, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.8);
+  border-radius: 14px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 50;
+  min-width: 210px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px) scale(0.95);
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+  backdrop-filter: blur(20px);
+}
+
+.context-menu.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.context-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.context-item:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 /* ---- Activity Quick Cards ---- */
@@ -666,7 +790,6 @@ body.showcase-active .showcase-banner {
   transform: translateY(-4px);
 }
 
-/* Widget Dimensions */
 .widget-1x1 {
   grid-column: span 1;
   min-height: 220px;
@@ -689,7 +812,6 @@ body.showcase-active .showcase-banner {
   min-height: 380px;
 }
 
-/* Widget Theme Variants */
 .widget-card.widget-glass {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -712,7 +834,6 @@ body.showcase-active .showcase-banner {
   box-shadow: 0 0 32px rgba(0, 112, 209, 0.4), 0 12px 36px rgba(0, 0, 0, 0.6);
 }
 
-/* Widget Header */
 .widget-header {
   display: flex;
   justify-content: space-between;
@@ -800,7 +921,6 @@ body.showcase-active .showcase-banner {
   transform: scale(1.1);
 }
 
-/* Widget Content Area */
 .widget-body {
   flex: 1;
   display: flex;
@@ -809,7 +929,6 @@ body.showcase-active .showcase-banner {
   gap: 12px;
 }
 
-/* Widget Footer Note */
 .widget-footer-note {
   font-size: 0.74rem;
   color: var(--text-dim);
@@ -818,8 +937,7 @@ body.showcase-active .showcase-banner {
   margin-top: 14px;
 }
 
-/* ---- Specific Widget Interiors ---- */
-/* 1. Trophy Widget */
+/* Specific Widget Interiors */
 .widget-trophy-display {
   display: flex;
   align-items: center;
@@ -859,15 +977,9 @@ body.showcase-active .showcase-banner {
   color: #00d4ff;
   border-color: rgba(0, 212, 255, 0.4);
 }
-.t-badge.gold {
-  color: #f1c40f;
-}
-.t-badge.silver {
-  color: #bdc3c7;
-}
-.t-badge.bronze {
-  color: #e67e22;
-}
+.t-badge.gold { color: #f1c40f; }
+.t-badge.silver { color: #bdc3c7; }
+.t-badge.bronze { color: #e67e22; }
 
 .trophy-progress-wrap {
   display: flex;
@@ -895,7 +1007,6 @@ body.showcase-active .showcase-banner {
   font-weight: 600;
 }
 
-/* 2. Storage / Tech Stack Widget */
 .storage-meters {
   display: flex;
   flex-direction: column;
@@ -939,7 +1050,6 @@ body.showcase-active .showcase-banner {
 .meter-bar.c-white { background: #ffffff; }
 .meter-bar.c-purple { background: #a855f7; }
 
-/* 3. Controller & Battery Widget */
 .battery-card-content {
   display: flex;
   flex-direction: column;
@@ -1003,7 +1113,6 @@ body.showcase-active .showcase-banner {
   background: rgba(0, 212, 255, 0.12);
 }
 
-/* 4. PSN Status Widget */
 .psn-status-card {
   display: flex;
   flex-direction: column;
@@ -1089,7 +1198,6 @@ body.showcase-active .showcase-banner {
   background: rgba(255, 255, 255, 0.28);
 }
 
-/* 5. Quick Links Widget */
 .quick-links-list {
   display: flex;
   flex-direction: column;
@@ -1116,33 +1224,12 @@ body.showcase-active .showcase-banner {
   transform: translateX(4px);
 }
 
-.q-icon {
-  font-size: 1.1rem;
-}
+.q-icon { font-size: 1.1rem; }
+.q-info { flex: 1; display: flex; flex-direction: column; }
+.q-title { font-size: 0.86rem; font-weight: 700; color: #fff; }
+.q-desc { font-size: 0.72rem; color: var(--text-muted); }
+.q-copy-btn, .q-arrow { font-size: 0.9rem; color: var(--ps-accent); }
 
-.q-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.q-title {
-  font-size: 0.86rem;
-  font-weight: 700;
-  color: #fff;
-}
-
-.q-desc {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-}
-
-.q-copy-btn, .q-arrow {
-  font-size: 0.9rem;
-  color: var(--ps-accent);
-}
-
-/* 6. Media Gallery Widget */
 .media-preview-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -1165,48 +1252,371 @@ body.showcase-active .showcase-banner {
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
 }
 
-/* ---- Bottom Controller Hints Row ---- */
-.bottom-row {
+/* ============================================================
+   Authentic PS5 Control Center Bar (PS Button)
+   ============================================================ */
+.control-center-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  z-index: 95;
+  padding-bottom: 24px;
+  pointer-events: none;
+  transform: translateY(120%);
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.control-center-bar.active {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.cc-track {
+  display: flex;
   align-items: center;
-  gap: 24px;
-  margin-top: 10px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  gap: 8px;
+  background: rgba(16, 20, 32, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(28px);
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow:
+    0 0 36px rgba(0, 112, 209, 0.45),
+    0 16px 48px rgba(0, 0, 0, 0.85);
 }
 
-.controller-hints {
+.cc-item-btn {
   display: flex;
-  gap: 20px;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  white-space: nowrap;
-  flex-wrap: wrap;
-}
-
-.hint-badge {
-  display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 3px 8px;
-  height: 22px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.18);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
   color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  margin-right: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.footer-system-status {
-  font-size: 0.84rem;
-  color: var(--text-dim);
+.cc-item-btn:hover,
+.cc-item-btn:focus {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.5);
+  outline: none;
+}
+
+.cc-item-btn .cc-tooltip {
+  position: absolute;
+  top: -34px;
+  white-space: nowrap;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.cc-item-btn:hover .cc-tooltip {
+  opacity: 1;
 }
 
 /* ============================================================
-   PS5 Modal / Drawer System (Внутренние окна без редиректов)
+   PS5 Search Overlay (Live Quick Search)
+   ============================================================ */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(7, 9, 15, 0.82);
+  backdrop-filter: blur(20px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px 24px 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.search-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search-modal {
+  width: 100%;
+  max-width: 640px;
+  background: rgba(16, 20, 32, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  gap: 12px;
+}
+
+.search-lens {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.search-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-results-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.search-result-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.search-result-card:hover {
+  background: rgba(0, 112, 209, 0.35);
+  border-color: var(--ps-accent);
+}
+
+.sr-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sr-title {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #fff;
+}
+
+.sr-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.sr-cat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ps-accent);
+  background: rgba(0, 212, 255, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* ============================================================
+   PS5 Settings Screen Modal
+   ============================================================ */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(7, 9, 15, 0.88);
+  backdrop-filter: blur(24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 36px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.settings-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.settings-modal {
+  width: 100%;
+  max-width: 960px;
+  height: 82vh;
+  background: rgba(16, 20, 32, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.settings-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: var(--ps-accent);
+}
+
+.settings-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.settings-close-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.settings-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.settings-nav {
+  width: 280px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+
+.settings-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.settings-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.settings-nav-btn.active {
+  background: rgba(0, 112, 209, 0.45);
+  border: 1px solid var(--ps-accent);
+  color: #fff;
+}
+
+.settings-detail {
+  flex: 1;
+  padding: 28px 36px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.settings-item-card {
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.settings-item-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.settings-item-val {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}
+
+.btn-settings-action {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-settings-action:hover {
+  background: #ffffff;
+  color: #07090f;
+}
+
+/* ============================================================
+   PS5 Modal / Drawer System
    ============================================================ */
 .modal-overlay {
   position: fixed;
@@ -1232,7 +1642,7 @@ body.showcase-active .showcase-banner {
   position: relative;
   width: 100%;
   max-width: 680px;
-  background: rgba(16, 20, 32, 0.92);
+  background: rgba(16, 20, 32, 0.94);
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 24px;
   box-shadow:
@@ -1248,7 +1658,6 @@ body.showcase-active .showcase-banner {
   transform: scale(1) translateY(0);
 }
 
-/* Background PlayStation Shape Symbols watermark */
 .modal-ps-shapes {
   position: absolute;
   top: 18px;
@@ -1407,7 +1816,7 @@ body.showcase-active .showcase-banner {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: rgba(16, 20, 32, 0.92);
+  background: rgba(16, 20, 32, 0.94);
   border: 1px solid rgba(0, 212, 255, 0.45);
   box-shadow:
     0 0 28px rgba(0, 112, 209, 0.45),
@@ -1470,6 +1879,46 @@ body.showcase-active .showcase-banner {
   color: #fff;
 }
 
+/* ---- Bottom Controller Hints Row ---- */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 10px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.controller-hints {
+  display: flex;
+  gap: 18px;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-wrap: wrap;
+}
+
+.hint-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px 8px;
+  height: 22px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-right: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.footer-system-status {
+  font-size: 0.84rem;
+  color: var(--text-dim);
+}
+
 /* ============================================================
    Responsive Rules
    ============================================================ */
@@ -1516,11 +1965,18 @@ body.showcase-active .showcase-banner {
   .controller-hints {
     display: none;
   }
-  .modal-card {
-    padding: 28px 24px;
+  .settings-modal {
+    height: 90vh;
   }
-  .modal-spec-grid {
-    grid-template-columns: 1fr;
+  .settings-layout {
+    flex-direction: column;
+  }
+  .settings-nav {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -1565,5 +2021,17 @@ body.showcase-active .showcase-banner {
   }
   .ps5-toast {
     min-width: auto;
+  }
+  .control-center-bar {
+    padding-bottom: 12px;
+  }
+  .cc-track {
+    gap: 4px;
+    padding: 6px 12px;
+  }
+  .cc-item-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
   }
 }

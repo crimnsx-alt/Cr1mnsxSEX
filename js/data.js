@@ -1,7 +1,8 @@
 /**
- * PS5 Welcome Hub — Data Store
- * Все данные персонального хаба Дмитрия (cr1mnsx).
- * Вкладки: "projects" (Проекты) и "link" (Link).
+ * PS5 Welcome Hub & Home Menu — Data Store
+ * Содержит данные проектов, категорий, Bento-виджетов, тем,
+ * настроек системы PS5, Control Center и поискового индекса.
+ * Никаких упоминаний старых консолей.
  */
 
 export const bgThemes = [
@@ -44,7 +45,7 @@ export const portfolioData = {
       title: "Дмитрий (cr1mnsx)",
       badge: "WELCOME HUB",
       tag: "Next-Gen Dashboard • Личный хаб",
-      desc: "Персональное интерактивное пространство Дмитрия (cr1mnsx): современные проекты, разработка, экспертиза в 1С:Предприятие, веб-технологии и прямые контакты.",
+      desc: "Персональное интерактивное пространство Дмитрия (cr1mnsx): современные веб-проекты, экспертиза в 1С:Предприятие, передовой фронтенд и прямые контакты.",
       btnText: "Обо мне & Стек",
       btnAction: "modal:bio",
       secText: "Скопировать контакт",
@@ -82,14 +83,14 @@ export const portfolioData = {
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Интерфейс</span>
-              <span class="spec-val">PS5 Welcome Hub Glassmorphism</span>
+              <span class="spec-val">PS5 Welcome Hub & Home Menu</span>
             </div>
             <div class="modal-spec-box">
               <span class="spec-label">Стек</span>
               <span class="spec-val">1С:Предприятие, JS (ESNext), CSS3, Web Audio</span>
             </div>
           </div>
-          <p class="modal-p">Интересуюсь созданием высокотехнологичных пользовательских интерфейсов с глубоким погружением (звук, микроанимации, физика переходов), а также комплексным внедрением и оптимизацией конфигураций 1С для реального бизнеса.</p>
+          <p class="modal-p">Фокус на создании эргономичных интерфейсов с реалистичным аудио-откликом (Web Audio API), оптимизации рабочих процессов и внедрении стандартов разработки.</p>
         `,
         actions: [
           { text: "Скопировать VK (cr1mnsx)", action: "copy:vk", primary: true },
@@ -147,7 +148,7 @@ export const portfolioData = {
               <span class="spec-val">Комплексная клиентская поддержка</span>
             </div>
           </div>
-          <p class="modal-p">Умение слушать бизнес-заказчика, выявлять узкие места в ведении учета и предлагать выверенные системные решения на платформе 1С:Предприятие 8.3.</p>
+          <p class="modal-p">Глубокое понимание бизнес-требований и умение трансформировать их в надежные рабочие алгоритмы.</p>
         `,
         actions: [
           { text: "Скопировать контакт для связи", action: "copy:vk", primary: true },
@@ -205,7 +206,6 @@ export const portfolioData = {
               <span class="spec-val">Прототипирование механик</span>
             </div>
           </div>
-          <p class="modal-p">Я с радостью поддерживаю проект экспертизой в интерактивных механиках, звуковом оформлении и тестировании ощущений в шлеме виртуальной реальности.</p>
         `,
         actions: [
           { text: "Написать авторам", action: "copy:vk", primary: true }
@@ -449,16 +449,13 @@ export const portfolioData = {
   ]
 };
 
-/**
- * Данные виджетов для Welcome Hub Bento Grid
- */
 export const welcomeWidgets = [
   {
     id: "widget-trophy",
     title: "Трофеи и Достижения",
     badge: "PSN LEVEL 99",
-    type: "blue", // 'blue' or 'glass'
-    defaultSpan: "widget-2x1", // 2x1, 1x1, 1x2
+    type: "blue",
+    defaultSpan: "widget-2x1",
     icon: "trophy",
     headerRight: "100% Завершено",
     content: `
@@ -653,4 +650,100 @@ export const layoutPresets = [
       "widget-media": "widget-2x1"
     }
   }
+];
+
+/**
+ * Аутентичные категории настроек PS5 Settings
+ */
+export const settingsSections = [
+  {
+    id: "accounts",
+    title: "Учетные записи и профиль",
+    icon: "👤",
+    items: [
+      { label: "Основной аккаунт", val: "cr1mnsx (Дмитрий)", action: "modal:bio" },
+      { label: "Уровень PlayStation Network", val: "Уровень 99 • ★ Платина", action: "modal:trophy" },
+      { label: "Конфиденциальность & Контакты", val: "Открыт к предложениям", action: "copy:vk" }
+    ]
+  },
+  {
+    id: "storage",
+    title: "Память и Хранилище SSD",
+    icon: "💾",
+    items: [
+      { label: "Сверхскоростной накопитель", val: "825 GB NVMe SSD (Доступно 667 GB)" },
+      { label: "Стек разработки", val: "1С:Предприятие 8.3, JavaScript, Web Audio API" },
+      { label: "Анализ баз данных & Учет", val: "КГ «РУНА» Экспертиза" }
+    ]
+  },
+  {
+    id: "sound",
+    title: "Звук и Аудиосистема",
+    icon: "🔊",
+    items: [
+      { label: "Фоновая музыка PS5", val: "Генеративный Ambient Synthesizer", toggle: "ambient" },
+      { label: "Звуковые эффекты интерфейса", val: "Синтез Web Audio API (Активны)", toggle: "sfx" },
+      { label: "3D Audio Tempest Engine", val: "Откалибровано для наушников" }
+    ]
+  },
+  {
+    id: "display",
+    title: "Экран и Видео",
+    icon: "🖥️",
+    items: [
+      { label: "Разрешение вывода", val: "3840 x 2160 (4K UHD) 60 FPS" },
+      { label: "Трассировка лучей (Ray Tracing)", val: "Включена • Режим быстродействия" },
+      { label: "Визуальный стиль", val: "PS5 Glassmorphism UI" }
+    ]
+  },
+  {
+    id: "accessories",
+    title: "Аксессуары (DualSense)",
+    icon: "🎮",
+    items: [
+      { label: "Беспроводной контроллер", val: "DualSense Wireless Controller" },
+      { label: "Уровень заряда аккумулятора", val: "88% (Подключено по Bluetooth)" },
+      { label: "Тактильная отдача & Триггеры", val: "Максимальная чувствительность" }
+    ]
+  },
+  {
+    id: "system",
+    title: "Система",
+    icon: "ℹ️",
+    items: [
+      { label: "Версия ПО консоли", val: "PlayStation 5 OS v24.8 (Welcome Hub)" },
+      { label: "Имя устройства", val: "PS5-CR1MNSX" },
+      { label: "Репозиторий", val: "crimnsx-alt/Cr1mnsxSEX" }
+    ]
+  }
+];
+
+/**
+ * Элементы Control Center (PS Button)
+ */
+export const controlCenterItems = [
+  { id: "cc-home", icon: "🏠", label: "Начало", action: "home" },
+  { id: "cc-switcher", icon: "🔀", label: "Переключатель", action: "switcher" },
+  { id: "cc-notifications", icon: "🔔", label: "Уведомления", action: "notifications" },
+  { id: "cc-gamebase", icon: "👥", label: "Game Base", action: "gamebase" },
+  { id: "cc-music", icon: "🎵", label: "Музыка", action: "music" },
+  { id: "cc-sound", icon: "🔊", label: "Звук", action: "sound" },
+  { id: "cc-accessories", icon: "🎮", label: "Аксессуары", action: "accessories" },
+  { id: "cc-profile", icon: "👤", label: "cr1mnsx", action: "modal:bio" },
+  { id: "cc-power", icon: "⚡", label: "Питание", action: "power" }
+];
+
+/**
+ * Поисковый индекс для мгновенного поиска по всему сайту
+ */
+export const searchCatalog = [
+  { title: "Дмитрий (cr1mnsx)", category: "Профиль", desc: "Главный хаб, биография, контакты", action: "modal:bio" },
+  { title: "1С:Предприятие & Консалтинг", category: "Карьера", desc: "Опыт в КГ «РУНА», УЦ №1", action: "modal:career" },
+  { title: "«По ту сторону яви»", category: "VR Проект", desc: "3D Virtual Reality Adventure", action: "modal:vr" },
+  { title: "Связь и Контакты", category: "Контакты", desc: "VK: vk.ru/cr1mnsx, GitHub", action: "modal:contacts" },
+  { title: "Боевой Сетап & ПК", category: "Сетап", desc: "Ryzen 5600X, RTX 3060 Ti, MacBook Air", action: "modal:setup" },
+  { title: "PlayStation 5 Гейминг", category: "Консоль", desc: "PS5, DualSense, GTA V RT 60FPS", action: "modal:gaming" },
+  { title: "Трофеи и Достижения", category: "PSN", desc: "★ 1 Платина, 12 Золото, Уровень 99", action: "modal:trophy" },
+  { title: "GitHub Репозиторий", category: "Код", desc: "github.com/crimnsx-alt", link: "https://github.com/crimnsx-alt" },
+  { title: "ВКонтакте", category: "Связь", desc: "vk.ru/cr1mnsx", action: "copy:vk" }
 ];
