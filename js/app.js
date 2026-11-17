@@ -225,6 +225,13 @@ function applyLanguageAndTelemetry() {
 
   $("#tabGames").textContent = S("tabGames");
   $("#tabMedia").textContent = S("tabMedia");
+  const tipsSpan = $("#btnSberTips")?.querySelector("span");
+  if (tipsSpan) {
+    tipsSpan.textContent = state.lang === "ru" ? "Донат" : "Donate";
+  }
+  if ($("#btnSberTips")) {
+    $("#btnSberTips").title = state.lang === "ru" ? "DonationAlerts · Поддержать автора" : "DonationAlerts · Support Project";
+  }
   $("#lblOnlineFriends").textContent = S("onlineFriends");
   $("#lblAccessibility").textContent = S("accessibility");
   $("#lblAccessibilityDesc").textContent = S("accessibilityDesc");
@@ -328,6 +335,9 @@ function renderRibbon() {
   const activeBtn = ribbonEl.querySelector(".ps5-tile.is-active");
   if (activeBtn) {
     activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    if (document.activeElement && document.activeElement.classList.contains("ps5-tile")) {
+      activeBtn.focus({ preventScroll: true });
+    }
   }
 }
 
@@ -1758,13 +1768,30 @@ function closeContextMenu() {
   menu.setAttribute("aria-hidden", "true");
 }
 
+function getTopbarItems() {
+  return [
+    $("#tabGames"),
+    $("#tabMedia"),
+    $("#btnSberTips"),
+    $("#btnLangToggle"),
+    $("#muteBtn"),
+    $("#btnSearch"),
+    $("#btnNotifications"),
+    $("#btnSettings"),
+    $("#btnProfile")
+  ].filter(Boolean);
+}
+
 function handleKeydown(e) {
   const sberOpen = $("#modalSberTips") && $("#modalSberTips").classList.contains("active");
   const modalOpen = $("#modalOverlay").classList.contains("active");
   const searchOpen = $("#searchOverlay").classList.contains("active");
   const settingsOpen = $("#settingsOverlay").classList.contains("active");
 
-  if (e.key === "Escape") {
+  if (e.key === "Escape" || e.key === "o" || e.key === "O") {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") && e.key !== "Escape") {
+      return;
+    }
     e.preventDefault();
     if (sberOpen) return closeSberTips();
     if (modalOpen) return closeModal();
@@ -1776,6 +1803,8 @@ function handleKeydown(e) {
   }
 
   if (sberOpen || modalOpen || searchOpen || settingsOpen) return;
+
+  if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
   if (e.key === " ") {
     e.preventDefault();
@@ -1790,26 +1819,98 @@ function handleKeydown(e) {
     return switchCategory(state.category === "games" ? "media" : "games");
   }
 
+  const topbarItems = getTopbarItems();
+  const currentFocused = document.activeElement;
+  const topbarIndex = topbarItems.indexOf(currentFocused);
+
+  // If focus is inside the Top Navigation / System Bar
+  if (topbarIndex !== -1) {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      const nextIndex = Math.min(topbarItems.length - 1, topbarIndex + 1);
+      topbarItems[nextIndex].focus();
+      SoundEngine.navigate();
+      return;
+    }
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      const prevIndex = Math.max(0, topbarIndex - 1);
+      topbarItems[prevIndex].focus();
+      SoundEngine.navigate();
+      return;
+    }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const activeTile = document.querySelector(".ps5-tile.is-active");
+      if (activeTile) {
+        activeTile.focus({ preventScroll: true });
+        SoundEngine.navigate();
+      }
+      return;
+    }
+    if (e.key === "Enter" || e.key === "x" || e.key === "X") {
+      e.preventDefault();
+      currentFocused.click();
+      return;
+    }
+  }
+
+  // If focus is in Game Carousel / Main Stage
   const list = getCurrentList();
   const idx = list.findIndex((it) => it.id === state.activeId);
 
   if (e.key === "ArrowRight") {
     e.preventDefault();
-    if (!state.isHubOpen) selectTile(list[(idx + 1) % list.length].id, true);
+    if (!state.isHubOpen) {
+      const nextId = list[(idx + 1) % list.length].id;
+      selectTile(nextId, true);
+      const nextTile = document.querySelector(`.ps5-tile[data-tile-id="${nextId}"]`);
+      if (nextTile) nextTile.focus({ preventScroll: true });
+    }
   } else if (e.key === "ArrowLeft") {
     e.preventDefault();
-    if (!state.isHubOpen) selectTile(list[(idx - 1 + list.length) % list.length].id, true);
-  } else if (e.key === "ArrowDown") {
-    e.preventDefault();
-    if (!state.isHubOpen) openGameHub();
+    if (!state.isHubOpen) {
+      const prevId = list[(idx - 1 + list.length) % list.length].id;
+      selectTile(prevId, true);
+      const prevTile = document.querySelector(`.ps5-tile[data-tile-id="${prevId}"]`);
+      if (prevTile) prevTile.focus({ preventScroll: true });
+    }
   } else if (e.key === "ArrowUp") {
     e.preventDefault();
-    if (state.isHubOpen) closeGameHub();
-  } else if (e.key === "Enter") {
+    if (state.isHubOpen) {
+      closeGameHub();
+    } else {
+      const tabTarget = state.category === "games" ? $("#tabGames") : $("#tabMedia");
+      if (tabTarget) {
+        tabTarget.focus();
+        SoundEngine.navigate();
+      }
+    }
+  } else if (e.key === "ArrowDown") {
+    e.preventDefault();
+    if (!state.isHubOpen) {
+      const active = getActiveItem();
+      if (active?.viewType === "game") {
+        openGameHub();
+      } else {
+        const firstWidget = $("#widgetFriends") || $(".ps5-widget");
+        if (firstWidget) {
+          firstWidget.focus();
+          SoundEngine.navigate();
+        }
+      }
+    }
+  } else if (e.key === "Enter" || e.key === "x" || e.key === "X") {
     const active = getActiveItem();
-    if (active?.viewType === "game" && document.activeElement === document.body) {
+    if (active) {
       e.preventDefault();
-      handleAction(active.btnAction || "modal:psn");
+      if (active.id === "library") {
+        handleAction("modal:library");
+      } else if (active.btnAction) {
+        handleAction(active.btnAction);
+      } else if (active.viewType === "game") {
+        openGameHub();
+      }
     }
   }
 }
@@ -2222,6 +2323,64 @@ function initSberTips() {
   }
 }
 
+let lastGamepadPoll = 0;
+function pollGamepads() {
+  const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+  if (gamepads && gamepads.length) {
+    const gp = Array.from(gamepads).find((g) => g && g.connected);
+    if (gp) {
+      const now = performance.now();
+      if (now - lastGamepadPoll > 200) {
+        const dLeft = gp.buttons[14]?.pressed || (gp.axes[0] && gp.axes[0] < -0.5);
+        const dRight = gp.buttons[15]?.pressed || (gp.axes[0] && gp.axes[0] > 0.5);
+        const dUp = gp.buttons[12]?.pressed || (gp.axes[1] && gp.axes[1] < -0.5);
+        const dDown = gp.buttons[13]?.pressed || (gp.axes[1] && gp.axes[1] > 0.5);
+
+        const btnCross = gp.buttons[0]?.pressed;
+        const btnCircle = gp.buttons[1]?.pressed;
+        const btnSquare = gp.buttons[2]?.pressed;
+        const btnTriangle = gp.buttons[3]?.pressed;
+        const btnL1 = gp.buttons[4]?.pressed;
+        const btnR1 = gp.buttons[5]?.pressed;
+        const btnPS = gp.buttons[16]?.pressed;
+
+        if (btnCross) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "Enter" }));
+        } else if (btnCircle) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "Escape" }));
+        } else if (btnTriangle) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "/" }));
+        } else if (btnPS) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: " " }));
+        } else if (btnL1) {
+          lastGamepadPoll = now;
+          switchCategory("games");
+        } else if (btnR1) {
+          lastGamepadPoll = now;
+          switchCategory("media");
+        } else if (dLeft) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+        } else if (dRight) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+        } else if (dUp) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+        } else if (dDown) {
+          lastGamepadPoll = now;
+          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+        }
+      }
+    }
+  }
+  requestAnimationFrame(pollGamepads);
+}
+
 function init() {
   particleEngine = new PS5ParticleEngine($("#ps5Particles"));
   particleEngine.start();
@@ -2378,6 +2537,7 @@ function init() {
   );
 
   setInterval(updateClock, 10000);
+  requestAnimationFrame(pollGamepads);
 }
 
 document.addEventListener("DOMContentLoaded", init);
