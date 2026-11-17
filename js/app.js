@@ -72,7 +72,7 @@ function hydrateStaticIcons() {
   if ($("#iconEditWidgetsGlyph")) $("#iconEditWidgetsGlyph").innerHTML = PS5Icons.gamepadSquare;
   $("#iconSearchBtn").innerHTML = PS5Icons.search;
   $("#iconSettingsBtn").innerHTML = PS5Icons.settings;
-  $("#iconProfileAvatar").innerHTML = `<img src="assets/covers/astro.jpg" alt="Player 1" class="ps5-topbar-avatar" onerror="this.onerror=null;this.src='assets/covers/spiderman.jpg'" />`;
+  $("#iconProfileAvatar").innerHTML = `<div class="ps5-topbar-avatar-circle" style="width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg, #0284c7, #1e3a8a); display:flex; align-items:center; justify-content:center; color:#ffffff;">${PS5Icons.profile}</div>`;
   $("#iconChevronLeft").innerHTML = PS5Icons.chevronLeft;
   if ($("#iconChevronRight")) $("#iconChevronRight").innerHTML = PS5Icons.chevronRight;
 
@@ -111,6 +111,8 @@ function hydrateStaticIcons() {
   }
 
   renderWelcomeFriends();
+  renderWelcomeWishlist();
+  updateNetworkWidgetStatus();
   renderWelcomeBatteryRings();
   renderControllerHints();
   updateMuteButtonUI();
@@ -358,6 +360,8 @@ function applyLanguageAndTelemetry() {
   renderRibbon();
   renderActiveView();
   renderControlCenter();
+  renderWelcomeWishlist();
+  updateNetworkWidgetStatus();
   updateClock();
 }
 
@@ -526,17 +530,7 @@ function renderGameHeroView(item) {
 
   const titleEl = $("#heroTitle");
   if (titleEl) {
-    if (item.id === "spiderman") {
-      titleEl.innerHTML = `
-        <div class="ps5-hero-title-spider" aria-label="Marvel's Spider-Man: Miles Morales">
-          <span class="ps5-marvel-badge">MARVEL</span>
-          <span class="ps5-spiderman-text">SPIDER-MAN</span>
-          <span class="ps5-miles-text">MILES MORALES</span>
-        </div>
-      `;
-    } else {
-      titleEl.textContent = t(item.title) || "";
-    }
+    titleEl.textContent = t(item.title) || "";
   }
 
   const descEl = $("#heroDesc");
@@ -960,43 +954,231 @@ function openAccessoriesModal() {
   });
 }
 
-function openGameBaseModal() {
+async function openGameBaseModal(initialTab = "friends") {
   const isRu = state.lang === "ru";
-  const html = `
-    <div style="display:flex; flex-direction:column; gap:10px; margin-top:12px;">
-      ${welcomeHubFriends.map(f => `
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
-          <div style="display:flex; align-items:center; gap:12px;">
-            <div style="width:38px; height:38px; border-radius:50%; background:${f.color}; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; color:#ffffff;">
-              ${f.initials}
-            </div>
-            <div>
-              <div style="font-weight:600; font-size:14px;">${f.name}</div>
-              <div style="font-size:12px; color:var(--ps5-text-muted); display:flex; align-items:center; gap:6px;">
-                <span class="ps5-green-dot" style="position:static; display:inline-block;"></span>
-                <span>${isRu ? "Играет в" : "Playing"} <strong style="color:rgba(255,255,255,0.85);">${f.game || "ASTRO BOT"}</strong></span>
+  const friends = await FriendsService.getConfirmedFriends();
+  let currentTab = initialTab;
+
+  function buildContent(activeTab, searchResults = null, searchQuery = "") {
+    return `
+      <div class="ps5-gb-shell">
+        <div class="ps5-gb-nav-row">
+          <div class="ps5-gb-tabs">
+            <button type="button" class="ps5-gb-tab ${activeTab === 'parties' ? 'active' : ''}" data-gbtab="parties">
+              <span class="ps5-gb-dot ps5-gb-dot--blue"></span>
+              <span>${isRu ? "Партии" : "Parties"} · 2</span>
+            </button>
+            <button type="button" class="ps5-gb-tab ${activeTab === 'friends' ? 'active' : ''}" data-gbtab="friends">
+              <span class="ps5-gb-dot ps5-gb-dot--green"></span>
+              <span>${isRu ? "Друзья" : "Friends"} · ${friends.length}</span>
+            </button>
+            <button type="button" class="ps5-gb-tab ${activeTab === 'requests' ? 'active' : ''}" data-gbtab="requests">
+              <span>${isRu ? "Заявки" : "Friend Requests"}</span>
+            </button>
+            <button type="button" class="ps5-gb-tab ${activeTab === 'search' ? 'active' : ''}" data-gbtab="search">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>${isRu ? "Поиск" : "Search"}</span>
+            </button>
+          </div>
+          <button type="button" class="ps5-btn-sec ps5-btn-sec--sm" id="btnGbCreateParty" style="font-size:12px; padding:5px 14px;">
+            ▲ ${isRu ? "Начать тусовку" : "Create Party"}
+          </button>
+        </div>
+
+        ${activeTab === 'friends' ? `
+          <div class="ps5-gb-subbar">
+            <span>${isRu ? `Всего друзей: ${friends.length}` : `All friends: ${friends.length}`}</span>
+            <span>${isRu ? "Сортировка: В сети - Не в сети" : "Sort by: Online - Offline"}</span>
+          </div>
+
+          ${friends.length === 0 ? `
+            <div class="ps5-friends-empty" style="padding:28px 16px;">
+              <div class="ps5-fe-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               </div>
+              <p class="ps5-fe-title">${isRu ? "Здесь пока нет друзей" : "No friends here yet"}</p>
+              <p class="ps5-fe-desc">${isRu ? "Добавь свой первый контакт и играйте вместе в PlayStation®5" : "Add your first friend and play together on PlayStation®5"}</p>
+              <button type="button" class="ps5-btn-play ps5-btn-play--sm" id="btnGbAddFriendEmpty" style="margin-top:8px;">
+                ${isRu ? "Добавить друга" : "Add Friend"}
+              </button>
+            </div>
+          ` : `
+            <div class="ps5-gb-grid">
+              ${friends.map(f => {
+                const av = PRESET_AVATARS.find(a => a.id === f.avatar) || PRESET_AVATARS[0];
+                return `
+                  <div class="ps5-gb-friend-card" data-fid="${f.id}">
+                    <div class="ps5-gb-avatar-wrap" style="background:${av.bg};">
+                      <span>${av.icon}</span>
+                      <span class="ps5-gb-avatar-dot"></span>
+                    </div>
+                    <div class="ps5-gb-card-name">
+                      <span>${escapeHtml(f.displayName)}</span>
+                      <span class="ps5-gb-plus-icon">+</span>
+                    </div>
+                    <div class="ps5-gb-card-status">${escapeHtml(f.currentGame || "PlayStation®5 System")}</div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          `}
+        ` : ''}
+
+        ${activeTab === 'parties' ? `
+          <div style="display:flex; flex-direction:column; gap:10px; padding:6px 0;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div style="width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #38bdf8, #818cf8); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800;">🎙</div>
+                <div>
+                  <div style="font-weight:600; font-size:14.5px;">${isRu ? "Тусовка Cr1mnsx & Friends" : "Cr1mnsx & Friends Party"}</div>
+                  <div style="font-size:12px; color:var(--ps5-text-muted); margin-top:2px;">2 ${isRu ? "участника в голосовом чате · Открытая" : "members in voice chat · Open"}</div>
+                </div>
+              </div>
+              <button class="ps5-btn-play ps5-btn-play--sm" type="button" id="btnJoinGbParty">${isRu ? "Присоединиться" : "Join"}</button>
             </div>
           </div>
-          <button class="ps5-btn-sec ps5-btn-sec--sm" style="font-size:11.5px; padding:4px 12px;" type="button">${isRu ? "В тусовку" : "Join Party"}</button>
+        ` : ''}
+
+        ${activeTab === 'requests' ? `
+          <div style="display:flex; flex-direction:column; gap:12px; padding:6px 0; text-align:center;">
+            <p style="font-size:13.5px; color:rgba(255,255,255,0.7);">${isRu ? "Управление входящими и исходящими заявками в друзья:" : "Manage incoming and outgoing friend requests:"}</p>
+            <div style="display:flex; justify-content:center; gap:12px; margin-top:4px;">
+              <button type="button" class="ps5-btn-play ps5-btn-play--sm" id="btnGbGoRequests">${isRu ? "Открыть «Мои заявки»" : "Open Friend Requests"}</button>
+              <button type="button" class="ps5-btn-sec ps5-btn-sec--sm" id="btnGbGoAdd">${isRu ? "Добавить нового друга" : "Add New Friend"}</button>
+            </div>
+          </div>
+        ` : ''}
+
+        ${activeTab === 'search' ? `
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="ps5-store-search-bar">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <input type="text" class="ps5-store-search-input" id="inputGbSearch" placeholder="${isRu ? "Введите никнейм игрока для поиска..." : "Search players by gamertag or nickname..."}" value="${escapeHtml(searchQuery)}" autocomplete="off" />
+            </div>
+
+            <div id="gbSearchResults" class="ps5-gb-grid">
+              ${searchResults === null ? `
+                <div style="grid-column:1/-1; text-align:center; padding:24px; color:rgba(255,255,255,0.4); font-size:13px;">
+                  ${isRu ? "Начните вводить никнейм, чтобы найти профиль игрока в базе" : "Type a gamertag to find player profiles in the directory"}
+                </div>
+              ` : (searchResults.length === 0 ? `
+                <div style="grid-column:1/-1; text-align:center; padding:24px; color:rgba(255,255,255,0.4); font-size:13px;">
+                  ${isRu ? "Игроков с таким никнеймом не найдено" : "No players found matching this nickname"}
+                </div>
+              ` : searchResults.map(p => {
+                const av = PRESET_AVATARS.find(a => a.id === p.avatar) || PRESET_AVATARS[0];
+                return `
+                  <div class="ps5-gb-friend-card" data-search-fid="${p.id}">
+                    <div class="ps5-gb-avatar-wrap" style="background:${av.bg};">
+                      <span>${av.icon}</span>
+                    </div>
+                    <div class="ps5-gb-card-name">
+                      <span>${escapeHtml(p.displayName)}</span>
+                    </div>
+                    <div class="ps5-gb-card-status">@${escapeHtml(p.nickname)}</div>
+                    <button type="button" class="ps5-btn-sec ps5-btn-sec--sm btn-view-found-profile" data-profile-nick="${escapeHtml(p.nickname)}" style="margin-top:8px; font-size:11px; padding:3px 10px;">
+                      ${isRu ? "Профиль" : "View"}
+                    </button>
+                  </div>
+                `;
+              }).join(''))}
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="ps5-gb-footer-cue">
+          <span class="ps5-gb-cue-key">L1 / R1</span>
+          <span>${isRu ? "Переключение вкладок" : "Switch Tabs"}</span>
         </div>
-      `).join("")}
-    </div>
-  `;
+      </div>
+    `;
+  }
+
+  function attachGbEvents() {
+    const cardEl = $("#modalOverlay .modal-card");
+    if (cardEl) cardEl.classList.add("ultra-wide");
+
+    $("#modalOverlay")?.querySelectorAll("[data-gbtab]").forEach(btn => {
+      btn.onclick = () => {
+        SoundEngine.focus();
+        currentTab = btn.dataset.gbtab;
+        refreshGbModal();
+      };
+    });
+
+    const addBtnEmpty = $("#btnGbAddFriendEmpty");
+    if (addBtnEmpty) addBtnEmpty.onclick = () => { closeModal(); openAddFriendModal(); };
+
+    const btnGoReq = $("#btnGbGoRequests");
+    if (btnGoReq) btnGoReq.onclick = () => { closeModal(); openFriendRequestsModal(); };
+
+    const btnGoAdd = $("#btnGbGoAdd");
+    if (btnGoAdd) btnGoAdd.onclick = () => { closeModal(); openAddFriendModal(); };
+
+    const btnParty = $("#btnGbCreateParty");
+    if (btnParty) btnParty.onclick = () => {
+      SoundEngine.confirm();
+      showToast(isRu ? "Тусовка PS5" : "PS5 Party", isRu ? "Голосовая тусовка создана · Микрофон активен" : "Voice party created · Mic live", PS5Icons.controller);
+    };
+
+    const btnJoinParty = $("#btnJoinGbParty");
+    if (btnJoinParty) btnJoinParty.onclick = () => {
+      SoundEngine.confirm();
+      showToast(isRu ? "Тусовка" : "Party", isRu ? "Вы присоединились к голосовому чату" : "Joined voice party", PS5Icons.controller);
+    };
+
+    $("#modalOverlay")?.querySelectorAll(".ps5-gb-friend-card[data-fid]").forEach(card => {
+      card.onclick = () => {
+        const fid = card.dataset.fid;
+        const fr = friends.find(f => f.id === fid);
+        if (fr) { closeModal(); openFriendProfileModal(fr); }
+      };
+    });
+
+    const inputSearch = $("#inputGbSearch");
+    if (inputSearch) {
+      inputSearch.focus();
+      inputSearch.oninput = async () => {
+        const q = inputSearch.value.trim();
+        if (!q) {
+          refreshGbModal(null, "");
+          return;
+        }
+        const res = await FriendsService.searchFriends(q);
+        refreshGbModal(res, q);
+      };
+    }
+
+    $("#modalOverlay")?.querySelectorAll(".btn-view-found-profile").forEach(btn => {
+      btn.onclick = async (e) => {
+        e.stopPropagation();
+        const nick = btn.dataset.profileNick;
+        const res = await FriendsService.searchFriends(nick);
+        if (res && res[0]) {
+          closeModal();
+          openFriendProfileModal(res[0]);
+        }
+      };
+    });
+  }
+
+  function refreshGbModal(searchResults = null, query = "") {
+    const body = $("#modalBody");
+    if (!body) return;
+    body.innerHTML = buildContent(currentTab, searchResults, query);
+    attachGbEvents();
+  }
 
   openModal({
     tag: "GAME BASE",
     title: "Game Base",
-    subtitle: isRu ? "Друзья в сети, тусовки и голосовой чат PS5" : "Online friends, parties, and PS5 voice chat",
-    content: html,
-    actions: [
-      {
-        text: isRu ? "Начать тусовку" : "Start Party",
-        primary: true,
-        action: "home_reset"
-      }
-    ]
+    subtitle: isRu ? "Друзья, тусовки, поиск игроков и голосовой чат PS5" : "Friends, parties, player search and voice chat",
+    content: buildContent(currentTab),
+    isWide: true,
+    actions: []
   });
+
+  attachGbEvents();
 }
 
 function openNotificationsModal() {
@@ -1006,8 +1188,8 @@ function openNotificationsModal() {
       <div style="display:flex; gap:14px; padding:14px 16px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
         <span style="color:var(--ps5-gold); flex-shrink:0;">${PS5Icons.trophy}</span>
         <div>
-          <div style="font-weight:600; font-size:14px;">${isRu ? "Получен трофей: Платина «Архитектор систем»" : "Trophy Earned: Platinum «System Architect»"}</div>
-          <div style="font-size:12.5px; color:var(--ps5-text-muted); margin-top:2px;">ASTRO BOT · ${isRu ? "Только что" : "Just now"}</div>
+          <div style="font-weight:600; font-size:14px;">${isRu ? "Получен трофей: Платина «Король Вайс-Сити»" : "Trophy Earned: Platinum «Vice City King»"}</div>
+          <div style="font-size:12.5px; color:var(--ps5-text-muted); margin-top:2px;">Grand Theft Auto: Vice City · ${isRu ? "Только что" : "Just now"}</div>
         </div>
       </div>
 
@@ -1340,27 +1522,557 @@ function closeModal() {
   SoundEngine.modalClose();
 }
 
+/* =========================================================================
+   TASK 05: AUTHENTIC PS5 WELCOME HUB WIDGET CONTROLLERS
+   - Trophies 1:1 screen (Image 2)
+   - Store 1:1 screen (Image 3)
+   - Media Gallery 1:1 screen & Lightbox (Image 4)
+   - Interactive Wishlist with localStorage
+   - Live Network Status & Diagnostics
+   - Remote Play Setup Guide
+   ========================================================================= */
+
+function openTrophiesModal(gameId = "gta-vc") {
+  const isRu = state.lang === "ru";
+  SoundEngine.confirm();
+
+  const trophiesList = [
+    {
+      id: "plat",
+      tier: "plat",
+      tierName: isRu ? "Платина" : "Platinum",
+      rarity: isRu ? "Редкий · 18.0% игроков" : "Rare · 18.0% of players earned",
+      title: isRu ? "Король Вайс-Сити" : "King of Vice City",
+      desc: isRu ? "Получите все призы в Grand Theft Auto: Vice City" : "Collect all trophies in Grand Theft Auto: Vice City",
+      date: "17/7/2026 17:43"
+    },
+    {
+      id: "story_end",
+      tier: "gold",
+      tierName: isRu ? "Золото" : "Gold",
+      rarity: isRu ? "Редкий · 24.5% игроков" : "Rare · 24.5% of players earned",
+      title: isRu ? "Рожденный в 80-х" : "Born in the '80s",
+      desc: isRu ? "Завершите финальную сюжетную миссию «Держи друзей близко...»" : "Complete the final storyline mission 'Keep Your Friends Close...'",
+      date: "11/7/2026 21:15"
+    },
+    {
+      id: "rampage",
+      tier: "silver",
+      tierName: isRu ? "Серебро" : "Silver",
+      rarity: isRu ? "Необычный · 42.1% игроков" : "Uncommon · 42.1% of players earned",
+      title: isRu ? "Железные нервы" : "Iron Nerves",
+      desc: isRu ? "Пройдите все 35 испытаний Rampage по всему Вайс-Сити" : "Complete all 35 Rampage challenges across Vice City",
+      date: "04/7/2026 19:40"
+    },
+    {
+      id: "stunt",
+      tier: "silver",
+      tierName: isRu ? "Серебро" : "Silver",
+      rarity: isRu ? "Необычный · 38.6% игроков" : "Uncommon · 38.6% of players earned",
+      title: isRu ? "В погоне за скоростью" : "Chasing Speed",
+      desc: isRu ? "Выполните все уникальные безумные прыжки (Unique Stunt Jumps)" : "Complete all Unique Stunt Jumps across Vice City",
+      date: "28/6/2026 16:22"
+    },
+    {
+      id: "intro",
+      tier: "bronze",
+      tierName: isRu ? "Бронза" : "Bronze",
+      rarity: isRu ? "Обычный · 91.6% игроков" : "Common · 91.6% of players earned",
+      title: isRu ? "Первые шаги Томми" : "Tommy's First Steps",
+      desc: isRu ? "Прибудьте в отель Ocean View и начните восхождение" : "Arrive at the Ocean View Hotel and start your reign",
+      date: "11/6/2026 20:32"
+    },
+    {
+      id: "shooting",
+      tier: "bronze",
+      tierName: isRu ? "Бронза" : "Bronze",
+      rarity: isRu ? "Обычный · 76.4% игроков" : "Common · 76.4% of players earned",
+      title: isRu ? "В яблочко!" : "Bullseye!",
+      desc: isRu ? "Наберите 45 очков на стрельбище в тире Ammu-Nation" : "Score 45 points at the Ammu-Nation Shooting Range",
+      date: "12/6/2026 17:43"
+    },
+    {
+      id: "assets",
+      tier: "gold",
+      tierName: isRu ? "Золото" : "Gold",
+      rarity: isRu ? "Редкий · 21.0% игроков" : "Rare · 21.0% of players earned",
+      title: isRu ? "Городской магнат" : "City Mogul",
+      desc: isRu ? "Приобретите все 10 объектов коммерческой недвижимости" : "Purchase all 10 asset properties across the city",
+      date: "14/7/2026 23:05"
+    }
+  ];
+
+  const html = `
+    <div class="ps5-tp-shell">
+      <div class="ps5-tp-header-banner">
+        <div class="ps5-tp-game-info">
+          <img src="assets/covers/gta_vc.jpg" class="ps5-tp-game-icon" alt="GTA Vice City" />
+          <div>
+            <div class="ps5-tp-game-title">Grand Theft Auto: Vice City</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-top:2px;">reVC WebAssembly Edition · Rockstar Games</div>
+          </div>
+        </div>
+
+        <div class="ps5-tp-stats-group">
+          <div class="ps5-tp-progress-box">
+            <div class="ps5-tp-progress-labels">
+              <span>${isRu ? "Прогресс" : "Progress"} <strong>100%</strong></span>
+              <span>47 / 47</span>
+            </div>
+            <div class="ps5-tp-progress-bar">
+              <div class="ps5-tp-progress-fill" style="width:100%;"></div>
+            </div>
+          </div>
+
+          <div class="ps5-tp-cups-breakdown">
+            <span class="ps5-tp-cup-stat plat" title="Platinum">🏆 1</span>
+            <span class="ps5-tp-cup-stat gold" title="Gold">🥇 3</span>
+            <span class="ps5-tp-cup-stat silver" title="Silver">🥈 7</span>
+            <span class="ps5-tp-cup-stat bronze" title="Bronze">🥉 36</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ps5-tp-subrow">
+        <span>${isRu ? "Все призы: 47" : "All trophies: 47"}</span>
+        <span>${isRu ? "Сортировка: По умолчанию" : "Sort by: Game Default"}</span>
+      </div>
+
+      <div class="ps5-tp-list">
+        ${trophiesList.map(t => `
+          <div class="ps5-tp-card">
+            <div class="ps5-tp-card-left">
+              <div class="ps5-tp-emblem-hex ${t.tier}">
+                <span>${t.tier === 'plat' ? '🏆' : (t.tier === 'gold' ? '🥇' : (t.tier === 'silver' ? '🥈' : '🥉'))}</span>
+              </div>
+              <div class="ps5-tp-card-meta">
+                <span class="ps5-tp-card-title">${t.title}</span>
+                <span class="ps5-tp-card-tier-info">
+                  <strong style="color:#ffffff;">${t.tierName}</strong> · ${t.rarity}
+                </span>
+                <span class="ps5-tp-card-desc">${t.desc}</span>
+              </div>
+            </div>
+            <div class="ps5-tp-card-right">
+              <span>📅 ${t.date}</span>
+            </div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  openModal({
+    tag: "TROPHIES",
+    title: isRu ? "Призы и достижения PS5" : "PlayStation 5 Trophies",
+    subtitle: isRu ? "Синхронизация профиля PlayStation Network · 100% Завершено" : "PlayStation Network Profile Sync · 100% Completed",
+    content: html,
+    isWide: true,
+    actions: []
+  });
+
+  const cardEl = $("#modalOverlay .modal-card");
+  if (cardEl) cardEl.classList.add("ultra-wide");
+}
+
 function openPSNModal() {
-  const sum = defaultProfileTelemetry;
-  const tr = sum.trophies;
+  openTrophiesModal("gta-vc");
+}
+
+function openStoreModal() {
+  const isRu = state.lang === "ru";
+  SoundEngine.confirm();
+
+  const trending = [
+    { id: "re-req", title: "Resident Evil Requiem", price: "$69.99", badge: "PS5", thumb: "assets/covers/cyberpunk.jpg" },
+    { id: "gta-6", title: "Grand Theft Auto VI", price: isRu ? "Скоро" : "Just announced", badge: "PS5", thumb: "assets/covers/gta_vc.jpg" },
+    { id: "marathon", title: "Marathon", price: "$39.99", badge: "PS5", thumb: "assets/covers/doom.jpg" },
+    { id: "cod", title: "Call of Duty®", price: isRu ? "В библиотеке" : "In library", badge: "PS5 | PS4", thumb: "assets/covers/quake3.jpg" },
+    { id: "wolverine", title: "Marvel's Wolverine", price: isRu ? "Скоро" : "Just announced", badge: "PS5", thumb: "assets/covers/nfs_u2.jpg" },
+    { id: "gtav", title: "Grand Theft Auto V", price: isRu ? "В библиотеке" : "In library", badge: "PS5 | PS4", thumb: "assets/covers/gta_v.jpg" }
+  ];
+
+  const html = `
+    <div class="ps5-store-shell">
+      <div class="ps5-store-top-tabs">
+        <span class="ps5-store-top-tab active">${isRu ? "Игры" : "Games"}</span>
+        <span class="ps5-store-top-tab">${isRu ? "Мультимедиа" : "Media"}</span>
+        <span class="ps5-store-top-tab">${isRu ? "Игроки" : "Players"}</span>
+      </div>
+
+      <div class="ps5-store-search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" class="ps5-store-search-input" id="inputStoreModalSearch" placeholder="${isRu ? "Поиск игр, дополнений и приложений..." : "Search for games, add-ons, and apps..."}" autocomplete="off" />
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <span class="ps5-store-section-title">${isRu ? "Популярные игры (Trending)" : "Trending games"}</span>
+        <div class="ps5-store-trending-grid">
+          ${trending.map(g => `
+            <div class="ps5-store-game-tile" data-store-gid="${g.id}">
+              <img src="${g.thumb}" class="ps5-store-tile-thumb" alt="${g.title}" />
+              <div class="ps5-store-tile-body">
+                <div class="ps5-store-tile-badges">
+                  <span class="ps5-badge-plat">${g.badge}</span>
+                </div>
+                <span class="ps5-store-tile-name">${g.title}</span>
+                <span class="ps5-store-tile-price">${g.price}</span>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-top:4px;">
+        <span class="ps5-store-section-title">${isRu ? "Подписки PlayStation Plus и сервисы" : "PlayStation Plus and other subscriptions"}</span>
+        <div class="ps5-store-subs-row">
+          <div class="ps5-store-sub-card" id="cardSubPsPlus">
+            <div class="ps5-store-sub-logo psplus">+</div>
+            <div>
+              <div class="ps5-store-sub-name">PlayStation Plus</div>
+              <div class="ps5-store-sub-hint">${isRu ? "Каталог 400+ игр, онлайн мультиплеер" : "400+ games catalog, online multiplayer"}</div>
+            </div>
+          </div>
+
+          <div class="ps5-store-sub-card" id="cardSubEaPlay">
+            <div class="ps5-store-sub-logo eaplay">EA</div>
+            <div>
+              <div class="ps5-store-sub-name">EA Play</div>
+              <div class="ps5-store-sub-hint">${isRu ? "Ранний доступ, 10% скидки в Store" : "Early access trials, 10% member discount"}</div>
+            </div>
+          </div>
+
+          <div class="ps5-store-sub-card" id="cardSubGtaPlus">
+            <div class="ps5-store-sub-logo gtaplus">GTA+</div>
+            <div>
+              <div class="ps5-store-sub-name">GTA+</div>
+              <div class="ps5-store-sub-hint">${isRu ? "$500,000 каждый месяц, эксклюзивные авто" : "$500,000 monthly, exclusive vehicles"}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  openModal({
+    tag: "PLAYSTATION®STORE",
+    title: "PlayStation™Store",
+    subtitle: isRu ? "Официальная витрина цифровых игр, предзаказов и подписок PS5" : "Official digital games, pre-orders and subscription hub",
+    content: html,
+    isWide: true,
+    actions: []
+  });
+
+  const cardEl = $("#modalOverlay .modal-card");
+  if (cardEl) cardEl.classList.add("ultra-wide");
+
+  $("#modalOverlay")?.querySelectorAll(".ps5-store-game-tile").forEach(tile => {
+    tile.onclick = () => {
+      const gid = tile.dataset.storeGid;
+      const g = trending.find(x => x.id === gid);
+      if (g) {
+        addWishlistItem({ id: g.id, title: g.title, sub: "PS Store" });
+      }
+    };
+  });
+}
+
+function openMediaGalleryModal() {
+  const isRu = state.lang === "ru";
+  SoundEngine.confirm();
+
+  const galleryItems = [
+    { title: "Ocean Drive Sunset", game: "Grand Theft Auto: Vice City", thumb: "assets/covers/gta_vc.jpg", trophy: "🏆 Король Вайс-Сити", date: "17/7/2026", res: "3840×2160 HDR" },
+    { title: "Los Santos Vinewood Skyline", game: "Grand Theft Auto V", thumb: "assets/covers/gta_v.jpg", trophy: "🏆 Добро пожаловать", date: "12/7/2026", res: "3840×2160 HDR" },
+    { title: "Bayview Drift Circuit Final", game: "Need for Speed Underground 2", thumb: "assets/covers/nfs_u2.jpg", trophy: "🥇 Король дрифта", date: "05/7/2026", res: "1920×1080 60fps" },
+    { title: "Springfield Downtown Cruise", game: "The Simpsons Hit & Run", thumb: "assets/covers/simpsons.png", trophy: "🥉 В пончиках сила", date: "28/6/2026", res: "1920×1080 60fps" },
+    { title: "Mars Phobos Arena Overdrive", game: "DOOM", thumb: "assets/covers/doom.jpg", trophy: "🥈 BFG 9000", date: "19/6/2026", res: "3840×2160 HDR" },
+    { title: "The Longest Yard Railgun Frag", game: "Quake III Arena", thumb: "assets/covers/quake3.jpg", trophy: "🥇 Quad Damage", date: "10/6/2026", res: "1920×1080 120fps" }
+  ];
+
+  const html = `
+    <div class="ps5-mg-shell">
+      <div class="ps5-mg-tabs-row">
+        <div class="ps5-mg-tabs">
+          <button type="button" class="ps5-mg-tab active">${isRu ? "Все" : "All"}</button>
+          <button type="button" class="ps5-mg-tab">${isRu ? "Избранное" : "Favourites"}</button>
+          <button type="button" class="ps5-mg-tab">${isRu ? "Призы" : "Trophies"}</button>
+          <button type="button" class="ps5-mg-tab">${isRu ? "Альбомы" : "Albums"}</button>
+        </div>
+        <span style="font-size:12px; color:rgba(255,255,255,0.5);">${isRu ? "Сортировка: По дате" : "Sort by: Date"}</span>
+      </div>
+
+      <div class="ps5-mg-grid">
+        ${galleryItems.map((item, idx) => `
+          <div class="ps5-mg-card" data-mg-idx="${idx}" title="${item.title} (${item.game})">
+            <img src="${item.thumb}" alt="${item.title}" />
+            <div class="ps5-mg-trophy-badge">${item.trophy}</div>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `;
+
+  openModal({
+    tag: "MEDIA GALLERY",
+    title: isRu ? "Галерея мультимедиа PS5" : "Media Gallery",
+    subtitle: isRu ? "Снимки экрана 4K HDR и видеозаписи игрового процесса" : "4K HDR Screenshots and gameplay video captures",
+    content: html,
+    isWide: true,
+    actions: []
+  });
+
+  const cardEl = $("#modalOverlay .modal-card");
+  if (cardEl) cardEl.classList.add("ultra-wide");
+
+  $("#modalOverlay")?.querySelectorAll(".ps5-mg-card").forEach(card => {
+    card.onclick = () => {
+      const idx = parseInt(card.dataset.mgIdx, 10);
+      const it = galleryItems[idx];
+      if (it) openMediaLightbox(it);
+    };
+  });
+}
+
+function openMediaLightbox(item) {
+  const isRu = state.lang === "ru";
+  SoundEngine.confirm();
+
+  const html = `
+    <div style="display:flex; flex-direction:column; gap:14px; width:100%;">
+      <div style="position:relative; width:100%; aspect-ratio:16/9; border-radius:14px; overflow:hidden; background:#000; box-shadow:0 14px 40px rgba(0,0,0,0.8);">
+        <img src="${item.thumb}" style="width:100%; height:100%; object-fit:contain;" alt="${item.title}" />
+        <div style="position:absolute; bottom:12px; left:12px; padding:4px 10px; border-radius:6px; background:rgba(0,0,0,0.8); color:#ffffff; font-size:12px; font-weight:600; border:1px solid rgba(255,255,255,0.2);">
+          ${item.trophy}
+        </div>
+      </div>
+
+      <div class="modal-spec-grid">
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Игра" : "Game"}</span><span class="spec-val">${item.game}</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Разрешение" : "Resolution"}</span><span class="spec-val">${item.res}</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Дата снимка" : "Date"}</span><span class="spec-val">${item.date}</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Формат" : "Format"}</span><span class="spec-val">PNG 4K (Ultra HD)</span></div>
+      </div>
+    </div>
+  `;
+
+  openModal({
+    tag: "CAPTURE PREVIEW",
+    title: item.title,
+    subtitle: item.game,
+    content: html,
+    isWide: true,
+    actions: [
+      {
+        text: isRu ? "Назад в галерею" : "Back to Gallery",
+        primary: true,
+        action: "modal:back_gallery"
+      }
+    ]
+  });
+}
+
+function openNetworkDiagnosticsModal() {
+  const isRu = state.lang === "ru";
+  const isOnline = navigator.onLine;
+  const conn = navigator.connection || {};
+  const effType = conn.effectiveType ? conn.effectiveType.toUpperCase() : "Wi-Fi 6 (802.11ax)";
+  const rtt = conn.rtt ? `${conn.rtt} ms` : "22 ms";
+
+  const html = `
+    <div style="display:flex; flex-direction:column; gap:14px; margin-top:8px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="width:10px; height:10px; border-radius:50%; background:${isOnline ? '#22c55e' : '#ef4444'}; box-shadow:0 0 10px ${isOnline ? '#22c55e' : '#ef4444'};"></span>
+          <span style="font-weight:600; font-size:14.5px;">${isRu ? "Состояние подключения к Интернету" : "Internet Connection Status"}</span>
+        </div>
+        <span style="font-size:13px; font-weight:700; color:${isOnline ? '#22c55e' : '#ef4444'};">${isOnline ? (isRu ? "Успешно подключено" : "Connected") : (isRu ? "Отключено" : "Disconnected")}</span>
+      </div>
+
+      <div class="modal-spec-grid">
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Тип соединения" : "Connection Type"}</span><span class="spec-val">${effType}</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Задержка (Ping)" : "Round Trip Latency"}</span><span class="spec-val">${rtt}</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Шифрование" : "Security"}</span><span class="spec-val">WPA3-Personal</span></div>
+        <div class="modal-spec-box"><span class="spec-label">NAT Type</span><span class="spec-val">Type 2 (Moderate)</span></div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
+        <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.7);">${isRu ? "Статус служб PlayStation Network:" : "PlayStation Network Services:"}</span>
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+          <span>${isRu ? "Управление учетной записью" : "Account Management"}</span>
+          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+          <span>${isRu ? "Игры и социальные сети" : "Gaming and Social"}</span>
+          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
+          <span>${isRu ? "PlayStation Store" : "PlayStation Store"}</span>
+          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+        </div>
+      </div>
+    </div>
+  `;
 
   openModal({
     tag: "PLAYSTATION®NETWORK",
-    title: state.lang === "ru" ? `Player 1 — Уровень ${sum.level} (${sum.totalTrophies} призов)` : `Player 1 — Level ${sum.level} (${sum.totalTrophies} Trophies)`,
-    subtitle: state.lang === "ru"
-      ? `Платина: ${tr.platinum} · Золото: ${tr.gold} · Серебро: ${tr.silver} · Бронза: ${tr.bronze}`
-      : `Platinum: ${tr.platinum} · Gold: ${tr.gold} · Silver: ${tr.silver} · Bronze: ${tr.bronze}`,
+    title: isRu ? "Диагностика сети PS5" : "PS5 Network Diagnostics",
+    subtitle: isRu ? "Проверка сетевого оборудования и служб PlayStation Network" : "Network status and PlayStation Network services check",
+    content: html,
     isWide: true,
-    content: `
-      <p class="modal-p">${state.lang === "ru" ? "Системный профиль учетной записи PlayStation®5. Готов к подключению вашего игрового тега или синхронизации данных." : "System PlayStation®5 account profile template. Ready for your custom gamertag or data sync."}</p>
-      <div class="modal-spec-grid">
-        <div class="modal-spec-box"><span class="spec-label">PlayStation Network</span><span class="spec-val">Онлайн · Службы активны</span></div>
-        <div class="modal-spec-box"><span class="spec-label">Синхронизация призов</span><span class="spec-val">100% Завершено</span></div>
+    actions: [
+      {
+        text: isRu ? "Повторить проверку" : "Test Connection",
+        primary: true,
+        action: "modal:test_network"
+      }
+    ]
+  });
+}
+
+function openRemotePlayModal() {
+  const isRu = state.lang === "ru";
+  const pin = Math.floor(10000000 + Math.random() * 90000000);
+  const html = `
+    <div style="display:flex; flex-direction:column; gap:16px; margin-top:8px;">
+      <p style="font-size:14px; color:rgba(255,255,255,0.8); line-height:1.5;">
+        ${isRu ? "Транслируйте игры с консоли PlayStation®5 на ваш ПК, Mac, смартфон iOS / Android или устройство PlayStation Portal с разрешением до 1080p и 60 FPS с поддержкой DualSense." : "Stream games from your PlayStation®5 console to your PC, Mac, iOS/Android device or PlayStation Portal with up to 1080p 60 FPS and full DualSense haptics."}
+      </p>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:18px 22px; border-radius:14px; background:rgba(56,189,248,0.08); border:1px solid rgba(56,189,248,0.25);">
+        <div>
+          <span style="font-size:12px; font-weight:600; color:#38bdf8; letter-spacing:0.06em; text-transform:uppercase;">${isRu ? "Одноразовый код сопряжения" : "Pairing PIN"}</span>
+          <div style="font-size:28px; font-weight:800; letter-spacing:0.18em; color:#ffffff; font-family:monospace; margin-top:4px;">${pin}</div>
+        </div>
+        <span style="font-size:11.5px; color:rgba(255,255,255,0.5);">${isRu ? "Действителен 300 сек" : "Expires in 300s"}</span>
       </div>
-    `,
+
+      <div class="modal-spec-grid">
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Рекомендуемая сеть" : "Recommended Network"}</span><span class="spec-val">5 GHz Wi-Fi / LAN 1 Gbps</span></div>
+        <div class="modal-spec-box"><span class="spec-label">${isRu ? "Качество потока" : "Stream Quality"}</span><span class="spec-val">1080p 60 FPS HDR</span></div>
+      </div>
+    </div>
+  `;
+
+  openModal({
+    tag: "PS REMOTE PLAY",
+    title: isRu ? "Дистанционная игра PS Remote Play" : "PlayStation Remote Play",
+    subtitle: isRu ? "Подключение портативных устройств и ПК к вашей PlayStation®5" : "Connect portable devices and PCs to your PlayStation®5",
+    content: html,
+    isWide: true,
     actions: []
   });
 }
+
+const DEFAULT_WISHLIST = [
+  { id: "gta-6", title: "GTA VI", sub: "Rockstar Games" },
+  { id: "ds2", title: "Death Stranding 2", sub: "Kojima Productions" },
+  { id: "wolverine", title: "Marvel's Wolverine", sub: "Insomniac Games" }
+];
+
+function getWishlistItems() {
+  try {
+    const raw = localStorage.getItem("ps5_wishlist_items");
+    if (!raw) {
+      localStorage.setItem("ps5_wishlist_items", JSON.stringify(DEFAULT_WISHLIST));
+      return DEFAULT_WISHLIST;
+    }
+    return JSON.parse(raw);
+  } catch (e) {
+    return DEFAULT_WISHLIST;
+  }
+}
+
+function saveWishlistItems(items) {
+  try {
+    localStorage.setItem("ps5_wishlist_items", JSON.stringify(items));
+  } catch (e) {}
+}
+
+function formatGamePlural(n, isRu) {
+  if (!isRu) return `${n} ${n === 1 ? 'game' : 'games'}`;
+  const rem10 = n % 10;
+  const rem100 = n % 100;
+  if (rem10 === 1 && rem100 !== 11) return `${n} игра`;
+  if (rem10 >= 2 && rem10 <= 4 && (rem100 < 10 || rem100 >= 20)) return `${n} игры`;
+  return `${n} игр`;
+}
+
+function renderWelcomeWishlist() {
+  const container = $("#welcomeWishlistItems");
+  const countBadge = $("#lblWishlistCount");
+  if (!container) return;
+  const items = getWishlistItems();
+  const isRu = state.lang === "ru";
+
+  if (countBadge) {
+    countBadge.textContent = formatGamePlural(items.length, isRu);
+  }
+
+  if (!items || items.length === 0) {
+    container.innerHTML = `<span class="ps5-wtag-empty">${isRu ? "Список желаемого пуст. Добавляйте игры из PS Store." : "Wishlist is empty. Add games from PS Store."}</span>`;
+    return;
+  }
+
+  container.innerHTML = items.map(it => `
+    <span class="ps5-wtag" data-id="${it.id}">
+      <span>${escapeHtml(it.title)}</span>
+      <button type="button" class="ps5-wtag-del" data-del-id="${it.id}" title="${isRu ? "Удалить из списка" : "Remove"}">×</button>
+    </span>
+  `).join("");
+
+  container.querySelectorAll(".ps5-wtag-del").forEach(btn => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const delId = btn.dataset.delId;
+      removeWishlistItem(delId);
+    };
+  });
+}
+
+function removeWishlistItem(id) {
+  const isRu = state.lang === "ru";
+  const items = getWishlistItems().filter(i => i.id !== id);
+  saveWishlistItems(items);
+  SoundEngine.back();
+  renderWelcomeWishlist();
+  showToast(isRu ? "Список желаемого" : "Wishlist", isRu ? "Игра удалена из списка желаемого" : "Game removed from wishlist", PS5Icons.heart);
+}
+
+function addWishlistItem(item) {
+  const isRu = state.lang === "ru";
+  const items = getWishlistItems();
+  if (items.some(i => i.id === item.id)) {
+    showToast(isRu ? "Список желаемого" : "Wishlist", isRu ? `«${item.title}» уже в списке желаемого` : `"${item.title}" is already in wishlist`, PS5Icons.heart);
+    return;
+  }
+  items.push(item);
+  saveWishlistItems(items);
+  SoundEngine.confirm();
+  renderWelcomeWishlist();
+  showToast(isRu ? "Список желаемого" : "Wishlist", isRu ? `«${item.title}» добавлена в список желаемого` : `"${item.title}" added to wishlist`, PS5Icons.heart);
+}
+
+function updateNetworkWidgetStatus() {
+  const isOnline = navigator.onLine;
+  const isRu = state.lang === "ru";
+  const subEl = $("#lblNetworkStatusSub");
+  const dotEl = $("#widgetNetworkStatus .ps5-green-dot");
+
+  if (subEl) {
+    subEl.textContent = isOnline
+      ? (isRu ? "PlayStation Network · Все службы работают" : "PlayStation Network · All Services Online")
+      : (isRu ? "Автономный режим · Нет подключения к сети" : "Offline Mode · No Internet Connection");
+  }
+  if (dotEl) {
+    dotEl.style.background = isOnline ? "#22c55e" : "#ef4444";
+    dotEl.style.boxShadow = isOnline ? "0 0 8px rgba(34, 197, 94, 0.7)" : "0 0 8px rgba(239, 68, 68, 0.7)";
+  }
+}
+
+window.addEventListener("online", updateNetworkWidgetStatus);
+window.addEventListener("offline", updateNetworkWidgetStatus);
 
 /* =========================================================================
    PS5 PLAYABLE GAME LIBRARY & IN-GAME VIEWPORT CONTROLLER
@@ -1844,6 +2556,11 @@ function handleAction(action) {
     return selectTile("explore", true);
   }
   if (action === "modal:psn") return openPSNModal();
+  if (action === "modal:trophies") return openTrophiesModal();
+  if (action === "modal:store") return openStoreModal();
+  if (action === "modal:remote_play") return openRemotePlayModal();
+  if (action === "modal:back_gallery") return openMediaGalleryModal();
+  if (action === "modal:test_network") return openNetworkDiagnosticsModal();
   if (action === "modal:library") return openLibraryModal();
   if (action.startsWith("select:")) {
     const tileId = action.slice(7);
@@ -3038,13 +3755,13 @@ function init() {
   $("#btnSettings").addEventListener("click", openSettings);
   $("#btnProfile").addEventListener("click", () => handleAction("modal:psn"));
 
-  // Welcome Hub Bento Widget Clicks
-  $("#widgetStore")?.addEventListener("click", () => selectTile("store", true));
+  // Welcome Hub Bento Widget Clicks (Authentic 1:1 PS5 Modals & Diagnostics)
+  $("#widgetStore")?.addEventListener("click", () => openStoreModal());
   $("#widgetAccessibility")?.addEventListener("click", () => {
     state.settingsSection = "language";
     openSettings();
   });
-  $("#widgetTrophies")?.addEventListener("click", () => openPSNModal());
+  $("#widgetTrophies")?.addEventListener("click", () => openTrophiesModal("gta-vc"));
   $("#widgetBattery")?.addEventListener("click", () => {
     state.settingsSection = "accessories";
     openSettings();
@@ -3053,22 +3770,13 @@ function init() {
     state.settingsSection = "storage";
     openSettings();
   });
-  $("#widgetWishlist")?.addEventListener("click", () => selectTile("store", true));
+  $("#widgetWishlist")?.addEventListener("click", () => openStoreModal());
   $("#widgetFriendActivity")?.addEventListener("click", () => selectTile("explore", true));
-  $("#widgetNetworkStatus")?.addEventListener("click", () => {
-    state.settingsSection = "accounts";
-    openSettings();
-  });
-  $("#widgetMediaGallery")?.addEventListener("click", () => {
-    if (state.category !== "media") switchCategory("media");
-    selectTile("media-gallery", true);
-  });
-  $("#widgetPsPlus")?.addEventListener("click", () => selectTile("store", true));
-  $("#widgetRemotePlay")?.addEventListener("click", () => {
-    state.settingsSection = "remote";
-    openSettings();
-  });
-  $("#widgetTrophyProgress")?.addEventListener("click", () => openPSNModal());
+  $("#widgetNetworkStatus")?.addEventListener("click", () => openNetworkDiagnosticsModal());
+  $("#widgetMediaGallery")?.addEventListener("click", () => openMediaGalleryModal());
+  $("#widgetPsPlus")?.addEventListener("click", () => openStoreModal());
+  $("#widgetRemotePlay")?.addEventListener("click", () => openRemotePlayModal());
+  $("#widgetTrophyProgress")?.addEventListener("click", () => openTrophiesModal("gta-vc"));
 
   // Game Hero / Hub Interactions
   $("#heroTrophySummary").addEventListener("click", () => openPSNModal());

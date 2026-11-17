@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261117_v4" />
+  <link rel="stylesheet" href="css/style.css?v=20261117_v5" />
   <script src="js/qrcode.min.js"></script>
 </head>
 <body>
@@ -287,15 +287,13 @@
                       </span>
                       <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
                     </div>
-                    <span class="ps5-wishlist-count-badge" id="lblWishlistCount">5 игр</span>
+                    <span class="ps5-wishlist-count-badge" id="lblWishlistCount">3 игры</span>
                   </header>
-                  <div class="ps5-wishlist-tags-row">
-                    <span class="ps5-wtag">GTA VI</span>
-                    <span class="ps5-wtag">Death Stranding 2</span>
-                    <span class="ps5-wtag">Wolverine</span>
+                  <div class="ps5-wishlist-tags-row" id="welcomeWishlistItems">
+                    <!-- Populated dynamically via localStorage -->
                   </div>
                   <footer class="ps5-wishlist-footer">
-                    <span class="ps5-wishlist-hint" id="lblWishlistHint">2 скидки активны в PS Store</span>
+                    <span class="ps5-wishlist-hint" id="lblWishlistHint">Синхронизировано · Нажмите для управления</span>
                   </footer>
                 </div>
               </div>
@@ -364,12 +362,12 @@
                     <span id="iconTpHeader" class="ps5-widget-icon"></span>
                     <span id="lblTrophyProgressTitle">Прогресс призов</span>
                   </div>
-                  <span class="ps5-tp-game-badge">Spider-Man 2</span>
+                  <span class="ps5-tp-game-badge">GTA: Vice City</span>
                 </div>
                 <div class="ps5-tp-recent">
                   <span class="ps5-tp-cup-dot">🏆</span>
                   <div class="ps5-tp-meta">
-                    <span class="ps5-tp-name">Великолепный Человек-паук</span>
+                    <span class="ps5-tp-name">Король Вайс-Сити</span>
                     <span class="ps5-tp-tier">Платиновый приз · 100%</span>
                   </div>
                 </div>
@@ -453,8 +451,8 @@
         <div class="hub-game-identity">
           <div id="hubGameThumb" class="hub-game-thumb"></div>
           <div class="hub-game-meta">
-            <h2 id="hubGameTitle" class="hub-game-title">Marvel's Spider-Man 2</h2>
-            <span id="hubGamePublisher" class="hub-game-publisher">Insomniac Games • PlayStation Studios</span>
+            <h2 id="hubGameTitle" class="hub-game-title">Grand Theft Auto: Vice City</h2>
+            <span id="hubGamePublisher" class="hub-game-publisher">Rockstar Games • reVC WASM Engine</span>
           </div>
         </div>
         <div class="hub-header-actions">
@@ -1035,6 +1033,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261117_v4"></script>
+  <script type="module" src="js/app.js?v=20261117_v5"></script>
 </body>
 </html>

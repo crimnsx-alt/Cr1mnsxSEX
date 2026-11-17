@@ -15,14 +15,14 @@ const STORAGE_KEYS = {
 
 // 8 Authentic PS5 Preset Avatars
 export const PRESET_AVATARS = [
-  { id: "spiderman", name: "Spider-Man", bg: "linear-gradient(135deg, #e11d48, #881337)", icon: "🕷️" },
-  { id: "astro", name: "Astro Bot", bg: "linear-gradient(135deg, #0284c7, #0369a1)", icon: "🤖" },
-  { id: "kratos", name: "Kratos", bg: "linear-gradient(135deg, #b91c1c, #450a0a)", icon: "🪓" },
-  { id: "clank", name: "Clank", bg: "linear-gradient(135deg, #eab308, #854d0e)", icon: "⚙️" },
-  { id: "jin", name: "Ghost of Tsushima", bg: "linear-gradient(135deg, #475569, #0f172a)", icon: "⚔️" },
-  { id: "aloy", name: "Horizon", bg: "linear-gradient(135deg, #ea580c, #7c2d12)", icon: "🏹" },
-  { id: "ellie", name: "The Last of Us", bg: "linear-gradient(135deg, #15803d, #14532d)", icon: "🌿" },
-  { id: "dualsense", name: "DualSense", bg: "linear-gradient(135deg, #6366f1, #312e81)", icon: "🎮" }
+  { id: "kratos", name: "Kratos (God of War)", bg: "linear-gradient(135deg, #b91c1c, #450a0a)", icon: "⚔️" },
+  { id: "jin", name: "Ghost of Tsushima", bg: "linear-gradient(135deg, #475569, #0f172a)", icon: "🗡️" },
+  { id: "clank", name: "Clank (Ratchet & Clank)", bg: "linear-gradient(135deg, #eab308, #854d0e)", icon: "⚙️" },
+  { id: "aloy", name: "Horizon Forbidden West", bg: "linear-gradient(135deg, #ea580c, #7c2d12)", icon: "🏹" },
+  { id: "ellie", name: "The Last of Us Part I", bg: "linear-gradient(135deg, #15803d, #14532d)", icon: "🌿" },
+  { id: "dualsense", name: "DualSense Wireless", bg: "linear-gradient(135deg, #0284c7, #0369a1)", icon: "🎮" },
+  { id: "helldiver", name: "Helldivers 2", bg: "linear-gradient(135deg, #f59e0b, #18181b)", icon: "🛡️" },
+  { id: "crash", name: "Crash Bandicoot", bg: "linear-gradient(135deg, #ea580c, #7c2d12)", icon: "🍎" }
 ];
 
 export function escapeHtml(str) {
@@ -451,5 +451,37 @@ export const FriendsService = {
       removeRawStorage(STORAGE_KEYS.MY_REQUEST);
     }
     return { success: true };
+  },
+
+  // 10. Search Confirmed Friends & Profiles
+  async searchFriends(query = "") {
+    const q = (query || "").trim().toLowerCase();
+    const friends = await this.getConfirmedFriends();
+    if (!q) return friends;
+    return friends.filter(
+      (f) =>
+        (f.nickname && f.nickname.toLowerCase().includes(q)) ||
+        (f.displayName && f.displayName.toLowerCase().includes(q)) ||
+        (f.bio && f.bio.toLowerCase().includes(q)) ||
+        (f.psnId && f.psnId.toLowerCase().includes(q))
+    );
+  },
+
+  // 11. Unblock User
+  async unblockUser(nickname, ownerPin) {
+    const isOwner = Boolean(ownerPin && ownerPin.trim() === SUPABASE_CONFIG.adminPin.trim());
+    if (!isOwner) throw new Error("Неверный ПИН-код владельца.");
+    const cleanNick = (nickname || "").trim();
+    const blocked = getLocalStore(STORAGE_KEYS.BLOCKED, []);
+    const filtered = blocked.filter((b) => b.toLowerCase() !== cleanNick.toLowerCase());
+    setLocalStore(STORAGE_KEYS.BLOCKED, filtered);
+    return { success: true };
+  },
+
+  // 12. Get Blocked Users List
+  getBlockedUsers(ownerPin) {
+    const isOwner = Boolean(ownerPin && ownerPin.trim() === SUPABASE_CONFIG.adminPin.trim());
+    if (!isOwner) throw new Error("Неверный ПИН-код владельца.");
+    return getLocalStore(STORAGE_KEYS.BLOCKED, []);
   }
 };
