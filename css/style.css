@@ -362,11 +362,11 @@ body.hub-active .ps5-screen {
   box-shadow: 0 0 8px rgba(0, 112, 209, 0.8);
 }
 
-/* Profile Avatar Button */
+/* Profile Avatar Button (1:1 PS5 Circular Gamer Avatar) */
 .ps5-avatar-btn {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: transparent;
   border: 1.5px solid rgba(255, 255, 255, 0.45);
@@ -390,16 +390,25 @@ body.hub-active .ps5-screen {
   border-color: #ffffff;
 }
 
+.ps5-topbar-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
 .ps5-online-dot {
   position: absolute;
   right: -1px;
   bottom: -1px;
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #22c55e;
-  border: 1.5px solid #060811;
+  border: 2px solid #060811;
   box-shadow: 0 0 6px #22c55e;
+  z-index: 2;
 }
 
 /* System Clock */
@@ -409,7 +418,7 @@ body.hub-active .ps5-screen {
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   color: rgba(255, 255, 255, 0.95);
-  margin-left: 2px;
+  margin-left: 3px;
   white-space: nowrap;
 }
 
@@ -425,7 +434,7 @@ body.hub-active .ps5-screen {
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
-  padding: 4px clamp(28px, 4vw, 56px) 44px;
+  padding: 4px clamp(28px, 4vw, 56px) 52px;
 }
 
 .ps5-ribbon-wrap::-webkit-scrollbar {
@@ -435,7 +444,7 @@ body.hub-active .ps5-screen {
 .ps5-games-ribbon {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 14px;
   width: max-content;
   min-width: 100%;
 }
@@ -443,17 +452,17 @@ body.hub-active .ps5-screen {
 /* Inactive Game Tile (dimmed, clean, restrained) */
 .ps5-tile {
   position: relative;
-  width: 74px;
-  height: 74px;
-  min-width: 74px;
-  flex: 0 0 74px;
-  border-radius: 18px;
+  width: 76px;
+  height: 76px;
+  min-width: 76px;
+  flex: 0 0 76px;
+  border-radius: 16px;
   border: 2.5px solid transparent;
   background: transparent;
   padding: 2.5px;
   cursor: pointer;
-  opacity: 0.62;
-  filter: brightness(0.85);
+  opacity: 0.68;
+  filter: brightness(0.88);
   transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
               flex 0.28s cubic-bezier(0.16, 1, 0.3, 1),
@@ -484,7 +493,7 @@ body.hub-active .ps5-screen {
 .ps5-tile-art {
   width: 100%;
   height: 100%;
-  border-radius: 14px;
+  border-radius: 13.5px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -519,18 +528,18 @@ body.hub-active .ps5-screen {
   height: 104px;
   min-width: 104px;
   flex: 0 0 104px;
-  border-radius: 20px;
+  border-radius: 18px;
   padding: 2.5px;
   background: #080c16;
-  border-color: #ffffff;
-  box-shadow: 0 0 22px rgba(255, 255, 255, 0.45), 0 0 45px rgba(0, 112, 209, 0.28), 0 14px 35px rgba(0, 0, 0, 0.85);
+  border: 2.8px solid #ffffff;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.42), 0 0 48px rgba(0, 112, 209, 0.28), 0 14px 35px rgba(0, 0, 0, 0.85);
   opacity: 1;
   filter: none;
   z-index: 10;
 }
 
 .ps5-tile.is-active .ps5-tile-art {
-  border-radius: 15px;
+  border-radius: 14.5px;
   border: none;
 }
 
@@ -538,7 +547,7 @@ body.hub-active .ps5-screen {
 .ps5-tile-active-label {
   display: none;
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 12px);
   left: 0;
   white-space: nowrap;
   font-family: var(--font-ps5);
@@ -1876,6 +1885,51 @@ body.hub-active .ps5-screen {
   max-width: 680px;
 }
 
+/* Marvel's Spider-Man: Miles Morales Authentic Logo Branding (1:1 PS5 System UI) */
+.ps5-hero-title-spider {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin-bottom: 8px;
+}
+
+.ps5-marvel-badge {
+  display: inline-block;
+  font-family: var(--font-ps5);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #ffffff;
+  background: #e50914;
+  padding: 2.5px 8px;
+  border-radius: 2px;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
+.ps5-spiderman-text {
+  font-size: clamp(34px, 4.4vw, 58px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.96;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.95);
+}
+
+.ps5-miles-text {
+  font-size: clamp(17px, 2.1vw, 26px);
+  font-weight: 800;
+  font-style: italic;
+  color: #ef4444;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+  margin-top: 2px;
+  text-shadow: 0 2px 16px rgba(239, 68, 68, 0.5);
+}
+
 .ps5-hero-kicker {
   font-size: clamp(13.5px, 1.1vw, 16px);
   font-weight: 500;
@@ -1927,28 +1981,35 @@ body.hub-active .ps5-screen {
   gap: 8px;
   height: 48px;
   padding: 0 38px;
-  background: #ffffff;
-  color: #090c14;
+  background: rgba(38, 44, 56, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  color: #ffffff;
   font-family: var(--font-ps5);
   font-size: 15.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
   border-radius: 999px;
-  border: none;
   cursor: pointer;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 255, 255, 0.25);
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .ps5-btn-play:hover {
   transform: scale(1.04);
-  background: #f8fafc;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 8px 28px rgba(255, 255, 255, 0.4), 0 0 30px rgba(0, 112, 209, 0.4);
+  background: #ffffff;
+  color: #090c14;
+  border-color: #ffffff;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.55), 0 0 45px rgba(0, 112, 209, 0.35);
 }
 
 .ps5-btn-play:focus-visible {
   outline: 2.5px solid #ffffff !important;
   outline-offset: 3px !important;
+  background: #ffffff;
+  color: #090c14;
+  border-color: #ffffff;
   box-shadow: 0 0 25px rgba(255, 255, 255, 0.85), 0 0 50px rgba(0, 112, 209, 0.7) !important;
 }
 
@@ -1966,7 +2027,7 @@ body.hub-active .ps5-screen {
   height: 48px;
   padding: 0 26px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(38, 44, 56, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
   font-family: var(--font-ps5);
@@ -2003,7 +2064,7 @@ body.hub-active .ps5-screen {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(38, 44, 56, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
   cursor: pointer;
@@ -2021,6 +2082,7 @@ body.hub-active .ps5-screen {
 .ps5-btn-dots:focus-visible {
   outline: 2.5px solid #ffffff !important;
   outline-offset: 3px !important;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* Right-bottom PS5 Trophy Summary Pill */

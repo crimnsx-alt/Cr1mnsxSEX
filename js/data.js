@@ -189,6 +189,61 @@ export const ribbonCatalog = {
       ]
     },
     {
+      id: "spiderman",
+      viewType: "game",
+      title: { ru: "Marvel's Spider-Man: Miles Morales", en: "Marvel's Spider-Man: Miles Morales" },
+      publisher: "PlayStation Studios • Insomniac Games",
+      kicker: { ru: "Be Greater. Be Yourself.", en: "Be Greater. Be Yourself." },
+      desc: {
+        ru: "В новом приключении вселенной Marvel «Человек-паук» подросток Майлз Моралес пытается привыкнуть к своему новому дому и стать новым Человеком-пауком.",
+        en: "In the latest adventure in the Marvel's Spider-Man universe, teenager Miles Morales is adjusting to his new home while following in the footsteps of his mentor."
+      },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "modal:library",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/spiderman_ps5.jpg",
+      thumb: "assets/covers/spiderman.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("spiderman", "SPIDER-MAN"),
+      progressPct: 100,
+      playTime: "PS5 • 4K HDR 60 FPS",
+      trophies: { platinum: 1, gold: 2, silver: 10, bronze: 37 },
+      activities: [
+        { title: "Гарлем в опасности", type: "Сюжетная кампания", progress: 100, timeEst: "Финал", thumb: "assets/covers/spiderman.jpg", action: "modal:library" },
+        { title: "Биоэлектрические навыки", type: "Боевые испытания", progress: 100, timeEst: "Мастерство", thumb: "assets/covers/spiderman.jpg", action: "modal:library" }
+      ],
+      news: [
+        { date: "Insomniac Games", title: "Обновление графики и трассировка лучей", desc: "Поддержка тактильной отдачи DualSense и адаптивных триггеров." }
+      ]
+    },
+    {
+      id: "astro",
+      viewType: "game",
+      title: { ru: "Astro's Playroom", en: "Astro's Playroom" },
+      publisher: "Team ASOBI • PlayStation Studios",
+      kicker: { ru: "Инновационная демонстрация DualSense™", en: "DualSense™ Wireless Controller Showcase" },
+      desc: {
+        ru: "Исследуйте 4 уникальных мира, каждый из которых демонстрирует инновационные возможности беспроводного контроллера DualSense.",
+        en: "Explore four worlds, each showcasing innovative gameplay using the new and versatile features of the DualSense wireless controller."
+      },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "modal:library",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/covers/astro.jpg",
+      thumb: "assets/covers/astro.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("astro", "ASTRO PLAYROOM"),
+      progressPct: 100,
+      playTime: "В комплекте с PS5",
+      trophies: { platinum: 1, gold: 3, silver: 13, bronze: 26 },
+      activities: [
+        { title: "Центр процессора", type: "Мир 1", progress: 100, timeEst: "Завершено", thumb: "assets/covers/astro.jpg", action: "modal:library" }
+      ],
+      news: [
+        { date: "Team ASOBI", title: "Все секреты консоли", desc: "Соберите все артефакты PlayStation от PS1 до PS5." }
+      ]
+    },
+    {
       id: "gta-vc",
       viewType: "game",
       title: { ru: "Grand Theft Auto: Vice City", en: "Grand Theft Auto: Vice City" },

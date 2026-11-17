@@ -72,7 +72,7 @@ function hydrateStaticIcons() {
   if ($("#iconEditWidgetsGlyph")) $("#iconEditWidgetsGlyph").innerHTML = PS5Icons.gamepadSquare;
   $("#iconSearchBtn").innerHTML = PS5Icons.search;
   $("#iconSettingsBtn").innerHTML = PS5Icons.settings;
-  $("#iconProfileAvatar").innerHTML = PS5Icons.profileSmiley;
+  $("#iconProfileAvatar").innerHTML = `<img src="assets/covers/astro.jpg" alt="Player 1" class="ps5-topbar-avatar" onerror="this.onerror=null;this.src='assets/covers/spiderman.jpg'" />`;
   $("#iconChevronLeft").innerHTML = PS5Icons.chevronLeft;
   if ($("#iconChevronRight")) $("#iconChevronRight").innerHTML = PS5Icons.chevronRight;
 
@@ -526,7 +526,17 @@ function renderGameHeroView(item) {
 
   const titleEl = $("#heroTitle");
   if (titleEl) {
-    titleEl.textContent = t(item.title) || "";
+    if (item.id === "spiderman") {
+      titleEl.innerHTML = `
+        <div class="ps5-hero-title-spider" aria-label="Marvel's Spider-Man: Miles Morales">
+          <span class="ps5-marvel-badge">MARVEL</span>
+          <span class="ps5-spiderman-text">SPIDER-MAN</span>
+          <span class="ps5-miles-text">MILES MORALES</span>
+        </div>
+      `;
+    } else {
+      titleEl.textContent = t(item.title) || "";
+    }
   }
 
   const descEl = $("#heroDesc");
