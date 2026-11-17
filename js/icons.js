@@ -104,6 +104,10 @@ export const PS5Icons = {
 
   exploreTile: `<svg viewBox="0 0 44 44" width="32" height="32" fill="none" aria-hidden="true"><circle cx="22" cy="22" r="13" stroke="#ffffff" stroke-width="2" opacity="0.85"/><polygon points="22,12 25.2,20.5 34,22 25.2,23.5 22,32 18.8,23.5 10,22 18.8,20.5" fill="#60a5fa"/></svg>`,
 
+  youtubeTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><rect x="6" y="11" width="32" height="22" rx="6" fill="#ff0000"/><polygon points="18,16 29,22 18,28" fill="#ffffff"/></svg>`,
+
+  twitchTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><path d="M9 7h26v17l-6 6h-6l-4 4v-4H9V7z" fill="#9146ff"/><rect x="23.5" y="14" width="3" height="7" fill="#ffffff"/><rect x="17.5" y="14" width="3" height="7" fill="#ffffff"/></svg>`,
+
   dualsenseSilhouette: `<svg viewBox="0 0 36 26" width="24" height="17" fill="#ffffff" aria-hidden="true"><path d="M10.5 4.5h15c3.2 0 5.6 2.5 6.3 5.7l1.4 7.2c.5 2.4-1.3 4.6-3.7 4.6-1.4 0-2.7-.7-3.5-1.9l-2.6-3.6H12.6L10 20.1c-.8 1.2-2.1 1.9-3.5 1.9-2.4 0-4.2-2.2-3.7-4.6l1.4-7.2C4.9 7 7.3 4.5 10.5 4.5z"/></svg>`,
 
   earbudsSilhouette: `<svg viewBox="0 0 36 26" width="24" height="17" fill="#ffffff" aria-hidden="true"><path d="M13 4.5c-3 0-5.2 2.6-5.2 6.2 0 3.2 1.8 5.8 4.4 6.2 1.2.2 2.3-.6 2.3-1.9V6.8c0-1.3-1-2.3-1.5-2.3zm-1.8 4.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6z"/><path d="M23 7.5c3 0 5.2 2.6 5.2 6.2 0 3.2-1.8 5.8-4.4 6.2-1.2.2-2.3-.6-2.3-1.9V9.8c0-1.3 1-2.3 1.5-2.3zm1.8 4.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6z"/></svg>`,

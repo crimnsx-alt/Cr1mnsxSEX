@@ -27,9 +27,12 @@ export const uiStrings = {
     mediaGallerySub: "Снимки экрана и видеоклипы 4K HDR",
     networkStatusTitle: "Состояние сети",
     networkStatusSub: "PlayStation Network · Все службы работают",
-    slotWidgetTitle: "Свободный виджет",
-    slotWidgetSub: "Место для новой карточки Welcome Hub",
-    playCta: "Открыть",
+    trophyProgressTitle: "Прогресс призов",
+    trophyProgressSub: "Последние достижения и трофеи",
+    storageFreeHint: "158 GB свободно · M.2 NVMe готов",
+    wishlistCount: "5 игр",
+    wishlistDiscountHint: "2 скидки активны в PS Store",
+    playCta: "Играть",
     openCta: "Открыть",
     backHome: "В главное меню",
     scrollHubCue: "Нажмите ↓ или прокрутите вниз — Центр игры",
@@ -85,9 +88,12 @@ export const uiStrings = {
     mediaGallerySub: "4K HDR captures and video clips",
     networkStatusTitle: "Network Status",
     networkStatusSub: "PlayStation Network · All services operational",
-    slotWidgetTitle: "Custom Widget Slot",
-    slotWidgetSub: "Ready for new Welcome Hub content",
-    playCta: "Open",
+    trophyProgressTitle: "Trophy Progress",
+    trophyProgressSub: "Recent achievements & earned trophies",
+    storageFreeHint: "158 GB free · M.2 NVMe ready",
+    wishlistCount: "5 games",
+    wishlistDiscountHint: "2 active sales in PS Store",
+    playCta: "Play",
     openCta: "Open",
     backHome: "Home Screen",
     scrollHubCue: "Press ↓ or scroll down for Game Hub",
@@ -193,10 +199,10 @@ export const ribbonCatalog = {
       trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
       activities: [
         { title: "Подборка релизов PS5", type: "Витрина", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
-        { title: "Слот для нового раздела", type: "Шаблон карточки", progress: 0, timeEst: "Готово к заполнению", thumb: PS5Icons.makeSceneArt("slot-1"), action: "modal:slot-1" }
+        { title: "Новинки и скидки PS Store", type: "Распродажа", progress: 100, timeEst: "Скидки до -60%", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" }
       ],
       news: [
-        { date: "PS Store", title: "Витрина 4K HDR", desc: "Чистый макет витрины PS5, готовый к наполнению вашим контентом." }
+        { date: "PS Store", title: "Витрина 4K HDR", desc: "Главные релизы и эксклюзивы консоли PlayStation 5." }
       ]
     },
     {
@@ -217,110 +223,87 @@ export const ribbonCatalog = {
       thumb: PS5Icons.makeSceneArt("ps5-eco", "WELCOME HUB")
     },
     {
-      id: "slot-01",
+      id: "astro",
       viewType: "game",
-      title: { ru: "Раздел 01 · Шаблон", en: "Section 01 · Template" },
-      publisher: "PlayStation®5 UI Slot",
-      kicker: { ru: "PlayStation®5 · Пользовательский слот 01", en: "PlayStation®5 · Custom Slot 01" },
+      title: { ru: "ASTRO BOT", en: "ASTRO BOT" },
+      publisher: "Team ASOBI • PlayStation Studios",
+      kicker: { ru: "PlayStation®5 · Эксклюзив DualSense", en: "PlayStation®5 · DualSense Exclusive" },
       desc: {
-        ru: "Пустой модульный слот для добавления вашего главного раздела, заголовка, описания и ключевых карточек.",
-        en: "Clean modular slot ready for your primary section title, description, and activity cards."
+        ru: "Присоединяйтесь к Астро в грандиозном космическом приключении! Более 50 планет, спасение потерянной команды и полная отдача контроллера DualSense.",
+        en: "Join Astro in a supersized space adventure! Explore over 50 planets, rescue your lost crew, and feel every step with DualSense haptics."
       },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
-      btnAction: "modal:slot-1",
-      secText: { ru: "Настройки", en: "Settings" },
-      secAction: "open:settings",
-      bg: PS5Icons.makeSceneArt("slot-1", "SLOT 01"),
-      thumb: PS5Icons.makeSceneArt("slot-1", "01"),
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "modal:psn",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/covers/astro.jpg",
+      thumb: "assets/covers/astro.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-1", "ASTRO BOT"),
       progressPct: 100,
-      playTime: "Шаблон 01",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      playTime: "34 ч • 4K HDR 60 FPS",
+      trophies: { platinum: 1, gold: 3, silver: 7, bronze: 33 },
       activities: [
-        { title: "Карточка активности 01", type: "Слот контента", progress: 50, timeEst: "Добавьте заголовок", thumb: PS5Icons.makeSceneArt("slot-1"), action: "modal:slot-1" },
-        { title: "Карточка активности 02", type: "Слот контента", progress: 25, timeEst: "Добавьте описание", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:slot-1" }
+        { title: "Спасение VIP-ботов", type: "Основная цель", progress: 100, timeEst: "300/300 ботов", thumb: "assets/covers/astro.jpg", action: "modal:psn" },
+        { title: "Галактика Затерянных Вершин", type: "Секретные уровни", progress: 100, timeEst: "Завершено", thumb: "assets/covers/astro.jpg", action: "modal:psn" }
       ],
       news: [
-        { date: "Слот 01", title: "Готово к наполнению", desc: "Здесь размещаются новости, обновления или анонсы нового раздела." }
-      ],
-      modalData: {
-        badge: "TEMPLATE SLOT · 01",
-        title: "Раздел 01 — Шаблон контента",
-        subtitle: "Системная карточка оболочки PlayStation®5",
-        content: `
-          <p class="modal-p">Этот слот полностью очищен и подготовлен для добавления новой информации: текста, ссылок, тегов или характеристик.</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box"><span class="spec-label">Параметр 1</span><span class="spec-val">Значение (ожидает ввода)</span></div>
-            <div class="modal-spec-box"><span class="spec-label">Параметр 2</span><span class="spec-val">Значение (ожидает ввода)</span></div>
-          </div>
-        `,
-        actions: []
-      }
+        { date: "PS5 Обновление", title: "Скоростные испытания и новые боты", desc: "Бесплатное дополнение со спидран-уровнями уже доступно для всех владельцев игры." }
+      ]
     },
     {
-      id: "slot-02",
+      id: "gow",
       viewType: "game",
-      title: { ru: "Раздел 02 · Шаблон", en: "Section 02 · Template" },
-      publisher: "PlayStation®5 UI Slot",
-      kicker: { ru: "PlayStation®5 · Пользовательский слот 02", en: "PlayStation®5 · Custom Slot 02" },
+      title: { ru: "God of War Ragnarök", en: "God of War Ragnarök" },
+      publisher: "Santa Monica Studio • PlayStation Studios",
+      kicker: { ru: "PlayStation®5 · Эпический блокбастер", en: "PlayStation®5 · Blockbuster" },
       desc: {
-        ru: "Второй чистый экран оболочки в стиле PS5 для нового направления, коллекции или описания.",
-        en: "Second clean PS5 shell screen ready for new content or collections."
+        ru: "Кратос и Атрей отправляются в мифическое путешествие по всем Девяти мирам в поисках ответов, пока войска Асгарда готовятся к предречённой битве.",
+        en: "Kratos and Atreus embark on a mythic journey across the Nine Realms in search of answers as Asgardian forces prepare for the prophesied battle."
       },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
-      btnAction: "modal:slot-2",
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "modal:psn",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/covers/gow.jpg",
+      thumb: "assets/covers/gow.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-2", "GOD OF WAR"),
+      progressPct: 82,
+      playTime: "58 ч • Режим 120 Гц",
+      trophies: { platinum: 1, gold: 4, silver: 15, bronze: 16 },
+      activities: [
+        { title: "Путь сквозь Фимбулвинтер", type: "Сюжетная кампания", progress: 82, timeEst: "Глава 12", thumb: "assets/covers/gow.jpg", action: "modal:psn" },
+        { title: "Горнило Муспельхейма", type: "Испытания", progress: 60, timeEst: "В процессе", thumb: "assets/covers/gow.jpg", action: "modal:psn" }
+      ],
+      news: [
+        { date: "Valhalla DLC", title: "Бесплатное дополнение Valhalla", desc: "Погрузитесь в глубины разума Кратоса в новом роуглайт-режиме." }
+      ]
+    },
+    {
+      id: "gtavc",
+      viewType: "game",
+      title: { ru: "Grand Theft Auto: Vice City", en: "Grand Theft Auto: Vice City" },
+      publisher: "Rockstar Games • WASM Arcade",
+      kicker: { ru: "WASM Arcade · Мгновенный запуск", en: "WASM Arcade · Instant Launch" },
+      desc: {
+        ru: "Добро пожаловать в 80-е! Неоновый Вайс-Сити, легендарные радиостанции и восхождение Томми Версетти. Запуск прямо в окне консоли.",
+        en: "Welcome to the 1980s! Neon-lit Vice City, legendary soundtrack, and the rise of Tommy Vercetti. Plays directly in the browser shell."
+      },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "launch:gtavc",
       secText: { ru: "Библиотека", en: "Library" },
       secAction: "modal:library",
-      bg: PS5Icons.makeSceneArt("slot-2", "SLOT 02"),
-      thumb: PS5Icons.makeSceneArt("slot-2", "02"),
-      progressPct: 75,
-      playTime: "Шаблон 02",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      bg: "assets/covers/gta_vc.jpg",
+      thumb: "assets/covers/gta_vc.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-3", "VICE CITY"),
+      progressPct: 65,
+      playTime: "WASM Эмулятор • 60 FPS",
+      trophies: { platinum: 0, gold: 2, silver: 6, bronze: 26 },
       activities: [
-        { title: "Блок информации 01", type: "Слот контента", progress: 75, timeEst: "Шаблон 02", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:slot-2" }
+        { title: "Захват особняка Версетти", type: "Миссия сюжета", progress: 65, timeEst: "Миссия", thumb: "assets/covers/gta_vc.jpg", action: "launch:gtavc" }
       ],
       news: [
-        { date: "Слот 02", title: "Чистая структура", desc: "Готово для добавления новых материалов." }
-      ],
-      modalData: {
-        badge: "TEMPLATE SLOT · 02",
-        title: "Раздел 02 — Шаблон контента",
-        subtitle: "Готовый контейнер для новых данных",
-        content: `<p class="modal-p">Замените этот текст в файле <code>js/data.js</code> или скажите, какую информацию сюда добавить.</p>`,
-        actions: []
-      }
-    },
-    {
-      id: "slot-03",
-      viewType: "game",
-      title: { ru: "Раздел 03 · Шаблон", en: "Section 03 · Template" },
-      publisher: "PlayStation®5 UI Slot",
-      kicker: { ru: "PlayStation®5 · Пользовательский слот 03", en: "PlayStation®5 · Custom Slot 03" },
-      desc: {
-        ru: "Третий чистый экран оболочки PS5 с поддержкой Game Hub, карточек 16:9 и блока новостей.",
-        en: "Third clean PS5 shell screen with Game Hub 16:9 activity cards and news grid."
-      },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
-      btnAction: "modal:slot-3",
-      secText: { ru: "В главное меню", en: "Home" },
-      secAction: "home_reset",
-      bg: PS5Icons.makeSceneArt("slot-3", "SLOT 03"),
-      thumb: PS5Icons.makeSceneArt("slot-3", "03"),
-      progressPct: 50,
-      playTime: "Шаблон 03",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
-      activities: [
-        { title: "Блок информации 01", type: "Слот контента", progress: 50, timeEst: "Шаблон 03", thumb: PS5Icons.makeSceneArt("slot-3"), action: "modal:slot-3" }
-      ],
-      news: [
-        { date: "Слот 03", title: "Готово к заполнению", desc: "Модульная сетка PS5 без сторонних упоминаний." }
-      ],
-      modalData: {
-        badge: "TEMPLATE SLOT · 03",
-        title: "Раздел 03 — Шаблон контента",
-        subtitle: "Готовый контейнер для новых данных",
-        content: `<p class="modal-p">Пустая карточка шаблона 03 готова к заполнению новым контентом.</p>`,
-        actions: []
-      }
+        { date: "WASM Edition", title: "Поддержка геймпада DualSense", desc: "Управление полностью адаптировано под стики и кнопки контроллера PlayStation." }
+      ]
     },
     {
       id: "spider-man",
@@ -393,22 +376,22 @@ export const ribbonCatalog = {
       thumb: PS5Icons.makeSceneArt("explore", "EXPLORE"),
       cards: [
         {
-          title: { ru: "Карточка 01 · Шаблон", en: "Card 01 · Template" },
-          tag: { ru: "Слот новостей", en: "News Slot" },
-          img: PS5Icons.makeSceneArt("slot-1", "CARD 01"),
-          action: "modal:slot-1"
+          title: { ru: "PlayStation®5 Pro · Технология PSSR", en: "PlayStation®5 Pro · PSSR Technology" },
+          tag: { ru: "PSSR 4K 120 FPS", en: "PSSR 4K 120 FPS" },
+          img: PS5Icons.makeSceneArt("slot-1", "PS5 PRO"),
+          action: "modal:psn"
         },
         {
-          title: { ru: "Карточка 02 · Шаблон", en: "Card 02 · Template" },
-          tag: { ru: "Слот витрины", en: "Showcase Slot" },
-          img: PS5Icons.makeSceneArt("slot-2", "CARD 02"),
-          action: "modal:slot-2"
+          title: { ru: "Турниры PlayStation Tournaments", en: "PlayStation Tournaments" },
+          tag: { ru: "Киберспорт", en: "Esports" },
+          img: PS5Icons.makeSceneArt("slot-2", "TOURNAMENTS"),
+          action: "modal:psn"
         },
         {
-          title: { ru: "Карточка 03 · Шаблон", en: "Card 03 · Template" },
-          tag: { ru: "Слот галереи", en: "Gallery Slot" },
-          img: PS5Icons.makeSceneArt("slot-3", "CARD 03"),
-          action: "modal:slot-3"
+          title: { ru: "Коллекция игр месяца PlayStation Plus", en: "PlayStation Plus Monthly Games" },
+          tag: { ru: "Подписка", en: "Subscription" },
+          img: PS5Icons.makeSceneArt("slot-3", "PS PLUS"),
+          action: "modal:library"
         },
         {
           title: { ru: "Аудиосистема PS5", en: "PS5 Audio Synth" },
@@ -543,70 +526,59 @@ export const ribbonCatalog = {
       }
     },
     {
-      id: "media-slot-1",
+      id: "youtube",
       viewType: "game",
-      title: { ru: "Медиа слот 01 · Шаблон", en: "Media Slot 01 · Template" },
-      publisher: "PlayStation®5 Media UI",
-      kicker: { ru: "Пользовательский медиа-блок", en: "Custom Media Container" },
+      title: { ru: "YouTube", en: "YouTube" },
+      publisher: "Google LLC",
+      kicker: { ru: "Медиасервис · 4K HDR 60 FPS", en: "Media Service · 4K HDR 60 FPS" },
       desc: {
-        ru: "Свободная плитка во вкладке «Медиа» для добавления приложения, видео или страницы.",
-        en: "Available tile inside the Media tab for apps, streams, or custom content."
+        ru: "Смотрите любимые игровые каналы, прямые трансляции, руководства по прохождению и трейлеры в максимальном качестве 4K HDR.",
+        en: "Watch your favorite gaming creators, live streams, game walkthroughs, and official 4K HDR trailers."
       },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
-      btnAction: "modal:media-slot-1",
-      secText: { ru: "Настройки", en: "Settings" },
-      secAction: "open:settings",
-      bg: PS5Icons.makeSceneArt("slot-2", "MEDIA SLOT 01"),
-      thumb: PS5Icons.makeSceneArt("slot-2", "02"),
+      ctaText: { ru: "Запустить", en: "Start" },
+      btnAction: "open:youtube",
+      secText: { ru: "В браузер", en: "Browser" },
+      secAction: "open:youtube",
+      iconSvg: PS5Icons.youtubeTile,
+      bg: PS5Icons.makeSceneArt("media-slot", "YOUTUBE 4K"),
+      thumb: PS5Icons.makeSceneArt("media-slot", "YOUTUBE"),
       progressPct: 100,
-      playTime: "Шаблон",
+      playTime: "Приложение PS5",
       trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        { title: "Медиа-слот 01", type: "Шаблон", progress: 0, timeEst: "Ожидает контент", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:media-slot-1" }
+        { title: "Рекомендованные стримы", type: "Прямой эфир", progress: 100, timeEst: "Онлайн", thumb: PS5Icons.makeSceneArt("media-slot"), action: "open:youtube" },
+        { title: "Официальные трейлеры PlayStation", type: "Канал PS", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("slot-1"), action: "open:youtube" }
       ],
       news: [
-        { date: "Media", title: "Готово к заполнению", desc: "Чистый шаблон без лишних данных." }
-      ],
-      modalData: {
-        badge: "MEDIA SLOT · 01",
-        title: "Медиа слот 01",
-        subtitle: "Свободный блок вкладки «Медиа»",
-        content: `<p class="modal-p">Готово для интеграции нового сервиса, видео или карточки.</p>`,
-        actions: []
-      }
+        { date: "YouTube PS5", title: "Поддержка пространственного звука", desc: "Смотрите видео со звуком 3D Tempest Audio на совместимых наушниках." }
+      ]
     },
     {
-      id: "media-slot-2",
+      id: "twitch",
       viewType: "game",
-      title: { ru: "Медиа слот 02 · Шаблон", en: "Media Slot 02 · Template" },
-      publisher: "PlayStation®5 Media UI",
-      kicker: { ru: "Пользовательский медиа-блок", en: "Custom Media Container" },
+      title: { ru: "Twitch", en: "Twitch" },
+      publisher: "Twitch Interactive, Inc.",
+      kicker: { ru: "Прямые трансляции · Киберспорт", en: "Live Streams · Esports" },
       desc: {
-        ru: "Дополнительная плитка вкладки «Медиа» для будущего наполнения.",
-        en: "Additional Media tab tile ready for future content."
+        ru: "Смотрите прямые эфиры лучших стримеров, турниры PlayStation Tournaments и общайтесь с игровым сообществом в реальном времени.",
+        en: "Watch top streamers live, follow PlayStation Tournaments, and chat with millions of gamers in real time."
       },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
-      btnAction: "modal:media-slot-2",
+      ctaText: { ru: "Запустить", en: "Start" },
+      btnAction: "open:twitch",
       secText: { ru: "К играм", en: "Games Tab" },
       secAction: "home_reset",
-      bg: PS5Icons.makeSceneArt("slot-3", "MEDIA SLOT 02"),
-      thumb: PS5Icons.makeSceneArt("slot-3", "03"),
+      iconSvg: PS5Icons.twitchTile,
+      bg: PS5Icons.makeSceneArt("slot-2", "TWITCH LIVE"),
+      thumb: PS5Icons.makeSceneArt("slot-2", "TWITCH"),
       progressPct: 100,
-      playTime: "Шаблон",
+      playTime: "Приложение PS5",
       trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        { title: "Медиа-слот 02", type: "Шаблон", progress: 0, timeEst: "Ожидает контент", thumb: PS5Icons.makeSceneArt("slot-3"), action: "modal:media-slot-2" }
+        { title: "Популярные трансляции", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "open:twitch" }
       ],
       news: [
-        { date: "Media", title: "Готово к заполнению", desc: "Чистый шаблон без лишних данных." }
-      ],
-      modalData: {
-        badge: "MEDIA SLOT · 02",
-        title: "Медиа слот 02",
-        subtitle: "Свободный блок вкладки «Медиа»",
-        content: `<p class="modal-p">Готово для добавления нового контента.</p>`,
-        actions: []
-      }
+        { date: "Twitch PS5", title: "Трансляция прямо с консоли", desc: "Нажмите кнопку Create на контроллере DualSense, чтобы мгновенно начать свой стрим." }
+      ]
     }
   ]
 };
@@ -684,9 +656,10 @@ export const controlCenterItems = [
 
 export const searchCatalog = [
   { title: "Центр приветствия (Welcome Hub)", category: "Система", desc: "Горизонтальная лента виджетов PS5", action: "home_reset" },
-  { title: "Раздел 01 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-1" },
-  { title: "Раздел 02 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-2" },
-  { title: "Раздел 03 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-3" },
+  { title: "ASTRO BOT", category: "Игра", desc: "Эксклюзивный платформер PlayStation 5", action: "select:astro" },
+  { title: "God of War Ragnarök", category: "Игра", desc: "Эпическое путешествие Кратоса и Атрея", action: "select:gow" },
+  { title: "Grand Theft Auto: Vice City", category: "WASM", desc: "Классический экшен с запуском в браузере", action: "launch:gtavc" },
+  { title: "Marvel's Spider-Man", category: "Игра", desc: "Приключения Человека-паука в Нью-Йорке", action: "select:spider-man" },
   { title: "PlayStation Store", category: "Витрина", desc: "Каталог и демонстрационные разделы", action: "modal:library" },
   { title: "Обзор (Explore)", category: "Лента", desc: "Новости и карточки формата 16:9", action: "open:explore" },
   { title: "Профиль и призы", category: "PSN", desc: "Системная статистика профиля", action: "modal:psn" },

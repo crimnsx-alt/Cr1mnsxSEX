@@ -80,6 +80,8 @@ function hydrateStaticIcons() {
   $("#iconAccHeader").innerHTML = PS5Icons.accessibility;
   $("#iconAccEmblem").innerHTML = PS5Icons.accessibilityEmblem;
   $("#iconTrophyHeader").innerHTML = PS5Icons.trophy;
+  if ($("#iconStorageHeader")) $("#iconStorageHeader").innerHTML = PS5Icons.storage;
+  if ($("#iconTpHeader")) $("#iconTpHeader").innerHTML = PS5Icons.trophy;
 
   $("#cupPlat").innerHTML = PS5Icons.trophyCup3D("platinum");
   $("#cupGold").innerHTML = PS5Icons.trophyCup3D("gold");
@@ -238,9 +240,12 @@ function applyLanguageAndTelemetry() {
   $("#lblTrophies").textContent = S("trophies");
   $("#lblStoreShowcaseTitle").textContent = S("storeFeaturedTitle");
   $("#lblStoreShowcaseSub").textContent = S("storeFeaturedSub");
-  $("#lblConsoleStorage").textContent = S("consoleStorage");
-  $("#lblWishlistTitle").textContent = S("wishlistTitle");
-  $("#lblWishlistSub").textContent = S("wishlistSub");
+  if ($("#lblConsoleStorage")) $("#lblConsoleStorage").textContent = S("consoleStorage");
+  if ($("#lblStorageFree")) $("#lblStorageFree").textContent = S("storageFreeHint");
+  if ($("#lblWishlistTitle")) $("#lblWishlistTitle").textContent = S("wishlistTitle");
+  if ($("#lblWishlistCount")) $("#lblWishlistCount").textContent = S("wishlistCount");
+  if ($("#lblWishlistHint")) $("#lblWishlistHint").textContent = S("wishlistDiscountHint");
+  if ($("#lblTrophyProgressTitle")) $("#lblTrophyProgressTitle").textContent = S("trophyProgressTitle");
   $("#lblFriendActivityTitle").textContent = S("friendActivityTitle");
   $("#lblFriendActivitySub").textContent = S("friendActivitySub");
   $("#lblScrollHubCue").textContent = S("scrollHubCue");
@@ -427,6 +432,13 @@ function renderExploreView(item) {
 }
 
 function renderGameHeroView(item) {
+  const heroView = $("#ps5GameHeroView");
+  if (heroView) {
+    heroView.classList.remove("ps5-hero-anim-in");
+    void heroView.offsetWidth;
+    heroView.classList.add("ps5-hero-anim-in");
+  }
+
   $("#heroKicker").textContent = t(item.kicker);
   $("#heroTitle").textContent = t(item.title);
   $("#heroDesc").textContent = t(item.desc);
@@ -1709,6 +1721,16 @@ function handleAction(action) {
   }
   if (action === "modal:psn") return openPSNModal();
   if (action === "modal:library") return openLibraryModal();
+  if (action.startsWith("select:")) {
+    const tileId = action.slice(7);
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    if (state.category !== "games") switchCategory("games");
+    return selectTile(tileId, true);
+  }
+  if (action === "launch:gtavc" || action === "launch:gta-vc") return launchPlayableGame("gta-vc");
+  if (action === "open:youtube") return window.open("https://youtube.com/gaming", "_blank", "noopener");
+  if (action === "open:twitch") return window.open("https://twitch.tv", "_blank", "noopener");
 
   const mapByAction = {
     "modal:slot-1": "slot-01",
@@ -2448,7 +2470,11 @@ function init() {
     state.settingsSection = "accessories";
     openSettings();
   });
-  $("#widgetWishlist")?.addEventListener("click", () => selectTile("rdr2", true));
+  $("#widgetStorage")?.addEventListener("click", () => {
+    state.settingsSection = "storage";
+    openSettings();
+  });
+  $("#widgetWishlist")?.addEventListener("click", () => selectTile("store", true));
   $("#widgetFriendActivity")?.addEventListener("click", () => selectTile("explore", true));
   $("#widgetNetworkStatus")?.addEventListener("click", () => {
     state.settingsSection = "accounts";
@@ -2458,12 +2484,12 @@ function init() {
     if (state.category !== "media") switchCategory("media");
     selectTile("media-gallery", true);
   });
-  $("#widgetCustomSlot")?.addEventListener("click", () => handleAction("modal:slot-1"));
   $("#widgetPsPlus")?.addEventListener("click", () => selectTile("store", true));
   $("#widgetRemotePlay")?.addEventListener("click", () => {
     state.settingsSection = "remote";
     openSettings();
   });
+  $("#widgetTrophyProgress")?.addEventListener("click", () => openPSNModal());
 
   // Game Hero / Hub Interactions
   $("#heroTrophySummary").addEventListener("click", () => openPSNModal());

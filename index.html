@@ -218,42 +218,67 @@
             </article>
           </div>
 
-          <!-- Column 3: Battery Rings (29%) + Wishlist / Console Storage (66%) -->
+          <!-- Column 3: Battery Rings (29%) + Dedicated Console Storage (66%) -->
           <div class="ps5-bento-col">
             <article class="ps5-widget ps5-widget--battery" id="widgetBattery" tabindex="0" role="button">
               <div class="ps5-battery-rings-row" id="welcomeBatteryRings"></div>
             </article>
 
-            <article class="ps5-widget ps5-widget--wishlist" id="widgetWishlist" tabindex="0" role="button">
-              <div class="ps5-wishlist-art" id="welcomeWishlistBg">
-                <div class="ps5-wishlist-scrim"></div>
-                <div class="ps5-wishlist-top">
-                  <span class="ps5-wishlist-badge" id="lblConsoleStorage">Память консоли</span>
-                  <span class="ps5-wishlist-storage-val">667 / 825 GB SSD</span>
-                </div>
-                <div class="ps5-wishlist-bottom">
-                  <div class="ps5-storage-section">
-                    <div class="ps5-ssd-bar-track">
-                      <div class="ps5-ssd-bar-fill" style="width: 81%;"></div>
-                    </div>
-                    <span class="ps5-ssd-free-hint">158 GB свободно</span>
+            <article class="ps5-widget ps5-widget--storage" id="widgetStorage" tabindex="0" role="button">
+              <div class="ps5-storage-inner">
+                <header class="ps5-widget-header">
+                  <div class="ps5-widget-title-group">
+                    <span id="iconStorageHeader" class="ps5-widget-icon"></span>
+                    <span id="lblConsoleStorage">Память консоли</span>
                   </div>
-                  <div class="ps5-wishlist-divider"></div>
-                  <div class="ps5-wishlist-header-row">
-                    <span class="ps5-wishlist-heart" aria-hidden="true">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    </span>
-                    <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
-                    <span class="ps5-wishlist-count-badge">5 игр</span>
+                  <span class="ps5-storage-val" id="lblStorageVal">667 / 825 GB</span>
+                </header>
+                <div class="ps5-storage-body">
+                  <div class="ps5-ssd-bar-track">
+                    <div class="ps5-ssd-bar-fill ps5-ssd-bar-fill--games" style="width: 58%;" title="Игры: 480 GB"></div>
+                    <div class="ps5-ssd-bar-fill ps5-ssd-bar-fill--media" style="width: 14%;" title="Медиа: 115 GB"></div>
+                    <div class="ps5-ssd-bar-fill ps5-ssd-bar-fill--sys" style="width: 9%;" title="Система: 72 GB"></div>
                   </div>
-                  <p class="ps5-wishlist-sub" id="lblWishlistSub">GTA VI · Death Stranding 2 · Wolverine</p>
+                  <div class="ps5-storage-legend">
+                    <span class="ps5-legend-item"><span class="ps5-legend-dot ps5-legend-dot--games"></span>Игры</span>
+                    <span class="ps5-legend-item"><span class="ps5-legend-dot ps5-legend-dot--media"></span>Медиа</span>
+                    <span class="ps5-legend-item"><span class="ps5-legend-dot ps5-legend-dot--sys"></span>Система</span>
+                  </div>
                 </div>
+                <footer class="ps5-storage-footer">
+                  <span class="ps5-ssd-free-hint" id="lblStorageFree">158 GB свободно · M.2 NVMe готов</span>
+                </footer>
               </div>
             </article>
           </div>
 
-          <!-- Column 4: Activity (64%) + Network Status (31%) -->
+          <!-- Column 4: Dedicated Wishlist (48%) + Activity (48%) -->
           <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--wishlist" id="widgetWishlist" tabindex="0" role="button">
+              <div class="ps5-wishlist-art" id="welcomeWishlistBg">
+                <div class="ps5-wishlist-scrim"></div>
+                <div class="ps5-wishlist-content">
+                  <header class="ps5-widget-header">
+                    <div class="ps5-widget-title-group">
+                      <span class="ps5-wishlist-heart" aria-hidden="true">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="#ef4444"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                      </span>
+                      <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
+                    </div>
+                    <span class="ps5-wishlist-count-badge" id="lblWishlistCount">5 игр</span>
+                  </header>
+                  <div class="ps5-wishlist-tags-row">
+                    <span class="ps5-wtag">GTA VI</span>
+                    <span class="ps5-wtag">Death Stranding 2</span>
+                    <span class="ps5-wtag">Wolverine</span>
+                  </div>
+                  <footer class="ps5-wishlist-footer">
+                    <span class="ps5-wishlist-hint" id="lblWishlistHint">2 скидки активны в PS Store</span>
+                  </footer>
+                </div>
+              </div>
+            </article>
+
             <article class="ps5-widget ps5-widget--activity" id="widgetFriendActivity" tabindex="0" role="button" title="Обзор и активность">
               <div class="ps5-peek-inner">
                 <div class="ps5-peek-meta">
@@ -261,6 +286,19 @@
                   <span class="ps5-peek-pill">Explore</span>
                 </div>
                 <p class="ps5-peek-sub" id="lblFriendActivitySub">Последние события и обновления системы</p>
+              </div>
+            </article>
+          </div>
+
+          <!-- Column 5: Media Gallery (48%) + Network Status (48%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--media-slot" id="widgetMediaGallery" tabindex="0" role="button">
+              <div class="ps5-slot-inner" id="welcomeMediaCardBg">
+                <div class="ps5-store-scrim"></div>
+                <div class="ps5-store-meta">
+                  <span class="ps5-store-kicker" id="lblMediaGalleryTitle">Галерея мультимедиа</span>
+                  <span class="ps5-store-sub" id="lblMediaGallerySub">Снимки экрана и видеоклипы 4K HDR</span>
+                </div>
               </div>
             </article>
 
@@ -275,30 +313,7 @@
             </article>
           </div>
 
-          <!-- Column 5: Media Gallery (48%) + Custom Widget Slot (48%) -->
-          <div class="ps5-bento-col">
-            <article class="ps5-widget ps5-widget--media-slot" id="widgetMediaGallery" tabindex="0" role="button">
-              <div class="ps5-slot-inner" id="welcomeMediaCardBg">
-                <div class="ps5-store-scrim"></div>
-                <div class="ps5-store-meta">
-                  <span class="ps5-store-kicker" id="lblMediaGalleryTitle">Галерея мультимедиа</span>
-                  <span class="ps5-store-sub" id="lblMediaGallerySub">Снимки экрана и видеоклипы 4K HDR</span>
-                </div>
-              </div>
-            </article>
-
-            <article class="ps5-widget ps5-widget--custom-slot" id="widgetCustomSlot" tabindex="0" role="button">
-              <div class="ps5-net-inner">
-                <div class="ps5-widget-header">
-                  <span class="ps5-peek-label" id="lblSlotWidgetTitle">Свободный виджет</span>
-                  <span class="ps5-peek-pill">01</span>
-                </div>
-                <span class="ps5-peek-sub" id="lblSlotWidgetSub">Место для новой карточки Welcome Hub</span>
-              </div>
-            </article>
-          </div>
-
-          <!-- Column 6: PlayStation Plus (48%) + Remote Play (48%) -->
+          <!-- Column 6: PlayStation Plus (34%) + Remote Play (31%) + Trophy Progress (31%) -->
           <div class="ps5-bento-col">
             <article class="ps5-widget ps5-widget--media-slot" id="widgetPsPlus" tabindex="0" role="button">
               <div class="ps5-slot-inner" id="welcomePsPlusCardBg">
@@ -317,6 +332,25 @@
                   <span class="ps5-peek-pill">PS5</span>
                 </div>
                 <span class="ps5-peek-sub" id="lblRemotePlaySub">Трансляция на ПК, смартфон или портал</span>
+              </div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--trophy-progress" id="widgetTrophyProgress" tabindex="0" role="button">
+              <div class="ps5-tp-inner">
+                <div class="ps5-widget-header">
+                  <div class="ps5-widget-title-group">
+                    <span id="iconTpHeader" class="ps5-widget-icon"></span>
+                    <span id="lblTrophyProgressTitle">Прогресс призов</span>
+                  </div>
+                  <span class="ps5-tp-game-badge">Spider-Man 2</span>
+                </div>
+                <div class="ps5-tp-recent">
+                  <span class="ps5-tp-cup-dot">🏆</span>
+                  <div class="ps5-tp-meta">
+                    <span class="ps5-tp-name">Великолепный Человек-паук</span>
+                    <span class="ps5-tp-tier">Платиновый приз · 100%</span>
+                  </div>
+                </div>
               </div>
             </article>
           </div>
@@ -385,8 +419,8 @@
         <div class="hub-game-identity">
           <div id="hubGameThumb" class="hub-game-thumb"></div>
           <div class="hub-game-meta">
-            <h2 id="hubGameTitle" class="hub-game-title">Название</h2>
-            <span id="hubGamePublisher" class="hub-game-publisher">Издатель</span>
+            <h2 id="hubGameTitle" class="hub-game-title">Marvel's Spider-Man 2</h2>
+            <span id="hubGamePublisher" class="hub-game-publisher">Insomniac Games • PlayStation Studios</span>
           </div>
         </div>
         <div class="hub-header-actions">
@@ -607,7 +641,7 @@
           <h1 class="gw-hub-title" id="gwHubTitle">Grand Theft Auto V</h1>
           <p class="gw-hub-desc" id="gwHubDesc">Порт игры на движке WebAssembly. Рекомендуется запуск во весь экран в новой вкладке для прямого соединения без блокировок Cloudflare.</p>
           <div class="gw-hub-actions">
-            <a class="gw-hub-btn-primary" id="gwHubBtnPlayExternal" href="#" target="_blank" rel="noopener">
+            <a class="gw-hub-btn-primary" id="gwHubBtnPlayExternal" href="javascript:void(0)" target="_blank" rel="noopener">
               <span>▶</span> <span>Запустить во весь экран ↗</span>
             </a>
             <button class="gw-hub-btn-secondary" id="gwHubBtnTryIframe">
@@ -621,7 +655,7 @@
       <div class="gw-helper-banner">
         <span>Нажмите <kbd>⛶</kbd> или <kbd>F</kbd> для перехода во весь экран</span>
         <span>•</span>
-        <a class="gw-helper-link" id="gwHelperExternalLink" href="#" target="_blank" rel="noopener">Открыть в отдельной вкладке ↗</a>
+        <a class="gw-helper-link" id="gwHelperExternalLink" href="javascript:void(0)" target="_blank" rel="noopener">Открыть в отдельной вкладке ↗</a>
       </div>
     </div>
   </div>

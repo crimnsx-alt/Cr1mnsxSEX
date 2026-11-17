@@ -1387,10 +1387,105 @@ body.hub-active .ps5-screen {
 }
 
 /* =========================================================================
-   Widget 6: Console Storage & Wishlist
+   Widget: Dedicated Console Storage (SSD)
+   ========================================================================= */
+.ps5-widget--storage {
+  flex: 66 1 0;
+  min-height: 0;
+  height: auto;
+  padding: 1.6vh 1.3vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ps5-storage-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ps5-storage-val {
+  color: #38bdf8;
+  font-weight: 700;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+}
+
+.ps5-storage-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: auto 0;
+}
+
+.ps5-ssd-bar-track {
+  width: 100%;
+  height: 7px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.ps5-ssd-bar-fill--games {
+  background: linear-gradient(90deg, #0070d1 0%, #38bdf8 100%);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.5);
+}
+
+.ps5-ssd-bar-fill--media {
+  background: #f59e0b;
+}
+
+.ps5-ssd-bar-fill--sys {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.ps5-storage-legend {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.ps5-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.ps5-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.ps5-legend-dot--games { background: #38bdf8; box-shadow: 0 0 5px #38bdf8; }
+.ps5-legend-dot--media { background: #f59e0b; }
+.ps5-legend-dot--sys { background: rgba(255, 255, 255, 0.7); }
+
+.ps5-storage-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ps5-ssd-free-hint {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* =========================================================================
+   Widget: Dedicated Wishlist
    ========================================================================= */
 .ps5-widget--wishlist {
-  flex: 66 1 0;
+  flex: 48 1 0;
   min-height: 0;
   height: auto;
 }
@@ -1410,107 +1505,130 @@ body.hub-active .ps5-screen {
 .ps5-wishlist-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(12, 18, 32, 0.65) 0%, rgba(6, 10, 20, 0.94) 75%);
+  background: linear-gradient(180deg, rgba(12, 18, 32, 0.75) 0%, rgba(6, 10, 20, 0.94) 85%);
 }
 
-.ps5-wishlist-top,
-.ps5-wishlist-bottom {
+.ps5-wishlist-content {
   position: relative;
   z-index: 2;
-}
-
-.ps5-wishlist-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: clamp(11.5px, 0.95vw, 14px);
-}
-
-.ps5-wishlist-badge {
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-}
-
-.ps5-wishlist-storage-val {
-  color: #38bdf8;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
-}
-
-.ps5-storage-section {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-bottom: 8px;
-}
-
-.ps5-ssd-bar-track {
-  width: 100%;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.ps5-ssd-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #0070d1 0%, #38bdf8 100%);
-  border-radius: 999px;
-  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
-}
-
-.ps5-ssd-free-hint {
-  font-size: 11px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
-  align-self: flex-end;
-}
-
-.ps5-wishlist-divider {
-  width: 100%;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin: 6px 0 8px;
-}
-
-.ps5-wishlist-header-row {
-  display: flex;
-  align-items: center;
-  gap: 7px;
+  justify-content: space-between;
 }
 
 .ps5-wishlist-heart {
-  font-size: 13px;
-  filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.7));
+  display: inline-flex;
+  align-items: center;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.8));
 }
 
 .ps5-wishlist-title {
-  font-size: clamp(13.5px, 1.2vw, 17px);
+  font-size: clamp(12.5px, 1.1vw, 15px);
   font-weight: 700;
   color: #ffffff;
-  margin: 0;
 }
 
 .ps5-wishlist-count-badge {
-  margin-left: auto;
   font-size: 10.5px;
   font-weight: 700;
   color: #ffffff;
-  background: rgba(244, 63, 94, 0.25);
-  border: 1px solid rgba(244, 63, 94, 0.5);
-  padding: 2px 8px;
+  background: rgba(239, 68, 68, 0.22);
+  border: 1px solid rgba(239, 68, 68, 0.45);
+  padding: 2px 7px;
   border-radius: 999px;
 }
 
-.ps5-wishlist-sub {
-  font-size: clamp(10.5px, 0.88vw, 12.5px);
-  color: rgba(255, 255, 255, 0.65);
-  margin: 4px 0 0;
+.ps5-wishlist-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: auto 0;
+}
+
+.ps5-wtag {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 2.5px 7px;
+  border-radius: 6px;
+}
+
+.ps5-wishlist-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ps5-wishlist-hint {
+  font-size: 11px;
+  color: #38bdf8;
+  font-weight: 500;
+}
+
+/* =========================================================================
+   Widget: Trophy Progress Card
+   ========================================================================= */
+.ps5-widget--trophy-progress {
+  flex: 32 1 0;
+  min-height: 0;
+  height: auto;
+  padding: 1.4vh 1.2vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ps5-tp-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ps5-tp-game-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+
+.ps5-tp-recent {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: auto 0;
+}
+
+.ps5-tp-cup-dot {
+  font-size: 16px;
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+}
+
+.ps5-tp-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ps5-tp-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ps5-tp-tier {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 /* Col 4 & Col 5: Scrollable Activity, Network & Template Slot Cards */
@@ -1745,26 +1863,38 @@ body.hub-active .ps5-screen {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 38px;
   background: #ffffff;
-  color: #090b12;
+  color: #090c14;
   font-family: var(--font-ps5);
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 600;
-  padding: 12px 34px;
+  letter-spacing: -0.01em;
   border-radius: 999px;
   border: none;
   cursor: pointer;
-  transition: transform 0.2s var(--ps5-ease), box-shadow 0.2s ease;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45), 0 0 20px rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .ps5-btn-play:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 0 8px 24px rgba(255, 255, 255, 0.25);
+  background: #f8fafc;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 8px 28px rgba(255, 255, 255, 0.4), 0 0 30px rgba(0, 112, 209, 0.4);
+}
+
+.ps5-btn-play:focus-visible {
+  outline: 2.5px solid #ffffff !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.85), 0 0 50px rgba(0, 112, 209, 0.7) !important;
 }
 
 .ps5-btn-play--sm {
-  padding: 8px 18px;
-  font-size: 13px;
+  height: 36px;
+  padding: 0 20px;
+  font-size: 13.5px;
 }
 
 .ps5-btn-sec {
@@ -1772,64 +1902,103 @@ body.hub-active .ps5-screen {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  height: 48px;
+  padding: 0 26px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
   font-family: var(--font-ps5);
-  font-size: 14px;
+  font-size: 14.5px;
   font-weight: 500;
   cursor: pointer;
-  backdrop-filter: blur(18px);
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ps5-ease);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ps5-btn-sec:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.ps5-btn-sec:focus-visible {
+  outline: 2.5px solid #ffffff !important;
+  outline-offset: 3px !important;
+  background: rgba(255, 255, 255, 0.25);
 }
 
 .ps5-btn-sec--sm {
-  padding: 8px 16px;
-  font-size: 12.5px;
+  height: 36px;
+  padding: 0 18px;
+  font-size: 13px;
 }
 
 .ps5-btn-dots {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
   color: #ffffff;
   cursor: pointer;
-  backdrop-filter: blur(18px);
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s var(--ps5-ease);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ps5-btn-dots:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: scale(1.06);
+}
+
+.ps5-btn-dots:focus-visible {
+  outline: 2.5px solid #ffffff !important;
+  outline-offset: 3px !important;
 }
 
 /* Right-bottom PS5 Trophy Summary Pill */
 .ps5-hero-trophy-card {
-  width: 240px;
-  padding: 14px 18px;
-  border-radius: 13px;
-  background: rgba(23, 26, 33, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(22px);
+  width: 250px;
+  padding: 16px 20px;
+  border-radius: 16px;
+  background: rgba(14, 20, 36, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   cursor: pointer;
-  transition: transform 0.2s var(--ps5-ease), border-color 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .ps5-hero-trophy-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-2.5px);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+}
+
+.ps5-hero-trophy-card:focus-visible {
+  outline: 2.5px solid #ffffff !important;
+  outline-offset: 3px !important;
+}
+
+@keyframes heroContentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ps5-hero-anim-in {
+  animation: heroContentFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .ps5-ht-top {
