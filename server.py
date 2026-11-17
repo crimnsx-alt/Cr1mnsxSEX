@@ -23,10 +23,11 @@ def get_lan_ip():
 
 def get_donate_config():
     default_config = {
-        "target_url": "https://tips.sberbank.ru",
+        "service": "donationalerts",
+        "target_url": "https://www.donationalerts.com/r/cr1mnsx",
         "nickname": "cr1mnsx",
-        "title": "СберЧаевые — Поддержка проекта",
-        "description": "Прямой анонимный перевод через Сбербанк без раскрытия номера телефона и карты",
+        "title": "DonationAlerts — Поддержка проекта",
+        "description": "Анонимная поддержка автора через DonationAlerts (Сбербанк, SberPay, СБП, карты)",
         "currency": "RUB",
         "preset_amounts": [100, 300, 500, 1000]
     }

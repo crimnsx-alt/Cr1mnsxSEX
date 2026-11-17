@@ -3771,3 +3771,54 @@ body.hub-active .stage-game-hub {
   display: none;
 }
 
+/* =========================================================================
+   DonationAlerts Custom Accents & Themes
+   ========================================================================= */
+.ps5-top-tips-btn:hover {
+  background: rgba(255, 119, 0, 0.22);
+  border-color: rgba(255, 119, 0, 0.75);
+  box-shadow: 0 0 16px rgba(255, 119, 0, 0.35);
+}
+
+.da-brand-icon {
+  background: rgba(255, 119, 0, 0.12) !important;
+  border: 1px solid rgba(255, 119, 0, 0.35) !important;
+}
+
+.da-badge {
+  color: #ff7700 !important;
+  background: rgba(255, 119, 0, 0.14) !important;
+  border-color: rgba(255, 119, 0, 0.3) !important;
+}
+
+.da-qr-label {
+  color: #ff7700 !important;
+}
+
+.da-pulse {
+  background: #ff7700 !important;
+  box-shadow: 0 0 8px #ff7700 !important;
+}
+
+.da-avatar {
+  background: rgba(255, 119, 0, 0.15) !important;
+}
+
+.da-btn-primary {
+  background: linear-gradient(135deg, #ea580c 0%, #ff7700 100%) !important;
+  box-shadow: 0 6px 20px rgba(255, 119, 0, 0.35) !important;
+}
+
+.da-btn-primary:hover {
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%) !important;
+  box-shadow: 0 10px 26px rgba(255, 119, 0, 0.45) !important;
+}
+
+.da-btn-save {
+  background: #ea580c !important;
+}
+
+.da-btn-save:hover {
+  background: #ff7700 !important;
+}
+

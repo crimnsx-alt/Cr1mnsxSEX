@@ -44,12 +44,12 @@
         </nav>
 
         <div class="ps5-status-cluster">
-          <!-- Sberbank Tips / Anonymous SberPay QR Button -->
-          <button class="ps5-top-tips-btn" id="btnSberTips" type="button" title="СберЧаевые · Поддержать автора" aria-label="СберЧаевые">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          <!-- DonationAlerts / Anonymous Donation Button -->
+          <button class="ps5-top-tips-btn" id="btnSberTips" type="button" title="DonationAlerts · Поддержать автора" aria-label="Донат">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff7700" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
-            <span>Чаевые</span>
+            <span>Донат</span>
           </button>
 
           <button class="ps5-top-lang" id="btnLangToggle" type="button" title="Switch Language / Переключить RU-EN" aria-label="Язык интерфейса">RU</button>
@@ -586,7 +586,7 @@
   </div>
 
   <!-- =========================================================================
-     SBERBANK TIPS & ANONYMOUS DONATION MODAL (1:1 PS5 System Experience)
+     DONATIONALERTS & ANONYMOUS DONATION MODAL (1:1 PS5 System Experience)
      ========================================================================= -->
   <div class="modal-sber-tips" id="modalSberTips" aria-hidden="true">
     <div class="sber-tips-backdrop" id="sberTipsBackdrop"></div>
@@ -596,21 +596,20 @@
 
       <!-- Header -->
       <div class="sber-tips-header">
-        <div class="sber-brand-icon">
+        <div class="sber-brand-icon da-brand-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="2.2"/>
-            <path d="M7.5 12l3 3 6.5-6.5" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="#ff7700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
         <div class="sber-header-text">
           <div class="sber-header-title-row">
-            <h2 class="sber-title" id="sberDialogTitle">СберЧаевые</h2>
-            <span class="sber-badge-safe">
+            <h2 class="sber-title" id="sberDialogTitle">DonationAlerts</h2>
+            <span class="sber-badge-safe da-badge">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               100% Анонимно
             </span>
           </div>
-          <p class="sber-subtitle" id="sberSubtitle">Прямой перевод на карту Сбербанка без отображения телефона и карты</p>
+          <p class="sber-subtitle" id="sberSubtitle">Быстрый перевод через DonationAlerts (Сбербанк, SberPay, СБП, карты)</p>
         </div>
       </div>
 
@@ -622,30 +621,30 @@
             <div class="sber-qr-code" id="sberQrContainer">
               <!-- Vector SVG QR generated dynamically by qrcode-generator -->
             </div>
-            <div class="sber-qr-center-badge">
+            <div class="sber-qr-center-badge da-center-badge">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <rect width="24" height="24" rx="6" fill="#15803d"/>
-                <path d="M6 12.5l4 4 8-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect width="24" height="24" rx="6" fill="#ff7700"/>
+                <path d="M12 4l2.4 4.8 5.3.8-3.8 3.7.9 5.3-4.8-2.5-4.8 2.5.9-5.3-3.8-3.7 5.3-.8L12 4z" fill="#fff"/>
               </svg>
             </div>
           </div>
-          <div class="sber-qr-label">
-            <span class="sber-pulse-dot"></span>
+          <div class="sber-qr-label da-qr-label">
+            <span class="sber-pulse-dot da-pulse"></span>
             <span>Вечный динамический QR</span>
           </div>
-          <p class="sber-qr-hint">Наведите камеру смартфона для быстрой оплаты в приложении СберБанк Онлайн или через СБП</p>
+          <p class="sber-qr-hint">Наведите камеру смартфона для быстрого доната через Сбербанк, SberPay, СБП или банковскую карту</p>
         </div>
 
         <!-- Right: Details & Actions -->
         <div class="sber-details-pane">
           <!-- Author Info Card -->
           <div class="sber-author-chip">
-            <div class="sber-author-avatar">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div class="sber-author-avatar da-avatar">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff7700" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             </div>
             <div class="sber-author-info">
-              <div class="sber-author-name" id="sberAuthorName">Получатель: @cr1mnsx</div>
-              <div class="sber-author-meta">Счёт: Карта Сбербанка · Зачисление мгновенно</div>
+              <div class="sber-author-name" id="sberAuthorName">Получатель: @cr1mnsx (DonationAlerts)</div>
+              <div class="sber-author-meta">Вывод: Карта Сбербанка · Зачисление мгновенно</div>
             </div>
           </div>
 
@@ -653,7 +652,7 @@
           <div class="sber-features-row">
             <div class="sber-feat-pill">
               <span class="sber-feat-icon">⚡</span>
-              <span>SberPay</span>
+              <span>SberPay & СберБанк</span>
             </div>
             <div class="sber-feat-pill">
               <span class="sber-feat-icon">🌐</span>
@@ -665,7 +664,7 @@
             </div>
             <div class="sber-feat-pill">
               <span class="sber-feat-icon">🔒</span>
-              <span>Номер скрыт</span>
+              <span>100% Анонимно</span>
             </div>
           </div>
 
@@ -682,9 +681,9 @@
 
           <!-- Actions Row -->
           <div class="sber-actions-row">
-            <a class="sber-btn-primary" id="btnSberPayDirect" href="/donate" target="_blank" rel="noopener">
-              <span>💚</span>
-              <span>Оплатить через СберБанк ↗</span>
+            <a class="sber-btn-primary da-btn-primary" id="btnSberPayDirect" href="https://www.donationalerts.com/r/cr1mnsx" target="_blank" rel="noopener">
+              <span>🎁</span>
+              <span>Задонатить через DonationAlerts ↗</span>
             </a>
             <button class="sber-btn-secondary" id="btnSberCopyLink">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -695,14 +694,14 @@
           <!-- Expandable Settings Section -->
           <div class="sber-settings-drawer">
             <button class="sber-toggle-settings" id="btnToggleSberSettings">
-              <span>⚙️ Настройки ссылки СберЧаевых</span>
+              <span>⚙️ Настройки ссылки DonationAlerts</span>
               <span class="sber-caret" id="sberSettingsCaret">▼</span>
             </button>
             <div class="sber-settings-panel" id="sberSettingsPanel" style="display: none;">
-              <label class="sber-input-label">Прямой URL страницы СберЧаевые:</label>
+              <label class="sber-input-label">Прямой URL страницы DonationAlerts:</label>
               <div class="sber-input-row">
-                <input type="text" class="sber-input" id="inputSberUrl" placeholder="https://tips.sberbank.ru/s/your_username" value="https://tips.sberbank.ru">
-                <button class="sber-btn-save" id="btnSaveSberUrl">Сохранить</button>
+                <input type="text" class="sber-input" id="inputSberUrl" placeholder="https://www.donationalerts.com/r/your_nickname" value="https://www.donationalerts.com/r/cr1mnsx">
+                <button class="sber-btn-save da-btn-save" id="btnSaveSberUrl">Сохранить</button>
               </div>
               <div class="sber-settings-status" id="sberSaveStatus"></div>
             </div>
