@@ -149,63 +149,6 @@ export const defaultProfileTelemetry = {
 export const ribbonCatalog = {
   games: [
     {
-      id: "psplus",
-      viewType: "game",
-      isPeekLeft: true,
-      tileStyle: "dark",
-      iconSvg: PS5Icons.psPlusCross,
-      title: { ru: "PlayStation Plus", en: "PlayStation Plus" },
-      publisher: "Sony Interactive Entertainment",
-      kicker: { ru: "PlayStation®Plus · Подписка", en: "PlayStation®Plus · Membership" },
-      desc: {
-        ru: "Каталог игр PS5 и PS4, облачное хранилище сохранений и ежемесячные подборки.",
-        en: "Discover hundreds of PS5 and PS4 titles, monthly games, and cloud storage."
-      },
-      ctaText: { ru: "Открыть каталог", en: "View Catalog" },
-      btnAction: "modal:library",
-      secText: { ru: "Профиль", en: "Profile" },
-      secAction: "modal:psn",
-      bg: PS5Icons.makeSceneArt("store", "PLAYSTATION PLUS"),
-      thumb: PS5Icons.makeSceneArt("store", "PS PLUS"),
-      progressPct: 100,
-      trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
-      activities: [
-        { title: "Каталог PlayStation Plus", type: "Подписка", progress: 100, timeEst: "PS5 / PS4", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
-        { title: "Игровой профиль", type: "PlayStation Network", progress: 100, timeEst: "Уровень 100", thumb: PS5Icons.makeSceneArt("ps5-eco"), action: "modal:psn" }
-      ],
-      news: [
-        { date: "PS Plus", title: "Облачное хранилище активно", desc: "Автоматическая синхронизация прогресса и сохранений консоли." }
-      ]
-    },
-    {
-      id: "store",
-      viewType: "game",
-      tileStyle: "store",
-      iconSvg: PS5Icons.psStoreBag,
-      title: { ru: "PlayStation Store", en: "PlayStation Store" },
-      publisher: "Sony Interactive Entertainment",
-      kicker: { ru: "PlayStation™Store · Витрина", en: "PlayStation™Store · Showcase" },
-      desc: {
-        ru: "Цифровой магазин PlayStation 5: ключевые релизы, коллекции и интерактивные карточки.",
-        en: "Explore flagship PS5 releases, digital collections, and interactive showcases."
-      },
-      ctaText: { ru: "Открыть витрину", en: "Browse Store" },
-      btnAction: "modal:library",
-      secText: { ru: "Обзор", en: "Explore" },
-      secAction: "open:explore",
-      bg: PS5Icons.makeSceneArt("store", "PLAYSTATION STORE"),
-      thumb: PS5Icons.makeSceneArt("store", "PS STORE"),
-      progressPct: 84,
-      trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
-      activities: [
-        { title: "Подборка релизов PS5", type: "Витрина", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
-        { title: "Новинки и скидки PS Store", type: "Распродажа", progress: 100, timeEst: "Скидки до -60%", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" }
-      ],
-      news: [
-        { date: "PS Store", title: "Витрина 4K HDR", desc: "Главные релизы и эксклюзивы консоли PlayStation 5." }
-      ]
-    },
-    {
       id: "welcome",
       viewType: "welcome",
       tileStyle: "welcome",
@@ -223,216 +166,171 @@ export const ribbonCatalog = {
       thumb: PS5Icons.makeSceneArt("ps5-eco", "WELCOME HUB")
     },
     {
-      id: "astro",
+      id: "store",
       viewType: "game",
-      title: { ru: "ASTRO BOT", en: "ASTRO BOT" },
-      publisher: "Team ASOBI • PlayStation Studios",
-      kicker: { ru: "PlayStation®5 · Эксклюзив DualSense", en: "PlayStation®5 · DualSense Exclusive" },
+      tileStyle: "store",
+      iconSvg: PS5Icons.psStoreBag,
+      title: { ru: "PlayStation Store", en: "PlayStation Store" },
+      publisher: "Sony Interactive Entertainment",
+      kicker: { ru: "PlayStation™Store · Витрина", en: "PlayStation™Store · Showcase" },
       desc: {
-        ru: "Присоединяйтесь к Астро в грандиозном космическом приключении! Более 50 планет, спасение потерянной команды и полная отдача контроллера DualSense.",
-        en: "Join Astro in a supersized space adventure! Explore over 50 planets, rescue your lost crew, and feel every step with DualSense haptics."
+        ru: "Цифровой магазин PlayStation 5: ключевые релизы, коллекции и интерактивные карточки.",
+        en: "Explore flagship PS5 releases, digital collections, and interactive showcases."
       },
-      ctaText: { ru: "Играть", en: "Play" },
-      btnAction: "modal:psn",
-      secText: { ru: "Подробнее", en: "Details" },
+      ctaText: { ru: "Открыть витрину", en: "Browse Store" },
+      btnAction: "modal:library",
+      secText: { ru: "Обзор", en: "Explore" },
       secAction: "modal:library",
-      bg: "assets/covers/astro.jpg",
-      thumb: "assets/covers/astro.jpg",
-      fallbackBg: PS5Icons.makeSceneArt("slot-1", "ASTRO BOT"),
-      progressPct: 100,
-      playTime: "34 ч • 4K HDR 60 FPS",
-      trophies: { platinum: 1, gold: 3, silver: 7, bronze: 33 },
+      bg: PS5Icons.makeSceneArt("store", "PLAYSTATION STORE"),
+      thumb: PS5Icons.makeSceneArt("store", "PS STORE"),
+      progressPct: 84,
+      trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
       activities: [
-        { title: "Спасение VIP-ботов", type: "Основная цель", progress: 100, timeEst: "300/300 ботов", thumb: "assets/covers/astro.jpg", action: "modal:psn" },
-        { title: "Галактика Затерянных Вершин", type: "Секретные уровни", progress: 100, timeEst: "Завершено", thumb: "assets/covers/astro.jpg", action: "modal:psn" }
+        { title: "Подборка релизов PS5", type: "Витрина", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
+        { title: "Новинки и скидки PS Store", type: "Распродажа", progress: 100, timeEst: "Скидки до -60%", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" }
       ],
       news: [
-        { date: "PS5 Обновление", title: "Скоростные испытания и новые боты", desc: "Бесплатное дополнение со спидран-уровнями уже доступно для всех владельцев игры." }
+        { date: "PS Store", title: "Витрина 4K HDR", desc: "Главные релизы и эксклюзивы консоли PlayStation 5." }
       ]
     },
     {
-      id: "gow",
-      viewType: "game",
-      title: { ru: "God of War Ragnarök", en: "God of War Ragnarök" },
-      publisher: "Santa Monica Studio • PlayStation Studios",
-      kicker: { ru: "PlayStation®5 · Эпический блокбастер", en: "PlayStation®5 · Blockbuster" },
-      desc: {
-        ru: "Кратос и Атрей отправляются в мифическое путешествие по всем Девяти мирам в поисках ответов, пока войска Асгарда готовятся к предречённой битве.",
-        en: "Kratos and Atreus embark on a mythic journey across the Nine Realms in search of answers as Asgardian forces prepare for the prophesied battle."
-      },
-      ctaText: { ru: "Играть", en: "Play" },
-      btnAction: "modal:psn",
-      secText: { ru: "Подробнее", en: "Details" },
-      secAction: "modal:library",
-      bg: "assets/covers/gow.jpg",
-      thumb: "assets/covers/gow.jpg",
-      fallbackBg: PS5Icons.makeSceneArt("slot-2", "GOD OF WAR"),
-      progressPct: 82,
-      playTime: "58 ч • Режим 120 Гц",
-      trophies: { platinum: 1, gold: 4, silver: 15, bronze: 16 },
-      activities: [
-        { title: "Путь сквозь Фимбулвинтер", type: "Сюжетная кампания", progress: 82, timeEst: "Глава 12", thumb: "assets/covers/gow.jpg", action: "modal:psn" },
-        { title: "Горнило Муспельхейма", type: "Испытания", progress: 60, timeEst: "В процессе", thumb: "assets/covers/gow.jpg", action: "modal:psn" }
-      ],
-      news: [
-        { date: "Valhalla DLC", title: "Бесплатное дополнение Valhalla", desc: "Погрузитесь в глубины разума Кратоса в новом роуглайт-режиме." }
-      ]
-    },
-    {
-      id: "gtavc",
+      id: "gta-vc",
       viewType: "game",
       title: { ru: "Grand Theft Auto: Vice City", en: "Grand Theft Auto: Vice City" },
-      publisher: "Rockstar Games • WASM Arcade",
-      kicker: { ru: "WASM Arcade · Мгновенный запуск", en: "WASM Arcade · Instant Launch" },
+      publisher: "Rockstar Games • reVC WASM Engine",
+      kicker: { ru: "WASM Arcade · 1986 Vice City", en: "WASM Arcade · 1986 Vice City" },
       desc: {
-        ru: "Добро пожаловать в 80-е! Неоновый Вайс-Сити, легендарные радиостанции и восхождение Томми Версетти. Запуск прямо в окне консоли.",
-        en: "Welcome to the 1980s! Neon-lit Vice City, legendary soundtrack, and the rise of Tommy Vercetti. Plays directly in the browser shell."
+        ru: "Культовая классика Rockstar Games в браузере: Томми Версетти, неоновый особняк, пляжи Вайс-Сити и легендарные радиостанции Flash FM и Wave 103 на движке reVC.",
+        en: "Rockstar Games cult classic running in browser via reVC WebAssembly engine: Tommy Vercetti, neon mansion, Vice City beaches, and legendary radio stations."
       },
       ctaText: { ru: "Играть", en: "Play" },
-      btnAction: "launch:gtavc",
-      secText: { ru: "Библиотека", en: "Library" },
+      btnAction: "launch:gta-vc",
+      secText: { ru: "Подробнее", en: "Details" },
       secAction: "modal:library",
       bg: "assets/covers/gta_vc.jpg",
       thumb: "assets/covers/gta_vc.jpg",
-      fallbackBg: PS5Icons.makeSceneArt("slot-3", "VICE CITY"),
+      fallbackBg: PS5Icons.makeSceneArt("slot-1", "VICE CITY"),
       progressPct: 65,
-      playTime: "WASM Эмулятор • 60 FPS",
-      trophies: { platinum: 0, gold: 2, silver: 6, bronze: 26 },
+      playTime: "reVC WASM • 60 FPS",
+      trophies: { platinum: 1, gold: 3, silver: 8, bronze: 22 },
       activities: [
-        { title: "Захват особняка Версетти", type: "Миссия сюжета", progress: 65, timeEst: "Миссия", thumb: "assets/covers/gta_vc.jpg", action: "launch:gtavc" }
+        { title: "Захват особняка Версетти", type: "Миссия сюжета", progress: 65, timeEst: "Миссия", thumb: "assets/covers/gta_vc.jpg", action: "launch:gta-vc" },
+        { title: "Радиостанция Wave 103", type: "Саундтрек 80-х", progress: 100, timeEst: "Синтезаторы", thumb: "assets/covers/gta_vc.jpg", action: "launch:gta-vc" }
       ],
       news: [
-        { date: "WASM Edition", title: "Поддержка геймпада DualSense", desc: "Управление полностью адаптировано под стики и кнопки контроллера PlayStation." }
+        { date: "reVC WASM", title: "Поддержка геймпада DualSense", desc: "Управление полностью адаптировано под стики и кнопки контроллера PlayStation." }
       ]
     },
     {
-      id: "spider-man",
+      id: "gta-v",
       viewType: "game",
-      title: { ru: "Marvel's Spider-Man", en: "Marvel's Spider-Man" },
-      publisher: "Insomniac Games • Sony Interactive",
-      kicker: { ru: "PlayStation®5 · Игровая витрина", en: "PlayStation®5 · Game Showcase" },
+      title: { ru: "Grand Theft Auto V", en: "Grand Theft Auto V" },
+      publisher: "Rockstar Games • WebGPU & WASM Port",
+      kicker: { ru: "WebGPU Arcade · Los Santos", en: "WebGPU Arcade · Los Santos" },
       desc: {
-        ru: "Демонстрационная карточка игры PlayStation 5: полноэкранный арт-фон, прогресс трофеев и двухуровневый Game Hub.",
-        en: "PlayStation 5 game showcase with full-bleed backdrop, trophy progress, and two-tier Game Hub."
+        ru: "Масштабный мир Лос-Сантоса и округа Блейн: Майкл, Франклин и Тревор с оптимизацией шейдеров и текстур под современные браузеры.",
+        en: "The expansive world of Los Santos and Blaine County: Michael, Franklin, and Trevor with shader and texture optimization for modern browsers."
       },
-      ctaText: { ru: "Обзор игры", en: "Game Details" },
-      btnAction: "modal:psn",
-      secText: { ru: "Библиотека", en: "Library" },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "launch:gta-v",
+      secText: { ru: "Подробнее", en: "Details" },
       secAction: "modal:library",
-      bg: "https://image.api.playstation.com/vulcan/img/rnd/202010/2122/19xis9VT5XfnXsLSMkxUjvVd.png",
-      thumb: "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
-      fallbackBg: PS5Icons.makeSceneArt("ps5-eco", "SPIDER-MAN"),
-      progressPct: 64,
-      playTime: "4K HDR · 60 FPS",
-      trophies: { platinum: 1, gold: 4, silver: 12, bronze: 28 },
+      bg: "assets/covers/gta_v.jpg",
+      thumb: "assets/covers/gta_v.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-2", "GTA V"),
+      progressPct: 78,
+      playTime: "WebGPU • 60 FPS",
+      trophies: { platinum: 1, gold: 4, silver: 12, bronze: 32 },
       activities: [
-        { title: "Сюжетная кампания", type: "Основная активность", progress: 64, timeEst: "PS5 Activity Card", thumb: PS5Icons.makeSceneArt("ps5-eco"), action: "modal:psn" },
-        { title: "Режим производительности RT", type: "Графика 4K", progress: 100, timeEst: "60 FPS", thumb: PS5Icons.makeSceneArt("store"), action: "modal:psn" }
+        { title: "Ограбление в Палето-Бэй", type: "Сюжетная кампания", progress: 78, timeEst: "Глава 5", thumb: "assets/covers/gta_v.jpg", action: "launch:gta-v" },
+        { title: "Прыжки с парашютом над Чилиад", type: "Экстрим", progress: 100, timeEst: "Завершено", thumb: "assets/covers/gta_v.jpg", action: "launch:gta-v" }
       ],
       news: [
-        { date: "PS5 Demo", title: "Официальная карточка игры", desc: "Эталонный макет игрового хаба с Game Help и лентой событий." }
+        { date: "WebGPU RAGE", title: "Трассировка лучей и 60 FPS", desc: "Современный графический конвейер WebGPU обеспечивает плавный рендеринг Лос-Сантоса." }
       ]
     },
     {
-      id: "rdr2",
+      id: "nfs-u2",
       viewType: "game",
-      title: { ru: "Red Dead Redemption 2", en: "Red Dead Redemption 2" },
-      publisher: "Rockstar Games",
-      kicker: { ru: "PlayStation®5 · Игровая витрина", en: "PlayStation®5 · Game Showcase" },
+      title: { ru: "Need for Speed: Underground 2", en: "Need for Speed: Underground 2" },
+      publisher: "EA Black Box • NFSU2Recomp WebAssembly",
+      kicker: { ru: "WASM Racing · Bayview", en: "WASM Racing · Bayview" },
       desc: {
-        ru: "Демонстрационный игровой экран с виньеткой фона, кнопкой запуска и горизонтальными карточками активностей в Game Hub.",
-        en: "Sample game screen featuring dark vignette backdrop, Play CTA, and horizontal activity cards."
+        ru: "Ночной Бэйвью, культовый саундтрек Riders on the Storm, неоновый тюнинг легендарного Nissan 350Z и уличные гонки прямо в окне консоли.",
+        en: "Nighttime Bayview, iconic soundtrack, neon tuning of the Nissan 350Z, and street racing in the browser shell."
       },
-      ctaText: { ru: "Обзор игры", en: "Game Details" },
-      btnAction: "modal:psn",
-      secText: { ru: "Библиотека", en: "Library" },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "launch:nfs-u2",
+      secText: { ru: "Подробнее", en: "Details" },
       secAction: "modal:library",
-      bg: "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/pic0.png",
-      thumb: "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/icon0.png",
-      fallbackBg: PS5Icons.makeSceneArt("wishlist", "RED DEAD REDEMPTION 2"),
-      progressPct: 48,
-      playTime: "PS4 Pro / PS5",
-      trophies: { platinum: 0, gold: 2, silver: 8, bronze: 19 },
+      bg: "assets/covers/nfs_u2.jpg",
+      thumb: "assets/covers/nfs_u2.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-3", "NFSU2"),
+      progressPct: 54,
+      playTime: "NFSU2 WASM • 60 FPS",
+      trophies: { platinum: 0, gold: 2, silver: 7, bronze: 18 },
       activities: [
-        { title: "Глава кампании", type: "Активность", progress: 48, timeEst: "В процессе", thumb: PS5Icons.makeSceneArt("wishlist"), action: "modal:psn" }
+        { title: "Гонки URL на автодроме", type: "Подземная лига", progress: 54, timeEst: "Этап 3", thumb: "assets/covers/nfs_u2.jpg", action: "launch:nfs-u2" },
+        { title: "Тюнинг ателье Snoop Dogg", type: "Стайлинг", progress: 100, timeEst: "Рейтинг 10★", thumb: "assets/covers/nfs_u2.jpg", action: "launch:nfs-u2" }
       ],
       news: [
-        { date: "PS5 Demo", title: "Демонстрационный профиль игры", desc: "Пример оформления страницы игры в системе PlayStation 5." }
+        { date: "NFSU2Recomp", title: "Поддержка аналоговых триггеров", desc: "Газ и тормоз плавно дозируются курками L2/R2 контроллера DualSense." }
       ]
     },
     {
-      id: "explore",
-      viewType: "explore",
-      tileStyle: "dark",
-      iconSvg: PS5Icons.exploreTile,
-      title: { ru: "Обзор", en: "Explore" },
-      publisher: "PlayStation®5 System News",
-      kicker: { ru: "Официальные новости PlayStation · Обновлено", en: "Official news from PlayStation · Updated" },
-      desc: {
-        ru: "Информационная лента и витрина карточек 16:9. Подготовьте собственные заголовки, анонсы или разделы для этой сетки.",
-        en: "News hub and 16:9 card showcase. Ready to be populated with your custom headlines and updates."
-      },
-      bg: PS5Icons.makeSceneArt("explore", "EXPLORE"),
-      thumb: PS5Icons.makeSceneArt("explore", "EXPLORE"),
-      cards: [
-        {
-          title: { ru: "PlayStation®5 Pro · Технология PSSR", en: "PlayStation®5 Pro · PSSR Technology" },
-          tag: { ru: "PSSR 4K 120 FPS", en: "PSSR 4K 120 FPS" },
-          img: PS5Icons.makeSceneArt("slot-1", "PS5 PRO"),
-          action: "modal:psn"
-        },
-        {
-          title: { ru: "Турниры PlayStation Tournaments", en: "PlayStation Tournaments" },
-          tag: { ru: "Киберспорт", en: "Esports" },
-          img: PS5Icons.makeSceneArt("slot-2", "TOURNAMENTS"),
-          action: "modal:psn"
-        },
-        {
-          title: { ru: "Коллекция игр месяца PlayStation Plus", en: "PlayStation Plus Monthly Games" },
-          tag: { ru: "Подписка", en: "Subscription" },
-          img: PS5Icons.makeSceneArt("slot-3", "PS PLUS"),
-          action: "modal:library"
-        },
-        {
-          title: { ru: "Аудиосистема PS5", en: "PS5 Audio Synth" },
-          tag: { ru: "Emaj9 Ambient", en: "Emaj9 Ambient" },
-          img: PS5Icons.makeSceneArt("audio-slot", "AUDIO"),
-          action: "toggle:ambient"
-        },
-        {
-          title: { ru: "Каталог библиотеки", en: "System Library" },
-          tag: { ru: "Все элементы", en: "All Items" },
-          img: PS5Icons.makeSceneArt("store", "LIBRARY"),
-          action: "modal:library"
-        }
-      ]
-    },
-    {
-      id: "remoteplay",
+      id: "simpsons",
       viewType: "game",
-      tileStyle: "dark",
-      iconSvg: PS5Icons.remotePlayTile,
-      title: { ru: "PS Remote Play", en: "PS Remote Play" },
-      publisher: "Sony Interactive Entertainment",
-      kicker: { ru: "Удаленная игра · DualSense", en: "Remote Streaming · DualSense" },
+      title: { ru: "The Simpsons: Hit & Run", en: "The Simpsons: Hit & Run" },
+      publisher: "Radical Entertainment • WASM Sandbox",
+      kicker: { ru: "WASM Sandbox · Springfield", en: "WASM Sandbox · Springfield" },
       desc: {
-        ru: "Потоковая трансляция игр PlayStation®5 на внешние экраны с минимальной задержкой.",
-        en: "Stream your PlayStation®5 console to external displays with low latency."
+        ru: "Знаменитый открытый мир Спрингфилда: Гомер, Мардж, Барт и Лиза выполняют безумные миссии на культовых машинах города.",
+        en: "The open world of Springfield: Homer, Marge, Bart, and Lisa take on wild missions in iconic cartoon rides."
       },
-      ctaText: { ru: "Настройки", en: "Settings" },
-      btnAction: "open:settings",
-      secText: { ru: "Центр управления", en: "Control Center" },
-      secAction: "open:cc",
-      bg: PS5Icons.makeSceneArt("media-slot", "PS REMOTE PLAY"),
-      thumb: PS5Icons.makeSceneArt("media-slot", "REMOTE"),
-      progressPct: 100,
-      playTime: "60 FPS HDR",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "launch:simpsons",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/covers/simpsons.png",
+      thumb: "assets/covers/simpsons.png",
+      fallbackBg: PS5Icons.makeSceneArt("slot-1", "SIMPSONS"),
+      progressPct: 42,
+      playTime: "WASM Sandbox • 60 FPS",
+      trophies: { platinum: 0, gold: 1, silver: 5, bronze: 14 },
       activities: [
-        { title: "Подключение контроллера DualSense", type: "Система", progress: 100, timeEst: "Готово", thumb: PS5Icons.makeSceneArt("media-slot"), action: "open:settings" }
+        { title: "Миссии Гомера Симпсона", type: "Уровень 1", progress: 42, timeEst: "Миссия 5", thumb: "assets/covers/simpsons.png", action: "launch:simpsons" },
+        { title: "Сбор карточек коллекционера", type: "Секреты", progress: 80, timeEst: "Спрингфилд", thumb: "assets/covers/simpsons.png", action: "launch:simpsons" }
       ],
       news: [
-        { date: "Remote Play", title: "Системный компонент PS5", desc: "Стандартный модуль оболочки PlayStation." }
+        { date: "WASM Sandbox", title: "Оригинальная озвучка персонажей", desc: "Все реплики Гомера, Барта и мистера Бёрнса сохранены в оригинальном качестве." }
+      ]
+    },
+    {
+      id: "doom-classic",
+      viewType: "game",
+      title: { ru: "DOOM (1993)", en: "DOOM (1993)" },
+      publisher: "id Software • Classic WASM FPS Engine",
+      kicker: { ru: "WASM Classic FPS · Phobos", en: "WASM Classic FPS · Phobos" },
+      desc: {
+        ru: "Легендарный шутер от первого лица, определивший жанр: космический десантник, адские легионы на Фобосе и канонический саундтрек E1M1.",
+        en: "The legendary first-person shooter that defined the genre: Doomguy, hellspawn on Phobos, and the iconic E1M1 soundtrack."
+      },
+      ctaText: { ru: "Играть", en: "Play" },
+      btnAction: "launch:doom-classic",
+      secText: { ru: "Подробнее", en: "Details" },
+      secAction: "modal:library",
+      bg: "assets/covers/doom.jpg",
+      thumb: "assets/covers/doom.jpg",
+      fallbackBg: PS5Icons.makeSceneArt("slot-2", "DOOM"),
+      progressPct: 90,
+      playTime: "id Tech 1 WASM • 60 FPS",
+      trophies: { platinum: 1, gold: 3, silver: 6, bronze: 20 },
+      activities: [
+        { title: "Knee-Deep in the Dead (E1M1)", type: "Эпизод 1", progress: 90, timeEst: "Фобос", thumb: "assets/covers/doom.jpg", action: "launch:doom-classic" },
+        { title: "Секретные зоны E1M8", type: "Испытание", progress: 100, timeEst: "BFG 9000", thumb: "assets/covers/doom.jpg", action: "launch:doom-classic" }
+      ],
+      news: [
+        { date: "id Tech WASM", title: "E1M1 Саундтрек в MIDI / SoundFont", desc: "Поддержка высококачественного синтезатора Roland Sound Canvas." }
       ]
     },
     {
@@ -656,12 +554,13 @@ export const controlCenterItems = [
 
 export const searchCatalog = [
   { title: "Центр приветствия (Welcome Hub)", category: "Система", desc: "Горизонтальная лента виджетов PS5", action: "home_reset" },
-  { title: "ASTRO BOT", category: "Игра", desc: "Эксклюзивный платформер PlayStation 5", action: "select:astro" },
-  { title: "God of War Ragnarök", category: "Игра", desc: "Эпическое путешествие Кратоса и Атрея", action: "select:gow" },
-  { title: "Grand Theft Auto: Vice City", category: "WASM", desc: "Классический экшен с запуском в браузере", action: "launch:gtavc" },
-  { title: "Marvel's Spider-Man", category: "Игра", desc: "Приключения Человека-паука в Нью-Йорке", action: "select:spider-man" },
+  { title: "Grand Theft Auto: Vice City", category: "WASM", desc: "Культовая классика в Вайс-Сити 1986 года", action: "launch:gta-vc" },
+  { title: "Grand Theft Auto V", category: "WebGPU", desc: "Лос-Сантос и округ Блейн на движке RAGE", action: "launch:gta-v" },
+  { title: "Need for Speed: Underground 2", category: "WASM", desc: "Ночной Бэйвью и тюнинг Nissan 350Z", action: "launch:nfs-u2" },
+  { title: "The Simpsons: Hit & Run", category: "WASM", desc: "Открытый мир Спрингфилда и миссии Гомера", action: "launch:simpsons" },
+  { title: "DOOM (1993)", category: "WASM", desc: "Канонический шутер id Software на Фобосе", action: "launch:doom-classic" },
   { title: "PlayStation Store", category: "Витрина", desc: "Каталог и демонстрационные разделы", action: "modal:library" },
-  { title: "Обзор (Explore)", category: "Лента", desc: "Новости и карточки формата 16:9", action: "open:explore" },
+  { title: "Библиотека игр", category: "Система", desc: "Каталог из 8 браузерных портов", action: "modal:library" },
   { title: "Профиль и призы", category: "PSN", desc: "Системная статистика профиля", action: "modal:psn" },
   { title: "Настройки системы", category: "Система", desc: "Язык, звук, память и аксессуары", action: "open:settings" }
 ];

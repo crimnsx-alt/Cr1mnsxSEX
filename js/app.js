@@ -1728,7 +1728,11 @@ function handleAction(action) {
     if (state.category !== "games") switchCategory("games");
     return selectTile(tileId, true);
   }
-  if (action === "launch:gtavc" || action === "launch:gta-vc") return launchPlayableGame("gta-vc");
+  if (action === "launch:gtavc") return launchPlayableGame("gta-vc");
+  if (action.startsWith("launch:")) {
+    const gameId = action.slice(7);
+    return launchPlayableGame(gameId);
+  }
   if (action === "open:youtube") return window.open("https://youtube.com/gaming", "_blank", "noopener");
   if (action === "open:twitch") return window.open("https://twitch.tv", "_blank", "noopener");
 
@@ -2280,6 +2284,12 @@ function initSberTips() {
       if (!b) return;
       presetsRow.querySelectorAll(".sber-preset-btn").forEach(item => item.classList.remove("active"));
       b.classList.add("active");
+      const amount = b.dataset.amount;
+      const directBtn = $("#btnSberPayDirect");
+      if (directBtn) {
+        const base = sberConfig.target_url || "https://www.donationalerts.com/r/cr1mnsx";
+        directBtn.href = `${base}?amount=${amount}`;
+      }
       SoundEngine.tick();
     });
   }
@@ -2287,7 +2297,7 @@ function initSberTips() {
   const copyBtn = $("#btnSberCopyLink");
   if (copyBtn) {
     copyBtn.addEventListener("click", async () => {
-      const donateUrl = sberConfig.dynamic_url || (window.location.origin + '/donate');
+      const donateUrl = sberConfig.target_url || "https://www.donationalerts.com/r/cr1mnsx";
       try {
         await navigator.clipboard.writeText(donateUrl);
         SoundEngine.confirm();
@@ -2453,7 +2463,7 @@ function init() {
   });
   $("#btnContinuePlaying")?.addEventListener("click", () => {
     SoundEngine.playStart();
-    selectTile("spiderman", true);
+    selectTile("gta-vc", true);
   });
   $("#btnSettings").addEventListener("click", openSettings);
   $("#btnProfile").addEventListener("click", () => handleAction("modal:psn"));
