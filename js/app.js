@@ -382,6 +382,9 @@ function renderActiveView() {
     $("#scrollDownCue").hidden = item.viewType !== "game";
   }
 
+  document.body.classList.remove("view-welcome", "view-explore", "view-game");
+  document.body.classList.add(`view-${item.viewType || "game"}`);
+
   if (item.viewType === "welcome") {
     welcomeEl.hidden = false;
     exploreEl.hidden = true;
@@ -439,34 +442,76 @@ function renderGameHeroView(item) {
     heroView.classList.add("ps5-hero-anim-in");
   }
 
-  $("#heroKicker").textContent = t(item.kicker);
-  $("#heroTitle").textContent = t(item.title);
-  $("#heroDesc").textContent = t(item.desc);
+  const pubEl = $("#heroPublisher");
+  if (pubEl) {
+    pubEl.textContent = item.publisher || "";
+    pubEl.hidden = !item.publisher;
+  }
+
+  const kickerEl = $("#heroKicker");
+  if (kickerEl) {
+    const kickerText = t(item.kicker);
+    kickerEl.textContent = kickerText || "";
+    kickerEl.hidden = !kickerText;
+  }
+
+  const titleEl = $("#heroTitle");
+  if (titleEl) {
+    titleEl.textContent = t(item.title) || "";
+  }
+
+  const descEl = $("#heroDesc");
+  if (descEl) {
+    const descText = t(item.desc);
+    descEl.textContent = descText || "";
+    descEl.hidden = !descText;
+  }
 
   const primaryBtn = $("#heroBtn");
-  primaryBtn.textContent = t(item.ctaText) || S("playCta");
-  primaryBtn.onclick = () => handleAction(item.btnAction || "modal:bio");
+  if (primaryBtn) {
+    const cta = t(item.ctaText) || S("playCta") || "Играть";
+    const btnTextEl = $("#heroBtnText");
+    if (btnTextEl) btnTextEl.textContent = cta;
+    else primaryBtn.textContent = cta;
+    primaryBtn.setAttribute("aria-label", `${cta}: ${t(item.title)}`);
+    primaryBtn.onclick = () => handleAction(item.btnAction || "launch:gta-vc");
+  }
 
   const secBtn = $("#heroSecondaryBtn");
-  if (item.secText) {
-    secBtn.hidden = false;
-    secBtn.textContent = t(item.secText);
-    secBtn.onclick = () => {
-      if (item.secAction) handleAction(item.secAction);
-      else if (item.secLink) window.open(item.secLink, "_blank", "noopener");
-    };
-  } else {
-    secBtn.hidden = true;
+  if (secBtn) {
+    if (item.secText) {
+      secBtn.hidden = false;
+      const secLabel = t(item.secText);
+      const secTextEl = $("#heroSecBtnText");
+      if (secTextEl) secTextEl.textContent = secLabel;
+      else secBtn.textContent = secLabel;
+      secBtn.setAttribute("aria-label", `${secLabel}: ${t(item.title)}`);
+      secBtn.onclick = () => {
+        if (item.secAction) handleAction(item.secAction);
+        else if (item.secLink) window.open(item.secLink, "_blank", "noopener");
+        else openLibraryModal();
+      };
+    } else {
+      secBtn.hidden = true;
+    }
   }
 
   // Right-bottom Trophy Summary
-  const tr = item.trophies || { platinum: 1, gold: 4, silver: 12, bronze: 24 };
-  const totalTr = tr.platinum + tr.gold + tr.silver + tr.bronze;
-  const pct = item.progressPct ?? 100;
-  $("#heroTrophyLabel").textContent = item.playTime || S("trophies");
-  $("#heroTrophyPct").textContent = `${pct}%`;
-  $("#heroTrophyCounts").textContent = `${totalTr} ${S("trophies").toLowerCase()}`;
-  $("#heroTrophyBar").style.width = `${pct}%`;
+  const trophyCard = $("#heroTrophySummary");
+  if (trophyCard) {
+    if (item.trophies) {
+      trophyCard.hidden = false;
+      const tr = item.trophies;
+      const totalTr = (tr.platinum || 0) + (tr.gold || 0) + (tr.silver || 0) + (tr.bronze || 0);
+      const pct = item.progressPct ?? 100;
+      $("#heroTrophyLabel").textContent = item.playTime || S("trophies") || "Призы";
+      $("#heroTrophyPct").textContent = `${pct}%`;
+      $("#heroTrophyCounts").textContent = `${totalTr} ${S("trophies").toLowerCase()}`;
+      $("#heroTrophyBar").style.width = `${pct}%`;
+    } else {
+      trophyCard.hidden = true;
+    }
+  }
 }
 
 // ============================================================
