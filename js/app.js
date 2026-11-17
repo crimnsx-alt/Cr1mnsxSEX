@@ -1977,13 +1977,78 @@ function setupWelcomeHubScroll() {
 }
 
 /* =========================================================================
-   SBERBANK TIPS & ANONYMOUS DONATION CONTROLLER
+   DONATIONALERTS CONTROLLER & LIVE NOTIFICATIONS LISTENER
    ========================================================================= */
 let sberConfig = {
-  target_url: 'https://tips.sberbank.ru',
+  service: 'donationalerts',
+  widget_token: '32rEFTeFPQ0WB6FEWKyo',
+  target_url: 'https://www.donationalerts.com/r/cr1mnsx',
   nickname: 'cr1mnsx',
   dynamic_url: window.location.origin + '/donate'
 };
+
+class DonationAlertsLiveListener {
+  constructor(token) {
+    this.token = token;
+    this.ws = null;
+    this.pingTimer = null;
+    this.connected = false;
+  }
+
+  connect() {
+    if (!this.token || this.connected) return;
+    try {
+      this.ws = new WebSocket('wss://socket7.donationalerts.com/socket.io/?EIO=3&transport=websocket');
+      this.ws.onopen = () => {
+        this.connected = true;
+      };
+      this.ws.onmessage = (event) => {
+        const msg = event.data;
+        if (typeof msg !== 'string') return;
+        if (msg.startsWith('0{')) {
+          this.ws.send('2probe');
+        } else if (msg === '3probe') {
+          this.ws.send('5');
+          this.ws.send('42["add-user",{"token":"' + this.token + '","type":"alert_widget"}]');
+          this.startPing();
+        } else if (msg.startsWith('42["donation"')) {
+          try {
+            const parsed = JSON.parse(msg.slice(2));
+            const data = typeof parsed[1] === 'string' ? JSON.parse(parsed[1]) : parsed[1];
+            const name = data.username || 'Аноним';
+            const amount = data.amount || '';
+            const currency = data.currency || 'RUB';
+            const text = data.message ? ` — "${data.message}"` : '';
+            showToast("🎁 Донат DonationAlerts!", `${name}: ${amount} ${currency}${text}`, PS5Icons.star);
+          } catch (e) {
+            console.warn('Donation parse error:', e);
+          }
+        }
+      };
+      this.ws.onclose = () => {
+        this.connected = false;
+        clearInterval(this.pingTimer);
+        setTimeout(() => this.connect(), 20000);
+      };
+      this.ws.onerror = () => {
+        try { this.ws.close(); } catch (_) {}
+      };
+    } catch (e) {
+      console.warn('DA WS error:', e);
+    }
+  }
+
+  startPing() {
+    clearInterval(this.pingTimer);
+    this.pingTimer = setInterval(() => {
+      if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+        this.ws.send('2');
+      }
+    }, 20000);
+  }
+}
+
+let daLiveListener = null;
 
 function renderSberQr(url) {
   const container = $("#sberQrContainer");
@@ -2023,19 +2088,24 @@ async function loadSberConfig() {
   }
 
   const input = $("#inputSberUrl");
-  if (input) input.value = sberConfig.target_url || '';
+  if (input) input.value = sberConfig.target_url || 'https://www.donationalerts.com/r/cr1mnsx';
   const author = $("#sberAuthorName");
   if (author && sberConfig.nickname) {
-    author.textContent = `Получатель: @${sberConfig.nickname}`;
+    author.textContent = `Получатель: @${sberConfig.nickname} (DonationAlerts)`;
   }
 
   const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.port === '8090';
-  const qrTarget = (isLocalHost && sberConfig.dynamic_url) ? sberConfig.dynamic_url : (sberConfig.target_url || 'https://tips.sberbank.ru/s/cr1mnsx');
+  const qrTarget = (isLocalHost && sberConfig.dynamic_url) ? sberConfig.dynamic_url : (sberConfig.target_url || 'https://www.donationalerts.com/r/cr1mnsx');
   renderSberQr(qrTarget);
 
   const directBtn = $("#btnSberPayDirect");
   if (directBtn) {
-    directBtn.href = sberConfig.target_url || 'https://tips.sberbank.ru/s/cr1mnsx';
+    directBtn.href = sberConfig.target_url || 'https://www.donationalerts.com/r/cr1mnsx';
+  }
+
+  if (sberConfig.widget_token && !daLiveListener) {
+    daLiveListener = new DonationAlertsLiveListener(sberConfig.widget_token);
+    daLiveListener.connect();
   }
 }
 
