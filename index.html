@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261117_v5" />
+  <link rel="stylesheet" href="css/style.css?v=20261117_v7" />
   <script src="js/qrcode.min.js"></script>
 </head>
 <body>
@@ -326,9 +326,9 @@
               <div class="ps5-net-inner">
                 <div class="ps5-widget-header">
                   <span class="ps5-peek-label" id="lblNetworkStatusTitle">Состояние сети</span>
-                  <span class="ps5-green-dot"></span>
+                  <span class="ps5-green-dot" style="background:#38bdf8; box-shadow:0 0 8px rgba(56, 189, 248, 0.7);"></span>
                 </div>
-                <span class="ps5-peek-sub" id="lblNetworkStatusSub">PlayStation Network · Все службы работают</span>
+                <span class="ps5-peek-sub" id="lblNetworkStatusSub">PlayStation Network · Состояние не проверено</span>
               </div>
             </article>
           </div>
@@ -816,7 +816,7 @@
             <div class="sber-settings-panel" id="sberSettingsPanel" style="display: none;">
               <label class="sber-input-label">Прямой URL страницы DonationAlerts:</label>
               <div class="sber-input-row">
-                <input type="text" class="sber-input" id="inputSberUrl" placeholder="https://www.donationalerts.com/r/your_nickname" value="https://www.donationalerts.com/r/cr1mnsx">
+                <input type="text" class="sber-input" id="inputSberUrl" placeholder="https://www.donationalerts.com/r/cr1mnsx" value="https://www.donationalerts.com/r/cr1mnsx">
                 <button class="sber-btn-save da-btn-save" id="btnSaveSberUrl">Сохранить</button>
               </div>
               <div class="sber-settings-status" id="sberSaveStatus"></div>
@@ -1033,6 +1033,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261117_v5"></script>
+  <script type="module" src="js/app.js?v=20261117_v7"></script>
 </body>
 </html>

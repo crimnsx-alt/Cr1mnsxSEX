@@ -899,7 +899,7 @@ function openAccessoriesModal() {
         <div style="display:flex; align-items:center; gap:14px;">
           <span style="color:#ffffff;">${PS5Icons.controller}</span>
           <div>
-            <div style="font-weight:600; font-size:14px;">DualSense #1 (${isRu ? "Белый" : "White"})</div>
+            <div style="font-weight:600; font-size:14px;">DualSense 1 (${isRu ? "Белый" : "White"})</div>
             <div style="font-size:12.5px; color:var(--ps5-text-muted);">${isRu ? "Беспроводной контроллер · В сети" : "Wireless Controller · Active"}</div>
           </div>
         </div>
@@ -913,7 +913,7 @@ function openAccessoriesModal() {
         <div style="display:flex; align-items:center; gap:14px;">
           <span style="color:#ffffff;">${PS5Icons.controller}</span>
           <div>
-            <div style="font-weight:600; font-size:14px;">DualSense #2 (${isRu ? "Черный Midnight" : "Midnight Black"})</div>
+            <div style="font-weight:600; font-size:14px;">DualSense 2 (${isRu ? "Черный Midnight" : "Midnight Black"})</div>
             <div style="font-size:12.5px; color:var(--ps5-text-muted);">${isRu ? "Беспроводной контроллер · Ожидание" : "Wireless Controller · Standby"}</div>
           </div>
         </div>
@@ -1204,7 +1204,7 @@ function openNotificationsModal() {
       <div style="display:flex; gap:14px; padding:14px 16px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
         <span style="color:var(--ps5-blue); flex-shrink:0;">${PS5Icons.controller}</span>
         <div>
-          <div style="font-weight:600; font-size:14px;">${isRu ? "Беспроводной контроллер DualSense #1 подключен" : "DualSense Wireless Controller #1 connected"}</div>
+          <div style="font-weight:600; font-size:14px;">${isRu ? "Беспроводной контроллер DualSense 1 подключен" : "DualSense Wireless Controller 1 connected"}</div>
           <div style="font-size:12.5px; color:var(--ps5-text-muted); margin-top:2px;">${isRu ? "Заряд батареи: 85%" : "Battery level: 85%"}</div>
         </div>
       </div>
@@ -1405,8 +1405,9 @@ function renderSettingsNav() {
 function renderSettingsDetail(secId) {
   const sec = settingsSections.find((s) => s.id === secId) || settingsSections[0];
   const box = $("#settingsDetail");
+  const secTitle = t(sec.title) || (state.lang === "ru" ? "Параметры" : "Settings");
   box.innerHTML = `
-    <h3 style="font-size:20px;font-weight:400;display:flex;align-items:center;gap:10px;">${sec.icon}<span>${t(sec.title)}</span></h3>
+    <h3 style="font-size:20px;font-weight:400;display:flex;align-items:center;gap:10px;">${sec.icon || ""}<span>${secTitle}</span></h3>
     <p style="font-size:13px;color:var(--ps5-text-muted);margin-bottom:6px;">${S("settingsSub")}</p>
   `;
 
@@ -1901,15 +1902,15 @@ function openNetworkDiagnosticsModal() {
         <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.7);">${isRu ? "Статус служб PlayStation Network:" : "PlayStation Network Services:"}</span>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "Управление учетной записью" : "Account Management"}</span>
-          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
         </div>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "Игры и социальные сети" : "Gaming and Social"}</span>
-          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
         </div>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "PlayStation Store" : "PlayStation Store"}</span>
-          <span style="color:#22c55e; font-weight:600;">● ${isRu ? "В сети" : "Online"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
         </div>
       </div>
     </div>
@@ -1968,7 +1969,7 @@ function openRemotePlayModal() {
 const DEFAULT_WISHLIST = [
   { id: "gta-6", title: "GTA VI", sub: "Rockstar Games" },
   { id: "ds2", title: "Death Stranding 2", sub: "Kojima Productions" },
-  { id: "wolverine", title: "Marvel's Wolverine", sub: "Insomniac Games" }
+  { id: "wolverine", title: "Marvel's Wolverine", sub: "PlayStation Studios" }
 ];
 
 function getWishlistItems() {
@@ -1978,7 +1979,10 @@ function getWishlistItems() {
       localStorage.setItem("ps5_wishlist_items", JSON.stringify(DEFAULT_WISHLIST));
       return DEFAULT_WISHLIST;
     }
-    return JSON.parse(raw);
+    const items = JSON.parse(raw);
+    return Array.isArray(items)
+      ? items.map(i => i.id === "wolverine" ? { ...i, sub: "PlayStation Studios" } : i)
+      : DEFAULT_WISHLIST;
   } catch (e) {
     return DEFAULT_WISHLIST;
   }
@@ -2062,12 +2066,12 @@ function updateNetworkWidgetStatus() {
 
   if (subEl) {
     subEl.textContent = isOnline
-      ? (isRu ? "PlayStation Network · Все службы работают" : "PlayStation Network · All Services Online")
+      ? (isRu ? "PlayStation Network · Состояние не проверено" : "PlayStation Network · Status unverified")
       : (isRu ? "Автономный режим · Нет подключения к сети" : "Offline Mode · No Internet Connection");
   }
   if (dotEl) {
-    dotEl.style.background = isOnline ? "#22c55e" : "#ef4444";
-    dotEl.style.boxShadow = isOnline ? "0 0 8px rgba(34, 197, 94, 0.7)" : "0 0 8px rgba(239, 68, 68, 0.7)";
+    dotEl.style.background = isOnline ? "#38bdf8" : "#ef4444";
+    dotEl.style.boxShadow = isOnline ? "0 0 8px rgba(56, 189, 248, 0.7)" : "0 0 8px rgba(239, 68, 68, 0.7)";
   }
 }
 
@@ -2559,7 +2563,7 @@ function handleAction(action) {
   if (action === "modal:trophies") return openTrophiesModal();
   if (action === "modal:store") return openStoreModal();
   if (action === "modal:remote_play") return openRemotePlayModal();
-  if (action === "modal:back_gallery") return openMediaGalleryModal();
+  if (action === "modal:media-gallery" || action === "modal:back_gallery") return openMediaGalleryModal();
   if (action === "modal:test_network") return openNetworkDiagnosticsModal();
   if (action === "modal:library") return openLibraryModal();
   if (action.startsWith("select:")) {
@@ -2581,7 +2585,6 @@ function handleAction(action) {
     "modal:slot-1": "slot-01",
     "modal:slot-2": "slot-02",
     "modal:slot-3": "slot-03",
-    "modal:media-gallery": "media-gallery",
     "modal:media-slot-1": "media-slot-1",
     "modal:media-slot-2": "media-slot-2"
   };

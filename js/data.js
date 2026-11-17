@@ -26,7 +26,7 @@ export const uiStrings = {
     mediaGalleryTitle: "Галерея мультимедиа",
     mediaGallerySub: "Снимки экрана и видеоклипы 4K HDR",
     networkStatusTitle: "Состояние сети",
-    networkStatusSub: "PlayStation Network · Все службы работают",
+    networkStatusSub: "PlayStation Network · Состояние не проверено",
     trophyProgressTitle: "Прогресс призов",
     trophyProgressSub: "Последние достижения и трофеи",
     storageFreeHint: "158 GB свободно · M.2 NVMe готов",
@@ -87,7 +87,7 @@ export const uiStrings = {
     mediaGalleryTitle: "Media Gallery",
     mediaGallerySub: "4K HDR captures and video clips",
     networkStatusTitle: "Network Status",
-    networkStatusSub: "PlayStation Network · All services operational",
+    networkStatusSub: "PlayStation Network · Status unverified",
     trophyProgressTitle: "Trophy Progress",
     trophyProgressSub: "Recent achievements & earned trophies",
     storageFreeHint: "158 GB free · M.2 NVMe ready",
@@ -392,10 +392,10 @@ export const ribbonCatalog = {
       publisher: "PlayStation®5 System Software",
       kicker: { ru: "Снимки экрана и клипы · 4K HDR", en: "Screenshots & Clips · 4K HDR" },
       desc: {
-        ru: "Системный раздел для хранения скриншотов, видеороликов и визуальных материалов.",
-        en: "System media gallery placeholder ready for screenshots, trailers, and clips."
+        ru: "Снимки экрана, 4K HDR видеоклипы и запечатленные трофейные моменты.",
+        en: "Screenshots, 4K HDR video clips and captured trophy moments."
       },
-      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      ctaText: { ru: "Открыть галерею", en: "Open Gallery" },
       btnAction: "modal:media-gallery",
       secText: { ru: "К играм", en: "Games Tab" },
       secAction: "home_reset",
@@ -405,16 +405,16 @@ export const ribbonCatalog = {
       playTime: "4K HDR",
       trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        { title: "Альбом снимков экрана", type: "Медиа", progress: 100, timeEst: "Пустой слот", thumb: PS5Icons.makeSceneArt("media-slot"), action: "modal:media-gallery" }
+        { title: "Альбом снимков экрана", type: "Медиа", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("media-slot"), action: "modal:media-gallery" }
       ],
       news: [
-        { date: "Media", title: "Раздел готов к наполнению", desc: "Добавьте собственные скриншоты или видеоролики." }
+        { date: "Media", title: "Галерея медиа", desc: "Просматривайте снимки экрана и записанные видеоролики игр." }
       ],
       modalData: {
         badge: "MEDIA GALLERY",
         title: "Галерея мультимедиа",
-        subtitle: "Пустой шаблон медиа-секции",
-        content: `<p class="modal-p">Здесь можно разместить изображения, превью видео или интерактивную фотогалерею.</p>`,
+        subtitle: "Снимки экрана и видеоклипы 4K HDR",
+        content: `<p class="modal-p">Коллекция снимков экрана 4K HDR, трофейных скриншотов и видеозаписей игрового процесса.</p>`,
         actions: []
       }
     },
@@ -518,9 +518,19 @@ export const settingsSections = [
     title: { ru: "Аксессуары", en: "Accessories" },
     icon: PS5Icons.controller,
     items: [
-      { label: { ru: "Беспроводной контроллер DualSense #1", en: "DualSense Wireless Controller #1" }, val: "86% · Bluetooth" },
-      { label: { ru: "Беспроводной контроллер DualSense #2", en: "DualSense Wireless Controller #2" }, val: "32% · Требуется зарядка" },
+      { label: { ru: "Беспроводной контроллер DualSense (Белый)", en: "DualSense Wireless Controller (White)" }, val: "86% · Bluetooth" },
+      { label: { ru: "Беспроводной контроллер DualSense (Midnight Black)", en: "DualSense Wireless Controller (Midnight Black)" }, val: "32% · Требуется зарядка" },
       { label: { ru: "Беспроводные наушники PULSE Explore", en: "PULSE Explore Wireless Earbuds" }, val: "91% · Tempest 3D Audio" }
+    ]
+  },
+  {
+    id: "remote",
+    title: { ru: "Дистанционная игра", en: "Remote Play" },
+    icon: PS5Icons.controller,
+    items: [
+      { label: { ru: "Разрешить дистанционную игру", en: "Enable Remote Play" }, val: { ru: "Включено (1080p 60 FPS)", en: "Enabled (1080p 60 FPS)" } },
+      { label: { ru: "Подключенные устройства", en: "Connected Devices" }, val: "PlayStation Portal · iPhone 15 Pro", action: "modal:remote_play" },
+      { label: { ru: "Качество потоковой передачи", en: "Streaming Quality" }, val: "Высокое (HDR 60fps)" }
     ]
   },
   {
@@ -529,7 +539,7 @@ export const settingsSections = [
     icon: PS5Icons.info,
     items: [
       { label: { ru: "Системное ПО", en: "System Software" }, val: "PlayStation®5 UI Shell" },
-      { label: { ru: "Режим", en: "Mode" }, val: "Clean Design Template" }
+      { label: { ru: "Режим", en: "Mode" }, val: "PlayStation®5 Dashboard" }
     ]
   }
 ];
