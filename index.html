@@ -62,6 +62,14 @@
             <span id="iconSearchBtn"></span>
           </button>
 
+          <button class="ps5-icon-btn ps5-notif-btn" id="btnNotifications" type="button" title="Уведомления PSN" aria-label="Уведомления">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="ps5-notif-badge">2</span>
+          </button>
+
           <button class="ps5-icon-btn" id="btnSettings" type="button" title="Настройки системы" aria-label="Настройки">
             <span id="iconSettingsBtn"></span>
           </button>
@@ -82,11 +90,34 @@
 
       <!-- VIEW 1: WELCOME HUB BENTO GRID (1:1 PS5 System Software · 3x2 Paged Viewport) -->
       <main class="ps5-welcome-hub" id="ps5WelcomeView">
-        <div class="ps5-welcome-toolbar">
-          <button class="ps5-edit-widgets-btn" id="btnEditWidgets" type="button" aria-label="Настроить виджеты">
-            <span id="iconEditWidgetsGlyph" class="ps5-btn-glyph"></span>
-            <span id="lblEditWidgets">Настроить виджеты</span>
-          </button>
+        <div class="ps5-welcome-hero-banner">
+          <div class="ps5-welcome-hero-left">
+            <div class="ps5-welcome-title-row">
+              <h1 class="ps5-welcome-hero-title" id="lblWelcomeHeroTitle">С возвращением, Player 1</h1>
+              <span class="ps5-welcome-pulse-badge">
+                <span class="ps5-welcome-pulse-dot"></span>
+                <span>PS5 Online · 4K 120Hz</span>
+              </span>
+            </div>
+            <p class="ps5-welcome-hero-sub" id="lblWelcomeHeroSub">PlayStation®5 System Software · Все службы работают в штатном режиме</p>
+          </div>
+          <div class="ps5-welcome-hero-right">
+            <div class="ps5-welcome-featured-game" id="btnContinuePlaying" role="button" tabindex="0" title="Быстрый запуск последнего проекта">
+              <div class="ps5-wfg-thumb" style="background-image: url('assets/covers/spiderman.jpg');"></div>
+              <div class="ps5-wfg-info">
+                <span class="ps5-wfg-kicker">Продолжить игру</span>
+                <span class="ps5-wfg-title">Marvel's Spider-Man 2</span>
+              </div>
+              <div class="ps5-wfg-play-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <span>Играть</span>
+              </div>
+            </div>
+            <button class="ps5-edit-widgets-btn" id="btnEditWidgets" type="button" aria-label="Настроить виджеты">
+              <span id="iconEditWidgetsGlyph" class="ps5-btn-glyph"></span>
+              <span id="lblEditWidgets">Настроить виджеты</span>
+            </button>
+          </div>
         </div>
 
         <button class="ps5-hub-chevron ps5-hub-chevron--left is-disabled" id="ps5ChevronLeft" type="button" aria-label="Пролистать влево">
@@ -198,14 +229,22 @@
                 <div class="ps5-wishlist-scrim"></div>
                 <div class="ps5-wishlist-top">
                   <span class="ps5-wishlist-badge" id="lblConsoleStorage">Память консоли</span>
-                  <span class="ps5-wishlist-storage-val">667 / 825 GB</span>
+                  <span class="ps5-wishlist-storage-val">667 / 825 GB SSD</span>
                 </div>
                 <div class="ps5-wishlist-bottom">
-                  <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
-                  <p class="ps5-wishlist-sub" id="lblWishlistSub">Избранные разделы и игры PS5</p>
-                  <div class="ps5-ssd-bar-track">
-                    <div class="ps5-ssd-bar-fill" style="width: 81%;"></div>
+                  <div class="ps5-storage-section">
+                    <div class="ps5-ssd-bar-track">
+                      <div class="ps5-ssd-bar-fill" style="width: 81%;"></div>
+                    </div>
+                    <span class="ps5-ssd-free-hint">158 GB свободно</span>
                   </div>
+                  <div class="ps5-wishlist-divider"></div>
+                  <div class="ps5-wishlist-header-row">
+                    <span class="ps5-wishlist-heart">❤️</span>
+                    <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
+                    <span class="ps5-wishlist-count-badge">5 игр</span>
+                  </div>
+                  <p class="ps5-wishlist-sub" id="lblWishlistSub">GTA VI · Death Stranding 2 · Wolverine</p>
                 </div>
               </div>
             </article>

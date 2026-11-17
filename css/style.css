@@ -179,25 +179,50 @@ body.hub-active .ps5-screen {
 
 .ps5-tab.is-active {
   color: #ffffff;
-  font-weight: 600;
+  font-weight: 700;
+  text-shadow: 0 0 14px rgba(56, 189, 248, 0.5);
 }
 
 .ps5-tab.is-active::after {
   content: "";
   position: absolute;
   bottom: 0;
-  left: 6px;
-  right: 6px;
-  height: 3px;
-  background: #ffffff;
+  left: 4px;
+  right: 4px;
+  height: 3.5px;
+  background: linear-gradient(90deg, #0070d1 0%, #38bdf8 50%, #0070d1 100%);
   border-radius: 999px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.8), 0 2px 6px rgba(0, 112, 209, 0.9);
 }
 
 .ps5-tab:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline: 2px solid #38bdf8;
   outline-offset: 4px;
   border-radius: 6px;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.6);
+}
+
+/* Notification Button in Topbar */
+.ps5-notif-btn {
+  position: relative;
+}
+
+.ps5-notif-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0070d1 0%, #38bdf8 100%);
+  border: 2px solid #060811;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 10px rgba(0, 112, 209, 0.8);
 }
 
 .ps5-status-cluster {
@@ -399,14 +424,156 @@ body.hub-active .ps5-screen {
 .ps5-welcome-hub {
   position: relative;
   margin-top: auto;
-  margin-bottom: calc(38px + 1.4vh);
-  height: 48vh;
-  min-height: 290px;
-  max-height: 436px;
+  margin-bottom: calc(30px + 1.2vh);
+  height: 52vh;
+  min-height: 330px;
+  max-height: 480px;
   width: 100%;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* ==========================================================================
+   PlayStation 5 Welcome Hero Banner (Cinematic Header Area)
+   ========================================================================== */
+.ps5-welcome-hero-banner {
+  width: calc(100% - 2 * 8.98vw);
+  margin: 0 auto 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 16px;
+  min-height: 48px;
+}
+
+.ps5-welcome-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ps5-welcome-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ps5-welcome-hero-title {
+  font-size: clamp(20px, 1.7vw, 28px);
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7);
+}
+
+.ps5-welcome-pulse-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 112, 209, 0.2);
+  border: 1px solid rgba(56, 189, 248, 0.45);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #38bdf8;
+  letter-spacing: 0.02em;
+  box-shadow: 0 0 12px rgba(0, 112, 209, 0.35);
+}
+
+.ps5-welcome-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: sberPulse 1.6s infinite;
+}
+
+.ps5-welcome-hero-sub {
+  font-size: clamp(11.5px, 0.92vw, 13px);
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.ps5-welcome-hero-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.ps5-welcome-featured-game {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 4px 5px;
+  background: rgba(14, 20, 36, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(56, 189, 248, 0.5);
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 20px rgba(0, 112, 209, 0.2);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps5-welcome-featured-game:hover {
+  background: rgba(22, 34, 60, 0.9);
+  border-color: rgba(56, 189, 248, 0.7);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 25px rgba(0, 112, 209, 0.45);
+  transform: translateY(-1.5px);
+}
+
+.ps5-wfg-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+
+.ps5-wfg-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ps5-wfg-kicker {
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+}
+
+.ps5-wfg-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.ps5-wfg-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #0070d1 0%, #0088ff 100%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-left: 2px;
+  box-shadow: 0 0 12px rgba(0, 112, 209, 0.5);
+  pointer-events: none;
 }
 
 .ps5-welcome-toolbar {
@@ -427,7 +594,7 @@ body.hub-active .ps5-screen {
   font-size: 12.5px;
   font-weight: 500;
   letter-spacing: -0.01em;
-  padding: 4px 14px;
+  padding: 5px 14px;
   border-radius: 999px;
   cursor: pointer;
   display: inline-flex;
@@ -559,22 +726,26 @@ body.hub-active .ps5-screen {
 
 .ps5-widget {
   position: relative;
-  border-radius: 13px;
-  background: var(--ps5-card-bg);
-  border: 1px solid var(--ps5-card-border);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(14, 20, 36, 0.82) 0%, rgba(8, 12, 24, 0.92) 100%);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.28);
   overflow: hidden;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
-  transition: transform 0.2s var(--ps5-ease),
-              border-color 0.2s ease,
-              box-shadow 0.2s ease;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.24s ease,
+              box-shadow 0.24s ease;
 }
 
 .ps5-widget:hover,
 .ps5-widget:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--ps5-card-border-focus);
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.35), 0 16px 34px rgba(0, 0, 0, 0.72);
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.45);
+  border-top-color: rgba(56, 189, 248, 0.75);
+  box-shadow: 0 0 0 1.5px rgba(0, 112, 209, 0.5), 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 112, 209, 0.35);
   outline: none;
 }
 
@@ -589,18 +760,22 @@ body.hub-active .ps5-screen {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: clamp(12px, 1.08vw, 15.5px);
-  font-weight: 600;
+  font-size: clamp(12.5px, 1.1vw, 15.5px);
+  font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .ps5-widget-icon {
   display: inline-flex;
   align-items: center;
-  color: #ffffff;
+  color: #38bdf8;
+  filter: drop-shadow(0 0 8px rgba(0, 112, 209, 0.5));
 }
 
-/* Col 1: Online Friends (66%) + Store Showcase (34%) */
+/* =========================================================================
+   Widget 1: Online Friends
+   ========================================================================= */
 .ps5-widget--friends {
   flex: 66 1 0;
   min-height: 0;
@@ -615,39 +790,63 @@ body.hub-active .ps5-screen {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: clamp(12px, 1.1vw, 15px);
-  font-weight: 600;
+  font-size: clamp(12px, 1.1vw, 14.5px);
+  font-weight: 700;
   color: #ffffff;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 3px 9px;
+  border-radius: 999px;
 }
 
 .ps5-green-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: var(--ps5-green);
-  box-shadow: 0 0 6px var(--ps5-green);
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: sberPulse 1.8s infinite;
 }
 
 .ps5-friends-avatars {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 7px;
   margin: auto 0;
+  width: 100%;
+}
+
+.ps5-friend-chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps5-friend-chip:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateX(3px);
 }
 
 .ps5-friend-avatar-item {
   position: relative;
-  width: clamp(38px, 3.3vw, 50px);
-  height: clamp(38px, 3.3vw, 50px);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(12px, 1vw, 14px);
-  font-weight: 600;
+  font-size: 13.5px;
+  font-weight: 700;
   color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
 }
 
 .ps5-friend-avatar-dot {
@@ -657,17 +856,49 @@ body.hub-active .ps5-screen {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--ps5-green);
-  border: 2px solid var(--ps5-card-bg);
+  background: #22c55e;
+  border: 2px solid #090e1c;
+  box-shadow: 0 0 8px #22c55e;
+  animation: sberPulse 2s infinite;
+}
+
+.ps5-friend-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ps5-friend-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ps5-friend-game {
+  font-size: 11.5px;
+  color: #38bdf8;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ps5-friends-names {
-  font-size: clamp(11px, 0.92vw, 13.5px);
-  line-height: 1.38;
-  color: var(--ps5-text-muted);
+  font-size: clamp(11px, 0.9vw, 13px);
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.55);
   font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* =========================================================================
+   Widget 2: PlayStation Store Card
+   ========================================================================= */
 .ps5-widget--store {
   flex: 34 1 0;
   min-height: 0;
@@ -689,7 +920,12 @@ body.hub-active .ps5-screen {
 .ps5-store-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(10, 18, 36, 0.9) 15%, rgba(0, 67, 156, 0.35) 100%);
+  background: linear-gradient(120deg, rgba(8, 14, 30, 0.88) 15%, rgba(0, 112, 209, 0.45) 100%);
+  transition: background 0.3s ease;
+}
+
+.ps5-widget--store:hover .ps5-store-scrim {
+  background: linear-gradient(120deg, rgba(8, 14, 30, 0.82) 15%, rgba(0, 112, 209, 0.65) 100%);
 }
 
 .ps5-store-meta {
@@ -701,14 +937,14 @@ body.hub-active .ps5-screen {
 }
 
 .ps5-store-kicker {
-  font-size: clamp(12px, 1.05vw, 15px);
-  font-weight: 600;
+  font-size: clamp(12.5px, 1.1vw, 15px);
+  font-weight: 700;
   color: #ffffff;
 }
 
 .ps5-store-sub {
   font-size: clamp(10.5px, 0.85vw, 12.5px);
-  color: var(--ps5-text-muted);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .ps5-store-mini-bag {
@@ -718,10 +954,13 @@ body.hub-active .ps5-screen {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transform: scale(0.82);
+  transform: scale(0.9);
+  filter: drop-shadow(0 0 10px rgba(0, 112, 209, 0.6));
 }
 
-/* Col 2: Accessibility (34%) + Trophies (66%) */
+/* =========================================================================
+   Widget 3: Accessibility Card
+   ========================================================================= */
 .ps5-widget--accessibility {
   flex: 34 1 0;
   min-height: 0;
@@ -730,7 +969,8 @@ body.hub-active .ps5-screen {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
+  border-left: 3px solid #0070d1;
 }
 
 .ps5-acc-left {
@@ -741,8 +981,8 @@ body.hub-active .ps5-screen {
 }
 
 .ps5-acc-desc {
-  font-size: clamp(10.8px, 0.92vw, 13.5px);
-  color: var(--ps5-text-muted);
+  font-size: clamp(11px, 0.92vw, 13.5px);
+  color: rgba(255, 255, 255, 0.65);
   font-weight: 400;
 }
 
@@ -750,8 +990,18 @@ body.hub-active .ps5-screen {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: radial-gradient(circle, rgba(0, 112, 209, 0.3) 0%, rgba(0, 112, 209, 0.05) 100%);
+  border: 1px solid rgba(0, 112, 209, 0.45);
+  box-shadow: 0 0 18px rgba(0, 112, 209, 0.35);
 }
 
+/* =========================================================================
+   Widget 4: Trophies Card
+   ========================================================================= */
 .ps5-widget--trophies {
   flex: 66 1 0;
   min-height: 0;
@@ -763,9 +1013,10 @@ body.hub-active .ps5-screen {
 }
 
 .ps5-trophies-total {
-  font-size: clamp(12px, 1.06vw, 15px);
-  font-weight: 600;
-  color: #ffffff;
+  font-size: clamp(12.5px, 1.08vw, 15px);
+  font-weight: 700;
+  color: #38bdf8;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
 .ps5-trophies-cups-row {
@@ -781,18 +1032,30 @@ body.hub-active .ps5-screen {
   flex-direction: column;
   align-items: center;
   gap: 0.65vh;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ps5-trophy-col:hover {
+  transform: translateY(-2px);
 }
 
 .ps5-trophy-3d-svg {
   height: clamp(38px, 6.8vh, 56px);
   width: auto;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+  transition: transform 0.22s var(--ps5-ease), filter 0.22s ease;
+}
+
+.ps5-trophy-col:hover .ps5-trophy-3d-svg {
+  transform: scale(1.08);
+  filter: drop-shadow(0 8px 20px rgba(0, 112, 209, 0.55));
 }
 
 .ps5-trophy-num {
-  font-size: clamp(12px, 1.08vw, 15.5px);
-  font-weight: 500;
-  color: #e5e7eb;
+  font-size: clamp(12.5px, 1.1vw, 15.5px);
+  font-weight: 700;
+  color: #ffffff;
   font-variant-numeric: tabular-nums;
 }
 
@@ -821,14 +1084,15 @@ body.hub-active .ps5-screen {
 
 .ps5-level-text,
 .ps5-level-pct {
-  font-size: clamp(11px, 0.94vw, 13.5px);
-  color: var(--ps5-text-muted);
+  font-size: clamp(11.5px, 0.95vw, 13.5px);
+  color: rgba(255, 255, 255, 0.75);
   font-variant-numeric: tabular-nums;
+  font-weight: 600;
 }
 
 .ps5-level-bar-track {
   width: 100%;
-  height: 3px;
+  height: 4px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
   overflow: hidden;
@@ -836,12 +1100,15 @@ body.hub-active .ps5-screen {
 
 .ps5-level-bar-fill {
   height: 100%;
-  background: #e5e7eb;
+  background: linear-gradient(90deg, #0070d1 0%, #38bdf8 100%);
   border-radius: 999px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
   transition: width 0.4s var(--ps5-ease);
 }
 
-/* Col 3: Battery Rings (34%) + Console Storage / Wishlist (66%) */
+/* =========================================================================
+   Widget 5: Battery Status Cards
+   ========================================================================= */
 .ps5-widget--battery {
   flex: 34 1 0;
   min-height: 0;
@@ -858,12 +1125,20 @@ body.hub-active .ps5-screen {
   justify-content: space-around;
   width: 100%;
   height: 100%;
+  padding: 4px 0;
+}
+
+.ps5-battery-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 .ps5-battery-ring-item {
   position: relative;
-  width: clamp(52px, 5.4vw, 76px);
-  height: clamp(52px, 5.4vw, 76px);
+  width: clamp(52px, 5.2vw, 70px);
+  height: clamp(52px, 5.2vw, 70px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -876,23 +1151,25 @@ body.hub-active .ps5-screen {
 }
 
 .ps5-ring-bg {
-  fill: #1b1f29;
+  fill: #0c1220;
 }
 
 .ps5-ring-track {
   fill: none;
   stroke: rgba(255, 255, 255, 0.12);
-  stroke-width: 2.6;
+  stroke-width: 2.8;
 }
 
 .ps5-ring-progress {
   fill: none;
-  stroke-width: 2.6;
+  stroke-width: 2.8;
   stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ps5-ring-progress--green { stroke: var(--ps5-green); }
-.ps5-ring-progress--amber { stroke: var(--ps5-amber); }
+.ps5-ring-progress--green { stroke: #22c55e; filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.5)); }
+.ps5-ring-progress--blue { stroke: #38bdf8; filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.5)); }
+.ps5-ring-progress--amber { stroke: #f59e0b; filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.5)); }
 
 .ps5-ring-inner {
   position: absolute;
@@ -901,10 +1178,38 @@ body.hub-active .ps5-screen {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding-top: 2px;
+  gap: 2px;
+  padding-top: 1px;
 }
 
+.ps5-ring-pct {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.ps5-ring-icon-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.85);
+  opacity: 0.85;
+}
+
+.ps5-battery-dev-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* =========================================================================
+   Widget 6: Console Storage & Wishlist
+   ========================================================================= */
 .ps5-widget--wishlist {
   flex: 66 1 0;
   min-height: 0;
@@ -917,7 +1222,7 @@ body.hub-active .ps5-screen {
   height: 100%;
   background-size: cover;
   background-position: center;
-  padding: 1.8vh 1.3vw;
+  padding: 1.6vh 1.3vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -926,7 +1231,7 @@ body.hub-active .ps5-screen {
 .ps5-wishlist-scrim {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(16, 20, 30, 0.55) 0%, rgba(16, 20, 30, 0.92) 78%);
+  background: linear-gradient(180deg, rgba(12, 18, 32, 0.65) 0%, rgba(6, 10, 20, 0.94) 75%);
 }
 
 .ps5-wishlist-top,
@@ -939,35 +1244,32 @@ body.hub-active .ps5-screen {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: clamp(11px, 0.92vw, 13.5px);
+  font-size: clamp(11.5px, 0.95vw, 14px);
 }
 
 .ps5-wishlist-badge {
-  font-weight: 600;
+  font-weight: 700;
   color: #ffffff;
+  letter-spacing: -0.01em;
 }
 
 .ps5-wishlist-storage-val {
-  color: var(--ps5-text-muted);
+  color: #38bdf8;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
 }
 
-.ps5-wishlist-title {
-  font-size: clamp(14px, 1.3vw, 19px);
-  font-weight: 400;
-  color: #ffffff;
-  margin-bottom: 4px;
-}
-
-.ps5-wishlist-sub {
-  font-size: clamp(11px, 0.9vw, 13px);
-  color: var(--ps5-text-muted);
-  margin-bottom: 10px;
+.ps5-storage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 8px;
 }
 
 .ps5-ssd-bar-track {
   width: 100%;
-  height: 4px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   overflow: hidden;
@@ -975,8 +1277,61 @@ body.hub-active .ps5-screen {
 
 .ps5-ssd-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--ps5-blue), var(--ps5-cyan));
+  background: linear-gradient(90deg, #0070d1 0%, #38bdf8 100%);
   border-radius: 999px;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+.ps5-ssd-free-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.65);
+  align-self: flex-end;
+}
+
+.ps5-wishlist-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin: 6px 0 8px;
+}
+
+.ps5-wishlist-header-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.ps5-wishlist-heart {
+  font-size: 13px;
+  filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.7));
+}
+
+.ps5-wishlist-title {
+  font-size: clamp(13.5px, 1.2vw, 17px);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.ps5-wishlist-count-badge {
+  margin-left: auto;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(244, 63, 94, 0.25);
+  border: 1px solid rgba(244, 63, 94, 0.5);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.ps5-wishlist-sub {
+  font-size: clamp(10.5px, 0.88vw, 12.5px);
+  color: rgba(255, 255, 255, 0.65);
+  margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Col 4 & Col 5: Scrollable Activity, Network & Template Slot Cards */
@@ -3334,25 +3689,43 @@ body.hub-active .stage-game-hub {
 .sber-tips-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(3, 7, 18, 0.82);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: radial-gradient(circle at 50% 30%, rgba(20, 24, 38, 0.65) 0%, rgba(3, 7, 18, 0.88) 100%);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
 }
 
 .sber-tips-dialog {
   position: relative;
   z-index: 2;
   width: 92%;
-  max-width: 760px;
-  background: radial-gradient(circle at 50% 0%, rgba(20, 32, 50, 0.95) 0%, rgba(10, 15, 25, 0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 1px solid rgba(34, 197, 94, 0.5);
-  border-radius: 24px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(34, 197, 94, 0.18);
+  max-width: 780px;
+  background: 
+    linear-gradient(145deg, rgba(8, 12, 22, 0.68) 0%, rgba(4, 7, 15, 0.82) 48%, rgba(2, 4, 10, 0.94) 100%),
+    url('../assets/bg_monica.jpg') center 22% / cover no-repeat;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 28px;
+  box-shadow: 
+    0 35px 90px rgba(0, 0, 0, 0.88),
+    0 0 50px rgba(255, 119, 0, 0.22),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(30px) saturate(190%);
+  -webkit-backdrop-filter: blur(30px) saturate(190%);
   padding: 32px;
   color: #fff;
   transform: scale(0.94) translateY(12px);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.sber-tips-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 15%, rgba(255, 119, 0, 0.16) 0%, transparent 60%),
+              linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 40%);
+  pointer-events: none;
+  border-radius: 28px;
 }
 
 .modal-sber-tips.active .sber-tips-dialog {
@@ -3366,20 +3739,27 @@ body.hub-active .stage-game-hub {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
   color: #fff;
   font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.2s, transform 0.2s;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 3;
 }
 
 .sber-tips-close-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border-top-color: #ffffff;
   transform: scale(1.08);
+  box-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.7), 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .sber-tips-header {
@@ -3388,15 +3768,21 @@ body.hub-active .stage-game-hub {
   gap: 16px;
   margin-bottom: 24px;
   padding-bottom: 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  position: relative;
+  z-index: 2;
 }
 
 .sber-brand-icon {
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.3);
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.24) 0%, rgba(255, 119, 0, 0.08) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 140, 50, 0.4);
+  border-top: 1px solid rgba(255, 180, 100, 0.7);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 6px 18px rgba(255, 119, 0, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3410,10 +3796,11 @@ body.hub-active .stage-game-hub {
 }
 
 .sber-title {
-  font-size: 22px;
-  font-weight: 700;
+  font-size: 23px;
+  font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.3px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .sber-badge-safe {
@@ -3422,17 +3809,22 @@ body.hub-active .stage-game-hub {
   gap: 5px;
   font-size: 11.5px;
   font-weight: 600;
-  color: #22c55e;
-  background: rgba(34, 197, 94, 0.14);
-  padding: 3px 9px;
-  border-radius: 12px;
-  border: 1px solid rgba(34, 197, 94, 0.28);
+  color: #ffaa44;
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.22) 0%, rgba(255, 119, 0, 0.08) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  padding: 4px 11px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 140, 50, 0.4);
+  border-top: 1px solid rgba(255, 180, 100, 0.7);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 4px 12px rgba(255, 119, 0, 0.2);
 }
 
 .sber-subtitle {
   font-size: 13.5px;
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.75);
   margin-top: 4px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .sber-tips-content {
@@ -3440,6 +3832,8 @@ body.hub-active .stage-game-hub {
   grid-template-columns: 260px 1fr;
   gap: 28px;
   align-items: start;
+  position: relative;
+  z-index: 2;
 }
 
 @media (max-width: 680px) {
@@ -3449,23 +3843,36 @@ body.hub-active .stage-game-hub {
   }
 }
 
+/* Apple Liquid Glass: QR Card */
 .sber-qr-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 18px 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 100%);
+  backdrop-filter: blur(28px) saturate(190%) contrast(105%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) contrast(105%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 22px;
+  padding: 20px 18px;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sber-qr-card:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%);
+  border-top-color: rgba(255, 255, 255, 0.75);
 }
 
 .sber-qr-frame {
   position: relative;
   background: #ffffff;
   padding: 12px;
-  border-radius: 14px;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(34, 197, 94, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65), 0 0 25px rgba(255, 119, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3498,26 +3905,28 @@ body.hub-active .stage-game-hub {
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: #22c55e;
+  color: #ffaa44;
   margin-top: 14px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .sber-pulse-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #22c55e;
-  box-shadow: 0 0 8px #22c55e;
+  background: #ff7700;
+  box-shadow: 0 0 8px #ff7700;
   animation: sberPulse 1.8s infinite;
 }
 
 .sber-qr-hint {
   font-size: 11.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
   line-height: 1.45;
   margin-top: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .sber-details-pane {
@@ -3526,38 +3935,59 @@ body.hub-active .stage-game-hub {
   gap: 16px;
 }
 
+/* Apple Liquid Glass: Author Chip */
 .sber-author-chip {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 14px;
-  padding: 12px 14px;
+  gap: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%);
+  backdrop-filter: blur(28px) saturate(190%) contrast(105%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%) contrast(105%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+    0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sber-author-chip:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border-top-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-1.5px);
 }
 
 .sber-author-avatar {
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(34, 197, 94, 0.15);
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.3) 0%, rgba(255, 119, 0, 0.1) 100%);
+  border: 1px solid rgba(255, 140, 50, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .sber-author-name {
-  font-size: 14.5px;
+  font-size: 15px;
   font-weight: 700;
   color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
 .sber-author-meta {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.7);
   margin-top: 2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
+/* =========================================================================
+   Apple Liquid Glass: Feature Badges / Pills (.sber-feat-pill)
+   ========================================================================= */
 .sber-features-row {
   display: flex;
   flex-wrap: wrap;
@@ -3567,14 +3997,35 @@ body.hub-active .stage-game-hub {
 .sber-feat-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 11px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.85);
+  gap: 7px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(24px) saturate(190%) contrast(105%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) contrast(105%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 9999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.2),
+    0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
+  user-select: none;
+}
+
+.sber-feat-pill:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.26) 0%, rgba(255, 255, 255, 0.10) 100%);
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 8px 22px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
 }
 
 .sber-presets-section {
@@ -3588,7 +4039,8 @@ body.hub-active .stage-game-hub {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .sber-presets-row {
@@ -3597,32 +4049,46 @@ body.hub-active .stage-game-hub {
   flex-wrap: wrap;
 }
 
+/* Apple Liquid Glass: Quick Amount Preset Buttons */
 .sber-preset-btn {
   flex: 1;
-  min-width: 68px;
-  padding: 9px 12px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  min-width: 72px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(20px) saturate(190%);
+  -webkit-backdrop-filter: blur(20px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
   color: #fff;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   text-align: center;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3),
+    0 4px 14px rgba(0, 0, 0, 0.25);
 }
 
 .sber-preset-btn:hover {
-  background: rgba(34, 197, 94, 0.18);
-  border-color: rgba(34, 197, 94, 0.6);
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.32) 0%, rgba(255, 119, 0, 0.14) 100%);
+  border-color: rgba(255, 140, 50, 0.7);
+  border-top-color: rgba(255, 210, 160, 0.9);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 6px 18px rgba(255, 119, 0, 0.35);
   transform: translateY(-2px);
 }
 
 .sber-preset-btn.active {
-  background: rgba(34, 197, 94, 0.25);
-  border-color: #22c55e;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.35);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.45) 0%, rgba(255, 119, 0, 0.22) 100%);
+  border: 1.5px solid #ff7700;
+  border-top: 1.5px solid #ffaa44;
+  box-shadow: 
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.6),
+    0 0 20px rgba(255, 119, 0, 0.5);
+  color: #ffffff;
 }
 
 .sber-actions-row {
@@ -3637,58 +4103,69 @@ body.hub-active .stage-game-hub {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 18px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  padding: 13px 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ea580c 0%, #ff7700 100%);
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  border: none;
+  box-shadow: 0 8px 24px rgba(255, 119, 0, 0.4);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 .sber-btn-primary:hover {
-  background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+  background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(34, 197, 94, 0.45);
+  box-shadow: 0 12px 30px rgba(255, 119, 0, 0.55);
 }
 
+/* Apple Liquid Glass: Secondary Action Button */
 .sber-btn-secondary {
   flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  padding: 12px 14px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  gap: 8px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 100%);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-top: 1px solid rgba(255, 255, 255, 0.55);
   color: #ffffff;
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.3),
+    0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sber-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.35);
   transform: translateY(-2px);
 }
 
 .sber-settings-drawer {
   margin-top: 6px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
   padding-top: 10px;
 }
 
 .sber-toggle-settings {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 12px;
   cursor: pointer;
   display: flex;
@@ -3700,7 +4177,7 @@ body.hub-active .stage-game-hub {
 }
 
 .sber-toggle-settings:hover {
-  color: #22c55e;
+  color: #ffaa44;
 }
 
 .sber-caret {
@@ -3712,62 +4189,72 @@ body.hub-active .stage-game-hub {
   transform: rotate(180deg);
 }
 
+/* Apple Liquid Glass: Settings Panel */
 .sber-settings-panel {
-  margin-top: 8px;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, rgba(10, 14, 24, 0.7) 0%, rgba(4, 7, 14, 0.85) 100%);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .sber-input-label {
   display: block;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.55);
-  margin-bottom: 5px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 6px;
 }
 
 .sber-input-row {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .sber-input {
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  padding: 8px 12px;
   color: #fff;
-  font-size: 12px;
+  font-size: 12.5px;
   outline: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .sber-input:focus {
-  border-color: #22c55e;
-  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+  border-color: #ff7700;
+  box-shadow: 0 0 10px rgba(255, 119, 0, 0.4);
 }
 
 .sber-btn-save {
-  background: #16a34a;
-  border: none;
-  border-radius: 8px;
-  padding: 0 12px;
+  background: linear-gradient(135deg, #ea580c 0%, #ff7700 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 0 14px;
   color: #fff;
-  font-size: 12px;
+  font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .sber-btn-save:hover {
-  background: #22c55e;
+  background: #ff7700;
+  transform: translateY(-1px);
 }
 
 .sber-settings-status {
   font-size: 11px;
   margin-top: 6px;
-  color: #22c55e;
+  color: #ffaa44;
   display: none;
 }
 
@@ -3781,18 +4268,26 @@ body.hub-active .stage-game-hub {
 }
 
 .da-brand-icon {
-  background: rgba(255, 119, 0, 0.12) !important;
-  border: 1px solid rgba(255, 119, 0, 0.35) !important;
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.24) 0%, rgba(255, 119, 0, 0.08) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 140, 50, 0.4) !important;
+  border-top: 1px solid rgba(255, 180, 100, 0.7) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 6px 18px rgba(255, 119, 0, 0.25) !important;
 }
 
 .da-badge {
-  color: #ff7700 !important;
-  background: rgba(255, 119, 0, 0.14) !important;
-  border-color: rgba(255, 119, 0, 0.3) !important;
+  color: #ffaa44 !important;
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.22) 0%, rgba(255, 119, 0, 0.08) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border: 1px solid rgba(255, 140, 50, 0.4) !important;
+  border-top: 1px solid rgba(255, 180, 100, 0.7) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 4px 12px rgba(255, 119, 0, 0.2) !important;
 }
 
 .da-qr-label {
-  color: #ff7700 !important;
+  color: #ffaa44 !important;
 }
 
 .da-pulse {
@@ -3801,17 +4296,18 @@ body.hub-active .stage-game-hub {
 }
 
 .da-avatar {
-  background: rgba(255, 119, 0, 0.15) !important;
+  background: linear-gradient(135deg, rgba(255, 119, 0, 0.3) 0%, rgba(255, 119, 0, 0.1) 100%) !important;
+  border: 1px solid rgba(255, 140, 50, 0.4) !important;
 }
 
 .da-btn-primary {
   background: linear-gradient(135deg, #ea580c 0%, #ff7700 100%) !important;
-  box-shadow: 0 6px 20px rgba(255, 119, 0, 0.35) !important;
+  box-shadow: 0 8px 24px rgba(255, 119, 0, 0.4) !important;
 }
 
 .da-btn-primary:hover {
   background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%) !important;
-  box-shadow: 0 10px 26px rgba(255, 119, 0, 0.45) !important;
+  box-shadow: 0 12px 30px rgba(255, 119, 0, 0.55) !important;
 }
 
 .da-btn-save {
@@ -3821,4 +4317,5 @@ body.hub-active .stage-game-hub {
 .da-btn-save:hover {
   background: #ff7700 !important;
 }
+
 

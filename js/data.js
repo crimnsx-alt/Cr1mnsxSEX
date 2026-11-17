@@ -213,7 +213,7 @@ export const ribbonCatalog = {
       },
       ctaText: { ru: "Обзор профиля", en: "Profile Overview" },
       btnAction: "modal:psn",
-      bg: "",
+      bg: "assets/bg_monica.jpg",
       thumb: PS5Icons.makeSceneArt("ps5-eco", "WELCOME HUB")
     },
     {

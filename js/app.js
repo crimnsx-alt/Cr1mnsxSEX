@@ -119,23 +119,31 @@ function renderWelcomeFriends() {
   box.innerHTML = welcomeHubFriends
     .map(
       (f) => `
-      <div class="ps5-friend-avatar-item" style="background: linear-gradient(135deg, ${f.color}, #111827);" title="${f.name} — ${f.status}">
-        <span>${f.initials}</span>
-        <span class="ps5-friend-avatar-dot"></span>
+      <div class="ps5-friend-chip" title="${f.name} — ${f.game} (${f.status})">
+        <div class="ps5-friend-avatar-item" style="background: linear-gradient(135deg, ${f.color}, #090e1c);">
+          <span>${f.initials}</span>
+          <span class="ps5-friend-avatar-dot"></span>
+        </div>
+        <div class="ps5-friend-meta">
+          <span class="ps5-friend-name">${f.name}</span>
+          <span class="ps5-friend-game">${f.game}</span>
+        </div>
       </div>
     `
     )
     .join("");
-  $("#lblFriendsList").textContent = welcomeHubFriends.map((f) => f.name).join(", ");
+  if ($("#lblFriendsList")) {
+    $("#lblFriendsList").textContent = welcomeHubFriends.map((f) => `${f.name} (${f.game})`).join(" · ");
+  }
 }
 
 function renderWelcomeBatteryRings() {
   const box = $("#welcomeBatteryRings");
   if (!box) return;
   const devices = [
-    { label: "DualSense #1", pct: 86, bars: 3, colorClass: "ps5-ring-progress--green", icon: PS5Icons.dualsenseSilhouette },
-    { label: "DualSense #2", pct: 32, bars: 2, colorClass: "ps5-ring-progress--amber", icon: PS5Icons.dualsenseSilhouette },
-    { label: "PULSE Explore", pct: 91, bars: 3, colorClass: "ps5-ring-progress--green", icon: PS5Icons.earbudsSilhouette }
+    { label: "DualSense 1", pct: 86, bars: 3, colorClass: "ps5-ring-progress--green", stroke: "#22c55e", icon: PS5Icons.dualsenseSilhouette },
+    { label: "DualSense 2", pct: 32, bars: 2, colorClass: "ps5-ring-progress--amber", stroke: "#f59e0b", icon: PS5Icons.dualsenseSilhouette },
+    { label: "PULSE 3D", pct: 91, bars: 3, colorClass: "ps5-ring-progress--blue", stroke: "#38bdf8", icon: PS5Icons.earbudsSilhouette }
   ];
   const circumference = 2 * Math.PI * 31; // 194.78
 
@@ -143,17 +151,21 @@ function renderWelcomeBatteryRings() {
     .map((d) => {
       const offset = (circumference * (1 - d.pct / 100)).toFixed(1);
       return `
-        <div class="ps5-battery-ring-item" title="${d.label} · ${d.pct}%">
-          <svg class="ps5-ring-svg" viewBox="0 0 72 72">
-            <circle cx="36" cy="36" r="31" class="ps5-ring-bg" />
-            <circle cx="36" cy="36" r="31" class="ps5-ring-track" />
-            <circle cx="36" cy="36" r="31" class="ps5-ring-progress ${d.colorClass}"
-              stroke-dasharray="${circumference.toFixed(1)}" stroke-dashoffset="${offset}" />
-          </svg>
-          <div class="ps5-ring-inner">
-            ${d.icon}
-            ${PS5Icons.miniBattery(d.bars)}
+        <div class="ps5-battery-card" title="${d.label}: ${d.pct}%">
+          <div class="ps5-battery-ring-item">
+            <svg class="ps5-ring-svg" viewBox="0 0 72 72">
+              <circle cx="36" cy="36" r="31" class="ps5-ring-bg" />
+              <circle cx="36" cy="36" r="31" class="ps5-ring-track" />
+              <circle cx="36" cy="36" r="31" class="ps5-ring-progress ${d.colorClass}"
+                style="stroke: ${d.stroke};"
+                stroke-dasharray="${circumference.toFixed(1)}" stroke-dashoffset="${offset}" />
+            </svg>
+            <div class="ps5-ring-inner">
+              <span class="ps5-ring-pct">${d.pct}%</span>
+              <span class="ps5-ring-icon-slot">${d.icon}</span>
+            </div>
           </div>
+          <span class="ps5-battery-dev-label">${d.label}</span>
         </div>
       `;
     })
@@ -359,7 +371,7 @@ function renderActiveView() {
     welcomeEl.hidden = false;
     exploreEl.hidden = true;
     heroEl.hidden = true;
-    setBackground("");
+    setBackground(item.bg || "assets/bg_monica.jpg");
   } else if (item.viewType === "explore") {
     welcomeEl.hidden = true;
     exploreEl.hidden = false;
@@ -2254,6 +2266,14 @@ function init() {
     showToast("Аудио PS5", SoundEngine.muted ? "Звук выключен" : "Звук включен", SoundEngine.muted ? PS5Icons.soundMuted : PS5Icons.soundOn);
   });
   $("#btnSearch").addEventListener("click", openSearch);
+  $("#btnNotifications")?.addEventListener("click", () => {
+    SoundEngine.chime();
+    showToast("Уведомления PSN", "Загрузка Marvel's Spider-Man 2 завершена · 4 друга в сети", PS5Icons.star);
+  });
+  $("#btnContinuePlaying")?.addEventListener("click", () => {
+    SoundEngine.playStart();
+    selectTile("spiderman", true);
+  });
   $("#btnSettings").addEventListener("click", openSettings);
   $("#btnProfile").addEventListener("click", () => handleAction("modal:psn"));
 

@@ -14,3 +14,7 @@ GEMINI_EXPORT.*
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Agent skills cache
+.agents/
+
