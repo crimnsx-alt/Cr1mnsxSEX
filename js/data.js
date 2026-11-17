@@ -10,7 +10,7 @@ export const uiStrings = {
   ru: {
     tabGames: "Игры",
     tabMedia: "Медиа",
-    onlineFriends: "Друзья в сети",
+    onlineFriends: "ДРУЗЬЯ",
     accessibility: "Специальные возможности",
     accessibilityDesc: "Сделайте PS5 удобнее для себя.",
     trophies: "Призы",
@@ -71,7 +71,7 @@ export const uiStrings = {
   en: {
     tabGames: "Games",
     tabMedia: "Media",
-    onlineFriends: "Online Friends",
+    onlineFriends: "FRIENDS",
     accessibility: "Accessibility",
     accessibilityDesc: "Make your PS5 more usable for you.",
     trophies: "Trophies",
