@@ -1,0 +1,16 @@
+# Backups and temporary snapshots
+backup_v1/
+clean_ps5.html
+*.tar.gz
+*.zip
+
+# Large local screenshots
+ps5_welcome_hub_fixed.png
+
+# LLM exports and chat dumps
+GEMINI_EXPORT.*
+*.log
+
+# OS metadata
+.DS_Store
+Thumbs.db

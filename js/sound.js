@@ -221,6 +221,31 @@ class PS5SoundEngine {
     osc.stop(now + 0.11);
   }
 
+  /** Переключение микрофона DualSense (Mute/Unmute) */
+  micMute(isMuted) {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    if (isMuted) {
+      osc.frequency.setValueAtTime(680, now);
+      osc.frequency.exponentialRampToValueAtTime(380, now + 0.08);
+    } else {
+      osc.frequency.setValueAtTime(380, now);
+      osc.frequency.exponentialRampToValueAtTime(740, now + 0.08);
+    }
+    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
+  }
+
   /** Спуск в Game Hub (Стрелка вниз ↓) */
   whooshDown() {
     if (this._muted) return;
@@ -348,6 +373,42 @@ class PS5SoundEngine {
 
   modalClose() {
     this.back();
+  }
+
+  launch() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    // Sub bass swell
+    const subOsc = ctx.createOscillator();
+    const subGain = ctx.createGain();
+    subOsc.type = "sine";
+    subOsc.frequency.setValueAtTime(110, now);
+    subOsc.frequency.exponentialRampToValueAtTime(180, now + 0.18);
+    subGain.gain.setValueAtTime(0.12 * this._sfxVolume, now);
+    subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+    subOsc.connect(subGain);
+    subGain.connect(ctx.destination);
+    subOsc.start(now);
+    subOsc.stop(now + 0.28);
+
+    // High shimmer chord
+    [880, 1320, 1760].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now + idx * 0.04);
+      gain.gain.setValueAtTime(0.001, now + idx * 0.04);
+      gain.gain.linearRampToValueAtTime(0.08 * this._sfxVolume, now + idx * 0.04 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.26);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.04);
+      osc.stop(now + idx * 0.04 + 0.26);
+    });
   }
 }
 

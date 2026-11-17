@@ -1,706 +1,694 @@
 /**
- * PS5 Home Menu & Game Hub — Data Store (spllitz baCpOEqBMSA Reference)
- * Полный набор данных: проекты с активностями (Activity Cards 16:9),
- * новостями, трофеями, настройками PS5 и Control Center.
- * Исключены любые упоминания старых консолей.
+ * PlayStation®5 System Software Shell — Pure UI/UX Template Store
+ * Clean 1:1 PS5 Welcome Hub, Explore, Game Home & Control Center
+ * Ready for custom content population (RU / EN).
  */
 
 import { PS5Icons } from "./icons.js";
 
-export const portfolioData = {
-  projects: [
+export const uiStrings = {
+  ru: {
+    tabGames: "Игры",
+    tabMedia: "Медиа",
+    onlineFriends: "Друзья в сети",
+    accessibility: "Специальные возможности",
+    accessibilityDesc: "Сделайте PS5 удобнее для себя.",
+    trophies: "Призы",
+    totalPrefix: "Всего",
+    levelPrefix: "Уровень",
+    consoleStorage: "Память консоли",
+    storeFeaturedTitle: "PlayStation Store",
+    storeFeaturedSub: "Витрина новинок и разделов оболочки",
+    wishlistTitle: "Список желаемого",
+    wishlistSub: "Избранные разделы и игры PS5",
+    friendActivityTitle: "Активность",
+    friendActivitySub: "Последние события и обновления системы",
+    mediaGalleryTitle: "Галерея мультимедиа",
+    mediaGallerySub: "Снимки экрана и видеоклипы 4K HDR",
+    networkStatusTitle: "Состояние сети",
+    networkStatusSub: "PlayStation Network · Все службы работают",
+    slotWidgetTitle: "Свободный виджет",
+    slotWidgetSub: "Место для новой карточки Welcome Hub",
+    playCta: "Открыть",
+    openCta: "Открыть",
+    backHome: "В главное меню",
+    scrollHubCue: "Нажмите ↓ или прокрутите вниз — Центр игры",
+    activitiesTitle: "События и активности",
+    activitiesBadge: "Карточки PS5",
+    newsTitle: "Новости и обновления",
+    newsBadge: "Лента событий",
+    trophiesProjectTitle: "Призы и достижения",
+    trophiesProjectBadge: "PlayStation Network",
+    ccCurrentTag: "ТЕКУЩИЙ ЭКРАН",
+    ccResumeBtn: "Возобновить",
+    ccMusicTag: "МУЗЫКА PS5",
+    ccMusicTitle: "PS5 Ambient Synth",
+    ccMusicArtist: "Эмбиент меню (Emaj9)",
+    ccNetworkTag: "GAME BASE И СЕТЬ",
+    ccNetworkSub: "PlayStation Network: Службы в норме",
+    ccProfileBtn: "Профиль",
+    searchPlaceholder: "Поиск по играм, разделам и настройкам…",
+    settingsTag: "PLAYSTATION 5 SYSTEM SOFTWARE",
+    settingsTitle: "Настройки",
+    settingsSub: "Конфигурация системной оболочки",
+    hintSelect: "Выбрать",
+    hintBack: "Назад",
+    hintSearch: "Поиск",
+    hintHub: "Центр игры",
+    hintCC: "Центр управления",
+    hintTab: "Вкладка",
+    editWidgets: "Настроить виджеты",
+    powerRest: "Перейти в режим покоя",
+    powerRestSub: "Зарядка контроллеров и фоновая загрузка обновлений при пониженном потреблении.",
+    powerOff: "Выключить систему PS5",
+    powerOffSub: "Закрыть все приложения и выключить консоль.",
+    powerRestart: "Перезагрузить систему PS5",
+    powerRestartSub: "Перезапуск системного программного обеспечения PS5."
+  },
+  en: {
+    tabGames: "Games",
+    tabMedia: "Media",
+    onlineFriends: "Online Friends",
+    accessibility: "Accessibility",
+    accessibilityDesc: "Make your PS5 more usable for you.",
+    trophies: "Trophies",
+    totalPrefix: "Total",
+    levelPrefix: "Level",
+    consoleStorage: "Console Storage",
+    storeFeaturedTitle: "PlayStation Store",
+    storeFeaturedSub: "Featured releases & system showcase",
+    wishlistTitle: "Wishlist",
+    wishlistSub: "Featured PS5 selections and collections",
+    friendActivityTitle: "Activity",
+    friendActivitySub: "Recent events and system updates",
+    mediaGalleryTitle: "Media Gallery",
+    mediaGallerySub: "4K HDR captures and video clips",
+    networkStatusTitle: "Network Status",
+    networkStatusSub: "PlayStation Network · All services operational",
+    slotWidgetTitle: "Custom Widget Slot",
+    slotWidgetSub: "Ready for new Welcome Hub content",
+    playCta: "Open",
+    openCta: "Open",
+    backHome: "Home Screen",
+    scrollHubCue: "Press ↓ or scroll down for Game Hub",
+    activitiesTitle: "Activities",
+    activitiesBadge: "PS5 Activity Cards",
+    newsTitle: "Official News",
+    newsBadge: "Updates",
+    trophiesProjectTitle: "Trophies",
+    trophiesProjectBadge: "PlayStation Network",
+    ccCurrentTag: "CURRENTLY SELECTED",
+    ccResumeBtn: "Resume",
+    ccMusicTag: "PS5 MUSIC",
+    ccMusicTitle: "PS5 Ambient Synth",
+    ccMusicArtist: "Emaj9 Menu Soundtrack",
+    ccNetworkTag: "GAME BASE & NETWORK",
+    ccNetworkSub: "PlayStation Network: All services operational",
+    ccProfileBtn: "Profile",
+    searchPlaceholder: "Search games, sections, and settings…",
+    settingsTag: "PLAYSTATION 5 SYSTEM SOFTWARE",
+    settingsTitle: "Settings",
+    settingsSub: "System shell preferences",
+    hintSelect: "Select",
+    hintBack: "Back",
+    hintSearch: "Search",
+    hintHub: "Game Hub",
+    hintCC: "Control Center",
+    hintTab: "Switch Tab",
+    editWidgets: "Customize Widgets",
+    powerRest: "Enter Rest Mode",
+    powerRestSub: "Charge controllers and download updates in low-power mode.",
+    powerOff: "Turn Off PS5",
+    powerOffSub: "Close all games and turn off the console.",
+    powerRestart: "Restart PS5",
+    powerRestartSub: "Restart the PlayStation 5 system software."
+  }
+};
+
+export const welcomeHubFriends = [
+  { name: "Zane Richardsons", initials: "ZR", color: "#3b82f6", status: "Online", game: "ASTRO BOT" },
+  { name: "Space_Carrot10", initials: "SC", color: "#22c55e", status: "Online", game: "Marvel's Spider-Man 2" },
+  { name: "DRJuiceXI", initials: "DJ", color: "#f59e0b", status: "Online", game: "Cyberpunk 2077" },
+  { name: "Elisa Woods", initials: "EW", color: "#ec4899", status: "Online", game: "Elden Ring" }
+];
+
+export const defaultProfileTelemetry = {
+  accountName: "PlayStation®5",
+  level: 100,
+  progressPct: 48,
+  trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
+  totalTrophies: 570
+};
+
+export const ribbonCatalog = {
+  games: [
     {
-      id: "hub-profile",
-      title: "Дмитрий (cr1mnsx)",
-      publisher: "PlayStation Studios • cr1mnsx",
-      badge: "CREATOR",
-      tag: "Личный хаб • Разработчик & Консультант",
-      desc: "Персональное пространство Дмитрия (cr1mnsx): современные веб-проекты, экспертиза в 1С:Предприятие, передовой фронтенд и прямые контакты.",
-      btnText: "Запустить хаб",
-      btnAction: "modal:bio",
-      secText: "Скопировать контакт",
-      secAction: "copy:vk",
-      thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=1920&q=80",
-      activities: [
-        {
-          id: "act-bio-1",
-          title: "Профиль cr1mnsx & Навыки",
-          type: "Основная цель",
-          progress: 100,
-          timeEst: "Завершено",
-          thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=640&q=80",
-          action: "modal:bio"
-        },
-        {
-          id: "act-bio-2",
-          title: "Исходный код на GitHub",
-          type: "Репозиторий",
-          progress: 95,
-          timeEst: "В сети",
-          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
-          link: "https://github.com/crimnsx-alt"
-        },
-        {
-          id: "act-bio-3",
-          title: "Прямая связь ВКонтакте",
-          type: "Контакт",
-          progress: 100,
-          timeEst: "Нажмите для копирования",
-          thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=640&q=80",
-          action: "copy:vk"
-        }
-      ],
-      news: [
-        {
-          date: "Ноябрь 2026",
-          title: "Релиз Next-Gen дашборда PlayStation 5",
-          desc: "Полная интеграция двухуровневого Game Hub, Activity Cards и Control Center."
-        },
-        {
-          date: "Октябрь 2026",
-          title: "Сертификация 1С & Расширение компетенций",
-          desc: "Успешное завершение курса УЦ №1 и внедрение стандартов в КГ «РУНА»."
-        }
-      ],
-      trophies: { platinum: 1, gold: 12, silver: 28, bronze: 58 },
-      modalData: {
-        badge: "USER PROFILE • LEVEL 99",
-        title: "Дмитрий — Разработчик & Консультант 1С",
-        subtitle: "Никнейм: cr1mnsx | Платформа: PS5 Dashboard | Статус: В сети",
-        content: `
-          <p class="modal-p">Привет! Я <strong>Дмитрий (cr1mnsx)</strong> — специалист на стыке веб-разработки и корпоративных бизнес-систем 1С:Предприятие.</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Квалификация</span>
-              <span class="spec-val">1С Консультант & Web Engineer</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Компания</span>
-              <span class="spec-val">КГ «РУНА»</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Архитектура UI</span>
-              <span class="spec-val">PlayStation 5 Home Menu</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Стек</span>
-              <span class="spec-val">1С:Предприятие 8.3, JS ESNext, Web Audio API</span>
-            </div>
-          </div>
-          <p class="modal-p">Фокусируюсь на создании иммерсивных интерфейсов с естественной физикой, реалистичным звуком и глубокой проработкой логики.</p>
-        `,
-        actions: [
-          { text: "Скопировать VK (cr1mnsx)", action: "copy:vk", primary: true },
-          { text: "Открыть GitHub", link: "https://github.com/crimnsx-alt", primary: false }
-        ]
-      }
-    },
-    {
-      id: "career-1c",
-      title: "1С Консалтинг & Бизнес",
-      publisher: "КГ «РУНА» • 1C Enterprise",
-      badge: "CAREER",
-      tag: "КГ «РУНА» • Экспертиза и Учет",
-      desc: "Профессиональное развитие в сфере консалтинга и сопровождения систем 1С:Предприятие. Работа с ключевыми клиентами в КГ «РУНА», освоение стандартов УЦ №1 и решение задач автоматизации учета.",
-      btnText: "Открыть карточку",
-      btnAction: "modal:career",
-      secText: "Учебный центр 1С",
-      secLink: "https://uc1.1c.ru/",
-      thumb: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&q=80",
-      activities: [
-        {
-          id: "act-1c-1",
-          title: "Сопровождение клиентов в КГ «РУНА»",
-          type: "Текущая активность",
-          progress: 88,
-          timeEst: "В процессе",
-          thumb: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=640&q=80",
-          action: "modal:career"
-        },
-        {
-          id: "act-1c-2",
-          title: "Сертификация: Консультант 1С",
-          type: "Квалификация",
-          progress: 100,
-          timeEst: "Пройдено",
-          thumb: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=640&q=80",
-          link: "https://uc1.1c.ru/"
-        }
-      ],
-      news: [
-        {
-          date: "2026",
-          title: "Автоматизация регламентного учета",
-          desc: "Оптимизация закрытия месяца и аудит баз данных клиентов."
-        }
-      ],
-      trophies: { platinum: 1, gold: 5, silver: 8, bronze: 14 },
-      modalData: {
-        badge: "CAREER TRACK • 1C CONSULTING",
-        title: "1С:Предприятие — Экспертиза и Консалтинг",
-        subtitle: "Практический опыт в КГ «РУНА» & База Учебного Центра №1",
-        content: `
-          <p class="modal-p">Автоматизация бизнес-процессов, сопровождение и настройка типовых и отраслевых конфигураций 1С:Предприятие.</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Направление</span>
-              <span class="spec-val">Консалтинг и сопровождение</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Обучение</span>
-              <span class="spec-val">Учебный Центр №1 (Пройдено)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Фокус</span>
-              <span class="spec-val">Анализ учета, закрытие месяца</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Клиенты</span>
-              <span class="spec-val">Корпоративный сектор</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Скопировать контакт для связи", action: "copy:vk", primary: true },
-          { text: "Портал УЦ №1", link: "https://uc1.1c.ru/", primary: false }
-        ]
-      }
-    },
-    {
-      id: "project-vr",
-      title: "«По ту сторону яви»",
-      publisher: "Independent VR Studio",
-      badge: "VR 3D",
-      tag: "Специальный гость • VR Game Dev",
-      desc: "Атмосферный 3D-проект виртуальной реальности нового поколения, создаваемый моей девушкой. Исследование тонких граней восприятия, детализированное окружение и полное погружение.",
-      btnText: "Карточка проекта",
-      btnAction: "modal:vr",
-      secText: "Связаться",
-      secAction: "copy:vk",
-      thumb: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=1920&q=80",
-      activities: [
-        {
-          id: "act-vr-1",
-          title: "Пространственное окружение и 3D Audio",
-          type: "VR Разработка",
-          progress: 75,
-          timeEst: "В разработке",
-          thumb: "https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=640&q=80",
-          action: "modal:vr"
-        },
-        {
-          id: "act-vr-2",
-          title: "Физика взаимодействия 6DOF",
-          type: "Игровая механика",
-          progress: 60,
-          timeEst: "Тестирование механик",
-          thumb: "https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=640&q=80",
-          action: "modal:vr"
-        }
-      ],
-      news: [
-        {
-          date: "2026",
-          title: "Прототипирование локаций виртуальной реальности",
-          desc: "Создание эффекта полного присутствия и реалистичного освещения."
-        }
-      ],
-      trophies: { platinum: 0, gold: 2, silver: 6, bronze: 10 },
-      modalData: {
-        badge: "FEATURED SHOWCASE • VR PROJECT",
-        title: "«По ту сторону яви» (VR Experience)",
-        subtitle: "Авторский VR-проект: интерактивное 3D-пространство и психологический нарратив",
-        content: `
-          <p class="modal-p">Атмосферный VR-проект моей девушки с акцентом на исследование границ восприятия, детальное окружение и бинауральный 3D-звук.</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Платформа</span>
-              <span class="spec-val">VR Headsets (6DOF)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Звук</span>
-              <span class="spec-val">Binaural 3D Audio</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Статус</span>
-              <span class="spec-val">Активный продакшен</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Роль</span>
-              <span class="spec-val">Технический консалтинг и тесты</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Написать авторам", action: "copy:vk", primary: true }
-        ]
-      }
-    },
-    {
-      id: "connect-hub",
-      title: "Связь и Контакты",
-      publisher: "PlayStation Network • cr1mnsx",
-      badge: "CONNECT",
-      tag: "PlayStation Network • Контакты",
-      desc: "Всегда открыт для конструктивного диалога, предложений в сфере 1С, веб-разработки, UI/UX и технологических коллабораций. Выбирайте удобный канал для связи.",
-      btnText: "Открыть контакты",
-      btnAction: "modal:contacts",
-      secText: "Скопировать VK",
-      secAction: "copy:vk",
-      thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80",
-      activities: [
-        {
-          id: "act-con-1",
-          title: "ВКонтакте: vk.ru/cr1mnsx",
-          type: "Личные сообщения",
-          progress: 100,
-          timeEst: "Кликните для копирования",
-          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
-          action: "copy:vk"
-        },
-        {
-          id: "act-con-2",
-          title: "GitHub: github.com/crimnsx-alt",
-          type: "Репозитории",
-          progress: 100,
-          timeEst: "В сети",
-          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
-          link: "https://github.com/crimnsx-alt"
-        }
-      ],
-      news: [
-        {
-          date: "Онлайн",
-          title: "Статус в сети: Готов к общению",
-          desc: "Открыт для обсуждения веб-проектов, 1С-автоматизации и UI-дизайна."
-        }
-      ],
-      trophies: { platinum: 1, gold: 4, silver: 10, bronze: 20 },
-      modalData: {
-        badge: "NETWORK & COMMUNICATION",
-        title: "Связь с Дмитрием (cr1mnsx)",
-        subtitle: "Быстрые ссылки, мессенджеры и профили разработчика",
-        content: `
-          <p class="modal-p">Вы можете связаться со мной по вопросам сотрудничества, вакансий, 1С-консалтинга или фронтенд-разработки:</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">VK профиль</span>
-              <span class="spec-val">vk.ru/cr1mnsx</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">GitHub</span>
-              <span class="spec-val">github.com/crimnsx-alt</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Время ответа</span>
-              <span class="spec-val">Обычно в течение дня</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Формат</span>
-              <span class="spec-val">ЛС / Деловая переписка</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Скопировать ссылку VK", action: "copy:vk", primary: true },
-          { text: "Открыть профиль GitHub", link: "https://github.com/crimnsx-alt", primary: false }
-        ]
-      }
-    },
-    {
-      id: "project-library",
-      title: "Библиотека проектов",
-      publisher: "PlayStation Network • cr1mnsx",
-      badge: "LIBRARY",
-      tag: "Коллекция • Все проекты и репозитории",
-      desc: "Полный каталог всех проектов, карьерных этапов, 1С-разработок, VR-концептов и открытых репозиториев Дмитрия (cr1mnsx).",
-      btnText: "Открыть библиотеку",
+      id: "psplus",
+      viewType: "game",
+      isPeekLeft: true,
+      tileStyle: "dark",
+      iconSvg: PS5Icons.psPlusCross,
+      title: { ru: "PlayStation Plus", en: "PlayStation Plus" },
+      publisher: "Sony Interactive Entertainment",
+      kicker: { ru: "PlayStation®Plus · Подписка", en: "PlayStation®Plus · Membership" },
+      desc: {
+        ru: "Каталог игр PS5 и PS4, облачное хранилище сохранений и ежемесячные подборки.",
+        en: "Discover hundreds of PS5 and PS4 titles, monthly games, and cloud storage."
+      },
+      ctaText: { ru: "Открыть каталог", en: "View Catalog" },
       btnAction: "modal:library",
-      secText: "Мой GitHub",
-      secLink: "https://github.com/crimnsx-alt",
-      thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1920&q=80",
+      secText: { ru: "Профиль", en: "Profile" },
+      secAction: "modal:psn",
+      bg: PS5Icons.makeSceneArt("store", "PLAYSTATION PLUS"),
+      thumb: PS5Icons.makeSceneArt("store", "PS PLUS"),
+      progressPct: 100,
+      trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
       activities: [
-        {
-          id: "act-lib-1",
-          title: "Вся коллекция проектов cr1mnsx",
-          type: "Каталог",
-          progress: 100,
-          timeEst: "Коллекция активна",
-          thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=640&q=80",
-          action: "modal:library"
-        },
-        {
-          id: "act-lib-2",
-          title: "Открытый код на GitHub",
-          type: "GitHub",
-          progress: 100,
-          timeEst: "github.com/crimnsx-alt",
-          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
-          link: "https://github.com/crimnsx-alt"
-        }
+        { title: "Каталог PlayStation Plus", type: "Подписка", progress: 100, timeEst: "PS5 / PS4", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
+        { title: "Игровой профиль", type: "PlayStation Network", progress: 100, timeEst: "Уровень 100", thumb: PS5Icons.makeSceneArt("ps5-eco"), action: "modal:psn" }
       ],
       news: [
-        {
-          date: "Коллекция",
-          title: "Game Library активна",
-          desc: "Доступны все интерактивные карточки, спецификации и репозитории."
-        }
+        { date: "PS Plus", title: "Облачное хранилище активно", desc: "Автоматическая синхронизация прогресса и сохранений консоли." }
+      ]
+    },
+    {
+      id: "store",
+      viewType: "game",
+      tileStyle: "store",
+      iconSvg: PS5Icons.psStoreBag,
+      title: { ru: "PlayStation Store", en: "PlayStation Store" },
+      publisher: "Sony Interactive Entertainment",
+      kicker: { ru: "PlayStation™Store · Витрина", en: "PlayStation™Store · Showcase" },
+      desc: {
+        ru: "Цифровой магазин PlayStation 5: ключевые релизы, коллекции и интерактивные карточки.",
+        en: "Explore flagship PS5 releases, digital collections, and interactive showcases."
+      },
+      ctaText: { ru: "Открыть витрину", en: "Browse Store" },
+      btnAction: "modal:library",
+      secText: { ru: "Обзор", en: "Explore" },
+      secAction: "open:explore",
+      bg: PS5Icons.makeSceneArt("store", "PLAYSTATION STORE"),
+      thumb: PS5Icons.makeSceneArt("store", "PS STORE"),
+      progressPct: 84,
+      trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
+      activities: [
+        { title: "Подборка релизов PS5", type: "Витрина", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("store"), action: "modal:library" },
+        { title: "Слот для нового раздела", type: "Шаблон карточки", progress: 0, timeEst: "Готово к заполнению", thumb: PS5Icons.makeSceneArt("slot-1"), action: "modal:slot-1" }
       ],
-      trophies: { platinum: 1, gold: 12, silver: 28, bronze: 58 },
+      news: [
+        { date: "PS Store", title: "Витрина 4K HDR", desc: "Чистый макет витрины PS5, готовый к наполнению вашим контентом." }
+      ]
+    },
+    {
+      id: "welcome",
+      viewType: "welcome",
+      tileStyle: "welcome",
+      iconSvg: PS5Icons.welcomeGlyphs,
+      title: { ru: "Центр приветствия", en: "Welcome" },
+      publisher: "PlayStation 5 System Software",
+      kicker: { ru: "PS5 Welcome Hub", en: "PS5 Welcome Hub" },
+      desc: {
+        ru: "Персонализируемый экран состояния консоли с горизонтальной лентой виджетов.",
+        en: "Customizable PS5 home dashboard with horizontally scrollable widgets."
+      },
+      ctaText: { ru: "Обзор профиля", en: "Profile Overview" },
+      btnAction: "modal:psn",
+      bg: "",
+      thumb: PS5Icons.makeSceneArt("ps5-eco", "WELCOME HUB")
+    },
+    {
+      id: "slot-01",
+      viewType: "game",
+      title: { ru: "Раздел 01 · Шаблон", en: "Section 01 · Template" },
+      publisher: "PlayStation®5 UI Slot",
+      kicker: { ru: "PlayStation®5 · Пользовательский слот 01", en: "PlayStation®5 · Custom Slot 01" },
+      desc: {
+        ru: "Пустой модульный слот для добавления вашего главного раздела, заголовка, описания и ключевых карточек.",
+        en: "Clean modular slot ready for your primary section title, description, and activity cards."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:slot-1",
+      secText: { ru: "Настройки", en: "Settings" },
+      secAction: "open:settings",
+      bg: PS5Icons.makeSceneArt("slot-1", "SLOT 01"),
+      thumb: PS5Icons.makeSceneArt("slot-1", "01"),
+      progressPct: 100,
+      playTime: "Шаблон 01",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Карточка активности 01", type: "Слот контента", progress: 50, timeEst: "Добавьте заголовок", thumb: PS5Icons.makeSceneArt("slot-1"), action: "modal:slot-1" },
+        { title: "Карточка активности 02", type: "Слот контента", progress: 25, timeEst: "Добавьте описание", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:slot-1" }
+      ],
+      news: [
+        { date: "Слот 01", title: "Готово к наполнению", desc: "Здесь размещаются новости, обновления или анонсы нового раздела." }
+      ],
       modalData: {
-        badge: "GAME LIBRARY • ALL PROJECTS",
-        title: "Библиотека проектов Дмитрия (cr1mnsx)",
-        subtitle: "Вся коллекция: веб-разработка, 1С, VR, сетап и контакты",
+        badge: "TEMPLATE SLOT · 01",
+        title: "Раздел 01 — Шаблон контента",
+        subtitle: "Системная карточка оболочки PlayStation®5",
         content: `
+          <p class="modal-p">Этот слот полностью очищен и подготовлен для добавления новой информации: текста, ссылок, тегов или характеристик.</p>
           <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Веб-разработка</span>
-              <span class="spec-val">PS5 UI, JavaScript ESNext, Audio API</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">1С:Предприятие</span>
-              <span class="spec-val">Консалтинг, УЦ №1, КГ «РУНА»</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Виртуальная реальность</span>
-              <span class="spec-val">«По ту сторону яви» (VR 3D)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Железо & Сетап</span>
-              <span class="spec-val">Ryzen 5600X, RTX 3060 Ti, MacBook Air</span>
-            </div>
+            <div class="modal-spec-box"><span class="spec-label">Параметр 1</span><span class="spec-val">Значение (ожидает ввода)</span></div>
+            <div class="modal-spec-box"><span class="spec-label">Параметр 2</span><span class="spec-val">Значение (ожидает ввода)</span></div>
           </div>
         `,
-        actions: [
-          { text: "Скопировать VK", action: "copy:vk", primary: true },
-          { text: "Открыть профиль GitHub", link: "https://github.com/crimnsx-alt", primary: false }
-        ]
+        actions: []
       }
+    },
+    {
+      id: "slot-02",
+      viewType: "game",
+      title: { ru: "Раздел 02 · Шаблон", en: "Section 02 · Template" },
+      publisher: "PlayStation®5 UI Slot",
+      kicker: { ru: "PlayStation®5 · Пользовательский слот 02", en: "PlayStation®5 · Custom Slot 02" },
+      desc: {
+        ru: "Второй чистый экран оболочки в стиле PS5 для нового направления, коллекции или описания.",
+        en: "Second clean PS5 shell screen ready for new content or collections."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:slot-2",
+      secText: { ru: "Библиотека", en: "Library" },
+      secAction: "modal:library",
+      bg: PS5Icons.makeSceneArt("slot-2", "SLOT 02"),
+      thumb: PS5Icons.makeSceneArt("slot-2", "02"),
+      progressPct: 75,
+      playTime: "Шаблон 02",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Блок информации 01", type: "Слот контента", progress: 75, timeEst: "Шаблон 02", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:slot-2" }
+      ],
+      news: [
+        { date: "Слот 02", title: "Чистая структура", desc: "Готово для добавления новых материалов." }
+      ],
+      modalData: {
+        badge: "TEMPLATE SLOT · 02",
+        title: "Раздел 02 — Шаблон контента",
+        subtitle: "Готовый контейнер для новых данных",
+        content: `<p class="modal-p">Замените этот текст в файле <code>js/data.js</code> или скажите, какую информацию сюда добавить.</p>`,
+        actions: []
+      }
+    },
+    {
+      id: "slot-03",
+      viewType: "game",
+      title: { ru: "Раздел 03 · Шаблон", en: "Section 03 · Template" },
+      publisher: "PlayStation®5 UI Slot",
+      kicker: { ru: "PlayStation®5 · Пользовательский слот 03", en: "PlayStation®5 · Custom Slot 03" },
+      desc: {
+        ru: "Третий чистый экран оболочки PS5 с поддержкой Game Hub, карточек 16:9 и блока новостей.",
+        en: "Third clean PS5 shell screen with Game Hub 16:9 activity cards and news grid."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:slot-3",
+      secText: { ru: "В главное меню", en: "Home" },
+      secAction: "home_reset",
+      bg: PS5Icons.makeSceneArt("slot-3", "SLOT 03"),
+      thumb: PS5Icons.makeSceneArt("slot-3", "03"),
+      progressPct: 50,
+      playTime: "Шаблон 03",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Блок информации 01", type: "Слот контента", progress: 50, timeEst: "Шаблон 03", thumb: PS5Icons.makeSceneArt("slot-3"), action: "modal:slot-3" }
+      ],
+      news: [
+        { date: "Слот 03", title: "Готово к заполнению", desc: "Модульная сетка PS5 без сторонних упоминаний." }
+      ],
+      modalData: {
+        badge: "TEMPLATE SLOT · 03",
+        title: "Раздел 03 — Шаблон контента",
+        subtitle: "Готовый контейнер для новых данных",
+        content: `<p class="modal-p">Пустая карточка шаблона 03 готова к заполнению новым контентом.</p>`,
+        actions: []
+      }
+    },
+    {
+      id: "spider-man",
+      viewType: "game",
+      title: { ru: "Marvel's Spider-Man", en: "Marvel's Spider-Man" },
+      publisher: "Insomniac Games • Sony Interactive",
+      kicker: { ru: "PlayStation®5 · Игровая витрина", en: "PlayStation®5 · Game Showcase" },
+      desc: {
+        ru: "Демонстрационная карточка игры PlayStation 5: полноэкранный арт-фон, прогресс трофеев и двухуровневый Game Hub.",
+        en: "PlayStation 5 game showcase with full-bleed backdrop, trophy progress, and two-tier Game Hub."
+      },
+      ctaText: { ru: "Обзор игры", en: "Game Details" },
+      btnAction: "modal:psn",
+      secText: { ru: "Библиотека", en: "Library" },
+      secAction: "modal:library",
+      bg: "https://image.api.playstation.com/vulcan/img/rnd/202010/2122/19xis9VT5XfnXsLSMkxUjvVd.png",
+      thumb: "https://image.api.playstation.com/vulcan/ap/rnd/202011/0402/C784xeOFo2wViCf4m5bxgoeH.png",
+      fallbackBg: PS5Icons.makeSceneArt("ps5-eco", "SPIDER-MAN"),
+      progressPct: 64,
+      playTime: "4K HDR · 60 FPS",
+      trophies: { platinum: 1, gold: 4, silver: 12, bronze: 28 },
+      activities: [
+        { title: "Сюжетная кампания", type: "Основная активность", progress: 64, timeEst: "PS5 Activity Card", thumb: PS5Icons.makeSceneArt("ps5-eco"), action: "modal:psn" },
+        { title: "Режим производительности RT", type: "Графика 4K", progress: 100, timeEst: "60 FPS", thumb: PS5Icons.makeSceneArt("store"), action: "modal:psn" }
+      ],
+      news: [
+        { date: "PS5 Demo", title: "Официальная карточка игры", desc: "Эталонный макет игрового хаба с Game Help и лентой событий." }
+      ]
+    },
+    {
+      id: "rdr2",
+      viewType: "game",
+      title: { ru: "Red Dead Redemption 2", en: "Red Dead Redemption 2" },
+      publisher: "Rockstar Games",
+      kicker: { ru: "PlayStation®5 · Игровая витрина", en: "PlayStation®5 · Game Showcase" },
+      desc: {
+        ru: "Демонстрационный игровой экран с виньеткой фона, кнопкой запуска и горизонтальными карточками активностей в Game Hub.",
+        en: "Sample game screen featuring dark vignette backdrop, Play CTA, and horizontal activity cards."
+      },
+      ctaText: { ru: "Обзор игры", en: "Game Details" },
+      btnAction: "modal:psn",
+      secText: { ru: "Библиотека", en: "Library" },
+      secAction: "modal:library",
+      bg: "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/pic0.png",
+      thumb: "https://image.api.playstation.com/gs2-sec/appkgo/prod/CUSA08519_00/12/i_3da1cf7c41dc7652f9b639e1680d96436773658668c7dc3930c441291095713b/i/icon0.png",
+      fallbackBg: PS5Icons.makeSceneArt("wishlist", "RED DEAD REDEMPTION 2"),
+      progressPct: 48,
+      playTime: "PS4 Pro / PS5",
+      trophies: { platinum: 0, gold: 2, silver: 8, bronze: 19 },
+      activities: [
+        { title: "Глава кампании", type: "Активность", progress: 48, timeEst: "В процессе", thumb: PS5Icons.makeSceneArt("wishlist"), action: "modal:psn" }
+      ],
+      news: [
+        { date: "PS5 Demo", title: "Демонстрационный профиль игры", desc: "Пример оформления страницы игры в системе PlayStation 5." }
+      ]
+    },
+    {
+      id: "explore",
+      viewType: "explore",
+      tileStyle: "dark",
+      iconSvg: PS5Icons.exploreTile,
+      title: { ru: "Обзор", en: "Explore" },
+      publisher: "PlayStation®5 System News",
+      kicker: { ru: "Официальные новости PlayStation · Обновлено", en: "Official news from PlayStation · Updated" },
+      desc: {
+        ru: "Информационная лента и витрина карточек 16:9. Подготовьте собственные заголовки, анонсы или разделы для этой сетки.",
+        en: "News hub and 16:9 card showcase. Ready to be populated with your custom headlines and updates."
+      },
+      bg: PS5Icons.makeSceneArt("explore", "EXPLORE"),
+      thumb: PS5Icons.makeSceneArt("explore", "EXPLORE"),
+      cards: [
+        {
+          title: { ru: "Карточка 01 · Шаблон", en: "Card 01 · Template" },
+          tag: { ru: "Слот новостей", en: "News Slot" },
+          img: PS5Icons.makeSceneArt("slot-1", "CARD 01"),
+          action: "modal:slot-1"
+        },
+        {
+          title: { ru: "Карточка 02 · Шаблон", en: "Card 02 · Template" },
+          tag: { ru: "Слот витрины", en: "Showcase Slot" },
+          img: PS5Icons.makeSceneArt("slot-2", "CARD 02"),
+          action: "modal:slot-2"
+        },
+        {
+          title: { ru: "Карточка 03 · Шаблон", en: "Card 03 · Template" },
+          tag: { ru: "Слот галереи", en: "Gallery Slot" },
+          img: PS5Icons.makeSceneArt("slot-3", "CARD 03"),
+          action: "modal:slot-3"
+        },
+        {
+          title: { ru: "Аудиосистема PS5", en: "PS5 Audio Synth" },
+          tag: { ru: "Emaj9 Ambient", en: "Emaj9 Ambient" },
+          img: PS5Icons.makeSceneArt("audio-slot", "AUDIO"),
+          action: "toggle:ambient"
+        },
+        {
+          title: { ru: "Каталог библиотеки", en: "System Library" },
+          tag: { ru: "Все элементы", en: "All Items" },
+          img: PS5Icons.makeSceneArt("store", "LIBRARY"),
+          action: "modal:library"
+        }
+      ]
+    },
+    {
+      id: "remoteplay",
+      viewType: "game",
+      tileStyle: "dark",
+      iconSvg: PS5Icons.remotePlayTile,
+      title: { ru: "PS Remote Play", en: "PS Remote Play" },
+      publisher: "Sony Interactive Entertainment",
+      kicker: { ru: "Удаленная игра · DualSense", en: "Remote Streaming · DualSense" },
+      desc: {
+        ru: "Потоковая трансляция игр PlayStation®5 на внешние экраны с минимальной задержкой.",
+        en: "Stream your PlayStation®5 console to external displays with low latency."
+      },
+      ctaText: { ru: "Настройки", en: "Settings" },
+      btnAction: "open:settings",
+      secText: { ru: "Центр управления", en: "Control Center" },
+      secAction: "open:cc",
+      bg: PS5Icons.makeSceneArt("media-slot", "PS REMOTE PLAY"),
+      thumb: PS5Icons.makeSceneArt("media-slot", "REMOTE"),
+      progressPct: 100,
+      playTime: "60 FPS HDR",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Подключение контроллера DualSense", type: "Система", progress: 100, timeEst: "Готово", thumb: PS5Icons.makeSceneArt("media-slot"), action: "open:settings" }
+      ],
+      news: [
+        { date: "Remote Play", title: "Системный компонент PS5", desc: "Стандартный модуль оболочки PlayStation." }
+      ]
+    },
+    {
+      id: "library",
+      viewType: "game",
+      tileStyle: "dark",
+      iconSvg: PS5Icons.gameLibraryTile,
+      title: { ru: "Библиотека игр", en: "Game Library" },
+      publisher: "PlayStation®5 System Software",
+      kicker: { ru: "Вся коллекция оболочки", en: "Full Shell Collection" },
+      desc: {
+        ru: "Ваша коллекция браузерных портов: GTA Vice City, GTA V, NFS Underground 2, Quake 3, DOOM, Simpsons, Minecraft.",
+        en: "Playable browser collection: GTA Vice City, GTA V, NFS Underground 2, Quake 3, DOOM, Simpsons, Minecraft."
+      },
+      ctaText: { ru: "Открыть библиотеку", en: "Open Library" },
+      btnAction: "modal:library",
+      secText: { ru: "Профиль", en: "Profile" },
+      secAction: "modal:psn",
+      bg: PS5Icons.makeSceneArt("explore", "GAME LIBRARY"),
+      thumb: PS5Icons.makeSceneArt("explore", "LIBRARY"),
+      progressPct: 100,
+      playTime: "Коллекция",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Открыть каталог оболочки", type: "Библиотека", progress: 100, timeEst: "Все разделы", thumb: PS5Icons.makeSceneArt("explore"), action: "modal:library" }
+      ],
+      news: [
+        { date: "Система", title: "Библиотека готова", desc: "Наполняется автоматически из конфигурации ленты." }
+      ]
     }
   ],
-  link: [
+
+  media: [
     {
-      id: "link-setup",
-      title: "Боевой Сетап & Железо",
-      publisher: "Hardware & Workstation",
-      badge: "SETUP",
-      tag: "Workstation & Мобильность",
-      desc: "Моя рабочая и творческая экосистема: производительный десктоп для моделирования, компиляции и рендеринга + легкий MacBook Air для мобильной разработки.",
-      btnText: "Характеристики ПК",
-      btnAction: "modal:setup",
-      secText: "Скопировать сетап",
-      secAction: "copy:setup",
-      thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=1920&q=80",
+      id: "ps5-media-audio",
+      viewType: "game",
+      title: { ru: "Музыка PS5 · Ambient Synth", en: "PS5 Music · Ambient Synth" },
+      publisher: "Web Audio API Synthesizer",
+      kicker: { ru: "Встроенный звуковой движок · Emaj9", en: "Built-in Audio Engine · Emaj9" },
+      desc: {
+        ru: "Генеративная эмбиент-музыка системного меню PlayStation 5 и тактильные звуки навигации интерфейса.",
+        en: "Real-time PlayStation 5 ambient menu soundtrack with tactile UI feedback sounds."
+      },
+      ctaText: { ru: "Включить / Пауза", en: "Play / Pause" },
+      btnAction: "toggle:ambient",
+      secText: { ru: "Control Center", en: "Control Center" },
+      secAction: "open:cc",
+      bg: PS5Icons.makeSceneArt("audio-slot", "TEMPEST 3D AUDIO"),
+      thumb: PS5Icons.makeSceneArt("audio-slot", "MUSIC"),
+      progressPct: 100,
+      playTime: "Tempest 3D Audio",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        {
-          id: "act-set-1",
-          title: "Основной ПК: Ryzen 5600X • RTX 3060 Ti",
-          type: "Спецификация",
-          progress: 100,
-          timeEst: "32 GB ОЗУ • 2 TB SSD",
-          thumb: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&w=640&q=80",
-          action: "modal:setup"
-        },
-        {
-          id: "act-set-2",
-          title: "Apple MacBook Air (macOS)",
-          type: "Мобильность",
-          progress: 100,
-          timeEst: "Apple Silicon",
-          thumb: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=640&q=80",
-          action: "modal:setup"
-        }
+        { title: "Запустить эмбиент-синтезатор", type: "Аудиосистема", progress: 100, timeEst: "Web Audio API", thumb: PS5Icons.makeSceneArt("audio-slot"), action: "toggle:ambient" }
       ],
       news: [
-        {
-          date: "Hardware Status",
-          title: "Рабочая станция откалибрована",
-          desc: "NVMe SSD скорость 3500 МБ/с, стабильное охлаждение и двойной монитор."
-        }
+        { date: "Audio", title: "Звук меню без внешних файлов", desc: "Плавное звучание Emaj9 с фильтрацией низких частот." }
+      ]
+    },
+    {
+      id: "media-gallery",
+      viewType: "game",
+      title: { ru: "Галерея мультимедиа", en: "Media Gallery" },
+      publisher: "PlayStation®5 System Software",
+      kicker: { ru: "Снимки экрана и клипы · 4K HDR", en: "Screenshots & Clips · 4K HDR" },
+      desc: {
+        ru: "Системный раздел для хранения скриншотов, видеороликов и визуальных материалов.",
+        en: "System media gallery placeholder ready for screenshots, trailers, and clips."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:media-gallery",
+      secText: { ru: "К играм", en: "Games Tab" },
+      secAction: "home_reset",
+      bg: PS5Icons.makeSceneArt("media-slot", "MEDIA GALLERY"),
+      thumb: PS5Icons.makeSceneArt("media-slot", "HD"),
+      progressPct: 100,
+      playTime: "4K HDR",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      activities: [
+        { title: "Альбом снимков экрана", type: "Медиа", progress: 100, timeEst: "Пустой слот", thumb: PS5Icons.makeSceneArt("media-slot"), action: "modal:media-gallery" }
       ],
-      trophies: { platinum: 1, gold: 3, silver: 4, bronze: 10 },
+      news: [
+        { date: "Media", title: "Раздел готов к наполнению", desc: "Добавьте собственные скриншоты или видеоролики." }
+      ],
       modalData: {
-        badge: "HARDWARE & WORKSTATION",
-        title: "Конфигурация рабочей станции cr1mnsx",
-        subtitle: "Сбалансированное железо для работы с кодом, 1С и мультимедиа",
-        content: `
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Процессор</span>
-              <span class="spec-val">AMD Ryzen 5 5600X (6 ядер, 12 потоков)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Видеокарта</span>
-              <span class="spec-val">NVIDIA GeForce RTX 3060 Ti 8GB</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Память</span>
-              <span class="spec-val">32 GB High-Speed DDR4</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Накопители</span>
-              <span class="spec-val">Ultra NVMe M.2 SSD 2 TB</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Ноутбук</span>
-              <span class="spec-val">Apple MacBook Air (macOS)</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Периферия</span>
-              <span class="spec-val">Механическая клавиатура, DualSense</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Скопировать спецификацию", action: "copy:setup", primary: true }
-        ]
+        badge: "MEDIA GALLERY",
+        title: "Галерея мультимедиа",
+        subtitle: "Пустой шаблон медиа-секции",
+        content: `<p class="modal-p">Здесь можно разместить изображения, превью видео или интерактивную фотогалерею.</p>`,
+        actions: []
       }
     },
     {
-      id: "link-gaming",
-      title: "PlayStation 5 Экосистема",
-      publisher: "Sony Interactive Entertainment",
-      badge: "PS5",
-      tag: "PlayStation 5 • 60 FPS Ray Tracing",
-      desc: "Игровая атмосфера некстгена: кинематографичная графика, плавный фреймрейт 60 FPS, тактильный отклик DualSense и эстетика фирменного интерфейса Sony.",
-      btnText: "Игровой профиль",
-      btnAction: "modal:gaming",
-      secText: "Связаться",
-      secAction: "copy:vk",
-      thumb: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=1920&q=80",
+      id: "media-slot-1",
+      viewType: "game",
+      title: { ru: "Медиа слот 01 · Шаблон", en: "Media Slot 01 · Template" },
+      publisher: "PlayStation®5 Media UI",
+      kicker: { ru: "Пользовательский медиа-блок", en: "Custom Media Container" },
+      desc: {
+        ru: "Свободная плитка во вкладке «Медиа» для добавления приложения, видео или страницы.",
+        en: "Available tile inside the Media tab for apps, streams, or custom content."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:media-slot-1",
+      secText: { ru: "Настройки", en: "Settings" },
+      secAction: "open:settings",
+      bg: PS5Icons.makeSceneArt("slot-2", "MEDIA SLOT 01"),
+      thumb: PS5Icons.makeSceneArt("slot-2", "02"),
+      progressPct: 100,
+      playTime: "Шаблон",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        {
-          id: "act-game-1",
-          title: "Grand Theft Auto V Expanded",
-          type: "Текущая игра",
-          progress: 90,
-          timeEst: "60 FPS Ray Tracing",
-          thumb: "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?auto=format&fit=crop&w=640&q=80",
-          action: "modal:gaming"
-        },
-        {
-          id: "act-game-2",
-          title: "DualSense Wireless Controller",
-          type: "Аксессуар",
-          progress: 88,
-          timeEst: "Haptic Feedback активен",
-          thumb: "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&w=640&q=80",
-          action: "modal:gaming"
-        }
+        { title: "Медиа-слот 01", type: "Шаблон", progress: 0, timeEst: "Ожидает контент", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:media-slot-1" }
       ],
       news: [
-        {
-          date: "PS5 System",
-          title: "Обновление прошивки консоли",
-          desc: "Поддержка 120 FPS, VRR и Tempest 3D Audio."
-        }
+        { date: "Media", title: "Готово к заполнению", desc: "Чистый шаблон без лишних данных." }
       ],
-      trophies: { platinum: 1, gold: 5, silver: 12, bronze: 30 },
       modalData: {
-        badge: "CONSOLE GAMING • PS5 ECOSYSTEM",
-        title: "PlayStation 5 Experience",
-        subtitle: "Любимые игры, тактильный отклик и консольный отдых",
-        content: `
-          <p class="modal-p">PlayStation 5 — эталон визуального дизайна, тактильного погружения и плавности интерфейса.</p>
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">Консоль</span>
-              <span class="spec-val">PlayStation 5 Digital Edition</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Приоритет</span>
-              <span class="spec-val">60 FPS с трассировкой лучей</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Геймпад</span>
-              <span class="spec-val">DualSense Wireless Controller</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Аудио</span>
-              <span class="spec-val">Tempest 3D AudioTech</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Скопировать контакт", action: "copy:vk", primary: true }
-        ]
+        badge: "MEDIA SLOT · 01",
+        title: "Медиа слот 01",
+        subtitle: "Свободный блок вкладки «Медиа»",
+        content: `<p class="modal-p">Готово для интеграции нового сервиса, видео или карточки.</p>`,
+        actions: []
       }
     },
     {
-      id: "link-hub",
-      title: "Быстрые Ссылки (Link Hub)",
-      publisher: "Link Catalog • cr1mnsx",
-      badge: "LINK HUB",
-      tag: "Единый каталог • Прямой доступ",
-      desc: "Централизованный хаб ссылок: аккаунты, репозитории, профили и способы связаться в один клик без лишних переходов.",
-      btnText: "Открыть Link Hub",
-      btnAction: "modal:links",
-      secText: "Скопировать всё",
-      secAction: "copy:all_links",
-      thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=400&q=80",
-      bg: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1920&q=80",
+      id: "media-slot-2",
+      viewType: "game",
+      title: { ru: "Медиа слот 02 · Шаблон", en: "Media Slot 02 · Template" },
+      publisher: "PlayStation®5 Media UI",
+      kicker: { ru: "Пользовательский медиа-блок", en: "Custom Media Container" },
+      desc: {
+        ru: "Дополнительная плитка вкладки «Медиа» для будущего наполнения.",
+        en: "Additional Media tab tile ready for future content."
+      },
+      ctaText: { ru: "Открыть шаблон", en: "Open Slot" },
+      btnAction: "modal:media-slot-2",
+      secText: { ru: "К играм", en: "Games Tab" },
+      secAction: "home_reset",
+      bg: PS5Icons.makeSceneArt("slot-3", "MEDIA SLOT 02"),
+      thumb: PS5Icons.makeSceneArt("slot-3", "03"),
+      progressPct: 100,
+      playTime: "Шаблон",
+      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        {
-          id: "act-lnk-1",
-          title: "Профиль ВКонтакте",
-          type: "Социальная сеть",
-          progress: 100,
-          timeEst: "vk.ru/cr1mnsx",
-          thumb: "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=640&q=80",
-          action: "copy:vk"
-        },
-        {
-          id: "act-lnk-2",
-          title: "Профиль на GitHub",
-          type: "Открытый код",
-          progress: 100,
-          timeEst: "github.com/crimnsx-alt",
-          thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=640&q=80",
-          link: "https://github.com/crimnsx-alt"
-        }
+        { title: "Медиа-слот 02", type: "Шаблон", progress: 0, timeEst: "Ожидает контент", thumb: PS5Icons.makeSceneArt("slot-3"), action: "modal:media-slot-2" }
       ],
       news: [
-        {
-          date: "Каталог",
-          title: "Актуальные контакты проверены",
-          desc: "Все каналы связи активны."
-        }
+        { date: "Media", title: "Готово к заполнению", desc: "Чистый шаблон без лишних данных." }
       ],
-      trophies: { platinum: 1, gold: 2, silver: 4, bronze: 8 },
       modalData: {
-        badge: "DIRECT LINK CATALOG",
-        title: "Каталог ссылок и профилей",
-        subtitle: "Быстрый переход и копирование контактов",
-        content: `
-          <div class="modal-spec-grid">
-            <div class="modal-spec-box">
-              <span class="spec-label">ВКонтакте</span>
-              <span class="spec-val">vk.ru/cr1mnsx</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">GitHub</span>
-              <span class="spec-val">github.com/crimnsx-alt</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Проект PS5 Hub</span>
-              <span class="spec-val">crimnsx-alt.github.io/Cr1mnsxSEX</span>
-            </div>
-            <div class="modal-spec-box">
-              <span class="spec-label">Платформа 1С</span>
-              <span class="spec-val">1С:Предприятие 8.3</span>
-            </div>
-          </div>
-        `,
-        actions: [
-          { text: "Скопировать VK", action: "copy:vk", primary: true },
-          { text: "Скопировать GitHub", action: "copy:github", primary: false }
-        ]
+        badge: "MEDIA SLOT · 02",
+        title: "Медиа слот 02",
+        subtitle: "Свободный блок вкладки «Медиа»",
+        content: `<p class="modal-p">Готово для добавления нового контента.</p>`,
+        actions: []
       }
     }
   ]
 };
 
-/**
- * Разделы системных настроек PS5 Settings
- */
 export const settingsSections = [
   {
     id: "accounts",
-    title: "Учетные записи и профиль",
+    title: { ru: "Пользователи и учетные записи", en: "Users and Accounts" },
     icon: PS5Icons.profile,
     items: [
-      { label: "Основной пользователь", val: "cr1mnsx (Дмитрий)", action: "modal:bio" },
-      { label: "Уровень PlayStation Network", val: "Уровень 99 • Платина", action: "modal:trophy" },
-      { label: "Контакты & Связь", val: "vk.ru/cr1mnsx", action: "copy:vk" }
+      { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Player 1 (PS5)", action: "modal:psn" },
+      { label: { ru: "Сетевой статус", en: "Online Status" }, val: "Online · PlayStation Network" }
+    ]
+  },
+  {
+    id: "language",
+    title: { ru: "Язык и Интерфейс", en: "Language & UI Mode" },
+    icon: PS5Icons.globe,
+    items: [
+      { label: { ru: "Язык системной оболочки", en: "System Shell Language" }, val: { ru: "Русский (PS5 OS)", en: "English (PS5 OS)" }, toggle: "lang" },
+      { label: { ru: "Анимация частиц и волн", en: "5D Background Particles" }, val: { ru: "Активно (Canvas 60 FPS)", en: "Active (Canvas 60 FPS)" }, toggle: "particles" }
     ]
   },
   {
     id: "storage",
-    title: "Память и Хранилище SSD",
+    title: { ru: "Память", en: "Storage" },
     icon: PS5Icons.storage,
     items: [
-      { label: "Ultra-High Speed SSD", val: "825 GB (Доступно 667 GB)" },
-      { label: "Стек разработки", val: "1С:Предприятие 8.3, JavaScript ESNext, Web Audio" },
-      { label: "Бизнес-учет & Экспертиза", val: "КГ «РУНА»" }
+      { label: { ru: "Хранилище консоли (SSD)", en: "Console Storage (SSD)" }, val: "667.2 GB / 825 GB" },
+      { label: { ru: "Свободное пространство", en: "Free Space" }, val: "157.8 GB" }
     ]
   },
   {
     id: "sound",
-    title: "Звук и Аудиосистема",
+    title: { ru: "Звук", en: "Sound" },
     icon: PS5Icons.soundOn,
     items: [
-      { label: "Фоновая музыка PS5", val: "Генеративный синтезатор меню", toggle: "ambient" },
-      { label: "Звуковые эффекты интерфейса", val: "Синтез щелчков и аккордов", toggle: "sfx" },
-      { label: "Tempest 3D Audio", val: "Откалибровано для стереонаушников" }
-    ]
-  },
-  {
-    id: "display",
-    title: "Экран и Видео",
-    icon: PS5Icons.display,
-    items: [
-      { label: "Разрешение вывода", val: "3840 x 2160 (4K UHD) 60 FPS" },
-      { label: "Трассировка лучей", val: "Ray Tracing Performance Mode" },
-      { label: "Интерфейс консоли", val: "Sony PS5 Dashboard UI" }
+      { label: { ru: "Фоновая музыка меню", en: "Home Screen Music" }, val: "Emaj9 Ambient Synth", toggle: "ambient" },
+      { label: { ru: "Звуковые эффекты системы", en: "System Sound Effects" }, val: "Web Audio API Feedback", toggle: "sfx" }
     ]
   },
   {
     id: "accessories",
-    title: "Аксессуары (DualSense)",
+    title: { ru: "Аксессуары", en: "Accessories" },
     icon: PS5Icons.controller,
     items: [
-      { label: "Контроллер", val: "DualSense Wireless Controller" },
-      { label: "Уровень заряда аккумулятора", val: "88% • Подключено по Bluetooth" },
-      { label: "Haptic Feedback & Триггеры", val: "Тактильный отклик активен" }
+      { label: { ru: "Беспроводной контроллер DualSense #1", en: "DualSense Wireless Controller #1" }, val: "86% · Bluetooth" },
+      { label: { ru: "Беспроводной контроллер DualSense #2", en: "DualSense Wireless Controller #2" }, val: "32% · Требуется зарядка" },
+      { label: { ru: "Беспроводные наушники PULSE Explore", en: "PULSE Explore Wireless Earbuds" }, val: "91% · Tempest 3D Audio" }
     ]
   },
   {
     id: "system",
-    title: "Система",
+    title: { ru: "Система", en: "System" },
     icon: PS5Icons.info,
     items: [
-      { label: "Версия ПО консоли", val: "PlayStation 5 OS v24.8" },
-      { label: "Устройство", val: "PS5-CR1MNSX" },
-      { label: "Репозиторий", val: "crimnsx-alt/Cr1mnsxSEX" }
+      { label: { ru: "Системное ПО", en: "System Software" }, val: "PlayStation®5 UI Shell" },
+      { label: { ru: "Режим", en: "Mode" }, val: "Clean Design Template" }
     ]
   }
 ];
 
-/**
- * Элементы Control Center (PS Button)
- */
 export const controlCenterItems = [
-  { id: "cc-home", icon: PS5Icons.home, label: "Начало", action: "home" },
-  { id: "cc-switcher", icon: PS5Icons.switcher, label: "Переключатель", action: "switcher" },
-  { id: "cc-notifications", icon: PS5Icons.notifications, label: "Уведомления", action: "notifications" },
-  { id: "cc-gamebase", icon: PS5Icons.gamebase, label: "Game Base", action: "gamebase" },
-  { id: "cc-music", icon: PS5Icons.music, label: "Музыка", action: "music" },
-  { id: "cc-sound", icon: PS5Icons.soundOn, label: "Звук", action: "sound" },
-  { id: "cc-mic", icon: PS5Icons.mic, label: "Микрофон", action: "mic" },
-  { id: "cc-accessories", icon: PS5Icons.controller, label: "Аксессуары", action: "accessories" },
-  { id: "cc-profile", icon: PS5Icons.profile, label: "cr1mnsx", action: "modal:bio" },
-  { id: "cc-power", icon: PS5Icons.power, label: "Питание", action: "power" }
+  { id: "cc-home", icon: PS5Icons.home, label: { ru: "Начало", en: "Home" }, action: "home" },
+  { id: "cc-switcher", icon: PS5Icons.switcher, label: { ru: "Переключатель", en: "Switcher" }, action: "switcher" },
+  { id: "cc-notifications", icon: PS5Icons.notifications, label: { ru: "Уведомления", en: "Notifications" }, action: "notifications" },
+  { id: "cc-gamebase", icon: PS5Icons.gamebase, label: { ru: "Game Base", en: "Game Base" }, action: "gamebase" },
+  { id: "cc-music", icon: PS5Icons.music, label: { ru: "Музыка", en: "Music" }, action: "music" },
+  { id: "cc-sound", icon: PS5Icons.soundOn, label: { ru: "Звук", en: "Sound" }, action: "sound" },
+  { id: "cc-mic", icon: PS5Icons.mic, label: { ru: "Микрофон", en: "Mic" }, action: "mic" },
+  { id: "cc-accessories", icon: PS5Icons.controller, label: { ru: "Аксессуары", en: "Accessories" }, action: "accessories" },
+  { id: "cc-profile", icon: PS5Icons.profile, label: { ru: "Профиль", en: "Profile" }, action: "modal:psn" },
+  { id: "cc-power", icon: PS5Icons.power, label: { ru: "Питание", en: "Power" }, action: "power" }
 ];
 
-/**
- * Каталог для мгновенного поиска
- */
 export const searchCatalog = [
-  { title: "Дмитрий (cr1mnsx)", category: "Профиль", desc: "Главный хаб, биография, стек", action: "modal:bio" },
-  { title: "1С:Предприятие & Консалтинг", category: "Карьера", desc: "Опыт в КГ «РУНА», база УЦ №1", action: "modal:career" },
-  { title: "«По ту сторону яви»", category: "VR Проект", desc: "3D Virtual Reality Adventure", action: "modal:vr" },
-  { title: "Связь и Контакты", category: "Контакты", desc: "VK: vk.ru/cr1mnsx, GitHub", action: "modal:contacts" },
-  { title: "Боевой Сетап & ПК", category: "Сетап", desc: "Ryzen 5600X, RTX 3060 Ti, MacBook Air", action: "modal:setup" },
-  { title: "PlayStation 5 Гейминг", category: "Консоль", desc: "PS5, DualSense, GTA V RT 60FPS", action: "modal:gaming" },
-  { title: "Трофеи и Достижения", category: "PSN", desc: "★ 1 Платина, 12 Золото, Уровень 99", action: "modal:trophy" },
-  { title: "Библиотека проектов", category: "Коллекция", desc: "Все проекты, репозитории и разработки", action: "modal:library" },
-  { title: "GitHub Репозиторий", category: "Код", desc: "github.com/crimnsx-alt", link: "https://github.com/crimnsx-alt" },
-  { title: "ВКонтакте", category: "Связь", desc: "vk.ru/cr1mnsx", action: "copy:vk" }
+  { title: "Центр приветствия (Welcome Hub)", category: "Система", desc: "Горизонтальная лента виджетов PS5", action: "home_reset" },
+  { title: "Раздел 01 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-1" },
+  { title: "Раздел 02 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-2" },
+  { title: "Раздел 03 · Шаблон", category: "Шаблон", desc: "Пустой слот оболочки для нового контента", action: "modal:slot-3" },
+  { title: "PlayStation Store", category: "Витрина", desc: "Каталог и демонстрационные разделы", action: "modal:library" },
+  { title: "Обзор (Explore)", category: "Лента", desc: "Новости и карточки формата 16:9", action: "open:explore" },
+  { title: "Профиль и призы", category: "PSN", desc: "Системная статистика профиля", action: "modal:psn" },
+  { title: "Настройки системы", category: "Система", desc: "Язык, звук, память и аксессуары", action: "open:settings" }
 ];

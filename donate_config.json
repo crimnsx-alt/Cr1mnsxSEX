@@ -1,0 +1,16 @@
+{
+  "target_url": "https://tips.sberbank.ru/s/cr1mnsx",
+  "nickname": "cr1mnsx",
+  "title": "СберЧаевые — Поддержка проекта",
+  "description": "Прямой анонимный перевод через Сбербанк без раскрытия номера телефона и карты",
+  "currency": "RUB",
+  "preset_amounts": [
+    100,
+    300,
+    500,
+    1000
+  ],
+  "lan_ip": "192.168.31.70",
+  "server_port": 8090,
+  "dynamic_url": "http://192.168.31.70:8090/donate"
+}

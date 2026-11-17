@@ -1,61 +1,485 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Личный дашборд Дмитрия (cr1mnsx) — PS5 Home Menu: двухуровневый Game Hub, Activity Cards и Control Center">
-  <meta name="theme-color" content="#07090f">
-  <title>cr1mnsx • PlayStation 5 Home Menu</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="PlayStation®5 System Software Shell — 1:1 Interactive Console UI Design" />
+  <meta name="theme-color" content="#060811" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230070cc'/%3E%3Cpath d='M8 21.5L13.5 19v-7.5l3 1.2v9.8l4.5-1.6c1-.4 2-.1 2 .8 0 1-1.3 1.7-2.6 2.1L14 26V11l-4-1.5v12z' fill='%23fff'/%3E%3C/svg%3E" />
+  <title>PlayStation®5 — Welcome Hub &amp; System Shell</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/qrcode.min.js"></script>
 </head>
 <body>
 
-  <!-- Dynamic Dual-Layer 4K Background System -->
-  <div id="bgLayerA" class="bg-layer-a"></div>
-  <div id="bgLayerB" class="bg-layer-b"></div>
-  <div class="bg-overlay"></div>
+  <!-- ======================================================================
+       LAYER 0: 5D MULTIDIMENSIONAL BACKGROUND (Crossfade Art + Canvas Waves/Bokeh)
+       ====================================================================== -->
+  <div class="ps5-bg-layer" aria-hidden="true">
+    <div class="ps5-bg-art" id="bgLayerA"></div>
+    <div class="ps5-bg-art" id="bgLayerB"></div>
+    <canvas id="ps5Particles" class="ps5-particles"></canvas>
+    <div class="ps5-bg-vignette"></div>
+  </div>
 
-  <!-- Toast Notifications Container -->
+  <!-- Toast Notifications (PS5 Trophy / System Popups) -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- PS5 Search Overlay -->
-  <div id="searchOverlay" class="search-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <!-- ======================================================================
+       MASTER VIEWPORT STAGE (Level 0 Home Shell <-> Level 1 Game Hub)
+       ====================================================================== -->
+  <div id="viewportStage" class="viewport-stage">
+
+    <!-- LEVEL 0: PS5 Home Shell -->
+    <div id="stageHome" class="ps5-screen">
+
+      <!-- TOP SYSTEM BAR -->
+      <header class="ps5-topbar">
+        <nav class="ps5-nav-tabs" aria-label="Разделы системы">
+          <button class="ps5-tab is-active" id="tabGames" data-tab="games" type="button">Игры</button>
+          <button class="ps5-tab" id="tabMedia" data-tab="media" type="button">Медиа</button>
+        </nav>
+
+        <div class="ps5-status-cluster">
+          <!-- Sberbank Tips / Anonymous SberPay QR Button -->
+          <button class="ps5-top-tips-btn" id="btnSberTips" type="button" title="СберЧаевые · Поддержать автора" aria-label="СберЧаевые">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span>Чаевые</span>
+          </button>
+
+          <button class="ps5-top-lang" id="btnLangToggle" type="button" title="Switch Language / Переключить RU-EN" aria-label="Язык интерфейса">RU</button>
+
+          <button class="ps5-icon-btn" id="muteBtn" type="button" title="Звук и эмбиент меню" aria-label="Переключить звук">
+            <span id="muteIcon"></span>
+          </button>
+
+          <button class="ps5-icon-btn" id="btnSearch" type="button" title="Поиск (/)" aria-label="Поиск">
+            <span id="iconSearchBtn"></span>
+          </button>
+
+          <button class="ps5-icon-btn" id="btnSettings" type="button" title="Настройки системы" aria-label="Настройки">
+            <span id="iconSettingsBtn"></span>
+          </button>
+
+          <button class="ps5-avatar-btn" id="btnProfile" type="button" title="Профиль Player 1" aria-label="Профиль пользователя">
+            <span id="iconProfileAvatar"></span>
+            <span class="ps5-online-dot"></span>
+          </button>
+
+          <time class="ps5-clock" id="ps5Clock">22:45</time>
+        </div>
+      </header>
+
+      <!-- TOP-ALIGNED SYSTEM / GAME RIBBON -->
+      <section class="ps5-ribbon-wrap" aria-label="Лента разделов">
+        <div class="ps5-games-ribbon" id="ps5GamesRibbon"></div>
+      </section>
+
+      <!-- VIEW 1: WELCOME HUB BENTO GRID (1:1 PS5 System Software · 3x2 Paged Viewport) -->
+      <main class="ps5-welcome-hub" id="ps5WelcomeView">
+        <div class="ps5-welcome-toolbar">
+          <button class="ps5-edit-widgets-btn" id="btnEditWidgets" type="button" aria-label="Настроить виджеты">
+            <span id="iconEditWidgetsGlyph" class="ps5-btn-glyph"></span>
+            <span id="lblEditWidgets">Настроить виджеты</span>
+          </button>
+        </div>
+
+        <button class="ps5-hub-chevron ps5-hub-chevron--left is-disabled" id="ps5ChevronLeft" type="button" aria-label="Пролистать влево">
+          <span id="iconChevronLeft"></span>
+        </button>
+        <button class="ps5-hub-chevron ps5-hub-chevron--right" id="ps5ChevronRight" type="button" aria-label="Пролистать вправо">
+          <span id="iconChevronRight"></span>
+        </button>
+
+        <div class="ps5-bento-viewport" id="ps5BentoViewport">
+          <div class="ps5-bento-grid" id="ps5BentoTrack">
+          <!-- Column 1: Online Friends (64%) + Store Showcase (31%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--friends" id="widgetFriends" tabindex="0" role="button">
+              <header class="ps5-widget-header">
+                <div class="ps5-widget-title-group">
+                  <span id="iconFriendsHeader" class="ps5-widget-icon"></span>
+                  <span id="lblOnlineFriends">Друзья в сети</span>
+                </div>
+                <div class="ps5-friends-online-badge">
+                  <span class="ps5-green-dot"></span>
+                  <span id="lblFriendsCount">4</span>
+                </div>
+              </header>
+              <div class="ps5-friends-avatars" id="welcomeFriendsAvatars"></div>
+              <p class="ps5-friends-names" id="lblFriendsList">
+                Zane Richardsons, Space_Carrot10, DRJuiceXI, Elisa Woods
+              </p>
+            </article>
+
+            <article class="ps5-widget ps5-widget--store" id="widgetStore" tabindex="0" role="button">
+              <div class="ps5-store-card-inner" id="welcomeStoreCardBg">
+                <div class="ps5-store-scrim"></div>
+                <div class="ps5-store-meta">
+                  <span class="ps5-store-kicker" id="lblStoreShowcaseTitle">PlayStation Store</span>
+                  <span class="ps5-store-sub" id="lblStoreShowcaseSub">Витрина новинок и разделов оболочки</span>
+                </div>
+                <span class="ps5-store-mini-bag" id="iconStoreMini"></span>
+              </div>
+            </article>
+          </div>
+
+          <!-- Column 2: Accessibility (29%) + Trophies (66%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--accessibility" id="widgetAccessibility" tabindex="0" role="button">
+              <div class="ps5-acc-left">
+                <header class="ps5-widget-header">
+                  <div class="ps5-widget-title-group">
+                    <span id="iconAccHeader" class="ps5-widget-icon"></span>
+                    <span id="lblAccessibility">Специальные возможности</span>
+                  </div>
+                </header>
+                <p class="ps5-acc-desc" id="lblAccessibilityDesc">Сделайте PS5 удобнее для себя.</p>
+              </div>
+              <div class="ps5-acc-emblem" id="iconAccEmblem"></div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--trophies" id="widgetTrophies" tabindex="0" role="button">
+              <header class="ps5-widget-header">
+                <div class="ps5-widget-title-group">
+                  <span id="iconTrophyHeader" class="ps5-widget-icon"></span>
+                  <span id="lblTrophies">Призы</span>
+                </div>
+                <span class="ps5-trophies-total" id="ps5TrophiesTotal">Всего: 570</span>
+              </header>
+
+              <div class="ps5-trophies-cups-row">
+                <div class="ps5-trophy-col">
+                  <div class="ps5-trophy-cup" id="cupPlat"></div>
+                  <span class="ps5-trophy-num" id="ps5CountPlat">12</span>
+                </div>
+                <div class="ps5-trophy-col">
+                  <div class="ps5-trophy-cup" id="cupGold"></div>
+                  <span class="ps5-trophy-num" id="ps5CountGold">48</span>
+                </div>
+                <div class="ps5-trophy-col">
+                  <div class="ps5-trophy-cup" id="cupSilver"></div>
+                  <span class="ps5-trophy-num" id="ps5CountSilver">126</span>
+                </div>
+                <div class="ps5-trophy-col">
+                  <div class="ps5-trophy-cup" id="cupBronze"></div>
+                  <span class="ps5-trophy-num" id="ps5CountBronze">384</span>
+                </div>
+              </div>
+
+              <footer class="ps5-trophies-footer">
+                <div class="ps5-trophy-level-row">
+                  <div class="ps5-level-left">
+                    <span class="ps5-level-crest" id="iconLevelCrest"></span>
+                    <span class="ps5-level-text" id="ps5TrophyLevel">Уровень 100</span>
+                  </div>
+                  <span class="ps5-level-pct" id="ps5TrophyPct">48%</span>
+                </div>
+                <div class="ps5-level-bar-track">
+                  <div class="ps5-level-bar-fill" id="ps5TrophyBarFill" style="width: 48%;"></div>
+                </div>
+              </footer>
+            </article>
+          </div>
+
+          <!-- Column 3: Battery Rings (29%) + Wishlist / Console Storage (66%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--battery" id="widgetBattery" tabindex="0" role="button">
+              <div class="ps5-battery-rings-row" id="welcomeBatteryRings"></div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--wishlist" id="widgetWishlist" tabindex="0" role="button">
+              <div class="ps5-wishlist-art" id="welcomeWishlistBg">
+                <div class="ps5-wishlist-scrim"></div>
+                <div class="ps5-wishlist-top">
+                  <span class="ps5-wishlist-badge" id="lblConsoleStorage">Память консоли</span>
+                  <span class="ps5-wishlist-storage-val">667 / 825 GB</span>
+                </div>
+                <div class="ps5-wishlist-bottom">
+                  <h3 class="ps5-wishlist-title" id="lblWishlistTitle">Список желаемого</h3>
+                  <p class="ps5-wishlist-sub" id="lblWishlistSub">Избранные разделы и игры PS5</p>
+                  <div class="ps5-ssd-bar-track">
+                    <div class="ps5-ssd-bar-fill" style="width: 81%;"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <!-- Column 4: Activity (64%) + Network Status (31%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--activity" id="widgetFriendActivity" tabindex="0" role="button" title="Обзор и активность">
+              <div class="ps5-peek-inner">
+                <div class="ps5-peek-meta">
+                  <span class="ps5-peek-label" id="lblFriendActivityTitle">Активность</span>
+                  <span class="ps5-peek-pill">Explore</span>
+                </div>
+                <p class="ps5-peek-sub" id="lblFriendActivitySub">Последние события и обновления системы</p>
+              </div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--network" id="widgetNetworkStatus" tabindex="0" role="button">
+              <div class="ps5-net-inner">
+                <div class="ps5-widget-header">
+                  <span class="ps5-peek-label" id="lblNetworkStatusTitle">Состояние сети</span>
+                  <span class="ps5-green-dot"></span>
+                </div>
+                <span class="ps5-peek-sub" id="lblNetworkStatusSub">PlayStation Network · Все службы работают</span>
+              </div>
+            </article>
+          </div>
+
+          <!-- Column 5: Media Gallery (48%) + Custom Widget Slot (48%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--media-slot" id="widgetMediaGallery" tabindex="0" role="button">
+              <div class="ps5-slot-inner" id="welcomeMediaCardBg">
+                <div class="ps5-store-scrim"></div>
+                <div class="ps5-store-meta">
+                  <span class="ps5-store-kicker" id="lblMediaGalleryTitle">Галерея мультимедиа</span>
+                  <span class="ps5-store-sub" id="lblMediaGallerySub">Снимки экрана и видеоклипы 4K HDR</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--custom-slot" id="widgetCustomSlot" tabindex="0" role="button">
+              <div class="ps5-net-inner">
+                <div class="ps5-widget-header">
+                  <span class="ps5-peek-label" id="lblSlotWidgetTitle">Свободный виджет</span>
+                  <span class="ps5-peek-pill">01</span>
+                </div>
+                <span class="ps5-peek-sub" id="lblSlotWidgetSub">Место для новой карточки Welcome Hub</span>
+              </div>
+            </article>
+          </div>
+
+          <!-- Column 6: PlayStation Plus (48%) + Remote Play (48%) -->
+          <div class="ps5-bento-col">
+            <article class="ps5-widget ps5-widget--media-slot" id="widgetPsPlus" tabindex="0" role="button">
+              <div class="ps5-slot-inner" id="welcomePsPlusCardBg">
+                <div class="ps5-store-scrim"></div>
+                <div class="ps5-store-meta">
+                  <span class="ps5-store-kicker" id="lblPsPlusTitle">PlayStation Plus</span>
+                  <span class="ps5-store-sub" id="lblPsPlusSub">Игры месяца и сетевые привилегии</span>
+                </div>
+              </div>
+            </article>
+
+            <article class="ps5-widget ps5-widget--custom-slot" id="widgetRemotePlay" tabindex="0" role="button">
+              <div class="ps5-net-inner">
+                <div class="ps5-widget-header">
+                  <span class="ps5-peek-label" id="lblRemotePlayTitle">Дистанционная игра</span>
+                  <span class="ps5-peek-pill">PS5</span>
+                </div>
+                <span class="ps5-peek-sub" id="lblRemotePlaySub">Трансляция на ПК, смартфон или портал</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </main>
+
+      <!-- VIEW 2: EXPLORE & MEDIA SHOWCASE VIEW (1:1 PS5 Explore) -->
+      <main class="ps5-explore-view" id="ps5ExploreView" hidden>
+        <div class="ps5-explore-hero">
+          <p class="ps5-explore-kicker" id="exploreKicker"></p>
+          <h1 class="ps5-explore-title" id="exploreTitle"></h1>
+          <p class="ps5-explore-desc" id="exploreDesc"></p>
+        </div>
+        <div class="ps5-media-cards-row" id="ps5MediaCardsRow"></div>
+      </main>
+
+      <!-- VIEW 3: GAME HOME HERO STAGE (1:1 PS5 Selected Game / Project Screen) -->
+      <main class="ps5-game-hero-view" id="ps5GameHeroView" hidden>
+        <div class="ps5-game-hero-row">
+          <div class="ps5-hero-left">
+            <p class="ps5-hero-kicker" id="heroKicker"></p>
+            <h1 class="ps5-hero-title" id="heroTitle"></h1>
+            <p class="ps5-hero-desc" id="heroDesc"></p>
+
+            <div class="ps5-hero-actions">
+              <button id="heroBtn" class="ps5-btn-play" type="button">Играть</button>
+              <button id="heroSecondaryBtn" class="ps5-btn-sec" type="button">Подробнее</button>
+              <button id="btnOptionsMenu" class="ps5-btn-dots" type="button" aria-label="Дополнительные параметры">
+                <span id="iconOptionsDots"></span>
+              </button>
+            </div>
+          </div>
+
+          <aside class="ps5-hero-trophy-card" id="heroTrophySummary" role="button" tabindex="0">
+            <div class="ps5-ht-top">
+              <span id="iconHeroTrophy"></span>
+              <span class="ps5-ht-label" id="heroTrophyLabel">Прогресс призов</span>
+            </div>
+            <div class="ps5-ht-stats">
+              <span class="ps5-ht-pct" id="heroTrophyPct">100%</span>
+              <span class="ps5-ht-count" id="heroTrophyCounts">Earned</span>
+            </div>
+            <div class="ps5-ht-bar">
+              <div class="ps5-ht-bar-fill" id="heroTrophyBar"></div>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <!-- GLOBAL PS5 BOTTOM BAR (DualSense Controller Hints & Scroll Cue) -->
+      <footer class="ps5-bottom-bar" id="ps5BottomBar">
+        <div id="scrollDownCue" class="ps5-scroll-cue" role="button" tabindex="0" hidden>
+          <span id="iconScrollDown"></span>
+          <span id="lblScrollHubCue">Нажмите ↓ или прокрутите вниз — Центр игры</span>
+        </div>
+
+        <div class="ps5-controller-hints" id="ps5ControllerHints"></div>
+      </footer>
+
+    </div>
+
+    <!-- LEVEL 1: GAME HUB VIEW (Slides up on ArrowDown / Scroll) -->
+    <section id="stageGameHub" class="stage-game-hub" aria-label="Центр игры">
+      <div class="hub-nav-header">
+        <div class="hub-game-identity">
+          <div id="hubGameThumb" class="hub-game-thumb"></div>
+          <div class="hub-game-meta">
+            <h2 id="hubGameTitle" class="hub-game-title">Название</h2>
+            <span id="hubGamePublisher" class="hub-game-publisher">Издатель</span>
+          </div>
+        </div>
+        <div class="hub-header-actions">
+          <button id="scrollUpCue" class="ps5-btn-sec" type="button">
+            <span id="lblBackHome">В главное меню</span> ↑
+          </button>
+        </div>
+      </div>
+
+      <div class="hub-block">
+        <div class="hub-block-header">
+          <h3 class="hub-block-title" id="lblActivitiesTitle">События и активности</h3>
+          <span class="hub-block-badge" id="lblActivitiesBadge">Карточки PS5</span>
+        </div>
+        <div id="activityCarousel" class="activity-carousel"></div>
+      </div>
+
+      <div class="hub-block">
+        <div class="hub-block-header">
+          <h3 class="hub-block-title" id="lblNewsTitle">Официальные новости и обновления</h3>
+          <span class="hub-block-badge" id="lblNewsBadge">Лента событий</span>
+        </div>
+        <div id="hubNewsFeed" class="news-feed-grid"></div>
+      </div>
+
+      <div class="hub-block">
+        <div class="hub-block-header">
+          <h3 class="hub-block-title" id="lblTrophiesProjectTitle">Призы и достижения</h3>
+          <span class="hub-block-badge" id="lblTrophiesProjectBadge">PlayStation Network</span>
+        </div>
+        <div id="hubTrophies" class="hub-trophies-row"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ======================================================================
+       CONTEXT MENU (Three Dots)
+       ====================================================================== -->
+  <div id="contextMenu" class="ps5-context-menu" aria-hidden="true">
+    <button class="ps5-context-item" data-action="info" type="button">
+      <span id="ctxIconInfo"></span>
+      <span>Информация и детали</span>
+    </button>
+    <button class="ps5-context-item" data-action="share" type="button">
+      <span id="ctxIconShare"></span>
+      <span>Скопировать ссылку</span>
+    </button>
+    <button class="ps5-context-item" data-action="fav" type="button">
+      <span id="ctxIconStar"></span>
+      <span>Закрепить на главном</span>
+    </button>
+  </div>
+
+  <!-- ======================================================================
+       CONTROL CENTER OVERLAY (PS Button / Space)
+       ====================================================================== -->
+  <aside id="controlCenterOverlay" class="control-center-overlay" aria-hidden="true" role="dialog" aria-label="Центр управления PS5">
+    <div class="cc-modal-shell">
+      <div class="cc-cards-row">
+        <div class="cc-card" id="ccActiveGameCard">
+          <span class="cc-card-tag" id="lblCcCurrentTag">ТЕКУЩИЙ ЭКРАН</span>
+          <div class="cc-card-title" id="ccCardTitle">Центр приветствия</div>
+          <div class="cc-card-sub" id="ccCardSub">PlayStation 5 System Shell</div>
+          <button class="ps5-btn-play ps5-btn-play--sm" id="ccBtnResume" type="button">Возобновить</button>
+        </div>
+
+        <div class="cc-card cc-music-card">
+          <span class="cc-card-tag" id="lblCcMusicTag">МУЗЫКА PS5</span>
+          <div class="cc-music-info">
+            <span class="cc-music-icon" id="iconCcMusic"></span>
+            <div>
+              <div class="cc-card-title" id="lblCcMusicTitle">PS5 Ambient Synth</div>
+              <div class="cc-card-sub" id="lblCcMusicArtist">Эмбиент меню (Emaj9)</div>
+            </div>
+          </div>
+          <div class="cc-music-controls">
+            <button id="ccMusicToggle" class="ps5-btn-sec ps5-btn-sec--sm" type="button">Пауза / Старт</button>
+            <input id="ccMusicVolume" class="music-volume-slider" type="range" min="0" max="1" step="0.05" value="0.28" aria-label="Громкость музыки" />
+          </div>
+        </div>
+
+        <div class="cc-card">
+          <span class="cc-card-tag" id="lblCcNetworkTag">GAME BASE И СЕТЬ</span>
+          <div class="cc-card-title">Player 1 · Онлайн</div>
+          <div class="cc-card-sub" id="lblCcNetworkSub">PlayStation Network: Службы в норме</div>
+          <button class="ps5-btn-sec ps5-btn-sec--sm" id="ccBtnProfile" type="button">Профиль</button>
+        </div>
+      </div>
+
+      <div class="cc-track" id="controlCenterTrack"></div>
+    </div>
+  </aside>
+
+  <!-- ======================================================================
+       SEARCH OVERLAY (/)
+       ====================================================================== -->
+  <div id="searchOverlay" class="ps5-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="search-modal">
       <div class="search-input-wrap">
-        <span class="search-lens"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
-        <input id="searchInput" class="search-input" type="search" placeholder="Поиск проектов, навыков, 1С, сетапа, контактов…" autocomplete="off">
-        <button id="searchCloseBtn" class="search-close" type="button" aria-label="Закрыть поиск">✕</button>
+        <span class="search-lens" id="iconSearchModal"></span>
+        <input id="searchInput" class="search-input" type="search" placeholder="Поиск по играм, разделам и настройкам…" autocomplete="off" />
+        <button id="searchCloseBtn" class="ps5-close-circle" type="button" aria-label="Закрыть поиск">×</button>
       </div>
       <div id="searchResults" class="search-results-list"></div>
     </div>
   </div>
 
-  <!-- PS5 Settings Screen -->
-  <div id="settingsOverlay" class="settings-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <!-- ======================================================================
+       SETTINGS OVERLAY (PS5 System Settings)
+       ====================================================================== -->
+  <div id="settingsOverlay" class="ps5-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="settings-modal">
-      <div class="settings-header">
-        <div class="settings-title-wrap">
-          <span class="settings-tag">PLAYSTATION 5 OS</span>
-          <h2 class="settings-title">Настройки системы</h2>
+      <header class="settings-header">
+        <div>
+          <span class="settings-tag" id="lblSettingsTag">PLAYSTATION 5 SYSTEM SOFTWARE</span>
+          <h2 class="settings-title" id="lblSettingsTitle">Настройки</h2>
         </div>
-        <button id="settingsCloseBtn" class="settings-close-btn" type="button" aria-label="Закрыть настройки">✕</button>
-      </div>
+        <button id="settingsCloseBtn" class="ps5-close-circle" type="button" aria-label="Закрыть настройки">×</button>
+      </header>
       <div class="settings-layout">
-        <nav id="settingsNav" class="settings-nav" aria-label="Разделы настроек"></nav>
+        <nav id="settingsNav" class="settings-nav" aria-label="Категории настроек"></nav>
         <div id="settingsDetail" class="settings-detail"></div>
       </div>
     </div>
   </div>
 
-  <!-- PS5 Modal / Drawer System -->
-  <div id="modalOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <!-- ======================================================================
+       UNIVERSAL PS5 TELEMETRY / LIBRARY / PROFILE MODAL
+       ====================================================================== -->
+  <div id="modalOverlay" class="ps5-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal-card">
-      <div class="modal-ps-shapes">△ ◯ ✕ □</div>
-      <button id="modalCloseBtn" class="modal-close-btn" type="button" aria-label="Закрыть окно">✕</button>
-      <span id="modalTag" class="modal-tag">PLAYSTATION 5</span>
+      <button id="modalCloseBtn" class="ps5-close-circle modal-close-pos" type="button" aria-label="Закрыть окно">×</button>
+      <span id="modalTag" class="modal-tag">PLAYSTATION®5</span>
       <h2 id="modalTitle" class="modal-title">Заголовок</h2>
       <div id="modalSubtitle" class="modal-subtitle">Подзаголовок</div>
       <div id="modalBody" class="modal-body"></div>
@@ -63,195 +487,230 @@
     </div>
   </div>
 
-  <!-- Game Hub Context Menu (Three Dots) -->
-  <div id="contextMenu" class="context-menu" aria-hidden="true">
-    <button class="context-item" data-action="info" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> Информация о проекте</button>
-    <button class="context-item" data-action="share" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Скопировать ссылку</button>
-    <button class="context-item" data-action="fav" type="button"><svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Добавить в избранное</button>
+  <!-- ======================================================================
+       PS5 GAME LIBRARY FULLSCREEN MODAL (8 Playable Ports & 3 View Modes)
+       ====================================================================== -->
+  <div class="modal-game-library" id="modalGameLibrary">
+    <div class="lib-header">
+      <div class="lib-title-row">
+        <h2 class="lib-main-title">Библиотека игр <span style="font-size: 18px; color: rgba(255, 255, 255, 0.5); font-weight: 500; margin-left: 8px;">(8)</span></h2>
+      </div>
+      <button class="lib-close-btn" id="btnLibClose" title="Закрыть (Esc)">✕</button>
+    </div>
+
+    <div class="lib-filter-bar">
+      <div class="lib-search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="libSearchInput" placeholder="Поиск по библиотеке…">
+      </div>
+      <div class="lib-view-switchers">
+        <span class="lib-view-label">Дизайн:</span>
+        <button class="lib-view-btn active" id="btnViewPosters" data-view="posters" title="Постеры PS5">⊞ Постеры</button>
+        <button class="lib-view-btn" id="btnViewShowcase" data-view="showcase" title="Интерактивная витрина Showcase">☷ Showcase</button>
+        <button class="lib-view-btn" id="btnViewList" data-view="list" title="Подробный каталог">☰ Каталог</button>
+      </div>
+    </div>
+
+    <!-- VIEW 1: PS5 Vertical Posters Grid -->
+    <div class="lib-grid-container" id="libGrid"></div>
+
+    <!-- VIEW 2: PS5 Hero Showcase -->
+    <div class="lib-showcase-container" id="libShowcaseContainer">
+      <div class="lib-showcase-hero" id="libShowcaseHero">
+        <div class="showcase-hero-info">
+          <div class="showcase-badge-row" id="showcaseHeroBadgeRow"></div>
+          <h2 class="showcase-hero-title" id="showcaseHeroTitle">Grand Theft Auto: Vice City</h2>
+          <p class="showcase-hero-desc" id="showcaseHeroDesc"></p>
+          <button class="showcase-hero-play-btn" id="showcaseHeroPlayBtn">
+            <span>▶</span> <span>Запустить игру</span>
+          </button>
+        </div>
+      </div>
+      <div class="lib-showcase-ribbon" id="libShowcaseRibbon"></div>
+    </div>
+
+    <!-- VIEW 3: PS5 Detailed Catalog List -->
+    <div class="lib-list-container" id="libListContainer"></div>
   </div>
 
-  <!-- ====== Master Viewport Stage (Two-Tier Viewport) ====== -->
-  <div id="viewportStage" class="viewport-stage">
-    
-    <!-- LEVEL 0: Home Screen View -->
-    <main id="stageHome" class="stage-home">
-      <!-- Top Bar -->
-      <header class="top-bar">
-        <nav class="nav-tabs" aria-label="Основные разделы">
-          <span class="nav-tab active" data-category="projects" role="tab" tabindex="0">Проекты</span>
-          <span class="nav-tab" data-category="link" role="tab" tabindex="0">Link</span>
-        </nav>
+  <!-- ======================================================================
+       IN-GAME VIEWPORT WINDOW (Windowed & Fullscreen Mode with ⛶ Toggle)
+       ====================================================================== -->
+  <div class="in-game-window" id="inGameWindow">
+    <div class="game-window-header">
+      <div class="gw-left-title">
+        <div class="gw-status-dot"></div>
+        <span class="gw-title-text" id="gwGameTitle">Grand Theft Auto: Vice City</span>
+        <span class="gw-badge-running">WEBASSEMBLY 60 FPS</span>
+      </div>
+      <div class="gw-window-controls">
+        <a class="gw-btn" id="gwBtnExternal" title="Открыть игру в новой вкладке" target="_blank" rel="noopener" style="text-decoration:none;">↗</a>
+        <button class="gw-btn" id="gwBtnFullscreen" title="Развернуть на весь экран (⛶ / F)">⛶</button>
+        <button class="gw-btn" id="gwBtnClose" title="Закрыть окно игры (Esc)">✕</button>
+      </div>
+    </div>
 
-        <div class="status-bar">
-          <!-- Search -->
-          <button id="btnSearch" class="btn-top-icon" type="button" title="Поиск (Клавиша /)" aria-label="Поиск">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          </button>
+    <div class="game-window-viewport">
+      <!-- Live Playable Browser Game Iframe -->
+      <iframe id="genericGameFrame" allow="autoplay; fullscreen; gamepad; focus-without-user-activation; cross-origin-isolated" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups allow-forms allow-modals allow-downloads"></iframe>
 
-          <!-- Settings -->
-          <button id="btnSettings" class="btn-top-icon" type="button" title="Настройки системы PS5" aria-label="Настройки">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-
-          <!-- PS Button -->
-          <button id="btnPS" class="btn-ps-home" type="button" title="PlayStation Button • Control Center (Пробел)" aria-label="Control Center">
-            <span class="ps-logo-icon">PS</span>
-          </button>
-
-          <!-- Audio Toggle -->
-          <button id="muteBtn" class="mute-btn" type="button" title="Звук и фоновая музыка" aria-label="Звук">
-            <span id="muteIcon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg></span>
-          </button>
-          
-          <!-- Trophy Pill -->
-          <div id="trophyPill" class="trophy-pill" role="button" tabindex="0" title="Открыть трофеи">
-            <svg class="icon-inline" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
-            <span>Платина • Уровень 99</span>
+      <!-- In-Window PS5 Game Hub Deck (for external WASM ports with Cloudflare/CORS) -->
+      <div class="gw-hub-deck" id="gwHubDeck" style="display: none;">
+        <div class="gw-hub-backdrop" id="gwHubBackdrop"></div>
+        <div class="gw-hub-content">
+          <div class="gw-hub-badge-row">
+            <span class="poster-badge wasm">WEBASSEMBLY 60 FPS</span>
+            <span class="poster-badge webgpu">WEBGPU ENHANCED</span>
+            <span class="poster-badge ps5">OFFICIAL PORT</span>
           </div>
-
-          <!-- Profile -->
-          <button id="profilePill" class="profile-pill" type="button" aria-label="Открыть профиль cr1mnsx">
-            <div class="avatar">Д</div>
-            <span style="font-weight:700;">cr1mnsx</span>
-          </button>
-
-          <!-- Clock -->
-          <span id="clock">12:00</span>
-        </div>
-      </header>
-
-      <!-- Games Dock (Row of Tiles) -->
-      <nav id="gamesDock" class="games-dock" aria-label="Выбор проекта"></nav>
-
-      <!-- Hero Section -->
-      <section class="hero-section" aria-live="polite">
-        <span id="heroTag" class="hero-tag">PS5 Dashboard</span>
-        <h1 id="heroTitle" class="hero-title">Дмитрий (cr1mnsx)</h1>
-        <p id="heroDesc" class="hero-desc">Персональное интерактивное пространство Дмитрия: проекты, разработка, 1С:Предприятие и контакты.</p>
-        
-        <div class="hero-actions">
-          <button id="heroBtn" class="btn-play" type="button">Запустить</button>
-          <button id="heroSecondaryBtn" class="btn-secondary" type="button">Связаться</button>
-          <button id="btnOptionsMenu" class="btn-dots-menu" type="button" aria-label="Опции проекта">•••</button>
-        </div>
-      </section>
-
-      <!-- Home Footer Bar with Controller Hints -->
-      <footer class="home-footer-bar">
-        <div id="scrollDownCue" class="scroll-cue" role="button" tabindex="0" title="Нажмите для перехода в Game Hub">
-          <span class="cue-chevron">↓</span>
-          <span class="cue-text">Нажмите <strong>↓</strong> или прокрутите колесо для перехода в Game Hub</span>
-        </div>
-
-        <div class="controller-hints" aria-label="Подсказки управления">
-          <span class="c-hint"><kbd class="c-btn-ps">PS</kbd> Control Center (Пробел)</span>
-          <span class="c-hint"><kbd class="c-btn-circle cross">✕</kbd> Запустить (Enter)</span>
-          <span class="c-hint"><kbd class="c-btn-circle triangle">△</kbd> Поиск (/)</span>
-          <span class="c-hint"><kbd class="c-btn-pill">TAB</kbd> Вкладка</span>
-          <span class="c-hint"><kbd class="c-btn-circle circle">◯</kbd> Назад (ESC)</span>
-        </div>
-      </footer>
-    </main>
-
-    <!-- LEVEL 1: Game Hub View (Scrolled Down) -->
-    <section id="stageGameHub" class="stage-game-hub" aria-label="Хаб игры">
-      <!-- Hub Mini Header -->
-      <div class="hub-nav-header">
-        <div class="hub-game-identity">
-          <div id="hubGameThumb" class="hub-game-thumb"></div>
-          <div class="hub-game-meta">
-            <h2 id="hubGameTitle" class="hub-game-title">Название проекта</h2>
-            <span id="hubGamePublisher" class="hub-game-publisher">Издатель</span>
+          <h1 class="gw-hub-title" id="gwHubTitle">Grand Theft Auto V</h1>
+          <p class="gw-hub-desc" id="gwHubDesc">Порт игры на движке WebAssembly. Рекомендуется запуск во весь экран в новой вкладке для прямого соединения без блокировок Cloudflare.</p>
+          <div class="gw-hub-actions">
+            <a class="gw-hub-btn-primary" id="gwHubBtnPlayExternal" href="#" target="_blank" rel="noopener">
+              <span>▶</span> <span>Запустить во весь экран ↗</span>
+            </a>
+            <button class="gw-hub-btn-secondary" id="gwHubBtnTryIframe">
+              <span>🗗</span> <span>Попробовать во фрейме</span>
+            </button>
           </div>
         </div>
-        <div class="hub-header-actions">
-          <div class="hub-trophy-status">★ Пройдено 100% • Уровень 99</div>
-          <button id="scrollUpCue" class="btn-back-to-home" type="button">
-            <span>↑</span> В главное меню (↑)
-          </button>
-        </div>
       </div>
 
-      <!-- Activity Cards Carousel -->
-      <div class="hub-block">
-        <div class="hub-block-header">
-          <h3 class="hub-block-title">События и Активности</h3>
-          <span class="hub-block-badge">Activity Cards • PS5 Exclusive</span>
-        </div>
-        <div id="activityCarousel" class="activity-carousel"></div>
+      <!-- In-Window Floating Helper Bar -->
+      <div class="gw-helper-banner">
+        <span>Нажмите <kbd>⛶</kbd> или <kbd>F</kbd> для перехода во весь экран</span>
+        <span>•</span>
+        <a class="gw-helper-link" id="gwHelperExternalLink" href="#" target="_blank" rel="noopener">Открыть в отдельной вкладке ↗</a>
       </div>
-
-      <!-- Official News Feed -->
-      <div class="hub-block">
-        <div class="hub-block-header">
-          <h3 class="hub-block-title">Официальные новости и события</h3>
-          <span class="hub-block-badge">Обновления студии</span>
-        </div>
-        <div id="hubNewsFeed" class="news-feed-grid"></div>
-      </div>
-
-      <!-- Trophies Section -->
-      <div class="hub-block">
-        <div class="hub-block-header">
-          <h3 class="hub-block-title">Трофеи проекта</h3>
-          <span class="hub-block-badge">Награды PlayStation Network</span>
-        </div>
-        <div id="hubTrophies" class="hub-trophies-row"></div>
-      </div>
-
-      <!-- Game Hub Controller Hints Bar -->
-      <footer class="hub-footer-hints" aria-label="Подсказки управления">
-        <span class="c-hint"><kbd class="c-btn-arrow">↑</kbd> В главное меню (↑ / Колесо вверх)</span>
-        <span class="c-hint"><kbd class="c-btn-circle cross">✕</kbd> Выбрать (Enter)</span>
-        <span class="c-hint"><kbd class="c-btn-ps">PS</kbd> Control Center (Пробел)</span>
-        <span class="c-hint"><kbd class="c-btn-circle circle">◯</kbd> Назад (ESC)</span>
-      </footer>
-    </section>
-
+    </div>
   </div>
 
-  <!-- ====== Authentic PS5 Control Center (PS Button) ====== -->
-  <aside id="controlCenterOverlay" class="control-center-overlay" aria-hidden="true" role="dialog" aria-label="Control Center">
-    <div class="cc-modal-shell">
-      <!-- Upper Cards Row -->
-      <div class="cc-cards-row">
-        <!-- Active Card -->
-        <div class="cc-card" id="ccActiveGameCard">
-          <div class="cc-card-tag">ТЕКУЩИЙ ПРОЕКТ</div>
-          <div class="cc-card-title" id="ccCardTitle">Дмитрий (cr1mnsx)</div>
-          <div class="cc-card-sub">Возобновить просмотр • Прогресс 100%</div>
-          <button class="cc-card-btn" id="ccBtnResume" type="button">Возобновить</button>
-        </div>
+  <!-- =========================================================================
+     SBERBANK TIPS & ANONYMOUS DONATION MODAL (1:1 PS5 System Experience)
+     ========================================================================= -->
+  <div class="modal-sber-tips" id="modalSberTips" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="sberTipsBackdrop"></div>
+    <div class="sber-tips-dialog" role="dialog" aria-modal="true" aria-labelledby="sberDialogTitle">
+      <!-- Close Button -->
+      <button class="sber-tips-close-btn" id="btnSberClose" title="Закрыть (Esc)">✕</button>
 
-        <!-- Music Card -->
-        <div class="cc-card cc-music-card">
-          <div class="cc-card-tag">МУЗЫКА PS5</div>
-          <div class="cc-music-info">
-            <span class="music-note"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
-            <div>
-              <div class="music-title">PS5 Home Menu Ambient Synth</div>
-              <div class="music-artist">Emaj9 Relaxing Soundtrack</div>
+      <!-- Header -->
+      <div class="sber-tips-header">
+        <div class="sber-brand-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#22c55e" stroke-width="2.2"/>
+            <path d="M7.5 12l3 3 6.5-6.5" stroke="#22c55e" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="sber-header-text">
+          <div class="sber-header-title-row">
+            <h2 class="sber-title" id="sberDialogTitle">СберЧаевые</h2>
+            <span class="sber-badge-safe">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              100% Анонимно
+            </span>
+          </div>
+          <p class="sber-subtitle" id="sberSubtitle">Прямой перевод на карту Сбербанка без отображения телефона и карты</p>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="sber-tips-content">
+        <!-- Left: QR Code Card -->
+        <div class="sber-qr-card">
+          <div class="sber-qr-frame">
+            <div class="sber-qr-code" id="sberQrContainer">
+              <!-- Vector SVG QR generated dynamically by qrcode-generator -->
+            </div>
+            <div class="sber-qr-center-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect width="24" height="24" rx="6" fill="#15803d"/>
+                <path d="M6 12.5l4 4 8-8" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
           </div>
-          <div class="cc-music-controls">
-            <button id="ccMusicToggle" class="btn-cc-music" type="button">⏸ Пауза</button>
-            <input id="ccMusicVolume" class="music-volume-slider" type="range" min="0" max="1" step="0.05" value="0.28" title="Громкость музыки">
+          <div class="sber-qr-label">
+            <span class="sber-pulse-dot"></span>
+            <span>Вечный динамический QR</span>
+          </div>
+          <p class="sber-qr-hint">Наведите камеру смартфона для быстрой оплаты в приложении СберБанк Онлайн или через СБП</p>
+        </div>
+
+        <!-- Right: Details & Actions -->
+        <div class="sber-details-pane">
+          <!-- Author Info Card -->
+          <div class="sber-author-chip">
+            <div class="sber-author-avatar">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="sber-author-info">
+              <div class="sber-author-name" id="sberAuthorName">Получатель: @cr1mnsx</div>
+              <div class="sber-author-meta">Счёт: Карта Сбербанка · Зачисление мгновенно</div>
+            </div>
+          </div>
+
+          <!-- Features Grid -->
+          <div class="sber-features-row">
+            <div class="sber-feat-pill">
+              <span class="sber-feat-icon">⚡</span>
+              <span>SberPay</span>
+            </div>
+            <div class="sber-feat-pill">
+              <span class="sber-feat-icon">🌐</span>
+              <span>СБП 0%</span>
+            </div>
+            <div class="sber-feat-pill">
+              <span class="sber-feat-icon">💳</span>
+              <span>Любые карты</span>
+            </div>
+            <div class="sber-feat-pill">
+              <span class="sber-feat-icon">🔒</span>
+              <span>Номер скрыт</span>
+            </div>
+          </div>
+
+          <!-- Presets Row -->
+          <div class="sber-presets-section">
+            <span class="sber-section-label">Быстрые суммы поддержки:</span>
+            <div class="sber-presets-row" id="sberPresetsRow">
+              <button class="sber-preset-btn" data-amount="100">100 ₽</button>
+              <button class="sber-preset-btn active" data-amount="300">300 ₽</button>
+              <button class="sber-preset-btn" data-amount="500">500 ₽</button>
+              <button class="sber-preset-btn" data-amount="1000">1 000 ₽</button>
+            </div>
+          </div>
+
+          <!-- Actions Row -->
+          <div class="sber-actions-row">
+            <a class="sber-btn-primary" id="btnSberPayDirect" href="/donate" target="_blank" rel="noopener">
+              <span>💚</span>
+              <span>Оплатить через СберБанк ↗</span>
+            </a>
+            <button class="sber-btn-secondary" id="btnSberCopyLink">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="sberCopyBtnText">Скопировать ссылку</span>
+            </button>
+          </div>
+
+          <!-- Expandable Settings Section -->
+          <div class="sber-settings-drawer">
+            <button class="sber-toggle-settings" id="btnToggleSberSettings">
+              <span>⚙️ Настройки ссылки СберЧаевых</span>
+              <span class="sber-caret" id="sberSettingsCaret">▼</span>
+            </button>
+            <div class="sber-settings-panel" id="sberSettingsPanel" style="display: none;">
+              <label class="sber-input-label">Прямой URL страницы СберЧаевые:</label>
+              <div class="sber-input-row">
+                <input type="text" class="sber-input" id="inputSberUrl" placeholder="https://tips.sberbank.ru/s/your_username" value="https://tips.sberbank.ru">
+                <button class="sber-btn-save" id="btnSaveSberUrl">Сохранить</button>
+              </div>
+              <div class="sber-settings-status" id="sberSaveStatus"></div>
+            </div>
           </div>
         </div>
-
-        <!-- Party Chat Card -->
-        <div class="cc-card">
-          <div class="cc-card-tag">GAME BASE & СЕТЬ</div>
-          <div class="cc-card-title">cr1mnsx • В сети</div>
-          <div class="cc-card-sub">PlayStation Network: Все службы работают</div>
-          <button class="cc-card-btn outline" id="ccBtnProfile" type="button">Профиль</button>
-        </div>
       </div>
-
-      <!-- Lower Icon Dock -->
-      <div class="cc-track" id="controlCenterTrack"></div>
     </div>
-  </aside>
+  </div>
 
   <script type="module" src="js/app.js"></script>
 </body>
