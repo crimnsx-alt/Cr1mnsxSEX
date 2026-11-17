@@ -131,12 +131,7 @@ export const uiStrings = {
   }
 };
 
-export const welcomeHubFriends = [
-  { name: "Zane Richardsons", initials: "ZR", color: "#3b82f6", status: "Online", game: "ASTRO BOT" },
-  { name: "Space_Carrot10", initials: "SC", color: "#22c55e", status: "Online", game: "Marvel's Spider-Man 2" },
-  { name: "DRJuiceXI", initials: "DJ", color: "#f59e0b", status: "Online", game: "Cyberpunk 2077" },
-  { name: "Elisa Woods", initials: "EW", color: "#ec4899", status: "Online", game: "Elden Ring" }
-];
+export const welcomeHubFriends = [];
 
 export const defaultProfileTelemetry = {
   accountName: "PlayStation®5",

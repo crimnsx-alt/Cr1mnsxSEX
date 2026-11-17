@@ -17,6 +17,7 @@ import {
   searchCatalog,
   defaultProfileTelemetry
 } from "./data.js";
+import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
 import { SoundEngine } from "./sound.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
@@ -115,28 +116,96 @@ function hydrateStaticIcons() {
   updateMuteButtonUI();
 }
 
-function renderWelcomeFriends() {
-  const box = $("#welcomeFriendsAvatars");
-  if (!box) return;
-  box.innerHTML = welcomeHubFriends
-    .map(
-      (f) => `
-      <div class="ps5-friend-chip" title="${f.name} — ${f.game} (${f.status})">
-        <div class="ps5-friend-avatar-item" style="background: linear-gradient(135deg, ${f.color}, #090e1c);">
-          <span>${f.initials}</span>
-          <span class="ps5-friend-avatar-dot"></span>
-        </div>
-        <div class="ps5-friend-meta">
-          <span class="ps5-friend-name">${f.name}</span>
-          <span class="ps5-friend-game">${f.game}</span>
-        </div>
-      </div>
-    `
-    )
-    .join("");
-  if ($("#lblFriendsList")) {
-    $("#lblFriendsList").textContent = welcomeHubFriends.map((f) => `${f.name} (${f.game})`).join(" · ");
+let selectedAvatarId = PRESET_AVATARS[0].id;
+let isOwnerUnlocked = false;
+
+async function renderWelcomeFriends() {
+  const container = $("#welcomeFriendsContent");
+  if (!container) return;
+
+  const friends = await FriendsService.getConfirmedFriends();
+  const countBadge = $("#lblFriendsCount");
+  if (countBadge) {
+    countBadge.textContent = friends.length.toString();
   }
+
+  // Update pending request badge if user has one
+  const myReq = FriendsService.getMyRequest();
+  const reqBadge = $("#reqPendingBadge");
+  if (reqBadge) {
+    if (myReq && myReq.status === "pending") {
+      reqBadge.hidden = false;
+      reqBadge.textContent = "1";
+    } else {
+      reqBadge.hidden = true;
+    }
+  }
+
+  if (!friends || friends.length === 0) {
+    container.innerHTML = `
+      <div class="ps5-friends-empty">
+        <div class="ps5-fe-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <p class="ps5-fe-title">Здесь пока нет друзей</p>
+        <p class="ps5-fe-desc">Добавь свой первый контакт и играйте вместе</p>
+        <button type="button" class="ps5-btn-empty-add" id="btnEmptyAddFriend">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          <span>Добавить друга</span>
+        </button>
+      </div>
+    `;
+    const btnEmpty = $("#btnEmptyAddFriend");
+    if (btnEmpty) {
+      btnEmpty.onclick = (e) => {
+        e.stopPropagation();
+        openAddFriendModal();
+      };
+    }
+    return;
+  }
+
+  // Render confirmed friends chips
+  container.innerHTML = `
+    <div class="ps5-friends-avatars">
+      ${friends.map((f) => {
+        const av = PRESET_AVATARS.find((a) => a.id === f.avatar) || PRESET_AVATARS[0];
+        const hasSocials = f.consent_public_contacts && (f.steam || f.telegram || f.vk || f.discord || f.psnId);
+        return `
+          <div class="ps5-friend-chip" data-id="${f.id}" tabindex="0" role="button" title="${escapeHtml(f.displayName)} (@${escapeHtml(f.nickname)})">
+            <div class="ps5-friend-avatar-item" style="background: ${av.bg};">
+              <span>${av.icon}</span>
+              <span class="ps5-friend-avatar-dot"></span>
+            </div>
+            <div class="ps5-friend-meta">
+              <div class="ps5-friend-name-row">
+                <span class="ps5-friend-name">${escapeHtml(f.displayName)}</span>
+                <span class="ps5-friend-handle">@${escapeHtml(f.nickname)}</span>
+              </div>
+              <span class="ps5-friend-game">${escapeHtml(f.currentGame || "PlayStation®5")}</span>
+            </div>
+            ${hasSocials ? `
+              <div class="ps5-friend-socials-badge" title="Есть подтвержденные контакты">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.28 2.69 7.93 6.46 9.35l2.42-3.48A4.974 4.974 0 0 1 10 15c0-.62.12-1.22.33-1.77L7.4 11.2a2.49 2.49 0 0 1-1.4.42c-1.38 0-2.5-1.12-2.5-2.5S4.62 6.62 6 6.62s2.5 1.12 2.5 2.5c0 .32-.06.63-.18.91l2.94 2.1c.45-.18.94-.28 1.46-.28.47 0 .91.08 1.33.23l2.84-4.08A4.983 4.983 0 0 1 17 5c2.76 0 5 2.24 5 5s-2.24 5-5 5c-.75 0-1.46-.17-2.1-.47l-3.32 4.77C11.72 19.34 11.86 19.38 12 19.38c4.07 0 7.38-3.31 7.38-7.38S16.07 2 12 2z"/></svg>
+              </div>
+            ` : ""}
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  // Click on a friend chip opens their public profile popup
+  container.querySelectorAll(".ps5-friend-chip").forEach((chip) => {
+    chip.onclick = (e) => {
+      e.stopPropagation();
+      const fid = chip.dataset.id;
+      const fr = friends.find((item) => item.id === fid);
+      if (fr) openFriendProfileModal(fr);
+    };
+  });
 }
 
 function renderWelcomeBatteryRings() {
@@ -1855,6 +1924,8 @@ function getTopbarItems() {
 
 function handleKeydown(e) {
   const sberOpen = $("#modalSberTips") && $("#modalSberTips").classList.contains("active");
+  const friendAddOpen = $("#modalAddFriend") && $("#modalAddFriend").classList.contains("active");
+  const friendReqOpen = $("#modalFriendRequests") && $("#modalFriendRequests").classList.contains("active");
   const modalOpen = $("#modalOverlay").classList.contains("active");
   const searchOpen = $("#searchOverlay").classList.contains("active");
   const settingsOpen = $("#settingsOverlay").classList.contains("active");
@@ -1864,6 +1935,8 @@ function handleKeydown(e) {
       return;
     }
     e.preventDefault();
+    if (friendAddOpen) return closeAddFriendModal();
+    if (friendReqOpen) return closeFriendRequestsModal();
     if (sberOpen) return closeSberTips();
     if (modalOpen) return closeModal();
     if (searchOpen) return closeSearch();
@@ -1873,7 +1946,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen) return;
+  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -2400,6 +2473,447 @@ function initSberTips() {
   }
 }
 
+/* =========================================================================
+   PLAYSTATION 5 REAL FRIENDS SYSTEM & MODALS CONTROLLER
+   ========================================================================= */
+export function openAddFriendModal() {
+  SoundEngine.confirm();
+  const modal = $("#modalAddFriend");
+  if (!modal) return;
+
+  const grid = $("#avatarPickerGrid");
+  if (grid) {
+    grid.innerHTML = PRESET_AVATARS.map((av) => `
+      <button type="button" class="ps5-avatar-btn ${av.id === selectedAvatarId ? "selected" : ""}" data-avatar-id="${av.id}" title="${av.name}" style="background: ${av.bg};">
+        ${av.icon}
+      </button>
+    `).join("");
+
+    grid.querySelectorAll(".ps5-avatar-btn").forEach((btn) => {
+      btn.onclick = () => {
+        selectedAvatarId = btn.dataset.avatarId;
+        grid.querySelectorAll(".ps5-avatar-btn").forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        SoundEngine.hover();
+      };
+    });
+  }
+
+  const status = FriendsService.getBackendStatus();
+  const statusEl = $("#txtBackendMode");
+  if (statusEl) {
+    statusEl.textContent = status.isLive ? "Supabase Live" : "Локальный режим";
+  }
+
+  const alertBox = $("#friendFormAlert");
+  if (alertBox) {
+    alertBox.hidden = true;
+    alertBox.textContent = "";
+    alertBox.className = "ps5-form-alert";
+  }
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+export function closeAddFriendModal() {
+  SoundEngine.back();
+  const modal = $("#modalAddFriend");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+export function openFriendRequestsModal() {
+  SoundEngine.confirm();
+  const modal = $("#modalFriendRequests");
+  if (!modal) return;
+
+  const status = FriendsService.getBackendStatus();
+  const statusEl = $("#txtRequestsBackendMode");
+  if (statusEl) {
+    statusEl.textContent = status.isLive ? "Supabase Live" : "Локальный режим";
+  }
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+
+  switchRequestsTab("my");
+}
+
+export function closeFriendRequestsModal() {
+  SoundEngine.back();
+  const modal = $("#modalFriendRequests");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+function switchRequestsTab(tab) {
+  const tabMy = $("#tabBtnMyRequest");
+  const tabOwner = $("#tabBtnOwnerManage");
+  const panelMy = $("#panelMyRequest");
+  const panelOwner = $("#panelOwnerManage");
+
+  if (tab === "my") {
+    tabMy.classList.add("active");
+    tabOwner.classList.remove("active");
+    panelMy.hidden = false;
+    panelOwner.hidden = true;
+    renderMyRequestTab();
+  } else {
+    tabOwner.classList.add("active");
+    tabMy.classList.remove("active");
+    panelMy.hidden = true;
+    panelOwner.hidden = false;
+    renderOwnerTab();
+  }
+}
+
+function renderMyRequestTab() {
+  const container = $("#myRequestContent");
+  if (!container) return;
+
+  const myReq = FriendsService.getMyRequest();
+  if (!myReq) {
+    container.innerHTML = `
+      <div class="ps5-friends-empty">
+        <p class="ps5-fe-title">Вы пока не отправляли заявку в друзья</p>
+        <p class="ps5-fe-desc">Заполните анкету профиля, чтобы отправить заявку владельцу консоли.</p>
+        <button type="button" class="ps5-btn-empty-add" id="btnMyReqAdd">
+          <span>Отправить заявку</span>
+        </button>
+      </div>
+    `;
+    const btn = $("#btnMyReqAdd");
+    if (btn) {
+      btn.onclick = () => {
+        closeFriendRequestsModal();
+        openAddFriendModal();
+      };
+    }
+    return;
+  }
+
+  const av = PRESET_AVATARS.find((a) => a.id === myReq.avatar) || PRESET_AVATARS[0];
+  let statusBadge = "";
+  if (myReq.status === "pending") {
+    statusBadge = `<span class="ps5-status-tag status-pending">Ожидает подтверждения</span>`;
+  } else if (myReq.status === "accepted") {
+    statusBadge = `<span class="ps5-status-tag status-accepted">Принята (Вы в друзьях!)</span>`;
+  } else if (myReq.status === "rejected") {
+    statusBadge = `<span class="ps5-status-tag status-rejected">Отклонена</span>`;
+  } else {
+    statusBadge = `<span class="ps5-status-tag status-rejected">Заблокировано</span>`;
+  }
+
+  container.innerHTML = `
+    <div class="ps5-my-request-card">
+      <div class="ps5-mrc-top">
+        <div class="ps5-mrc-user">
+          <div class="ps5-friend-avatar-item" style="background: ${av.bg}; width: 44px; height: 44px;">
+            <span>${av.icon}</span>
+          </div>
+          <div>
+            <div class="ps5-friend-name" style="font-size: 15px;">${escapeHtml(myReq.displayName)}</div>
+            <div class="ps5-friend-handle">@${escapeHtml(myReq.nickname)}</div>
+          </div>
+        </div>
+        ${statusBadge}
+      </div>
+      ${myReq.bio ? `<p class="ps5-fe-desc" style="max-width: 100%;">${escapeHtml(myReq.bio)}</p>` : ""}
+      <div style="font-size: 11px; color: rgba(255,255,255,0.4);">
+        Дата отправки: ${new Date(myReq.createdAt).toLocaleString("ru-RU")}
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 6px;">
+        <button type="button" class="sber-btn-secondary" style="font-size: 12px; height: 32px;" id="btnCancelMyRequest">Отозвать заявку</button>
+      </div>
+    </div>
+  `;
+
+  const btnCancel = $("#btnCancelMyRequest");
+  if (btnCancel) {
+    btnCancel.onclick = () => {
+      FriendsService.deleteMyRequest();
+      showToast("Заявка", "Ваша заявка отозвана", PS5Icons.star);
+      renderMyRequestTab();
+      renderWelcomeFriends();
+    };
+  }
+}
+
+async function renderOwnerTab() {
+  const authBox = $("#ownerAuthBox");
+  const feedBox = $("#ownerRequestsFeed");
+  const list = $("#ownerRequestsList");
+
+  if (!isOwnerUnlocked) {
+    authBox.hidden = false;
+    feedBox.hidden = true;
+    return;
+  }
+
+  authBox.hidden = true;
+  feedBox.hidden = false;
+
+  const pin = $("#inputOwnerPin")?.value || "";
+  try {
+    const requests = await FriendsService.getFriendRequests(pin);
+    if (!requests || requests.length === 0) {
+      list.innerHTML = `<div class="ps5-friends-empty"><p class="ps5-fe-title">Нет входящих заявок</p></div>`;
+      return;
+    }
+
+    list.innerHTML = requests.map((req) => {
+      const av = PRESET_AVATARS.find((a) => a.id === req.avatar) || PRESET_AVATARS[0];
+      const hasConsent = req.consent_public_contacts;
+      return `
+        <div class="ps5-request-item" data-req-id="${req.id}">
+          <div class="ps5-req-meta-row">
+            <div class="ps5-req-user-info">
+              <div class="ps5-friend-avatar-item" style="background: ${av.bg}; width: 36px; height: 36px;">
+                <span>${av.icon}</span>
+              </div>
+              <div>
+                <span class="ps5-friend-name">${escapeHtml(req.displayName)}</span>
+                <span class="ps5-friend-handle">@${escapeHtml(req.nickname)}</span>
+              </div>
+            </div>
+            <span class="ps5-status-tag status-${req.status}">
+              ${req.status === "pending" ? "Ожидает" : req.status === "accepted" ? "Принята" : "Отклонена"}
+            </span>
+          </div>
+
+          ${req.bio ? `<p style="font-size: 12px; color: rgba(255,255,255,0.75); margin: 2px 0;">${escapeHtml(req.bio)}</p>` : ""}
+
+          ${hasConsent ? `
+            <div class="ps5-req-socials-chips">
+              ${req.steam ? `<a class="ps5-social-chip" href="${req.steam.startsWith("http") ? req.steam : "https://steamcommunity.com/id/" + req.steam}" target="_blank" rel="noopener">Steam</a>` : ""}
+              ${req.telegram ? `<a class="ps5-social-chip" href="${req.telegram.startsWith("http") ? req.telegram : "https://t.me/" + req.telegram.replace("@", "")}" target="_blank" rel="noopener">Telegram</a>` : ""}
+              ${req.vk ? `<a class="ps5-social-chip" href="${req.vk.startsWith("http") ? req.vk : "https://vk.com/" + req.vk}" target="_blank" rel="noopener">VK</a>` : ""}
+              ${req.discord ? `<span class="ps5-social-chip" title="Discord: ${escapeHtml(req.discord)}">Discord: ${escapeHtml(req.discord)}</span>` : ""}
+              ${req.psnId ? `<span class="ps5-social-chip" title="PSN ID: ${escapeHtml(req.psnId)}">PSN: ${escapeHtml(req.psnId)}</span>` : ""}
+              ${req.otherPlatforms ? `<span class="ps5-social-chip">${escapeHtml(req.otherPlatforms)}</span>` : ""}
+            </div>
+          ` : `<div style="font-size: 11px; color: rgba(255,255,255,0.4);">Контакты скрыты пользователем</div>`}
+
+          <div class="ps5-req-actions-row">
+            ${req.status === "pending" ? `
+              <button type="button" class="ps5-btn-accept btn-act-accept" data-id="${req.id}">✓ Принять</button>
+              <button type="button" class="ps5-btn-reject btn-act-reject" data-id="${req.id}">Отклонить</button>
+            ` : req.status === "accepted" ? `
+              <span style="font-size: 12px; color: #4ade80;">В друзьях</span>
+            ` : `
+              <span style="font-size: 12px; color: #fb7185;">Отклонена</span>
+            `}
+            <button type="button" class="ps5-btn-danger-sub btn-act-block" data-nick="${escapeHtml(req.nickname)}" title="Заблокировать пользователя">Блок</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    list.querySelectorAll(".btn-act-accept").forEach((btn) => {
+      btn.onclick = async () => {
+        try {
+          await FriendsService.acceptRequest(btn.dataset.id, pin);
+          SoundEngine.launch();
+          showToast("Друзья", "Заявка принята! Друг добавлен.", PS5Icons.star);
+          renderOwnerTab();
+          renderWelcomeFriends();
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+    });
+
+    list.querySelectorAll(".btn-act-reject").forEach((btn) => {
+      btn.onclick = async () => {
+        try {
+          await FriendsService.rejectRequest(btn.dataset.id, pin);
+          SoundEngine.modalClose();
+          showToast("Заявка", "Заявка отклонена.", PS5Icons.close);
+          renderOwnerTab();
+          renderWelcomeFriends();
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+    });
+
+    list.querySelectorAll(".btn-act-block").forEach((btn) => {
+      btn.onclick = async () => {
+        if (confirm(`Заблокировать пользователя ${btn.dataset.nick}?`)) {
+          await FriendsService.blockUser(btn.dataset.nick, pin);
+          showToast("Безопасность", "Пользователь заблокирован.", PS5Icons.warning);
+          renderOwnerTab();
+          renderWelcomeFriends();
+        }
+      };
+    });
+
+  } catch (err) {
+    isOwnerUnlocked = false;
+    authBox.hidden = false;
+    feedBox.hidden = true;
+    const errEl = $("#ownerAuthError");
+    if (errEl) {
+      errEl.hidden = false;
+      errEl.textContent = err.message || "Ошибка авторизации";
+    }
+  }
+}
+
+function openFriendProfileModal(friend) {
+  const av = PRESET_AVATARS.find((a) => a.id === friend.avatar) || PRESET_AVATARS[0];
+  const hasConsent = friend.consent_public_contacts;
+
+  let socialsHtml = "";
+  if (hasConsent) {
+    const s = [];
+    if (friend.steam) s.push(`<a class="ps5-social-chip" href="${friend.steam.startsWith("http") ? friend.steam : "https://steamcommunity.com/id/" + friend.steam}" target="_blank" rel="noopener">Steam ↗</a>`);
+    if (friend.telegram) s.push(`<a class="ps5-social-chip" href="${friend.telegram.startsWith("http") ? friend.telegram : "https://t.me/" + friend.telegram.replace("@", "")}" target="_blank" rel="noopener">Telegram ↗</a>`);
+    if (friend.vk) s.push(`<a class="ps5-social-chip" href="${friend.vk.startsWith("http") ? friend.vk : "https://vk.com/" + friend.vk}" target="_blank" rel="noopener">VK ↗</a>`);
+    if (friend.discord) s.push(`<span class="ps5-social-chip">Discord: ${escapeHtml(friend.discord)}</span>`);
+    if (friend.psnId) s.push(`<span class="ps5-social-chip">PSN: ${escapeHtml(friend.psnId)}</span>`);
+    if (friend.otherPlatforms) s.push(`<span class="ps5-social-chip">${escapeHtml(friend.otherPlatforms)}</span>`);
+    socialsHtml = s.length ? `<div class="ps5-req-socials-chips" style="margin-top: 14px;">${s.join("")}</div>` : "<p class=\"modal-p\">Пользователь не указал дополнительных ссылок.</p>";
+  } else {
+    socialsHtml = "<p class=\"modal-p\" style=\"opacity: 0.6;\">Пользователь скрыл контактные данные в настройках приватности.</p>";
+  }
+
+  openModal({
+    tag: "ПРОФИЛЬ ДРУГА",
+    title: `${escapeHtml(friend.displayName)} (@${escapeHtml(friend.nickname)})`,
+    subtitle: `${friend.status || "Online"} · ${escapeHtml(friend.currentGame || "PlayStation®5")}`,
+    content: `
+      <div style="display: flex; gap: 14px; align-items: center; margin-bottom: 12px;">
+        <div class="ps5-friend-avatar-item" style="background: ${av.bg}; width: 52px; height: 52px; font-size: 22px;">
+          <span>${av.icon}</span>
+          <span class="ps5-friend-avatar-dot"></span>
+        </div>
+        <div>
+          <h3 style="margin: 0; color: #fff; font-size: 17px;">${escapeHtml(friend.displayName)}</h3>
+          <span style="color: #38bdf8; font-size: 13px;">@${escapeHtml(friend.nickname)}</span>
+        </div>
+      </div>
+      ${friend.bio ? `<p class="modal-p">${escapeHtml(friend.bio)}</p>` : ""}
+      <div class="modal-spec-grid" style="margin-top: 12px;">
+        <div class="modal-spec-box"><span class="spec-label">Статус</span><span class="spec-val" style="color: #4ade80;">В сети</span></div>
+        <div class="modal-spec-box"><span class="spec-label">Платформа</span><span class="spec-val">PlayStation®5 System</span></div>
+      </div>
+      <div style="margin-top: 14px;">
+        <span class="spec-label" style="display: block; margin-bottom: 6px;">Связь с игроком:</span>
+        ${socialsHtml}
+      </div>
+    `,
+    actions: []
+  });
+}
+
+function initFriendsSystem() {
+  $("#btnOpenAddFriend")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openAddFriendModal();
+  });
+  $("#btnOpenFriendRequests")?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    openFriendRequestsModal();
+  });
+  $("#widgetFriends")?.addEventListener("click", (e) => {
+    if (e.target.closest("#btnOpenAddFriend") || e.target.closest("#btnOpenFriendRequests") || e.target.closest(".ps5-friend-chip") || e.target.closest("#btnEmptyAddFriend")) {
+      return;
+    }
+    openFriendRequestsModal();
+  });
+
+  $("#btnCloseAddFriend")?.addEventListener("click", closeAddFriendModal);
+  $("#btnCancelAddFriend")?.addEventListener("click", closeAddFriendModal);
+  $("#backdropAddFriend")?.addEventListener("click", closeAddFriendModal);
+
+  $("#btnCloseRequests")?.addEventListener("click", closeFriendRequestsModal);
+  $("#backdropFriendRequests")?.addEventListener("click", closeFriendRequestsModal);
+  $("#tabBtnMyRequest")?.addEventListener("click", () => switchRequestsTab("my"));
+  $("#tabBtnOwnerManage")?.addEventListener("click", () => switchRequestsTab("owner"));
+  $("#btnReloadRequests")?.addEventListener("click", renderOwnerTab);
+
+  $("#btnUnlockOwner")?.addEventListener("click", async () => {
+    const pin = $("#inputOwnerPin")?.value || "";
+    try {
+      await FriendsService.getFriendRequests(pin);
+      isOwnerUnlocked = true;
+      $("#ownerAuthError").hidden = true;
+      SoundEngine.confirm();
+      renderOwnerTab();
+    } catch (err) {
+      const errEl = $("#ownerAuthError");
+      if (errEl) {
+        errEl.hidden = false;
+        errEl.textContent = err.message || "Неверный ПИН-код";
+      }
+      SoundEngine.modalClose();
+    }
+  });
+
+  const form = $("#formAddFriend");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const alertBox = $("#friendFormAlert");
+      const btnSubmit = $("#btnSubmitFriendRequest");
+
+      alertBox.hidden = true;
+      alertBox.className = "ps5-form-alert";
+
+      const formData = {
+        nickname: $("#inputFriendNick").value,
+        displayName: $("#inputFriendName").value,
+        bio: $("#inputFriendBio").value,
+        avatar: selectedAvatarId,
+        steam: $("#inputFriendSteam").value,
+        telegram: $("#inputFriendTelegram").value,
+        vk: $("#inputFriendVk").value,
+        discord: $("#inputFriendDiscord").value,
+        psnId: $("#inputFriendPsn").value,
+        otherPlatforms: $("#inputFriendOther").value,
+        consent: $("#checkFriendConsent").checked
+      };
+
+      try {
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = `<span>Отправка…</span>`;
+
+        await FriendsService.submitFriendRequest(formData);
+        SoundEngine.launch();
+
+        alertBox.hidden = false;
+        alertBox.className = "ps5-form-alert success";
+        alertBox.textContent = "✓ Заявка успешно отправлена! Статус: Ожидает подтверждения владельцем.";
+
+        setTimeout(() => {
+          closeAddFriendModal();
+          openFriendRequestsModal();
+          renderWelcomeFriends();
+          form.reset();
+        }, 1200);
+
+      } catch (err) {
+        SoundEngine.modalClose();
+        alertBox.hidden = false;
+        alertBox.className = "ps5-form-alert error";
+        alertBox.textContent = `Ошибка: ${err.message}`;
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          <span>Отправить заявку</span>
+        `;
+      }
+    });
+  }
+}
+
 let lastGamepadPoll = 0;
 function pollGamepads() {
   const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
@@ -2466,6 +2980,7 @@ function init() {
   applyLanguageAndTelemetry();
   setupWelcomeHubScroll();
   initSberTips();
+  initFriendsSystem();
 
   $("#tabGames").addEventListener("click", () => switchCategory("games"));
   $("#tabMedia").addEventListener("click", () => switchCategory("media"));
@@ -2504,7 +3019,7 @@ function init() {
   $("#btnSearch").addEventListener("click", openSearch);
   $("#btnNotifications")?.addEventListener("click", () => {
     SoundEngine.chime();
-    showToast("Уведомления PSN", "Загрузка Marvel's Spider-Man 2 завершена · 4 друга в сети", PS5Icons.star);
+    showToast("Уведомления PSN", "Службы сети активны · PlayStation Network Online", PS5Icons.star);
   });
   $("#btnContinuePlaying")?.addEventListener("click", () => {
     SoundEngine.playStart();
@@ -2514,7 +3029,6 @@ function init() {
   $("#btnProfile").addEventListener("click", () => handleAction("modal:psn"));
 
   // Welcome Hub Bento Widget Clicks
-  $("#widgetFriends")?.addEventListener("click", () => openPSNModal());
   $("#widgetStore")?.addEventListener("click", () => selectTile("store", true));
   $("#widgetAccessibility")?.addEventListener("click", () => {
     state.settingsSection = "language";
