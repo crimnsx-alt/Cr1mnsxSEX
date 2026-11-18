@@ -106,7 +106,7 @@ class PS5AudioManager {
       }
     }
     if (this._ctx && this._ctx.state === "suspended") {
-      this._ctx.resume();
+      this._ctx.resume().catch(() => {});
     }
   }
 
@@ -407,7 +407,7 @@ class PS5AudioManager {
       filter.frequency.setValueAtTime(450, ctx.currentTime);
 
       masterGain.connect(filter);
-      filter.connect(ctx.destination);
+      filter.connect(this._masterGain || ctx.destination);
       this._ambientGain = masterGain;
 
       const freqs = [82.41, 123.47, 164.81, 207.65, 246.94];

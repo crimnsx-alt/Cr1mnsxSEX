@@ -1630,8 +1630,16 @@ function openModal({ tag, title, subtitle, content, actions = [], isWide = false
   card.classList.toggle("wide", !!isWide);
 
   $("#modalTag").textContent = tag || "PLAYSTATION®5";
-  $("#modalTitle").textContent = title || "";
-  $("#modalSubtitle").textContent = subtitle || "";
+  const titleEl = $("#modalTitle");
+  if (titleEl) {
+    titleEl.textContent = title || "";
+    titleEl.style.display = title ? "block" : "none";
+  }
+  const subEl = $("#modalSubtitle");
+  if (subEl) {
+    subEl.textContent = subtitle || "";
+    subEl.style.display = subtitle ? "block" : "none";
+  }
   $("#modalBody").innerHTML = content || "";
 
   const actionsEl = $("#modalActions");
@@ -1673,6 +1681,11 @@ function closeModal() {
   if (!overlay.classList.contains("active")) return;
   overlay.classList.remove("active");
   overlay.setAttribute("aria-hidden", "true");
+  const titleEl = $("#modalTitle");
+  if (titleEl) {
+    titleEl.style.display = "none";
+    titleEl.textContent = "";
+  }
   SoundEngine.cancel();
 }
 
@@ -2062,10 +2075,10 @@ function openNetworkDiagnosticsModal() {
     <div style="display:flex; flex-direction:column; gap:14px; margin-top:8px;">
       <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
         <div style="display:flex; align-items:center; gap:12px;">
-          <span style="width:10px; height:10px; border-radius:50%; background:${isOnline ? '#22c55e' : '#ef4444'}; box-shadow:0 0 10px ${isOnline ? '#22c55e' : '#ef4444'};"></span>
-          <span style="font-weight:600; font-size:14.5px;">${isRu ? "Состояние подключения к Интернету" : "Internet Connection Status"}</span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#94a3b8; box-shadow:0 0 10px rgba(148, 163, 184, 0.7);"></span>
+          <span style="font-weight:600; font-size:14.5px;">${isRu ? "Состояние подключения к сети" : "Network Connection Status"}</span>
         </div>
-        <span style="font-size:13px; font-weight:700; color:${isOnline ? '#22c55e' : '#ef4444'};">${isOnline ? (isRu ? "Успешно подключено" : "Connected") : (isRu ? "Отключено" : "Disconnected")}</span>
+        <span style="font-size:13px; font-weight:700; color:#94a3b8;">${isRu ? "Статус не проверен" : "Status unverified"}</span>
       </div>
 
       <div class="modal-spec-grid">
@@ -2076,18 +2089,18 @@ function openNetworkDiagnosticsModal() {
       </div>
 
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:6px;">
-        <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.7);">${isRu ? "Статус служб PlayStation Network:" : "PlayStation Network Services:"}</span>
+        <span style="font-size:13px; font-weight:600; color:rgba(255,255,255,0.7);">${isRu ? "Службы PlayStation Network:" : "PlayStation Network Services:"}</span>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "Управление учетной записью" : "Account Management"}</span>
-          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Статус не проверен" : "Status unverified"}</span>
         </div>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "Игры и социальные сети" : "Gaming and Social"}</span>
-          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Статус не проверен" : "Status unverified"}</span>
         </div>
         <div style="display:flex; justify-content:space-between; font-size:12.5px; padding:8px 12px; background:rgba(255,255,255,0.03); border-radius:8px;">
           <span>${isRu ? "PlayStation Store" : "PlayStation Store"}</span>
-          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Состояние не проверено (требуется PSN API)" : "Status unverified (PSN API required)"}</span>
+          <span style="color:#94a3b8; font-weight:600;">● ${isRu ? "Статус не проверен" : "Status unverified"}</span>
         </div>
       </div>
     </div>
@@ -2236,19 +2249,16 @@ function addWishlistItem(item) {
 }
 
 function updateNetworkWidgetStatus() {
-  const isOnline = navigator.onLine;
   const isRu = state.lang === "ru";
   const subEl = $("#lblNetworkStatusSub");
   const dotEl = $("#widgetNetworkStatus .ps5-green-dot");
 
   if (subEl) {
-    subEl.textContent = isOnline
-      ? (isRu ? "PlayStation Network · Статус не проверен" : "PlayStation Network · Status unverified")
-      : (isRu ? "Автономный режим · Нет подключения к сети" : "Offline Mode · No Internet Connection");
+    subEl.textContent = isRu ? "Статус не проверен" : "Status unverified";
   }
   if (dotEl) {
-    dotEl.style.background = isOnline ? "#38bdf8" : "#ef4444";
-    dotEl.style.boxShadow = isOnline ? "0 0 8px rgba(56, 189, 248, 0.7)" : "0 0 8px rgba(239, 68, 68, 0.7)";
+    dotEl.style.background = "#94a3b8";
+    dotEl.style.boxShadow = "0 0 8px rgba(148, 163, 184, 0.7)";
   }
 }
 
@@ -3288,16 +3298,25 @@ async function loadSberConfig() {
   }
 
   const localSavedUrl = localStorage.getItem('ps5_donate_url');
-  if (localSavedUrl) {
-    sberConfig.target_url = localSavedUrl;
-    const match = localSavedUrl.match(/\/r\/([a-zA-Z0-9_-]+)/);
-    if (match) {
-      sberConfig.nickname = match[1];
+  if (localSavedUrl && typeof localSavedUrl === 'string') {
+    const trimmed = localSavedUrl.trim();
+    if (trimmed.startsWith('http') && !trimmed.includes('ваш_никнейм') && !trimmed.includes('your_nickname')) {
+      sberConfig.target_url = trimmed;
+      const match = trimmed.match(/\/r\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        sberConfig.nickname = match[1];
+      }
     }
   }
 
+  // Ensure target_url is valid and persistent
+  if (!sberConfig.target_url || !sberConfig.target_url.startsWith('http') || sberConfig.target_url.includes('ваш_никнейм') || sberConfig.target_url.includes('your_nickname')) {
+    sberConfig.target_url = 'https://www.donationalerts.com/r/cr1mnsx';
+    sberConfig.nickname = 'cr1mnsx';
+  }
+
   const input = $("#inputSberUrl");
-  if (input) input.value = sberConfig.target_url || '';
+  if (input) input.value = sberConfig.target_url;
   const author = $("#sberAuthorName");
   if (author && sberConfig.nickname) {
     author.textContent = `Получатель: @${sberConfig.nickname} (DonationAlerts)`;
@@ -3400,13 +3419,13 @@ function initSberTips() {
   if (saveBtn && urlInput) {
     saveBtn.addEventListener("click", async () => {
       const newUrl = urlInput.value.trim();
-      if (!newUrl) {
+      if (!newUrl || !newUrl.startsWith("http") || newUrl.includes("ваш_никнейм") || newUrl.includes("your_nickname")) {
         SoundEngine.errorInTextBox();
         if (statusEl) {
           statusEl.style.display = "block";
           statusEl.style.color = "#ef4444";
-          statusEl.textContent = "Пожалуйста, укажите рабочую ссылку DonationAlerts";
-          setTimeout(() => { statusEl.style.display = "none"; }, 3000);
+          statusEl.textContent = "Пожалуйста, укажите рабочую ссылку DonationAlerts (например: https://www.donationalerts.com/r/cr1mnsx)";
+          setTimeout(() => { statusEl.style.display = "none"; }, 3500);
         }
         return;
       }

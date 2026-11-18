@@ -26,7 +26,7 @@ export const uiStrings = {
     mediaGalleryTitle: "Галерея мультимедиа",
     mediaGallerySub: "Снимки экрана и видеоклипы 4K HDR",
     networkStatusTitle: "Состояние сети",
-    networkStatusSub: "PlayStation Network · Статус не проверен",
+    networkStatusSub: "Статус не проверен",
     trophyProgressTitle: "Прогресс призов",
     trophyProgressSub: "Последние достижения и трофеи",
     storageFreeHint: "158 GB свободно · M.2 NVMe готов",
@@ -48,7 +48,7 @@ export const uiStrings = {
     ccMusicTitle: "PS5 Ambient Synth",
     ccMusicArtist: "Эмбиент меню (Emaj9)",
     ccNetworkTag: "GAME BASE И СЕТЬ",
-    ccNetworkSub: "PlayStation Network: Службы в норме",
+    ccNetworkSub: "PlayStation Network · Статус не проверен",
     ccProfileBtn: "Профиль",
     searchPlaceholder: "Поиск по играм, разделам и настройкам…",
     settingsTag: "PLAYSTATION 5 SYSTEM SOFTWARE",
@@ -87,7 +87,7 @@ export const uiStrings = {
     mediaGalleryTitle: "Media Gallery",
     mediaGallerySub: "4K HDR captures and video clips",
     networkStatusTitle: "Network Status",
-    networkStatusSub: "PlayStation Network · Status unverified",
+    networkStatusSub: "Status unverified",
     trophyProgressTitle: "Trophy Progress",
     trophyProgressSub: "Recent achievements & earned trophies",
     storageFreeHint: "158 GB free · M.2 NVMe ready",
@@ -109,7 +109,7 @@ export const uiStrings = {
     ccMusicTitle: "PS5 Ambient Synth",
     ccMusicArtist: "Emaj9 Menu Soundtrack",
     ccNetworkTag: "GAME BASE & NETWORK",
-    ccNetworkSub: "PlayStation Network: All services operational",
+    ccNetworkSub: "PlayStation Network · Status unverified",
     ccProfileBtn: "Profile",
     searchPlaceholder: "Search games, sections, and settings…",
     settingsTag: "PLAYSTATION 5 SYSTEM SOFTWARE",
@@ -483,7 +483,7 @@ export const settingsSections = [
     icon: PS5Icons.profile,
     items: [
       { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Player 1 (PS5)", action: "modal:psn" },
-      { label: { ru: "Сетевой статус", en: "Online Status" }, val: { ru: "Статус не проверен · PSN", en: "Status unverified · PSN" } }
+      { label: { ru: "Сетевой статус", en: "Online Status" }, val: { ru: "Статус не проверен", en: "Status unverified" } }
     ]
   },
   {
