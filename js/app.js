@@ -1002,7 +1002,6 @@ function openSoundModal() {
   $("#btnTestSoundUi")?.addEventListener("click", () => runTest("ui"));
   $("#btnTestSoundNotif")?.addEventListener("click", () => runTest("notif"));
 }
-}
 
 function openAccessoriesModal() {
   const isRu = state.lang === "ru";
@@ -4145,4 +4144,8 @@ function init() {
   requestAnimationFrame(pollGamepads);
 }
 
-document.addEventListener("DOMContentLoaded", init);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}

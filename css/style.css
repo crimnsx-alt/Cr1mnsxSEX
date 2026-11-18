@@ -1232,9 +1232,19 @@ body.hub-active .ps5-screen {
   transform: translateY(-2px);
 }
 
+.ps5-trophy-cup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 36px;
+}
+
 .ps5-trophy-3d-svg {
   height: clamp(38px, 6.8vh, 56px);
   width: auto;
+  aspect-ratio: 48 / 56;
+  display: block;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
   transition: transform 0.22s var(--ps5-ease), filter 0.22s ease;
 }
@@ -1303,7 +1313,7 @@ body.hub-active .ps5-screen {
    ========================================================================= */
 .ps5-widget--battery {
   flex: 34 1 0;
-  min-height: 0;
+  min-height: 80px;
   height: auto;
   padding: 0.6vh 1.1vw;
   display: flex;
