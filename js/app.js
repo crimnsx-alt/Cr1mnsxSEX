@@ -853,20 +853,67 @@ function openSoundModal() {
   const isRu = state.lang === "ru";
   const html = `
     <div style="display:flex; flex-direction:column; gap:14px; margin-top:12px;">
-      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
-        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-          <span style="font-weight:600; font-size:14px;">${isRu ? "Основная громкость интерфейса" : "System SFX Volume"}</span>
-          <span id="soundVolLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine._sfxVolume * 100)}%</span>
+      <!-- System Sounds Master Toggle -->
+      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:600; font-size:14px;">${isRu ? "Системные звуки PS5 (System Sounds)" : "PS5 System Sounds"}</div>
+          <div style="font-size:12px; color:var(--ps5-text-muted);">${isRu ? "Воспроизведение оригинальных звуковых эффектов PS5" : "Original PlayStation 5 system audio effects"}</div>
         </div>
-        <input id="soundSfxSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine._sfxVolume}" style="width:100%; accent-color:#ffffff;" />
+        <button class="ps5-btn-sec ps5-btn-sec--sm" id="btnModalToggleSystemSounds" type="button">
+          ${SoundEngine.systemSoundsEnabled ? "ON" : "OFF"}
+        </button>
       </div>
 
+      <!-- Navigation Volume -->
       <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-          <span style="font-weight:600; font-size:14px;">${isRu ? "Музыка главного меню (Эмбиент Emaj9)" : "Home Screen Ambient Music"}</span>
-          <span id="soundMusicLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine._musicVolume * 100)}%</span>
+          <span style="font-weight:600; font-size:14px;">${isRu ? "Громкость навигации (Navigation Volume)" : "Navigation Volume (Focus Move)"}</span>
+          <span id="soundNavLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine.navVolume * 100)}%</span>
         </div>
-        <input id="soundMusicSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine._musicVolume}" style="width:100%; accent-color:#ffffff;" />
+        <input id="soundNavSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine.navVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <!-- Interface Volume -->
+      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="font-weight:600; font-size:14px;">${isRu ? "Громкость интерфейса (Interface Volume)" : "Interface Volume (Enter / Cancel / Modals)"}</span>
+          <span id="soundUiLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine.uiVolume * 100)}%</span>
+        </div>
+        <input id="soundUiSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine.uiVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <!-- Notification Volume -->
+      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="font-weight:600; font-size:14px;">${isRu ? "Громкость уведомлений (Notification Volume)" : "Notification Volume (Toasts / Trophies)"}</span>
+          <span id="soundNotifLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine.notifVolume * 100)}%</span>
+        </div>
+        <input id="soundNotifSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine.notifVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <!-- Home Screen Ambient Music (Preserved!) -->
+      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="font-weight:600; font-size:14px;">${isRu ? "Музыка главного меню (PS5 Ambient Synth Emaj9)" : "Home Screen Ambient Music (Emaj9 Synth)"}</span>
+          <span id="soundMusicLabel" style="color:var(--ps5-text-muted); font-size:13px;">${Math.round(SoundEngine.musicVolume * 100)}%</span>
+        </div>
+        <input id="soundMusicSlider" type="range" min="0" max="1" step="0.05" value="${SoundEngine.musicVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <!-- Test Sound Section -->
+      <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08);">
+        <div style="margin-bottom:6px;">
+          <span style="font-weight:600; font-size:14px;">${isRu ? "Проверка оригинальных звуков (Test Sound)" : "Test Original System Audio"}</span>
+          <div style="font-size:12px; color:var(--ps5-text-muted); margin-top:2px;">
+            ${isRu ? "Проверка воспроизведения файлов из каталога assets/audio/" : "Verify audio file playback from assets/audio/ directory"}
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+          <button class="ps5-btn-sec ps5-btn-sec--sm" id="btnTestSoundNav" type="button">${isRu ? "▶ Навигация (Focus Move)" : "▶ Nav (Focus Move)"}</button>
+          <button class="ps5-btn-sec ps5-btn-sec--sm" id="btnTestSoundUi" type="button">${isRu ? "▶ Интерфейс (Enter)" : "▶ UI (Enter)"}</button>
+          <button class="ps5-btn-sec ps5-btn-sec--sm" id="btnTestSoundNotif" type="button">${isRu ? "▶ Уведомление (Trophy)" : "▶ Notif (Trophy)"}</button>
+        </div>
+        <div id="testSoundStatus" style="font-size:12px; color:#38bdf8; margin-top:10px; display:none; line-height:1.4;"></div>
       </div>
 
       <div style="background:rgba(255,255,255,0.04); padding:14px 18px; border-radius:14px; border:1px solid rgba(255,255,255,0.08); display:flex; justify-content:space-between; align-items:center;">
@@ -882,7 +929,7 @@ function openSoundModal() {
   openModal({
     tag: isRu ? "НАСТРОЙКИ ЗВУКА" : "SOUND SETTINGS",
     title: isRu ? "Звук" : "Sound",
-    subtitle: isRu ? "Регулировка уровней громкости и аудиоустройств PS5" : "Adjust volume levels and PS5 audio output",
+    subtitle: isRu ? "Регулировка уровней громкости и аудиосистемы PS5" : "Adjust volume levels and PS5 audio channels",
     content: html,
     actions: [
       {
@@ -893,21 +940,68 @@ function openSoundModal() {
     ]
   });
 
-  $("#soundSfxSlider")?.addEventListener("input", (e) => {
+  const toggleSysBtn = $("#btnModalToggleSystemSounds");
+  if (toggleSysBtn) {
+    toggleSysBtn.addEventListener("click", () => {
+      const next = !SoundEngine.systemSoundsEnabled;
+      SoundEngine.setSystemSoundsEnabled(next);
+      toggleSysBtn.textContent = next ? "ON" : "OFF";
+      if (next) SoundEngine.switchOn();
+      else SoundEngine.switchOff();
+    });
+  }
+
+  $("#soundNavSlider")?.addEventListener("input", (e) => {
     const val = parseFloat(e.target.value);
-    SoundEngine._sfxVolume = val;
-    SoundEngine.sliderLevelMeter(val);
-    const lbl = $("#soundVolLabel");
+    SoundEngine.setNavVolume(val);
+    const lbl = $("#soundNavLabel");
+    if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
+  });
+
+  $("#soundUiSlider")?.addEventListener("input", (e) => {
+    const val = parseFloat(e.target.value);
+    SoundEngine.setUiVolume(val);
+    const lbl = $("#soundUiLabel");
+    if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
+  });
+
+  $("#soundNotifSlider")?.addEventListener("input", (e) => {
+    const val = parseFloat(e.target.value);
+    SoundEngine.setNotifVolume(val);
+    const lbl = $("#soundNotifLabel");
     if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
   });
 
   $("#soundMusicSlider")?.addEventListener("input", (e) => {
     const val = parseFloat(e.target.value);
     SoundEngine.setMusicVolume(val);
-    SoundEngine.sliderLevelMeter(val);
     const lbl = $("#soundMusicLabel");
     if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
   });
+
+  const runTest = (channel) => {
+    const res = SoundEngine.testSound(channel);
+    const statusEl = $("#testSoundStatus");
+    if (statusEl) {
+      statusEl.style.display = "block";
+      if (res.isLoaded) {
+        statusEl.style.color = "#22c55e";
+        statusEl.textContent = isRu
+          ? `✓ Оригинальный звук «${res.soundKey}» (${res.file}) успешно воспроизведен.`
+          : `✓ Original sound "${res.soundKey}" (${res.file}) played successfully.`;
+      } else {
+        statusEl.style.color = "#f59e0b";
+        statusEl.textContent = isRu
+          ? `⚠ Аудиофайл «${res.file}» отсутствует в assets/audio/. Для воспроизведения поместите оригинальный файл в папку.`
+          : `⚠ Audio file "${res.file}" is missing from assets/audio/. Place the original file in the directory to enable sound.`;
+      }
+    }
+  };
+
+  $("#btnTestSoundNav")?.addEventListener("click", () => runTest("nav"));
+  $("#btnTestSoundUi")?.addEventListener("click", () => runTest("ui"));
+  $("#btnTestSoundNotif")?.addEventListener("click", () => runTest("notif"));
+}
 }
 
 function openAccessoriesModal() {
@@ -1339,7 +1433,7 @@ function openSearch() {
   $("#searchInput").value = "";
   renderSearchResults("");
   $("#searchInput").focus();
-  SoundEngine.modalOpen();
+  SoundEngine.openDialog();
 }
 
 function closeSearch() {
@@ -1347,7 +1441,7 @@ function closeSearch() {
   if (!overlay.classList.contains("active")) return;
   overlay.classList.remove("active");
   overlay.setAttribute("aria-hidden", "true");
-  SoundEngine.modalClose();
+  SoundEngine.cancel();
 }
 
 function renderSearchResults(q = "") {
@@ -1392,7 +1486,7 @@ function openSettings() {
   overlay.setAttribute("aria-hidden", "false");
   renderSettingsNav();
   renderSettingsDetail(state.settingsSection);
-  SoundEngine.modalOpen();
+  SoundEngine.openDialog();
 }
 
 function closeSettings() {
@@ -1400,7 +1494,7 @@ function closeSettings() {
   if (!overlay.classList.contains("active")) return;
   overlay.classList.remove("active");
   overlay.setAttribute("aria-hidden", "true");
-  SoundEngine.modalClose();
+  SoundEngine.cancel();
 }
 
 function renderSettingsNav() {
@@ -1435,7 +1529,19 @@ function renderSettingsDetail(secId) {
     row.className = "settings-item-card";
 
     let btnHtml = "";
-    if (item.action) {
+    if (item.slider) {
+      let val = 0.8;
+      if (item.slider === "nav_vol") val = SoundEngine.navVolume;
+      else if (item.slider === "ui_vol") val = SoundEngine.uiVolume;
+      else if (item.slider === "notif_vol") val = SoundEngine.notifVolume;
+
+      btnHtml = `
+        <div style="display:flex; align-items:center; gap:12px; width:220px;">
+          <input type="range" min="0" max="1" step="0.05" value="${val}" data-slider-type="${item.slider}" style="width:100%; accent-color:#ffffff;" />
+          <span class="ps5-settings-slider-lbl" style="font-size:12.5px; color:var(--ps5-text-muted); min-width:38px; text-align:right;">${Math.round(val * 100)}%</span>
+        </div>
+      `;
+    } else if (item.action) {
       btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-act="${item.action}" type="button">${S("openCta")}</button>`;
     } else if (item.toggle === "lang") {
       btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-toggle="lang" type="button">${state.lang === "ru" ? "Switch to EN" : "Переключить на RU"}</button>`;
@@ -1443,8 +1549,8 @@ function renderSettingsDetail(secId) {
       btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-toggle="particles" type="button">${state.particlesEnabled ? "ON" : "OFF"}</button>`;
     } else if (item.toggle === "ambient") {
       btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-toggle="ambient" type="button">${SoundEngine.ambientPlaying ? "ON" : "OFF"}</button>`;
-    } else if (item.toggle === "sfx") {
-      btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-toggle="sfx" type="button">${SoundEngine.muted ? "OFF" : "ON"}</button>`;
+    } else if (item.toggle === "system_sounds" || item.toggle === "sfx") {
+      btnHtml = `<button class="ps5-btn-sec ps5-btn-sec--sm" data-toggle="system_sounds" type="button">${SoundEngine.systemSoundsEnabled ? "ON" : "OFF"}</button>`;
     }
 
     row.innerHTML = `
@@ -1455,10 +1561,33 @@ function renderSettingsDetail(secId) {
       ${btnHtml}
     `;
 
+    const slider = row.querySelector("input[type='range']");
+    if (slider) {
+      slider.addEventListener("input", (e) => {
+        const val = parseFloat(e.target.value);
+        const stype = e.target.dataset.sliderType;
+        const lbl = row.querySelector(".ps5-settings-slider-lbl");
+        if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
+
+        if (stype === "nav_vol") SoundEngine.setNavVolume(val);
+        else if (stype === "ui_vol") SoundEngine.setUiVolume(val);
+        else if (stype === "notif_vol") SoundEngine.setNotifVolume(val);
+      });
+    }
+
     const btn = row.querySelector("button");
     if (btn) {
       btn.addEventListener("click", () => {
-        if (btn.dataset.act) {
+        if (btn.dataset.act === "test_sound") {
+          const res = SoundEngine.testSound("ui");
+          showToast(
+            state.lang === "ru" ? "Проверка звука PS5" : "PS5 Audio Test",
+            res.isLoaded
+              ? (state.lang === "ru" ? `✓ Звук «${res.soundKey}» (${res.file}) воспроизведен` : `✓ Sound "${res.soundKey}" (${res.file}) played`)
+              : (state.lang === "ru" ? `⚠ Файл «${res.file}» отсутствует в assets/audio/` : `⚠ File "${res.file}" missing in assets/audio/`),
+            res.isLoaded ? PS5Icons.soundOn : PS5Icons.soundMuted
+          );
+        } else if (btn.dataset.act) {
           closeSettings();
           handleAction(btn.dataset.act);
         } else if (btn.dataset.toggle === "lang") {
@@ -1478,11 +1607,11 @@ function renderSettingsDetail(secId) {
           btn.textContent = playing ? "ON" : "OFF";
           if (playing) SoundEngine.switchOn();
           else SoundEngine.switchOff();
-        } else if (btn.dataset.toggle === "sfx") {
-          SoundEngine.toggle();
-          updateMuteButtonUI();
-          btn.textContent = SoundEngine.muted ? "OFF" : "ON";
-          if (!SoundEngine.muted) SoundEngine.switchOn();
+        } else if (btn.dataset.toggle === "system_sounds" || btn.dataset.toggle === "sfx") {
+          const next = !SoundEngine.systemSoundsEnabled;
+          SoundEngine.setSystemSoundsEnabled(next);
+          btn.textContent = next ? "ON" : "OFF";
+          if (next) SoundEngine.switchOn();
           else SoundEngine.switchOff();
         }
       });
@@ -1536,7 +1665,7 @@ function openModal({ tag, title, subtitle, content, actions = [], isWide = false
 
   overlay.classList.add("active");
   overlay.setAttribute("aria-hidden", "false");
-  SoundEngine.modalOpen();
+  SoundEngine.openDialog();
 }
 
 function closeModal() {
@@ -1544,7 +1673,7 @@ function closeModal() {
   if (!overlay.classList.contains("active")) return;
   overlay.classList.remove("active");
   overlay.setAttribute("aria-hidden", "true");
-  SoundEngine.modalClose();
+  SoundEngine.cancel();
 }
 
 /* =========================================================================
@@ -2385,7 +2514,7 @@ function renderPlayableLibrary(searchQuery = '') {
 }
 
 function openLibraryModal() {
-  SoundEngine.confirm();
+  SoundEngine.openDialog();
   const modalGameLibrary = document.getElementById('modalGameLibrary');
   const libSearchInput = document.getElementById('libSearchInput');
   if (modalGameLibrary) {
@@ -2567,7 +2696,7 @@ function showToast(title, message, icon = PS5Icons.controller) {
     </div>
   `;
   container.appendChild(toast);
-  SoundEngine.chime();
+  SoundEngine.informativeToasts();
   setTimeout(() => {
     toast.classList.add("hide");
     setTimeout(() => toast.remove(), 260);
@@ -2589,6 +2718,16 @@ function handleAction(action) {
     closeModal();
     if (state.category !== "games") switchCategory("games");
     return selectTile("welcome", true);
+  }
+  if (action === "test_sound") {
+    const res = SoundEngine.testSound("ui");
+    return showToast(
+      state.lang === "ru" ? "Проверка звука PS5" : "PS5 Audio Test",
+      res.isLoaded
+        ? (state.lang === "ru" ? `✓ Звук «${res.soundKey}» (${res.file}) воспроизведен` : `✓ Sound "${res.soundKey}" (${res.file}) played`)
+        : (state.lang === "ru" ? `⚠ Файл «${res.file}» отсутствует в assets/audio/` : `⚠ File "${res.file}" missing in assets/audio/`),
+      res.isLoaded ? PS5Icons.soundOn : PS5Icons.soundMuted
+    );
   }
   if (action === "sound_mute") {
     closeModal();

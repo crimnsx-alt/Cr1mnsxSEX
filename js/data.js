@@ -509,8 +509,12 @@ export const settingsSections = [
     title: { ru: "Звук", en: "Sound" },
     icon: PS5Icons.soundOn,
     items: [
-      { label: { ru: "Фоновая музыка меню", en: "Home Screen Music" }, val: "Emaj9 Ambient Synth", toggle: "ambient" },
-      { label: { ru: "Звуковые эффекты системы", en: "System Sound Effects" }, val: "Web Audio API Feedback", toggle: "sfx" }
+      { label: { ru: "Фоновая музыка меню (PS5 Ambient Synth)", en: "Home Screen Music (PS5 Ambient Synth)" }, val: "Emaj9 / Bmaj Generative", toggle: "ambient" },
+      { label: { ru: "Системные звуки (System Sounds)", en: "System Sounds (PS5 System Effects)" }, val: { ru: "Оригинальные звуки интерфейса", en: "Original System Audio" }, toggle: "system_sounds" },
+      { label: { ru: "Громкость навигации (Navigation Volume)", en: "Navigation Volume (Focus Move)" }, val: "75%", slider: "nav_vol" },
+      { label: { ru: "Громкость интерфейса (Interface Volume)", en: "Interface Volume (Enter / Cancel / Modals)" }, val: "80%", slider: "ui_vol" },
+      { label: { ru: "Громкость уведомлений (Notification Volume)", en: "Notification Volume (Toasts / Trophies)" }, val: "90%", slider: "notif_vol" },
+      { label: { ru: "Проверка звука (Test Sound)", en: "Test Sound (Diagnostics)" }, val: { ru: "Воспроизвести тестовый сигнал", en: "Play Test Sound" }, action: "test_sound" }
     ]
   },
   {
