@@ -408,6 +408,12 @@ function renderRibbon() {
       <span class="ps5-tile-active-label">${t(item.title)}</span>
     `;
 
+    btn.addEventListener("pointerenter", () => {
+      if (state.activeId !== item.id) {
+        SoundEngine.focusMove();
+      }
+    });
+
     btn.addEventListener("click", () => {
       if (state.activeId !== item.id) {
         selectTile(item.id, true);
@@ -3986,6 +3992,17 @@ function init() {
   setupWelcomeHubScroll();
   initSberTips();
   initFriendsSystem();
+
+  // One-time gesture listener to unlock Web Audio API and start ambient audio smoothly
+  const unlockAudioOnGesture = () => {
+    SoundEngine.unlockAudio();
+    window.removeEventListener("pointerdown", unlockAudioOnGesture);
+    window.removeEventListener("keydown", unlockAudioOnGesture);
+    window.removeEventListener("touchstart", unlockAudioOnGesture);
+  };
+  window.addEventListener("pointerdown", unlockAudioOnGesture, { passive: true });
+  window.addEventListener("keydown", unlockAudioOnGesture, { passive: true });
+  window.addEventListener("touchstart", unlockAudioOnGesture, { passive: true });
 
   $("#tabGames").addEventListener("click", () => switchCategory("games"));
   $("#tabMedia").addEventListener("click", () => switchCategory("media"));

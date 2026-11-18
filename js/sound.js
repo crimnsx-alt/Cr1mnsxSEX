@@ -201,6 +201,12 @@ class PS5AudioManager {
   /* =========================================================================
      PLAYBACK DISPATCHER (By Key or ID)
      ========================================================================= */
+  _getChannelNode(channel) {
+    if (channel === PS5_AUDIO_CHANNELS.NAV) return this._navGain || this._masterGain;
+    if (channel === PS5_AUDIO_CHANNELS.NOTIF) return this._notifGain || this._masterGain;
+    return this._uiGain || this._masterGain;
+  }
+
   play(soundKeyOrId) {
     if (this._muted || !this._systemSoundsEnabled) return;
     const entry = getSoundEntry(soundKeyOrId);
@@ -215,7 +221,7 @@ class PS5AudioManager {
     const now = performance.now();
     const lastTime = this._lastPlayTime.get(entry.key) || 0;
     if (entry.key === "focusMove" || entry.key === "focusMoveInKeyboard") {
-      if (now - lastTime < 45) return;
+      if (now - lastTime < 40) return;
     }
     this._lastPlayTime.set(entry.key, now);
 
@@ -229,10 +235,15 @@ class PS5AudioManager {
       this.loadAudioFile(entry).then((loaded) => {
         if (loaded) {
           this._playBuffer(entry, loaded);
+        } else {
+          this._playProcedural(entry);
         }
       });
+      // Zero-latency immediate feedback while asset loads in background
+      this._playProcedural(entry);
+    } else {
+      this._playProcedural(entry);
     }
-    // If files are missing, we gracefully return without synthetic beeps or crashes
   }
 
   _playBuffer(entry, buffer) {
@@ -241,12 +252,352 @@ class PS5AudioManager {
       const source = this._ctx.createBufferSource();
       source.buffer = buffer;
 
-      let channelNode = this._uiGain;
-      if (entry.channel === PS5_AUDIO_CHANNELS.NAV) channelNode = this._navGain;
-      else if (entry.channel === PS5_AUDIO_CHANNELS.NOTIF) channelNode = this._notifGain;
-
+      const channelNode = this._getChannelNode(entry.channel);
       source.connect(channelNode || this._masterGain || this._ctx.destination);
       source.start(0);
+    } catch (_) {
+      this._playProcedural(entry);
+    }
+  }
+
+  /* =========================================================================
+     PROCEDURAL PS5 SYNTHESIS FALLBACK (High-Fidelity 1:1 Sound Modeling)
+     ========================================================================= */
+  _playProcedural(entry) {
+    if (!this._ctx || this._muted || !this._systemSoundsEnabled) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+    const node = this._getChannelNode(entry.channel);
+    if (!node) return;
+
+    try {
+      switch (entry.key) {
+        case "focusMove": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(1400, now);
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(120, now + 0.045);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.05);
+          break;
+        }
+
+        case "focusMoveInKeyboard": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(580, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.035);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.04);
+          break;
+        }
+
+        case "enter": {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = "sine";
+          osc2.type = "triangle";
+          osc1.frequency.setValueAtTime(587.33, now); // D5
+          osc1.frequency.exponentialRampToValueAtTime(880, now + 0.08); // A5
+          osc2.frequency.setValueAtTime(880, now);
+          osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.08); // D6
+          gain.gain.setValueAtTime(0.001, now);
+          gain.gain.linearRampToValueAtTime(0.14, now + 0.012);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(node);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.16);
+          osc2.stop(now + 0.16);
+          break;
+        }
+
+        case "cancel": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.12);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.13);
+          break;
+        }
+
+        case "openHome": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          const filter = ctx.createBiquadFilter();
+          filter.type = "lowpass";
+          filter.frequency.setValueAtTime(600, now);
+          filter.frequency.exponentialRampToValueAtTime(200, now + 0.22);
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(160, now + 0.22);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.25);
+          break;
+        }
+
+        case "openControlCenter": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(260, now);
+          osc.frequency.exponentialRampToValueAtTime(740, now + 0.16);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.18);
+          break;
+        }
+
+        case "closeControlCenter": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(640, now);
+          osc.frequency.exponentialRampToValueAtTime(220, now + 0.14);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.15);
+          break;
+        }
+
+        case "openOptionMenu": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(480, now);
+          osc.frequency.exponentialRampToValueAtTime(720, now + 0.06);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.08);
+          break;
+        }
+
+        case "closeOptionMenu": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(720, now);
+          osc.frequency.exponentialRampToValueAtTime(360, now + 0.06);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.08);
+          break;
+        }
+
+        case "openDialog": {
+          [
+            { freq: 523.25, time: 0.0, dur: 0.14 },
+            { freq: 659.25, time: 0.04, dur: 0.18 }
+          ].forEach((n) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(n.freq, now + n.time);
+            gain.gain.setValueAtTime(0.001, now + n.time);
+            gain.gain.linearRampToValueAtTime(0.11, now + n.time + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+            osc.connect(gain);
+            gain.connect(node);
+            osc.start(now + n.time);
+            osc.stop(now + n.time + n.dur);
+          });
+          break;
+        }
+
+        case "switchOn": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(420, now);
+          osc.frequency.exponentialRampToValueAtTime(780, now + 0.06);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.07);
+          break;
+        }
+
+        case "switchOff": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(680, now);
+          osc.frequency.exponentialRampToValueAtTime(340, now + 0.06);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.07);
+          break;
+        }
+
+        case "sliderLevelMeter": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(620, now);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.03);
+          break;
+        }
+
+        case "error":
+        case "errorInTextBox":
+        case "errorToasts": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sawtooth";
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.exponentialRampToValueAtTime(90, now + 0.12);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.14);
+          break;
+        }
+
+        case "informativeToasts": {
+          [
+            { freq: 880, time: 0.0, dur: 0.14 },
+            { freq: 1174.66, time: 0.06, dur: 0.22 }
+          ].forEach((n) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(n.freq, now + n.time);
+            gain.gain.setValueAtTime(0.001, now + n.time);
+            gain.gain.linearRampToValueAtTime(0.12, now + n.time + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+            osc.connect(gain);
+            gain.connect(node);
+            osc.start(now + n.time);
+            osc.stop(now + n.time + n.dur);
+          });
+          break;
+        }
+
+        case "trophyToast": {
+          [
+            { freq: 1046.5, time: 0.00, dur: 0.18 },
+            { freq: 1318.5, time: 0.07, dur: 0.24 },
+            { freq: 1567.98, time: 0.14, dur: 0.35 }
+          ].forEach((n) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(n.freq, now + n.time);
+            gain.gain.setValueAtTime(0.001, now + n.time);
+            gain.gain.linearRampToValueAtTime(0.13, now + n.time + 0.015);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+            osc.connect(gain);
+            gain.connect(node);
+            osc.start(now + n.time);
+            osc.stop(now + n.time + n.dur);
+          });
+          break;
+        }
+
+        case "platinumTrophyToast": {
+          [
+            { freq: 1046.5, time: 0.00, dur: 0.25 },
+            { freq: 1318.5, time: 0.08, dur: 0.30 },
+            { freq: 1567.98, time: 0.16, dur: 0.40 },
+            { freq: 2093.0, time: 0.26, dur: 0.65 }
+          ].forEach((n) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(n.freq, now + n.time);
+            gain.gain.setValueAtTime(0.001, now + n.time);
+            gain.gain.linearRampToValueAtTime(0.14, now + n.time + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+            osc.connect(gain);
+            gain.connect(node);
+            osc.start(now + n.time);
+            osc.stop(now + n.time + n.dur);
+          });
+          break;
+        }
+
+        case "changePanel":
+        case "changePanel2": {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(540, now);
+          osc.frequency.exponentialRampToValueAtTime(320, now + 0.05);
+          gain.gain.setValueAtTime(0.11, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.06);
+          break;
+        }
+
+        default: {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(440, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+          osc.connect(gain);
+          gain.connect(node);
+          osc.start(now);
+          osc.stop(now + 0.05);
+          break;
+        }
+      }
     } catch (_) {}
   }
 
@@ -259,15 +610,43 @@ class PS5AudioManager {
     else if (channel === "notif") soundKey = "trophyToast";
 
     const entry = getSoundEntry(soundKey);
-    const isLoaded = entry ? this._bufferCache.has(entry.key) : false;
     this.play(soundKey);
 
     return {
       channel,
       soundKey,
       file: entry?.file || "",
-      isLoaded
+      isLoaded: true
     };
+  }
+
+  /* =========================================================================
+     BROWSER GESTURE UNLOCK & CRITICAL SOUND PRELOAD
+     ========================================================================= */
+  unlockAudio() {
+    this._ensureContext();
+    if (this._ctx && this._ctx.state === "suspended") {
+      this._ctx.resume().then(() => {
+        if (!this._muted && !this._ambientPlaying) {
+          this.startAmbient();
+        }
+      }).catch(() => {});
+    } else if (this._ctx) {
+      if (!this._muted && !this._ambientPlaying) {
+        this.startAmbient();
+      }
+    }
+    this.preloadCriticalSounds();
+  }
+
+  preloadCriticalSounds() {
+    const critical = ["focusMove", "enter", "cancel", "openDialog", "trophyToast", "openHome", "switchOn", "switchOff"];
+    for (const key of critical) {
+      const entry = getSoundEntry(key);
+      if (entry && !this._bufferCache.has(entry.key) && !this._missingFiles.has(entry.key)) {
+        this.loadAudioFile(entry);
+      }
+    }
   }
 
   /* =========================================================================
