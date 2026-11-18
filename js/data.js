@@ -26,11 +26,11 @@ export const uiStrings = {
     mediaGalleryTitle: "Галерея мультимедиа",
     mediaGallerySub: "Снимки экрана и видеоклипы 4K HDR",
     networkStatusTitle: "Состояние сети",
-    networkStatusSub: "PlayStation Network · Состояние не проверено",
+    networkStatusSub: "PlayStation Network · Статус не проверен",
     trophyProgressTitle: "Прогресс призов",
     trophyProgressSub: "Последние достижения и трофеи",
     storageFreeHint: "158 GB свободно · M.2 NVMe готов",
-    wishlistCount: "5 игр",
+    wishlistCount: "3 игры",
     wishlistDiscountHint: "2 скидки активны в PS Store",
     playCta: "Играть",
     openCta: "Открыть",
@@ -91,7 +91,7 @@ export const uiStrings = {
     trophyProgressTitle: "Trophy Progress",
     trophyProgressSub: "Recent achievements & earned trophies",
     storageFreeHint: "158 GB free · M.2 NVMe ready",
-    wishlistCount: "5 games",
+    wishlistCount: "3 games",
     wishlistDiscountHint: "2 active sales in PS Store",
     playCta: "Play",
     openCta: "Open",
@@ -483,7 +483,7 @@ export const settingsSections = [
     icon: PS5Icons.profile,
     items: [
       { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Player 1 (PS5)", action: "modal:psn" },
-      { label: { ru: "Сетевой статус", en: "Online Status" }, val: "Online · PlayStation Network" }
+      { label: { ru: "Сетевой статус", en: "Online Status" }, val: { ru: "Статус не проверен · PSN", en: "Status unverified · PSN" } }
     ]
   },
   {

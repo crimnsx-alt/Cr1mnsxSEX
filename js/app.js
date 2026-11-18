@@ -314,9 +314,20 @@ function applyLanguageAndTelemetry() {
   if ($("#lblConsoleStorage")) $("#lblConsoleStorage").textContent = S("consoleStorage");
   if ($("#lblStorageFree")) $("#lblStorageFree").textContent = S("storageFreeHint");
   if ($("#lblWishlistTitle")) $("#lblWishlistTitle").textContent = S("wishlistTitle");
-  if ($("#lblWishlistCount")) $("#lblWishlistCount").textContent = S("wishlistCount");
+  const wlItems = getWishlistItems();
+  if ($("#lblWishlistCount")) $("#lblWishlistCount").textContent = formatGamePlural(wlItems.length, state.lang === "ru");
   if ($("#lblWishlistHint")) $("#lblWishlistHint").textContent = S("wishlistDiscountHint");
   if ($("#lblTrophyProgressTitle")) $("#lblTrophyProgressTitle").textContent = S("trophyProgressTitle");
+  const libTitleEl = document.querySelector(".lib-main-title");
+  if (libTitleEl) {
+    libTitleEl.innerHTML = `${state.lang === "ru" ? "Библиотека игр" : "Game Library"} <span style="font-size: 18px; color: rgba(255, 255, 255, 0.5); font-weight: 500; margin-left: 8px;">(${playableGames.length})</span>`;
+  }
+  const heroSubEl = $("#lblWelcomeHeroSub");
+  if (heroSubEl) {
+    heroSubEl.textContent = state.lang === "ru"
+      ? "PlayStation®5 System Software · Интерактивная веб-оболочка Welcome Hub"
+      : "PlayStation®5 System Software · Interactive Welcome Hub Shell";
+  }
   $("#lblFriendActivityTitle").textContent = S("friendActivityTitle");
   $("#lblFriendActivitySub").textContent = S("friendActivitySub");
   $("#lblScrollHubCue").textContent = S("scrollHubCue");
@@ -680,7 +691,7 @@ function switchCategory(cat) {
   $("#tabMedia").classList.toggle("is-active", cat === "media");
 
   if (state.isHubOpen) closeGameHub();
-  SoundEngine.confirm();
+  SoundEngine.changePanel();
   renderRibbon();
   renderActiveView();
 }
@@ -744,6 +755,7 @@ function toggleMic() {
 function handleControlCenterAction(action) {
   if (action === "home") {
     closeControlCenter();
+    SoundEngine.openHome();
     if (state.category !== "games") switchCategory("games");
     selectTile("welcome", true);
   } else if (action === "switcher") {
@@ -818,7 +830,11 @@ function openPowerModal() {
     btn.addEventListener("click", () => {
       const type = btn.dataset.power;
       closeModal();
-      SoundEngine.confirm();
+      if (type === "rest" || type === "off") {
+        SoundEngine.logOut();
+      } else {
+        SoundEngine.confirm();
+      }
       if (type === "rest") {
         showToast("Режим покоя", isRu ? "Консоль переходит в режим покоя... Нажмите любую клавишу для выхода." : "Entering Rest Mode... Press any key to wake.", PS5Icons.powerRest);
       } else if (type === "off") {
@@ -878,14 +894,17 @@ function openSoundModal() {
   });
 
   $("#soundSfxSlider")?.addEventListener("input", (e) => {
-    SoundEngine._sfxVolume = parseFloat(e.target.value);
+    const val = parseFloat(e.target.value);
+    SoundEngine._sfxVolume = val;
+    SoundEngine.sliderLevelMeter(val);
     const lbl = $("#soundVolLabel");
-    if (lbl) lbl.textContent = `${Math.round(SoundEngine._sfxVolume * 100)}%`;
+    if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
   });
 
   $("#soundMusicSlider")?.addEventListener("input", (e) => {
     const val = parseFloat(e.target.value);
     SoundEngine.setMusicVolume(val);
+    SoundEngine.sliderLevelMeter(val);
     const lbl = $("#soundMusicLabel");
     if (lbl) lbl.textContent = `${Math.round(val * 100)}%`;
   });
@@ -1100,7 +1119,7 @@ async function openGameBaseModal(initialTab = "friends") {
 
     $("#modalOverlay")?.querySelectorAll("[data-gbtab]").forEach(btn => {
       btn.onclick = () => {
-        SoundEngine.focus();
+        SoundEngine.changePanel();
         currentTab = btn.dataset.gbtab;
         refreshGbModal();
       };
@@ -1117,13 +1136,13 @@ async function openGameBaseModal(initialTab = "friends") {
 
     const btnParty = $("#btnGbCreateParty");
     if (btnParty) btnParty.onclick = () => {
-      SoundEngine.confirm();
+      SoundEngine.joinParty();
       showToast(isRu ? "Тусовка PS5" : "PS5 Party", isRu ? "Голосовая тусовка создана · Микрофон активен" : "Voice party created · Mic live", PS5Icons.controller);
     };
 
     const btnJoinParty = $("#btnJoinGbParty");
     if (btnJoinParty) btnJoinParty.onclick = () => {
-      SoundEngine.confirm();
+      SoundEngine.joinParty();
       showToast(isRu ? "Тусовка" : "Party", isRu ? "Вы присоединились к голосовому чату" : "Joined voice party", PS5Icons.controller);
     };
 
@@ -1396,7 +1415,7 @@ function renderSettingsNav() {
       state.settingsSection = sec.id;
       renderSettingsNav();
       renderSettingsDetail(sec.id);
-      SoundEngine.navigate();
+      SoundEngine.changePanel();
     });
     nav.appendChild(btn);
   });
@@ -1447,19 +1466,24 @@ function renderSettingsDetail(secId) {
           applyLanguageAndTelemetry();
           renderSettingsNav();
           renderSettingsDetail(state.settingsSection);
-          SoundEngine.confirm();
+          SoundEngine.changePanel();
         } else if (btn.dataset.toggle === "particles") {
           state.particlesEnabled = !state.particlesEnabled;
           particleEngine?.setPaused(!state.particlesEnabled);
           btn.textContent = state.particlesEnabled ? "ON" : "OFF";
-          SoundEngine.navigate();
+          if (state.particlesEnabled) SoundEngine.switchOn();
+          else SoundEngine.switchOff();
         } else if (btn.dataset.toggle === "ambient") {
           const playing = SoundEngine.toggleAmbient();
           btn.textContent = playing ? "ON" : "OFF";
+          if (playing) SoundEngine.switchOn();
+          else SoundEngine.switchOff();
         } else if (btn.dataset.toggle === "sfx") {
           SoundEngine.toggle();
           updateMuteButtonUI();
           btn.textContent = SoundEngine.muted ? "OFF" : "ON";
+          if (!SoundEngine.muted) SoundEngine.switchOn();
+          else SoundEngine.switchOff();
         }
       });
     }
@@ -1535,7 +1559,7 @@ function closeModal() {
 
 function openTrophiesModal(gameId = "gta-vc") {
   const isRu = state.lang === "ru";
-  SoundEngine.confirm();
+  SoundEngine.trophyToast();
 
   const trophiesList = [
     {
@@ -1674,6 +1698,22 @@ function openTrophiesModal(gameId = "gta-vc") {
 
   const cardEl = $("#modalOverlay .modal-card");
   if (cardEl) cardEl.classList.add("ultra-wide");
+
+  const modalBody = $("#modalBody");
+  if (modalBody) {
+    modalBody.querySelectorAll(".ps5-tp-card").forEach(c => {
+      c.style.cursor = "pointer";
+      c.addEventListener("click", () => {
+        if (c.querySelector(".ps5-tp-emblem-hex.plat")) {
+          SoundEngine.platinumTrophyToast();
+          showToast("Призы PS5", isRu ? "Платиновый приз разблокирован!" : "Platinum Trophy Unlocked!", "🏆");
+        } else {
+          SoundEngine.trophyToast();
+          showToast("Призы PS5", c.querySelector(".ps5-tp-card-title")?.textContent || "Приз получен", "🥇");
+        }
+      });
+    });
+  }
 }
 
 function openPSNModal() {
@@ -1770,11 +1810,19 @@ function openStoreModal() {
 
   $("#modalOverlay")?.querySelectorAll(".ps5-store-game-tile").forEach(tile => {
     tile.onclick = () => {
+      SoundEngine.purchaseUniversalCheckout();
       const gid = tile.dataset.storeGid;
       const g = trending.find(x => x.id === gid);
       if (g) {
         addWishlistItem({ id: g.id, title: g.title, sub: "PS Store" });
       }
+    };
+  });
+
+  $("#modalOverlay")?.querySelectorAll(".ps5-store-sub-card").forEach(card => {
+    card.onclick = () => {
+      SoundEngine.purchaseUniversalCheckout();
+      showToast("PlayStation Store", isRu ? "Информация о подписке загружена" : "Subscription details loaded", PS5Icons.star);
     };
   });
 }
@@ -1838,7 +1886,7 @@ function openMediaGalleryModal() {
 
 function openMediaLightbox(item) {
   const isRu = state.lang === "ru";
-  SoundEngine.confirm();
+  SoundEngine.takeScreenshot();
 
   const html = `
     <div style="display:flex; flex-direction:column; gap:14px; width:100%;">
@@ -2066,7 +2114,7 @@ function updateNetworkWidgetStatus() {
 
   if (subEl) {
     subEl.textContent = isOnline
-      ? (isRu ? "PlayStation Network · Состояние не проверено" : "PlayStation Network · Status unverified")
+      ? (isRu ? "PlayStation Network · Статус не проверен" : "PlayStation Network · Status unverified")
       : (isRu ? "Автономный режим · Нет подключения к сети" : "Offline Mode · No Internet Connection");
   }
   if (dotEl) {
@@ -2436,12 +2484,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLibClose = document.getElementById('btnLibClose');
   if (btnLibClose) btnLibClose.addEventListener('click', closeLibraryModal);
 
+  const modalGameLibrary = document.getElementById('modalGameLibrary');
+  if (modalGameLibrary) {
+    modalGameLibrary.addEventListener('click', (e) => {
+      if (e.target === modalGameLibrary) closeLibraryModal();
+    });
+  }
+
   document.querySelectorAll('.lib-view-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.lib-view-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentLibView = btn.dataset.view;
-      SoundEngine.navigate();
+      SoundEngine.changePanel();
       const libSearchInput = document.getElementById('libSearchInput');
       renderPlayableLibrary(libSearchInput ? libSearchInput.value : '');
     });
@@ -2627,15 +2682,22 @@ function updateMuteButtonUI() {
 // ============================================================
 function toggleContextMenu() {
   const menu = $("#contextMenu");
-  menu.classList.toggle("active");
-  menu.setAttribute("aria-hidden", String(!menu.classList.contains("active")));
-  SoundEngine.navigate();
+  const willBeActive = !menu.classList.contains("active");
+  menu.classList.toggle("active", willBeActive);
+  menu.setAttribute("aria-hidden", String(!willBeActive));
+  if (willBeActive) {
+    SoundEngine.openOptionMenu();
+  } else {
+    SoundEngine.closeOptionMenu();
+  }
 }
 
 function closeContextMenu() {
   const menu = $("#contextMenu");
+  if (!menu.classList.contains("active")) return;
   menu.classList.remove("active");
   menu.setAttribute("aria-hidden", "true");
+  SoundEngine.closeOptionMenu();
 }
 
 function getTopbarItems() {
@@ -2656,15 +2718,27 @@ function handleKeydown(e) {
   const sberOpen = $("#modalSberTips") && $("#modalSberTips").classList.contains("active");
   const friendAddOpen = $("#modalAddFriend") && $("#modalAddFriend").classList.contains("active");
   const friendReqOpen = $("#modalFriendRequests") && $("#modalFriendRequests").classList.contains("active");
-  const modalOpen = $("#modalOverlay").classList.contains("active");
-  const searchOpen = $("#searchOverlay").classList.contains("active");
-  const settingsOpen = $("#settingsOverlay").classList.contains("active");
+  const modalOpen = $("#modalOverlay") && $("#modalOverlay").classList.contains("active");
+  const searchOpen = $("#searchOverlay") && $("#searchOverlay").classList.contains("active");
+  const settingsOpen = $("#settingsOverlay") && $("#settingsOverlay").classList.contains("active");
+  const libOpen = $("#modalGameLibrary") && $("#modalGameLibrary").classList.contains("active");
+  const inGameOpen = $("#inGameWindow") && $("#inGameWindow").classList.contains("active");
+
+  if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
+    if (e.key === "Backspace") {
+      SoundEngine.backspace();
+    } else if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+      SoundEngine.textInput();
+    }
+  }
 
   if (e.key === "Escape" || e.key === "o" || e.key === "O") {
     if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") && e.key !== "Escape") {
       return;
     }
     e.preventDefault();
+    if (inGameOpen) return closeInGameWindow();
+    if (libOpen) return closeLibraryModal();
     if (friendAddOpen) return closeAddFriendModal();
     if (friendReqOpen) return closeFriendRequestsModal();
     if (sberOpen) return closeSberTips();
@@ -2676,7 +2750,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen) return;
+  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -3074,8 +3148,17 @@ async function loadSberConfig() {
     } catch (_) {}
   }
 
+  const localSavedUrl = localStorage.getItem('ps5_donate_url');
+  if (localSavedUrl) {
+    sberConfig.target_url = localSavedUrl;
+    const match = localSavedUrl.match(/\/r\/([a-zA-Z0-9_-]+)/);
+    if (match) {
+      sberConfig.nickname = match[1];
+    }
+  }
+
   const input = $("#inputSberUrl");
-  if (input) input.value = sberConfig.target_url || 'https://www.donationalerts.com/r/cr1mnsx';
+  if (input) input.value = sberConfig.target_url || '';
   const author = $("#sberAuthorName");
   if (author && sberConfig.nickname) {
     author.textContent = `Получатель: @${sberConfig.nickname} (DonationAlerts)`;
@@ -3087,7 +3170,7 @@ async function loadSberConfig() {
 
   const directBtn = $("#btnSberPayDirect");
   if (directBtn) {
-    directBtn.href = sberConfig.target_url || 'https://www.donationalerts.com/r/cr1mnsx';
+    directBtn.href = sberConfig.target_url || '#';
   }
 
   if (sberConfig.widget_token && !daLiveListener) {
@@ -3097,7 +3180,7 @@ async function loadSberConfig() {
 }
 
 export function openSberTips() {
-  SoundEngine.confirm();
+  SoundEngine.openDialog();
   const modal = $("#modalSberTips");
   if (modal) {
     modal.classList.add("active");
@@ -3107,7 +3190,7 @@ export function openSberTips() {
 }
 
 export function closeSberTips() {
-  SoundEngine.back();
+  SoundEngine.cancel();
   const modal = $("#modalSberTips");
   if (modal) {
     modal.classList.remove("active");
@@ -3178,26 +3261,59 @@ function initSberTips() {
   if (saveBtn && urlInput) {
     saveBtn.addEventListener("click", async () => {
       const newUrl = urlInput.value.trim();
-      if (!newUrl) return;
-      SoundEngine.tick();
+      if (!newUrl) {
+        SoundEngine.errorInTextBox();
+        if (statusEl) {
+          statusEl.style.display = "block";
+          statusEl.style.color = "#ef4444";
+          statusEl.textContent = "Пожалуйста, укажите рабочую ссылку DonationAlerts";
+          setTimeout(() => { statusEl.style.display = "none"; }, 3000);
+        }
+        return;
+      }
+      SoundEngine.enter();
+      localStorage.setItem('ps5_donate_url', newUrl);
+      sberConfig.target_url = newUrl;
+      const match = newUrl.match(/\/r\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        sberConfig.nickname = match[1];
+        const author = $("#sberAuthorName");
+        if (author) author.textContent = `Получатель: @${sberConfig.nickname} (DonationAlerts)`;
+      }
+      const directBtn = $("#btnSberPayDirect");
+      if (directBtn) directBtn.href = newUrl;
+      renderSberQr(newUrl);
+
       try {
-        const res = await fetch('/api/donate-config', {
+        await fetch('/api/donate-config', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ target_url: newUrl })
         });
-        const resData = await res.json();
-        if (resData.ok) {
-          SoundEngine.confirm();
-          sberConfig.target_url = newUrl;
-          if (statusEl) {
-            statusEl.style.display = "block";
-            statusEl.textContent = "✓ Ссылка сохранена! Перенаправление обновлено.";
-            setTimeout(() => { statusEl.style.display = "none"; }, 3000);
-          }
-        }
-      } catch (err) {
-        alert("Ошибка при сохранении: " + err.message);
+      } catch (_) {}
+
+      if (statusEl) {
+        statusEl.style.display = "block";
+        statusEl.style.color = "#22c55e";
+        statusEl.textContent = "✓ Ссылка сохранена! Перенаправление обновлено.";
+        setTimeout(() => { statusEl.style.display = "none"; }, 3000);
+      }
+    });
+  }
+
+  const directPayBtn = $("#btnSberPayDirect");
+  if (directPayBtn) {
+    directPayBtn.addEventListener("click", (e) => {
+      if (!sberConfig.target_url || sberConfig.target_url === "#" || sberConfig.target_url.includes("ваш_никнейм")) {
+        e.preventDefault();
+        const panel = $("#sberSettingsPanel");
+        const caret = $("#sberSettingsCaret");
+        if (panel) panel.style.display = "block";
+        if (caret) caret.classList.add("open");
+        const urlInput = $("#inputSberUrl");
+        if (urlInput) urlInput.focus();
+        SoundEngine.errorInTextBox();
+        showToast("DonationAlerts", "Укажите вашу ссылку на страницу донатов", PS5Icons.cross);
       }
     });
   }
@@ -3207,7 +3323,7 @@ function initSberTips() {
    PLAYSTATION 5 REAL FRIENDS SYSTEM & MODALS CONTROLLER
    ========================================================================= */
 export function openAddFriendModal() {
-  SoundEngine.confirm();
+  SoundEngine.openDialog();
   const modal = $("#modalAddFriend");
   if (!modal) return;
 
@@ -3224,7 +3340,7 @@ export function openAddFriendModal() {
         selectedAvatarId = btn.dataset.avatarId;
         grid.querySelectorAll(".ps5-avatar-btn").forEach((b) => b.classList.remove("selected"));
         btn.classList.add("selected");
-        SoundEngine.hover();
+        SoundEngine.focus();
       };
     });
   }
@@ -3247,7 +3363,7 @@ export function openAddFriendModal() {
 }
 
 export function closeAddFriendModal() {
-  SoundEngine.back();
+  SoundEngine.cancel();
   const modal = $("#modalAddFriend");
   if (modal) {
     modal.classList.remove("active");
@@ -3256,7 +3372,7 @@ export function closeAddFriendModal() {
 }
 
 export function openFriendRequestsModal() {
-  SoundEngine.confirm();
+  SoundEngine.openDialog();
   const modal = $("#modalFriendRequests");
   if (!modal) return;
 
@@ -3273,7 +3389,7 @@ export function openFriendRequestsModal() {
 }
 
 export function closeFriendRequestsModal() {
-  SoundEngine.back();
+  SoundEngine.cancel();
   const modal = $("#modalFriendRequests");
   if (modal) {
     modal.classList.remove("active");
@@ -3282,6 +3398,7 @@ export function closeFriendRequestsModal() {
 }
 
 function switchRequestsTab(tab) {
+  SoundEngine.changePanel();
   const tabMy = $("#tabBtnMyRequest");
   const tabOwner = $("#tabBtnOwnerManage");
   const panelMy = $("#panelMyRequest");
@@ -3582,7 +3699,7 @@ function initFriendsSystem() {
         errEl.hidden = false;
         errEl.textContent = err.message || "Неверный ПИН-код";
       }
-      SoundEngine.modalClose();
+      SoundEngine.errorInTextBox();
     }
   });
 
@@ -3629,7 +3746,8 @@ function initFriendsSystem() {
         }, 1200);
 
       } catch (err) {
-        SoundEngine.modalClose();
+        SoundEngine.errorInTextBox();
+        SoundEngine.error();
         alertBox.hidden = false;
         alertBox.className = "ps5-form-alert error";
         alertBox.textContent = `Ошибка: ${err.message}`;
@@ -3717,7 +3835,7 @@ function init() {
 
   $("#btnLangToggle").addEventListener("click", () => {
     state.lang = state.lang === "ru" ? "en" : "ru";
-    SoundEngine.confirm();
+    SoundEngine.changePanel();
     applyLanguageAndTelemetry();
   });
 
@@ -3813,13 +3931,26 @@ function init() {
     const playing = SoundEngine.toggleAmbient();
     showToast("Музыка PS5", playing ? "Воспроизведение включено" : "Пауза", PS5Icons.music);
   });
-  $("#ccMusicVolume").addEventListener("input", (e) => SoundEngine.setMusicVolume(parseFloat(e.target.value)));
+  $("#ccMusicVolume")?.addEventListener("input", (e) => {
+    const val = parseFloat(e.target.value);
+    SoundEngine.setMusicVolume(val);
+    SoundEngine.sliderLevelMeter(val);
+  });
 
   // Overlays Close
   $("#searchCloseBtn").addEventListener("click", closeSearch);
   $("#searchInput").addEventListener("input", (e) => renderSearchResults(e.target.value));
   $("#settingsCloseBtn").addEventListener("click", closeSettings);
   $("#modalCloseBtn").addEventListener("click", closeModal);
+  $("#btnLibClose")?.addEventListener("click", closeLibraryModal);
+  $("#gwBtnClose")?.addEventListener("click", closeInGameWindow);
+
+  const modalGameLibrary = document.getElementById("modalGameLibrary");
+  if (modalGameLibrary) {
+    modalGameLibrary.addEventListener("click", (e) => {
+      if (e.target === modalGameLibrary) closeLibraryModal();
+    });
+  }
 
   ["#modalOverlay", "#searchOverlay", "#settingsOverlay"].forEach((sel) => {
     $(sel).addEventListener("click", (e) => {

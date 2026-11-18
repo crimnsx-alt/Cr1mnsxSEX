@@ -3180,8 +3180,12 @@ body.hub-active .stage-game-hub {
     overflow: visible;
   }
   .ps5-bento-grid {
+    display: flex;
+    flex-direction: column;
     gap: 14px;
     height: auto;
+    overflow-x: visible;
+    overflow-y: visible;
     align-items: stretch;
   }
   .ps5-bento-col {
@@ -3225,7 +3229,16 @@ body.hub-active .stage-game-hub {
   }
   .cc-cards-row { grid-template-columns: 1fr; }
   .settings-layout { flex-direction: column; }
-  .settings-nav { width: 100%; flex-direction: row; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .settings-nav {
+    width: 100%;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow-x: auto;
+    flex-shrink: 0;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 @media (max-width: 640px) {

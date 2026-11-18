@@ -1,14 +1,9 @@
 /**
- * PS5 UI Sound Engine & Ambient Music Synthesizer (Web Audio API)
- * Синтезирует фирменную звуковую среду интерфейса PlayStation 5:
- * - Генеративная эмбиент-музыка меню (Emaj9 / Bmaj)
- * - Навигационный щелчок курсора
- * - Подтверждение выбора и открытие карточек
- * - Двухуровневый спуск / подъем (Game Hub Whoosh)
- * - Открытие / закрытие Control Center (PS Button)
- * - Звук трофеев и уведомлений (Trophy Chime)
- * - Звук возврата / отмены (Back / Cancel)
+ * PlayStation 5 UI Sound Engine & System Audio Synthesizer (Web Audio API)
+ * TASK 08.1: Complete Architectural Audio System with 45-Sound Catalog
  */
+
+import { PS5_SOUND_CATALOG, PS5_AUDIO_TIERS } from "./sound-catalog.js";
 
 class PS5SoundEngine {
   constructor() {
@@ -19,6 +14,8 @@ class PS5SoundEngine {
     this._ambientOscs = [];
     this._musicVolume = 0.28;
     this._sfxVolume = 0.75;
+    this._catalog = PS5_SOUND_CATALOG;
+    this._allowReserved = false; // Зарезервированные звуки отключены до активации функций
   }
 
   _ensureContext() {
@@ -41,12 +38,16 @@ class PS5SoundEngine {
     return this._ambientPlaying;
   }
 
+  get catalog() {
+    return this._catalog;
+  }
+
   toggle() {
     this._muted = !this._muted;
     if (this._muted) {
       this.stopAmbient();
     } else {
-      this.confirm();
+      this.enter();
       this.startAmbient();
     }
     return this._muted;
@@ -55,14 +56,41 @@ class PS5SoundEngine {
   setMusicVolume(val) {
     this._musicVolume = Math.max(0, Math.min(1, val));
     if (this._ambientGain && this._ctx) {
-      this._ambientGain.gain.setTargetAtTime(this._ambientPlaying && !this._muted ? this._musicVolume * 0.12 : 0, this._ctx.currentTime, 0.1);
+      this._ambientGain.gain.setTargetAtTime(
+        this._ambientPlaying && !this._muted ? this._musicVolume * 0.12 : 0,
+        this._ctx.currentTime,
+        0.1
+      );
     }
   }
 
-  /**
-   * Генеративная эмбиент-музыка главного меню PS5
-   * Теплые обертоны (E2, B2, E3, G#3, B3) с LFO и мягким фильтром
-   */
+  setSfxVolume(val) {
+    this._sfxVolume = Math.max(0, Math.min(1, val));
+  }
+
+  /* =========================================================================
+     GENERIC CATALOG DISPATCHER
+     ========================================================================= */
+  play(soundKey, param = null) {
+    if (this._muted) return;
+    const entry = this._catalog.find((s) => s.key === soundKey);
+    if (!entry) return;
+
+    // Зарезервированные звуки присутствуют в каталоге, но не воспроизводятся до подключения функций
+    if (entry.tier === PS5_AUDIO_TIERS.RESERVED && !this._allowReserved) {
+      return;
+    }
+
+    if (typeof this[soundKey] === "function") {
+      this[soundKey](param);
+    } else {
+      this.focusMove();
+    }
+  }
+
+  /* =========================================================================
+     AMBIENT MENU SOUNDTRACK (Emaj9 / Bmaj Generative Synthesizer)
+     ========================================================================= */
   startAmbient() {
     if (this._muted || this._ambientPlaying) return;
     this._ensureContext();
@@ -98,6 +126,7 @@ class PS5SoundEngine {
         const lfoGain = ctx.createGain();
         lfo.frequency.setValueAtTime(0.08 + idx * 0.04, ctx.currentTime);
         lfoGain.gain.setValueAtTime(1.5, ctx.currentTime);
+
         lfo.connect(osc.frequency);
         lfo.start();
 
@@ -121,7 +150,10 @@ class PS5SoundEngine {
     }
     setTimeout(() => {
       this._ambientOscs.forEach(({ osc, lfo }) => {
-        try { osc.stop(); lfo.stop(); } catch (e) {}
+        try {
+          osc.stop();
+          lfo.stop();
+        } catch (e) {}
       });
       this._ambientOscs = [];
     }, 500);
@@ -136,18 +168,20 @@ class PS5SoundEngine {
     return this._ambientPlaying;
   }
 
-  /** Навигационный щелчок курсора PS5 (при смене плитки в доке) */
-  navigate() {
+  /* =========================================================================
+     GROUP 1: ПОДКЛЮЧЕНО СРАЗУ (ОСНОВНЫЕ СИСТЕМНЫЕ ДЕЙСТВИЯ)
+     ========================================================================= */
+
+  /** Focus Move — перемещение по меню / переключение плиток */
+  focusMove() {
     if (this._muted) return;
     this._ensureContext();
     if (!this._ctx) return;
-
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-
     osc.type = "sine";
     osc.frequency.setValueAtTime(1240, now);
     osc.frequency.exponentialRampToValueAtTime(740, now + 0.048);
@@ -157,17 +191,15 @@ class PS5SoundEngine {
 
     osc.connect(gain);
     gain.connect(ctx.destination);
-
     osc.start(now);
     osc.stop(now + 0.06);
   }
 
-  /** Подтверждение выбора (Enter / Кнопка X) */
-  confirm() {
+  /** Enter — подтверждение выбора / открытие карточек */
+  enter() {
     if (this._muted) return;
     this._ensureContext();
     if (!this._ctx) return;
-
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
@@ -195,18 +227,16 @@ class PS5SoundEngine {
     osc2.stop(now + 0.18);
   }
 
-  /** Назад / Отмена (ESC / Кнопка O) */
-  back() {
+  /** Cancel — отмена / возврат (ESC / Кнопка O) */
+  cancel() {
     if (this._muted) return;
     this._ensureContext();
     if (!this._ctx) return;
-
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-
     osc.type = "sine";
     osc.frequency.setValueAtTime(940, now);
     osc.frequency.exponentialRampToValueAtTime(420, now + 0.1);
@@ -216,126 +246,493 @@ class PS5SoundEngine {
 
     osc.connect(gain);
     gain.connect(ctx.destination);
-
     osc.start(now);
     osc.stop(now + 0.11);
   }
 
-  /** Переключение микрофона DualSense (Mute/Unmute) */
-  micMute(isMuted) {
+  /** Open Home — открытие главного меню */
+  openHome() {
     if (this._muted) return;
     this._ensureContext();
     if (!this._ctx) return;
-    const ctx = this._ctx;
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    if (isMuted) {
-      osc.frequency.setValueAtTime(680, now);
-      osc.frequency.exponentialRampToValueAtTime(380, now + 0.08);
-    } else {
-      osc.frequency.setValueAtTime(380, now);
-      osc.frequency.exponentialRampToValueAtTime(740, now + 0.08);
-    }
-    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.09);
-  }
-
-  /** Спуск в Game Hub (Стрелка вниз ↓) */
-  whooshDown() {
-    if (this._muted) return;
-    this._ensureContext();
-    if (!this._ctx) return;
-
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-    const filter = ctx.createBiquadFilter();
-
-    filter.type = "lowpass";
-    filter.frequency.setValueAtTime(600, now);
-    filter.frequency.exponentialRampToValueAtTime(200, now + 0.22);
-
-    osc.type = "triangle";
-    osc.frequency.setValueAtTime(420, now);
-    osc.frequency.exponentialRampToValueAtTime(160, now + 0.22);
-
-    gain.gain.setValueAtTime(0.11 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-
-    osc.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.25);
-  }
-
-  /** Возврат из Game Hub в главное меню (Стрелка вверх ↑) */
-  whooshUp() {
-    if (this._muted) return;
-    this._ensureContext();
-    if (!this._ctx) return;
-
-    const ctx = this._ctx;
-    const now = ctx.currentTime;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
     osc.type = "sine";
-    osc.frequency.setValueAtTime(240, now);
-    osc.frequency.exponentialRampToValueAtTime(780, now + 0.18);
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(840, now + 0.16);
 
     gain.gain.setValueAtTime(0.1 * this._sfxVolume, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
-
     osc.start(now);
-    osc.stop(now + 0.2);
+    osc.stop(now + 0.18);
   }
 
-  /** Открытие / закрытие Control Center (Кнопка PS) */
-  controlCenter(isOpen = true) {
+  /** Open Control Center — открытие центра управления (PS Button) */
+  openControlCenter() {
     if (this._muted) return;
     this._ensureContext();
     if (!this._ctx) return;
-
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
-
     osc.type = "sine";
-    if (isOpen) {
-      osc.frequency.setValueAtTime(480, now);
-      osc.frequency.exponentialRampToValueAtTime(1180, now + 0.16);
-    } else {
-      osc.frequency.setValueAtTime(1180, now);
-      osc.frequency.exponentialRampToValueAtTime(480, now + 0.14);
-    }
+    osc.frequency.setValueAtTime(480, now);
+    osc.frequency.exponentialRampToValueAtTime(1180, now + 0.16);
 
     gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.17);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
-
     osc.start(now);
     osc.stop(now + 0.17);
   }
 
-  /** Трофей / Уведомление (Легендарный звон PS5: C6 -> E6 -> G6) */
+  /** Close Control Center — закрытие центра управления */
+  closeControlCenter() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1180, now);
+    osc.frequency.exponentialRampToValueAtTime(480, now + 0.14);
+
+    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+  }
+
+  /** Open Option Menu — открытие контекстного меню (...) */
+  openOptionMenu() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(1420, now);
+    osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+
+    gain.gain.setValueAtTime(0.11 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.06);
+  }
+
+  /** Close Option Menu — закрытие контекстного меню параметров */
+  closeOptionMenu() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, now);
+    osc.frequency.exponentialRampToValueAtTime(540, now + 0.05);
+
+    gain.gain.setValueAtTime(0.08 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.06);
+  }
+
+  /** Open Dialog — открытие диалогового окна / модального окна */
+  openDialog() {
+    this.openControlCenter();
+  }
+
+  /** Backspace — удаление символа в поле ввода */
+  backspace() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(520, now);
+    osc.frequency.exponentialRampToValueAtTime(260, now + 0.035);
+
+    gain.gain.setValueAtTime(0.08 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.04);
+  }
+
+  /** Text Input — ввод символа в текстовое поле */
+  textInput() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(980, now);
+    osc.frequency.exponentialRampToValueAtTime(680, now + 0.025);
+
+    gain.gain.setValueAtTime(0.06 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.03);
+  }
+
+  /** Switch On — включение переключателя / опции */
+  switchOn() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(640, now);
+    osc.frequency.exponentialRampToValueAtTime(960, now + 0.06);
+
+    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.07);
+  }
+
+  /** Switch Off — выключение переключателя / опции */
+  switchOff() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(960, now);
+    osc.frequency.exponentialRampToValueAtTime(640, now + 0.06);
+
+    gain.gain.setValueAtTime(0.08 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.07);
+  }
+
+  /** Slider Level Meter — изменение ползунка громкости / настройки */
+  sliderLevelMeter(normalizedVal = 0.5) {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const val = Math.max(0, Math.min(1, typeof normalizedVal === "number" ? normalizedVal : 0.5));
+    const freq = 440 + val * 660; // 440Hz -> 1100Hz
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.06 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.035);
+  }
+
+  /** Change Panel — переключение вкладки / панели */
+  changePanel() {
+    this.focusMove();
+  }
+
+  /** Focus Move in Keyboard — перемещение фокуса внутри клавиатуры */
+  focusMoveInKeyboard() {
+    this.textInput();
+  }
+
+  /** Open OSK — открытие экранной клавиатуры */
+  openOsk() {
+    this.openOptionMenu();
+  }
+
+  /* =========================================================================
+     GROUP 2: ПОДКЛЮЧЕНО ПО МЕРЕ ПОЯВЛЕНИЯ ФУНКЦИЙ
+     ========================================================================= */
+
+  /** Error — системная ошибка */
+  error() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    [360, 340].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+      gain.gain.setValueAtTime(0.07 * this._sfxVolume, now + idx * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.12);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.08);
+      osc.stop(now + idx * 0.08 + 0.12);
+    });
+  }
+
+  /** Error in Text Box — ошибка валидации поля ввода */
+  errorInTextBox() {
+    this.error();
+  }
+
+  /** Error Toasts — всплывающее уведомление об ошибке */
+  errorToasts() {
+    this.error();
+  }
+
+  /** Open Error Dialog — открытие диалога ошибки */
+  openErrorDialog() {
+    this.error();
+  }
+
+  /** Informative Toasts — информационное уведомление */
+  informativeToasts() {
+    this.chime();
+  }
+
+  /** Interactive Toasts — интерактивное уведомление */
+  interactiveToasts() {
+    this.chime();
+  }
+
+  /** Trophy Toast — получение трофея PS5 (C6 -> E6 -> G6) */
+  trophyToast() {
+    this.chime();
+  }
+
+  /** Platinum Trophy Toast — получение платинового трофея (C5 -> G5 -> C6 -> E6 -> G6 -> C7) */
+  platinumTrophyToast() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const notes = [
+      { freq: 523.25,  time: 0.00, dur: 0.22 }, // C5
+      { freq: 783.99,  time: 0.06, dur: 0.24 }, // G5
+      { freq: 1046.50, time: 0.12, dur: 0.26 }, // C6
+      { freq: 1318.51, time: 0.18, dur: 0.28 }, // E6
+      { freq: 1567.98, time: 0.24, dur: 0.35 }, // G6
+      { freq: 2093.00, time: 0.30, dur: 0.55 }  // C7
+    ];
+
+    notes.forEach((n) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(n.freq, now + n.time);
+
+      gain.gain.setValueAtTime(0.001, now + n.time);
+      gain.gain.linearRampToValueAtTime(0.14 * this._sfxVolume, now + n.time + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + n.time + n.dur);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + n.time);
+      osc.stop(now + n.time + n.dur);
+    });
+  }
+
+  /** Join Party — вход в голосовую группу */
+  joinParty() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    [523.25, 783.99].forEach((f, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, now + idx * 0.06);
+
+      gain.gain.setValueAtTime(0.1 * this._sfxVolume, now + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.12);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.12);
+    });
+  }
+
+  /** Leave Party — выход из голосовой группы */
+  leaveParty() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    [783.99, 523.25].forEach((f, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(f, now + idx * 0.06);
+
+      gain.gain.setValueAtTime(0.09 * this._sfxVolume, now + idx * 0.06);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.11);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.11);
+    });
+  }
+
+  /** Log Out — выход из профиля / выключение */
+  logOut() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(620, now);
+    osc.frequency.exponentialRampToValueAtTime(220, now + 0.22);
+
+    gain.gain.setValueAtTime(0.11 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.25);
+  }
+
+  /** Take Screenshot — создание снимка экрана */
+  takeScreenshot() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(1600, now);
+    osc.frequency.exponentialRampToValueAtTime(320, now + 0.07);
+
+    gain.gain.setValueAtTime(0.12 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
+  }
+
+  /** Purchase Universal Checkout — подтверждение покупки в Store */
+  purchaseUniversalCheckout() {
+    this.platinumTrophyToast();
+  }
+
+  /* =========================================================================
+     BACKWARD-COMPATIBLE ALIASES FOR EXISTING UI CODE
+     ========================================================================= */
+  navigate() {
+    this.focusMove();
+  }
+
+  focus() {
+    this.focusMove();
+  }
+
+  hover() {
+    this.focusMove();
+  }
+
+  confirm() {
+    this.enter();
+  }
+
+  back() {
+    this.cancel();
+  }
+
+  tick() {
+    this.focusMove();
+  }
+
+  modalOpen() {
+    this.openDialog();
+  }
+
+  modalClose() {
+    this.cancel();
+  }
+
+  controlCenter(isOpen = true) {
+    if (isOpen) this.openControlCenter();
+    else this.closeControlCenter();
+  }
+
   chime() {
     if (this._muted) return;
     this._ensureContext();
@@ -367,12 +764,84 @@ class PS5SoundEngine {
     });
   }
 
-  modalOpen() {
-    this.controlCenter(true);
+  whooshDown() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(600, now);
+    filter.frequency.exponentialRampToValueAtTime(200, now + 0.22);
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(420, now);
+    osc.frequency.exponentialRampToValueAtTime(160, now + 0.22);
+
+    gain.gain.setValueAtTime(0.11 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.25);
   }
 
-  modalClose() {
-    this.back();
+  whooshUp() {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(240, now);
+    osc.frequency.exponentialRampToValueAtTime(780, now + 0.18);
+
+    gain.gain.setValueAtTime(0.1 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.2);
+  }
+
+  micMute(isMuted) {
+    if (this._muted) return;
+    this._ensureContext();
+    if (!this._ctx) return;
+    const ctx = this._ctx;
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    if (isMuted) {
+      osc.frequency.setValueAtTime(680, now);
+      osc.frequency.exponentialRampToValueAtTime(380, now + 0.08);
+    } else {
+      osc.frequency.setValueAtTime(380, now);
+      osc.frequency.exponentialRampToValueAtTime(740, now + 0.08);
+    }
+    gain.gain.setValueAtTime(0.09 * this._sfxVolume, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
   }
 
   launch() {
@@ -382,7 +851,6 @@ class PS5SoundEngine {
     const ctx = this._ctx;
     const now = ctx.currentTime;
 
-    // Sub bass swell
     const subOsc = ctx.createOscillator();
     const subGain = ctx.createGain();
     subOsc.type = "sine";
@@ -395,7 +863,6 @@ class PS5SoundEngine {
     subOsc.start(now);
     subOsc.stop(now + 0.28);
 
-    // High shimmer chord
     [880, 1320, 1760].forEach((freq, idx) => {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -409,6 +876,10 @@ class PS5SoundEngine {
       osc.start(now + idx * 0.04);
       osc.stop(now + idx * 0.04 + 0.26);
     });
+  }
+
+  playStart() {
+    this.launch();
   }
 }
 
