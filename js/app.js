@@ -18,6 +18,7 @@ import {
   defaultProfileTelemetry
 } from "./data.js";
 import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
+import { psnService } from "./psn-service.js";
 import { SoundEngine } from "./sound.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
@@ -35,7 +36,10 @@ const state = {
   settingsSection: "accounts",
   bgFlip: false,
   isMicMuted: false,
-  widgetPreset: "default"
+  widgetPreset: "default",
+  trophyFilter: "all",
+  trophySearch: "",
+  activeGameDetailId: null
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -351,21 +355,37 @@ function applyLanguageAndTelemetry() {
   $("#lblSettingsTitle").textContent = S("settingsTitle");
   if ($("#lblEditWidgets")) $("#lblEditWidgets").textContent = S("editWidgets");
 
-  // System PS5 Trophies into Welcome Hub Trophies Card
-  const summary = defaultProfileTelemetry;
-  const earned = summary.trophies;
-  const total = summary.totalTrophies;
-  const level = summary.level;
-  const pct = summary.progressPct;
+  // System PS5 Trophies into Welcome Hub Trophies Card (Real PSN Data)
+  const prof = psnService.profile;
+  const total = prof ? prof.totalTrophies : defaultProfileTelemetry.totalTrophies;
+  const level = prof ? prof.trophyLevel : defaultProfileTelemetry.level;
+  const pct = prof ? prof.levelProgress : defaultProfileTelemetry.progressPct;
+  const plat = prof ? prof.platinum : defaultProfileTelemetry.trophies.platinum;
+  const gold = prof ? prof.gold : defaultProfileTelemetry.trophies.gold;
+  const silver = prof ? prof.silver : defaultProfileTelemetry.trophies.silver;
+  const bronze = prof ? prof.bronze : defaultProfileTelemetry.trophies.bronze;
 
-  $("#ps5TrophiesTotal").textContent = `${S("totalPrefix")}: ${total}`;
-  $("#ps5CountPlat").textContent = String(earned.platinum);
-  $("#ps5CountGold").textContent = String(earned.gold);
-  $("#ps5CountSilver").textContent = String(earned.silver);
-  $("#ps5CountBronze").textContent = String(earned.bronze);
+  $("#ps5TrophiesTotal").textContent = `${S("totalPrefix")}: ${Number(total).toLocaleString()}`;
+  $("#ps5CountPlat").textContent = String(plat);
+  $("#ps5CountGold").textContent = String(gold);
+  $("#ps5CountSilver").textContent = String(silver);
+  $("#ps5CountBronze").textContent = String(bronze);
   $("#ps5TrophyLevel").textContent = `${S("levelPrefix")} ${level}`;
   $("#ps5TrophyPct").textContent = `${pct}%`;
   $("#ps5TrophyBarFill").style.width = `${pct}%`;
+
+  // Profile Identity & Greeting on Welcome Hub
+  const onlineId = prof?.onlineId || "Player 1";
+  if ($("#lblWelcomeHeroTitle")) {
+    $("#lblWelcomeHeroTitle").textContent = state.lang === "ru" ? `С возвращением, ${onlineId}` : `Welcome back, ${onlineId}`;
+  }
+  if (prof?.avatarUrl && $("#iconProfileAvatar")) {
+    const avatarBtn = $("#btnProfile");
+    if (avatarBtn) {
+      avatarBtn.title = state.lang === "ru" ? `Профиль ${onlineId}` : `Profile ${onlineId}`;
+    }
+    $("#iconProfileAvatar").innerHTML = `<img src="${prof.avatarUrl}" alt="${onlineId}" class="ps5-topbar-avatar" onerror="this.onerror=null;this.parentElement.innerHTML=PS5Icons.avatarSvg" />`;
+  }
 
   renderControllerHints();
   renderRibbon();
@@ -1704,167 +1724,389 @@ function closeModal() {
    - Remote Play Setup Guide
    ========================================================================= */
 
-function openTrophiesModal(gameId = "gta-vc") {
-  const isRu = state.lang === "ru";
-  SoundEngine.trophyToast();
+/* =========================================================================
+   TASK 10: REAL PSN TROPHY SYNC & TROPHY COLLECTION ENGINE
+   ========================================================================= */
 
-  const trophiesList = [
-    {
-      id: "plat",
-      tier: "plat",
-      tierName: isRu ? "Платина" : "Platinum",
-      rarity: isRu ? "Редкий · 18.0% игроков" : "Rare · 18.0% of players earned",
-      title: isRu ? "Король Вайс-Сити" : "King of Vice City",
-      desc: isRu ? "Получите все призы в Grand Theft Auto: Vice City" : "Collect all trophies in Grand Theft Auto: Vice City",
-      date: "17/7/2026 17:43"
-    },
-    {
-      id: "story_end",
-      tier: "gold",
-      tierName: isRu ? "Золото" : "Gold",
-      rarity: isRu ? "Редкий · 24.5% игроков" : "Rare · 24.5% of players earned",
-      title: isRu ? "Рожденный в 80-х" : "Born in the '80s",
-      desc: isRu ? "Завершите финальную сюжетную миссию «Держи друзей близко...»" : "Complete the final storyline mission 'Keep Your Friends Close...'",
-      date: "11/7/2026 21:15"
-    },
-    {
-      id: "rampage",
-      tier: "silver",
-      tierName: isRu ? "Серебро" : "Silver",
-      rarity: isRu ? "Необычный · 42.1% игроков" : "Uncommon · 42.1% of players earned",
-      title: isRu ? "Железные нервы" : "Iron Nerves",
-      desc: isRu ? "Пройдите все 35 испытаний Rampage по всему Вайс-Сити" : "Complete all 35 Rampage challenges across Vice City",
-      date: "04/7/2026 19:40"
-    },
-    {
-      id: "stunt",
-      tier: "silver",
-      tierName: isRu ? "Серебро" : "Silver",
-      rarity: isRu ? "Необычный · 38.6% игроков" : "Uncommon · 38.6% of players earned",
-      title: isRu ? "В погоне за скоростью" : "Chasing Speed",
-      desc: isRu ? "Выполните все уникальные безумные прыжки (Unique Stunt Jumps)" : "Complete all Unique Stunt Jumps across Vice City",
-      date: "28/6/2026 16:22"
-    },
-    {
-      id: "intro",
-      tier: "bronze",
-      tierName: isRu ? "Бронза" : "Bronze",
-      rarity: isRu ? "Обычный · 91.6% игроков" : "Common · 91.6% of players earned",
-      title: isRu ? "Первые шаги Томми" : "Tommy's First Steps",
-      desc: isRu ? "Прибудьте в отель Ocean View и начните восхождение" : "Arrive at the Ocean View Hotel and start your reign",
-      date: "11/6/2026 20:32"
-    },
-    {
-      id: "shooting",
-      tier: "bronze",
-      tierName: isRu ? "Бронза" : "Bronze",
-      rarity: isRu ? "Обычный · 76.4% игроков" : "Common · 76.4% of players earned",
-      title: isRu ? "В яблочко!" : "Bullseye!",
-      desc: isRu ? "Наберите 45 очков на стрельбище в тире Ammu-Nation" : "Score 45 points at the Ammu-Nation Shooting Range",
-      date: "12/6/2026 17:43"
-    },
-    {
-      id: "assets",
-      tier: "gold",
-      tierName: isRu ? "Золото" : "Gold",
-      rarity: isRu ? "Редкий · 21.0% игроков" : "Rare · 21.0% of players earned",
-      title: isRu ? "Городской магнат" : "City Mogul",
-      desc: isRu ? "Приобретите все 10 объектов коммерческой недвижимости" : "Purchase all 10 asset properties across the city",
-      date: "14/7/2026 23:05"
+function formatTrophyDate(isoDate, isRu) {
+  if (!isoDate) return isRu ? "Не получено" : "Not earned";
+  try {
+    const d = new Date(isoDate);
+    return d.toLocaleDateString(isRu ? "ru-RU" : "en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric"
+    });
+  } catch {
+    return isoDate;
+  }
+}
+
+function openTrophyCollectionModal() {
+  const modal = $("#modalTrophyCollection");
+  if (!modal) return;
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  SoundEngine.openDialog();
+
+  renderTrophyCollectionModal();
+}
+
+function closeTrophyCollectionModal() {
+  const modal = $("#modalTrophyCollection");
+  if (!modal || !modal.classList.contains("active")) return;
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  SoundEngine.cancel();
+}
+
+function renderTrophyCollectionModal() {
+  const isRu = state.lang === "ru";
+  const { profile, recentTrophies, games, syncSource } = psnService.getData();
+  if (!profile) return;
+
+  // Profile Identity
+  const avatarEl = $("#tcProfileAvatar");
+  if (avatarEl && profile.avatarUrl) avatarEl.src = profile.avatarUrl;
+  $("#tcProfileOnlineId").textContent = profile.onlineId || "Player 1";
+
+  const pill = $("#tcSyncPill");
+  if (pill) {
+    if (syncSource === "supabase") pill.textContent = isRu ? "● PSN Cloud DB" : "● PSN Cloud DB";
+    else if (syncSource === "custom") pill.textContent = isRu ? "● Локальный импорт" : "● Custom Import";
+    else pill.textContent = isRu ? "● PSN Sync" : "● PSN Sync";
+  }
+
+  const tsEl = $("#tcSyncTimestamp");
+  if (tsEl) {
+    if (profile.lastSyncAt) {
+      const syncDate = new Date(profile.lastSyncAt);
+      tsEl.textContent = `${isRu ? "Синхронизировано:" : "Synced:"} ${syncDate.toLocaleDateString(isRu ? "ru-RU" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`;
+    } else {
+      tsEl.textContent = isRu ? "Синхронизировано недавно" : "Recently synced";
     }
-  ];
+  }
+
+  // Level & Progress
+  $("#tcTrophyLevel").textContent = String(profile.trophyLevel || 1);
+  $("#tcLevelProgressBar").style.width = `${profile.levelProgress || 0}%`;
+  $("#tcLevelProgressPct").textContent = `${profile.levelProgress || 0}%`;
+
+  // 3D Cup Icons
+  $("#tcCupPlatSvg").innerHTML = PS5Icons.trophyCup3D("platinum");
+  $("#tcCupGoldSvg").innerHTML = PS5Icons.trophyCup3D("gold");
+  $("#tcCupSilverSvg").innerHTML = PS5Icons.trophyCup3D("silver");
+  $("#tcCupBronzeSvg").innerHTML = PS5Icons.trophyCup3D("bronze");
+
+  // Counters
+  $("#tcTotalCount").textContent = Number(profile.totalTrophies || 0).toLocaleString();
+  $("#tcPlatCount").textContent = Number(profile.platinum || 0).toLocaleString();
+  $("#tcGoldCount").textContent = Number(profile.gold || 0).toLocaleString();
+  $("#tcSilverCount").textContent = Number(profile.silver || 0).toLocaleString();
+  $("#tcBronzeCount").textContent = Number(profile.bronze || 0).toLocaleString();
+
+  // Section 1: Recent Trophies
+  const recentListEl = $("#tcRecentTrophiesList");
+  if (recentListEl) {
+    if (!recentTrophies || recentTrophies.length === 0) {
+      recentListEl.innerHTML = `<div style="padding:14px; color:rgba(255,255,255,0.4); font-size:13px;">${isRu ? "Нет недавних призов" : "No recent trophies"}</div>`;
+    } else {
+      recentListEl.innerHTML = recentTrophies.map(t => {
+        const iconSrc = t.trophyIconUrl || "assets/covers/gta_vc.jpg";
+        return `
+          <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" onerror="this.src='assets/covers/gta_vc.jpg'">
+            <div class="tc-recent-info">
+              <span class="tc-recent-trophy-name">${escapeHtml(t.trophyName)}</span>
+              <span class="tc-recent-game-title">${escapeHtml(t.gameTitle || 'PlayStation 5')}</span>
+              <span class="tc-recent-date">${formatTrophyDate(t.earnedDateTime, isRu)}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      recentListEl.querySelectorAll(".tc-recent-card").forEach(card => {
+        card.addEventListener("click", () => {
+          const cid = card.dataset.commId;
+          if (cid) openGameTrophiesDetail(cid);
+        });
+      });
+    }
+  }
+
+  // Section 2: My Games
+  renderTrophyGamesList();
+}
+
+function renderTrophyGamesList() {
+  const isRu = state.lang === "ru";
+  const gamesGrid = $("#tcGamesGrid");
+  const countBadge = $("#tcGamesCount");
+  if (!gamesGrid) return;
+
+  const filteredGames = psnService.getGames(state.trophyFilter, state.trophySearch);
+  if (countBadge) {
+    countBadge.textContent = isRu ? `${filteredGames.length} ${formatGamePlural(filteredGames.length, true)}` : `${filteredGames.length} games`;
+  }
+
+  if (filteredGames.length === 0) {
+    gamesGrid.innerHTML = `
+      <div style="grid-column: 1 / -1; padding: 36px 20px; text-align: center; color: rgba(255, 255, 255, 0.4); font-size: 14px;">
+        ${isRu ? "Игры не найдены по текущему запросу" : "No games found matching your search"}
+      </div>
+    `;
+    return;
+  }
+
+  gamesGrid.innerHTML = filteredGames.map(g => {
+    const thumb = g.titleIconUrl || "assets/covers/gta_vc.jpg";
+    const counts = g.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+    const hasPlat = g.platinumEarned || counts.platinum > 0;
+
+    return `
+      <div class="tc-game-card" data-comm-id="${g.npCommunicationId}">
+        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" onerror="this.src='assets/covers/gta_vc.jpg'">
+        <div class="tc-game-details">
+          <div class="tc-game-header-row">
+            <span class="tc-game-title" title="${escapeHtml(g.titleName)}">${escapeHtml(g.titleName)}</span>
+            <span class="tc-platform-badge">${g.platform || 'PS5'}</span>
+          </div>
+          <div class="tc-game-progress-row">
+            <div class="tc-game-progress-track">
+              <div class="tc-game-progress-fill" style="width: ${g.progress}%;"></div>
+            </div>
+            <span class="tc-game-progress-val">${g.progress}%</span>
+          </div>
+          <div class="tc-game-cups-mini">
+            ${hasPlat ? `<span class="tc-mini-cup tc-mini-cup--plat">🏆 ${counts.platinum || 1}</span>` : ''}
+            <span class="tc-mini-cup tc-mini-cup--gold">🥇 ${counts.gold || 0}</span>
+            <span class="tc-mini-cup tc-mini-cup--silver">🥈 ${counts.silver || 0}</span>
+            <span class="tc-mini-cup tc-mini-cup--bronze">🥉 ${counts.bronze || 0}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  gamesGrid.querySelectorAll(".tc-game-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const cid = card.dataset.commId;
+      if (cid) openGameTrophiesDetail(cid);
+    });
+  });
+}
+
+function openGameTrophiesDetail(commId) {
+  const isRu = state.lang === "ru";
+  const game = psnService.getGame(commId);
+  if (!game) return;
+
+  state.activeGameDetailId = commId;
+  const modal = $("#modalGameTrophiesDetail");
+  const body = $("#gameDetailBody");
+  if (!modal || !body) return;
+
+  SoundEngine.openDialog();
+
+  const thumb = game.titleIconUrl || "assets/covers/gta_vc.jpg";
+  const counts = game.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+  const trophies = game.trophies || [];
+
+  body.innerHTML = `
+    <!-- Game Hero Banner -->
+    <div class="tc-game-hero-banner">
+      <img src="${thumb}" alt="${escapeHtml(game.titleName)}" class="tc-game-hero-thumb" onerror="this.src='assets/covers/gta_vc.jpg'">
+      <div class="tc-game-hero-info">
+        <h2 class="tc-game-hero-title">${escapeHtml(game.titleName)}</h2>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+          <span class="tc-platform-badge">${game.platform || 'PS5'}</span>
+          <span style="font-size:12.5px; color:rgba(255,255,255,0.6);">${isRu ? "Всего призов:" : "Total trophies:"} ${game.totalTrophiesCount || trophies.length}</span>
+        </div>
+        <div class="tc-game-progress-row" style="max-width:400px;">
+          <div class="tc-game-progress-track">
+            <div class="tc-game-progress-fill" style="width:${game.progress}%;"></div>
+          </div>
+          <span class="tc-game-progress-val">${game.progress}%</span>
+        </div>
+        <div class="tc-game-cups-mini" style="margin-top:8px;">
+          <span class="tc-mini-cup tc-mini-cup--plat">🏆 ${counts.platinum || 0}</span>
+          <span class="tc-mini-cup tc-mini-cup--gold">🥇 ${counts.gold || 0}</span>
+          <span class="tc-mini-cup tc-mini-cup--silver">🥈 ${counts.silver || 0}</span>
+          <span class="tc-mini-cup tc-mini-cup--bronze">🥉 ${counts.bronze || 0}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trophies List -->
+    <div class="tc-trophy-list">
+      ${trophies.length === 0 ? `
+        <div style="padding:32px; text-align:center; color:rgba(255,255,255,0.4); font-size:14px;">
+          ${isRu ? "Список индивидуальных призов игры подгружается..." : "Trophy list is loading..."}
+        </div>
+      ` : trophies.map(t => {
+        const isEarned = !!t.earned;
+        const iconSrc = t.trophyIconUrl || thumb;
+        const gradeClass = `tc-trophy-grade-badge--${t.trophyType || 'bronze'}`;
+
+        return `
+          <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'}">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" onerror="this.src='${thumb}'">
+            <div class="tc-trophy-content">
+              <div class="tc-trophy-name-row">
+                <span class="tc-trophy-name">${escapeHtml(t.trophyName)}</span>
+                <span class="tc-trophy-grade-badge ${gradeClass}">${(t.trophyType || 'bronze').toUpperCase()}</span>
+              </div>
+              <span class="tc-trophy-desc">${escapeHtml(t.trophyDetail || '')}</span>
+            </div>
+            <div class="tc-trophy-status-col">
+              ${isEarned 
+                ? `<span class="tc-earned-date">✓ ${formatTrophyDate(t.earnedDateTime, isRu)}</span>`
+                : `<span class="tc-locked-text">🔒 ${isRu ? "Не получено" : "Locked"}</span>`
+              }
+            </div>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `;
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeGameTrophiesDetail() {
+  const modal = $("#modalGameTrophiesDetail");
+  if (!modal || !modal.classList.contains("active")) return;
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  SoundEngine.cancel();
+}
+
+function openPsnJsonImportModal() {
+  closeSettings();
+  const modal = $("#modalPsnJsonImport");
+  const txt = $("#txtJsonImport");
+  const err = $("#jsonImportError");
+  if (!modal) return;
+  if (txt) txt.value = "";
+  if (err) err.style.display = "none";
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  SoundEngine.openDialog();
+}
+
+function closePsnJsonImportModal() {
+  const modal = $("#modalPsnJsonImport");
+  if (!modal || !modal.classList.contains("active")) return;
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  SoundEngine.cancel();
+}
+
+function submitPsnJsonImport() {
+  const txtEl = $("#txtJsonImport");
+  const errEl = $("#jsonImportError");
+  if (!txtEl || !errEl) return;
+
+  const val = txtEl.value.trim();
+  if (!val) {
+    errEl.textContent = state.lang === "ru" ? "Вставьте JSON с данными" : "Please paste JSON data";
+    errEl.style.display = "block";
+    return;
+  }
+
+  const res = psnService.importFromJSON(val);
+  if (!res.success) {
+    errEl.textContent = res.error;
+    errEl.style.display = "block";
+    SoundEngine.error();
+    return;
+  }
+
+  closePsnJsonImportModal();
+  SoundEngine.trophyToast();
+  showToast(
+    state.lang === "ru" ? "Импорт призов PSN" : "PSN Trophy Import",
+    state.lang === "ru" ? `✓ Успешно импортировано ${res.count} игр` : `✓ Successfully imported ${res.count} games`,
+    PS5Icons.trophy
+  );
+  applyLanguageAndTelemetry();
+}
+
+function openPsnSyncDetailsModal() {
+  const isRu = state.lang === "ru";
+  const { profile, games, syncSource } = psnService.getData();
+  const onlineId = profile?.onlineId || "Cr1mnsx";
+  const total = profile?.totalTrophies || 0;
+  const level = profile?.trophyLevel || 1;
 
   const html = `
-    <div class="ps5-tp-shell">
-      <div class="ps5-tp-header-banner">
-        <div class="ps5-tp-game-info">
-          <img src="assets/covers/gta_vc.jpg" class="ps5-tp-game-icon" alt="GTA Vice City" />
+    <div style="display:flex; flex-direction:column; gap:16px; margin-top:8px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-radius:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);">
+        <div style="display:flex; align-items:center; gap:14px;">
+          <img src="${profile?.avatarUrl || 'assets/covers/gta_vc.jpg'}" style="width:44px; height:44px; border-radius:50%; object-fit:cover;" alt="Avatar" onerror="this.src='assets/covers/gta_vc.jpg'">
           <div>
-            <div class="ps5-tp-game-title">Grand Theft Auto: Vice City</div>
-            <div style="font-size:12px; color:rgba(255,255,255,0.6); margin-top:2px;">reVC WebAssembly Edition · Rockstar Games</div>
+            <div style="font-weight:700; font-size:15px; color:#ffffff;">${onlineId}</div>
+            <div style="font-size:12.5px; color:rgba(255,255,255,0.5);">PlayStation Network Online ID</div>
           </div>
         </div>
+        <span style="padding:4px 10px; border-radius:999px; background:rgba(34,197,94,0.15); color:#22c55e; font-size:12px; font-weight:700;">● Активен</span>
+      </div>
 
-        <div class="ps5-tp-stats-group">
-          <div class="ps5-tp-progress-box">
-            <div class="ps5-tp-progress-labels">
-              <span>${isRu ? "Прогресс" : "Progress"} <strong>100%</strong></span>
-              <span>47 / 47</span>
-            </div>
-            <div class="ps5-tp-progress-bar">
-              <div class="ps5-tp-progress-fill" style="width:100%;"></div>
-            </div>
-          </div>
-
-          <div class="ps5-tp-cups-breakdown">
-            <span class="ps5-tp-cup-stat plat" title="Platinum">🏆 1</span>
-            <span class="ps5-tp-cup-stat gold" title="Gold">🥇 3</span>
-            <span class="ps5-tp-cup-stat silver" title="Silver">🥈 7</span>
-            <span class="ps5-tp-cup-stat bronze" title="Bronze">🥉 36</span>
-          </div>
+      <div class="modal-spec-grid">
+        <div class="spec-cell">
+          <span class="spec-label">Уровень PSN</span>
+          <span class="spec-value" style="color:#f59e0b;">Level ${level}</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">Всего призов</span>
+          <span class="spec-value">${Number(total).toLocaleString()}</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">Игр в библиотеке</span>
+          <span class="spec-value">${games.length}</span>
+        </div>
+        <div class="spec-cell">
+          <span class="spec-label">Платиновые призы</span>
+          <span class="spec-value" style="color:#38bdf8;">🏆 ${profile?.platinum || 0}</span>
         </div>
       </div>
 
-      <div class="ps5-tp-subrow">
-        <span>${isRu ? "Все призы: 47" : "All trophies: 47"}</span>
-        <span>${isRu ? "Сортировка: По умолчанию" : "Sort by: Game Default"}</span>
-      </div>
-
-      <div class="ps5-tp-list">
-        ${trophiesList.map(t => `
-          <div class="ps5-tp-card">
-            <div class="ps5-tp-card-left">
-              <div class="ps5-tp-emblem-hex ${t.tier}">
-                <span>${t.tier === 'plat' ? '🏆' : (t.tier === 'gold' ? '🥇' : (t.tier === 'silver' ? '🥈' : '🥉'))}</span>
-              </div>
-              <div class="ps5-tp-card-meta">
-                <span class="ps5-tp-card-title">${t.title}</span>
-                <span class="ps5-tp-card-tier-info">
-                  <strong style="color:#ffffff;">${t.tierName}</strong> · ${t.rarity}
-                </span>
-                <span class="ps5-tp-card-desc">${t.desc}</span>
-              </div>
-            </div>
-            <div class="ps5-tp-card-right">
-              <span>📅 ${t.date}</span>
-            </div>
-          </div>
-        `).join("")}
+      <div style="padding:16px; background:rgba(0,112,209,0.08); border:1px solid rgba(0,112,209,0.25); border-radius:14px;">
+        <div style="font-weight:700; font-size:13.5px; color:#38bdf8; margin-bottom:6px;">
+          ${isRu ? "Автоматическое обновление 24/7 (GitHub Actions)" : "Automatic 24/7 Sync (GitHub Actions)"}
+        </div>
+        <div style="font-size:12.5px; color:rgba(255,255,255,0.7); line-height:1.5;">
+          ${isRu 
+            ? "Для автоматической синхронизации новых призов с вашей PS5 добавьте токен NPSSO в Secrets репозитория GitHub:<br>1. Получите токен на <code>ca.account.sony.com/api/v1/ssocookie</code><br>2. Добавьте секрет <code>PSN_NPSSO</code> в GitHub Settings → Secrets → Actions.<br>Синхронизация запускается каждые 45 минут без передачи пароля."
+            : "For automatic trophy updates from your PS5, add your NPSSO token to GitHub Repository Secrets:<br>1. Obtain your token at <code>ca.account.sony.com/api/v1/ssocookie</code><br>2. Add secret <code>PSN_NPSSO</code> under Settings → Secrets → Actions.<br>Sync runs every 45 minutes automatically."
+          }
+        </div>
       </div>
     </div>
   `;
 
   openModal({
-    tag: "TROPHIES",
-    title: isRu ? "Призы и достижения PS5" : "PlayStation 5 Trophies",
-    subtitle: isRu ? "Синхронизация профиля PlayStation Network · 100% Завершено" : "PlayStation Network Profile Sync · 100% Completed",
+    tag: "PSN TROPHY SYNC",
+    title: isRu ? "Синхронизация PlayStation Network" : "PlayStation Network Sync",
+    subtitle: isRu ? "Статус подключения и автоматическое обновление" : "Connection status and automated updates",
     content: html,
     isWide: true,
-    actions: []
+    actions: [
+      { text: isRu ? "Синхронизировать сейчас" : "Sync Now", primary: true, action: "act:psn_sync_now" },
+      { text: isRu ? "Импорт JSON" : "Import JSON", primary: false, action: "modal:psn_json_import" },
+      { text: isRu ? "Сбросить кэш" : "Reset Cache", primary: false, action: "act:psn_disconnect" }
+    ]
   });
+}
 
-  const cardEl = $("#modalOverlay .modal-card");
-  if (cardEl) cardEl.classList.add("ultra-wide");
-
-  const modalBody = $("#modalBody");
-  if (modalBody) {
-    modalBody.querySelectorAll(".ps5-tp-card").forEach(c => {
-      c.style.cursor = "pointer";
-      c.addEventListener("click", () => {
-        if (c.querySelector(".ps5-tp-emblem-hex.plat")) {
-          SoundEngine.platinumTrophyToast();
-          showToast("Призы PS5", isRu ? "Платиновый приз разблокирован!" : "Platinum Trophy Unlocked!", "🏆");
-        } else {
-          SoundEngine.trophyToast();
-          showToast("Призы PS5", c.querySelector(".ps5-tp-card-title")?.textContent || "Приз получен", "🥇");
-        }
-      });
-    });
-  }
+function openTrophiesModal(gameId = "gta-vc") {
+  openTrophyCollectionModal();
 }
 
 function openPSNModal() {
-  openTrophiesModal("gta-vc");
+  openTrophyCollectionModal();
 }
 
 function openStoreModal() {
@@ -2767,6 +3009,47 @@ function handleAction(action) {
     closeModal();
     if (state.category !== "games") switchCategory("games");
     return selectTile("explore", true);
+  }
+  if (action === "modal:trophy_collection" || action === "modal:trophies") return openTrophyCollectionModal();
+  if (action === "modal:psn_sync_details") return openPsnSyncDetailsModal();
+  if (action === "modal:psn_json_import") return openPsnJsonImportModal();
+  if (action === "act:psn_sync_now") {
+    closeModal();
+    SoundEngine.enter();
+    showToast(
+      state.lang === "ru" ? "Синхронизация PSN" : "PSN Sync",
+      state.lang === "ru" ? "Проверка и загрузка трофеев..." : "Checking and syncing trophies...",
+      PS5Icons.trophy
+    );
+    psnService.syncNow().then((data) => {
+      SoundEngine.trophyToast();
+      showToast(
+        state.lang === "ru" ? "Трофеи обновлены" : "Trophies Updated",
+        state.lang === "ru" ? `✓ Синхронизировано ${data.games?.length || 0} игр и ${data.profile?.totalTrophies || 0} призов` : `✓ Synced ${data.games?.length || 0} games and ${data.profile?.totalTrophies || 0} trophies`,
+        PS5Icons.trophy
+      );
+      applyLanguageAndTelemetry();
+    }).catch(() => {
+      SoundEngine.error();
+      showToast(
+        state.lang === "ru" ? "Ошибка синхронизации" : "Sync Error",
+        state.lang === "ru" ? "Не удалось связаться с сервером" : "Could not reach sync server",
+        PS5Icons.error
+      );
+    });
+    return;
+  }
+  if (action === "act:psn_disconnect") {
+    closeModal();
+    psnService.disconnect();
+    SoundEngine.cancel();
+    showToast(
+      state.lang === "ru" ? "PSN Профиль" : "PSN Profile",
+      state.lang === "ru" ? "Локальные данные сброшены" : "Local data reset to defaults",
+      PS5Icons.info
+    );
+    applyLanguageAndTelemetry();
+    return;
   }
   if (action === "modal:psn") return openPSNModal();
   if (action === "modal:trophies") return openTrophiesModal();
@@ -4048,7 +4331,7 @@ function init() {
     selectTile("gta-vc", true);
   });
   $("#btnSettings").addEventListener("click", openSettings);
-  $("#btnProfile").addEventListener("click", () => handleAction("modal:psn"));
+  $("#btnProfile").addEventListener("click", () => openTrophyCollectionModal());
 
   // Welcome Hub Bento Widget Clicks (Authentic 1:1 PS5 Modals & Diagnostics)
   $("#widgetStore")?.addEventListener("click", () => openStoreModal());
@@ -4056,7 +4339,7 @@ function init() {
     state.settingsSection = "language";
     openSettings();
   });
-  $("#widgetTrophies")?.addEventListener("click", () => openTrophiesModal("gta-vc"));
+  $("#widgetTrophies")?.addEventListener("click", () => openTrophyCollectionModal());
   $("#widgetBattery")?.addEventListener("click", () => {
     state.settingsSection = "accessories";
     openSettings();
@@ -4071,7 +4354,78 @@ function init() {
   $("#widgetMediaGallery")?.addEventListener("click", () => openMediaGalleryModal());
   $("#widgetPsPlus")?.addEventListener("click", () => openStoreModal());
   $("#widgetRemotePlay")?.addEventListener("click", () => openRemotePlayModal());
-  $("#widgetTrophyProgress")?.addEventListener("click", () => openTrophiesModal("gta-vc"));
+  $("#widgetTrophyProgress")?.addEventListener("click", () => openTrophyCollectionModal());
+
+  // PSN Trophy Service Background Initialization & Live Updates
+  psnService.init().then(() => {
+    applyLanguageAndTelemetry();
+  });
+  psnService.onUpdate(() => {
+    applyLanguageAndTelemetry();
+    if ($("#modalTrophyCollection")?.classList.contains("active")) {
+      renderTrophyCollectionModal();
+    }
+  });
+
+  // Trophy Collection Modal Event Listeners
+  $("#btnTcClose")?.addEventListener("click", closeTrophyCollectionModal);
+  $("#tcBackdrop")?.addEventListener("click", closeTrophyCollectionModal);
+
+  $("#btnSyncTrophiesTop")?.addEventListener("click", () => {
+    const btn = $("#btnSyncTrophiesTop");
+    btn?.classList.add("is-loading");
+    SoundEngine.enter();
+    showToast(
+      state.lang === "ru" ? "Синхронизация PSN" : "PSN Sync",
+      state.lang === "ru" ? "Проверка и загрузка трофеев..." : "Checking and syncing trophies...",
+      PS5Icons.trophy
+    );
+    psnService.syncNow().then((data) => {
+      btn?.classList.remove("is-loading");
+      SoundEngine.trophyToast();
+      showToast(
+        state.lang === "ru" ? "Трофеи обновлены" : "Trophies Updated",
+        state.lang === "ru" ? `✓ Синхронизировано ${data.games?.length || 0} игр и ${data.profile?.totalTrophies || 0} призов` : `✓ Synced ${data.games?.length || 0} games and ${data.profile?.totalTrophies || 0} trophies`,
+        PS5Icons.trophy
+      );
+      applyLanguageAndTelemetry();
+      renderTrophyCollectionModal();
+    }).catch(() => {
+      btn?.classList.remove("is-loading");
+      SoundEngine.error();
+      showToast(
+        state.lang === "ru" ? "Ошибка синхронизации" : "Sync Error",
+        state.lang === "ru" ? "Не удалось связаться с сервером" : "Could not reach sync server",
+        PS5Icons.error
+      );
+    });
+  });
+
+  $("#tcGamesSearchInput")?.addEventListener("input", (e) => {
+    state.trophySearch = e.target.value;
+    renderTrophyGamesList();
+  });
+
+  $("#tcFilterPills")?.querySelectorAll(".tc-filter-pill")?.forEach((pill) => {
+    pill.addEventListener("click", () => {
+      $("#tcFilterPills")?.querySelectorAll(".tc-filter-pill")?.forEach((p) => p.classList.remove("is-active"));
+      pill.classList.add("is-active");
+      state.trophyFilter = pill.dataset.filter || "all";
+      SoundEngine.focusMove();
+      renderTrophyGamesList();
+    });
+  });
+
+  // Single Game Trophy Details Modal Event Listeners
+  $("#btnGameDetailClose")?.addEventListener("click", closeGameTrophiesDetail);
+  $("#btnGameDetailBack")?.addEventListener("click", closeGameTrophiesDetail);
+  $("#gameDetailBackdrop")?.addEventListener("click", closeGameTrophiesDetail);
+
+  // PSN JSON Import Modal Event Listeners
+  $("#btnJsonImportClose")?.addEventListener("click", closePsnJsonImportModal);
+  $("#btnCancelJsonImport")?.addEventListener("click", closePsnJsonImportModal);
+  $("#jsonImportBackdrop")?.addEventListener("click", closePsnJsonImportModal);
+  $("#btnSubmitJsonImport")?.addEventListener("click", submitPsnJsonImport);
 
   // Game Hero / Hub Interactions
   $("#heroTrophySummary").addEventListener("click", () => openPSNModal());

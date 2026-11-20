@@ -134,11 +134,11 @@ export const uiStrings = {
 export const welcomeHubFriends = [];
 
 export const defaultProfileTelemetry = {
-  accountName: "PlayStation®5",
-  level: 100,
-  progressPct: 48,
-  trophies: { platinum: 12, gold: 48, silver: 126, bronze: 384 },
-  totalTrophies: 570
+  accountName: "Cr1mnsx",
+  level: 284,
+  progressPct: 42,
+  trophies: { platinum: 24, gold: 148, silver: 462, bronze: 1208 },
+  totalTrophies: 1842
 };
 
 export const ribbonCatalog = {
@@ -484,6 +484,17 @@ export const settingsSections = [
     items: [
       { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Player 1 (PS5)", action: "modal:psn" },
       { label: { ru: "Сетевой статус", en: "Online Status" }, val: { ru: "Статус не проверен", en: "Status unverified" } }
+    ]
+  },
+  {
+    id: "psn_sync",
+    title: { ru: "Синхронизация PSN", en: "PlayStation Network Sync" },
+    icon: PS5Icons.trophy,
+    items: [
+      { label: { ru: "Синхронизация призов PSN", en: "PSN Trophy Sync" }, val: "Автоматически", action: "modal:psn_sync_details" },
+      { label: { ru: "Синхронизировать сейчас", en: "Sync Now" }, val: { ru: "Обновить данные", en: "Update data" }, action: "act:psn_sync_now" },
+      { label: { ru: "Импорт данных (JSON)", en: "Import Trophies (JSON)" }, val: { ru: "Загрузить", en: "Import" }, action: "modal:psn_json_import" },
+      { label: { ru: "Коллекция призов", en: "Trophy Collection" }, val: { ru: "Открыть обзор", en: "Open Collection" }, action: "modal:trophy_collection" }
     ]
   },
   {

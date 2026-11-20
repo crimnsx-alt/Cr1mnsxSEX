@@ -1,0 +1,567 @@
+#!/usr/bin/env node
+/**
+ * PlayStation Network (PSN) Trophy Synchronizer
+ * TASK 10: Automatic Synchronization with PlayStation 5 Welcome Hub
+ * 
+ * Safely fetches trophies, levels, and games from official PlayStation Network API
+ * using standard OAuth authentication via NPSSO token stored in server/repo secrets.
+ */
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = path.resolve(__dirname, '..');
+const DATA_DIR = path.join(ROOT_DIR, 'data');
+const TROPHIES_JSON_PATH = path.join(DATA_DIR, 'psn-trophies.json');
+
+// Official Sony Client ID & Secret for PS App OAuth
+const CLIENT_ID = '09515139-db77-4948-8042-e370db3597d1';
+const CLIENT_SECRET_BASIC = 'MDk1MTUxMzktZGI3Ny00OTQ4LTgwNDItZTM3MGRiMzU5N2QxOnExSUIxfldLTVNDUGEyWW0=';
+const REDIRECT_URI = 'com.scee.psxandroid.scee.medialink://community/auth/signin';
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Step 1: Exchange 64-character NPSSO cookie for OAuth accessCode
+ */
+async function exchangeNpssoForCode(npsso) {
+  const url = new URL('https://ca.account.sony.com/api/authz/v3/oauth/authorize');
+  url.searchParams.set('access_type', 'offline');
+  url.searchParams.set('client_id', CLIENT_ID);
+  url.searchParams.set('response_type', 'code');
+  url.searchParams.set('scope', 'psn:mobile.core');
+  url.searchParams.set('redirect_uri', REDIRECT_URI);
+
+  const res = await fetch(url.toString(), {
+    headers: {
+      Cookie: `npsso=${npsso}`,
+      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'
+    },
+    redirect: 'manual'
+  });
+
+  const location = res.headers.get('location');
+  if (!location) {
+    throw new Error('NPSSO authorization failed. Please verify that your NPSSO token is valid and not expired.');
+  }
+
+  const redirectUrl = new URL(location);
+  const code = redirectUrl.searchParams.get('code');
+  if (!code) {
+    throw new Error(`Failed to extract authorization code from redirect: ${location}`);
+  }
+
+  return code;
+}
+
+/**
+ * Step 2: Exchange authorization code for bearer accessToken
+ */
+async function exchangeCodeForTokens(code) {
+  const params = new URLSearchParams({
+    code,
+    client_id: CLIENT_ID,
+    grant_type: 'authorization_code',
+    redirect_uri: REDIRECT_URI,
+    token_format: 'jwt'
+  });
+
+  const res = await fetch('https://ca.account.sony.com/api/authz/v3/oauth/token', {
+    method: 'POST',
+    headers: {
+      Authorization: `Basic ${CLIENT_SECRET_BASIC}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    body: params.toString()
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Failed to exchange code for access token (${res.status}): ${errText}`);
+  }
+
+  const data = await res.json();
+  return data.access_token;
+}
+
+/**
+ * Step 3: Fetch Profile, Trophy Summary, Titles and Trophies from PSN
+ */
+async function fetchPsnData(accessToken) {
+  const headers = {
+    Authorization: `Bearer ${accessToken}`,
+    'Accept-Language': 'ru-RU, ru;q=0.9, en-US;q=0.8',
+    'User-Agent': 'PlayStation/23.11.0 CFNetwork/1408.0.4 Darwin/22.5.0'
+  };
+
+  // 1. User Profile
+  console.log('Fetching user profile...');
+  const profRes = await fetch('https://m.np.playstation.com/api/userProfile/v1/internal/users/me/profiles', { headers });
+  if (!profRes.ok) throw new Error(`Failed to fetch profile: ${profRes.status}`);
+  const profileData = await profRes.json();
+  const onlineId = profileData.onlineId || 'Player';
+  const avatarUrl = profileData.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl || 
+                    profileData.avatarUrls?.[0]?.avatarUrl || '';
+  const aboutMe = profileData.aboutMe || '';
+
+  // 2. Trophy Summary (Level, Total, Platinum, Gold, Silver, Bronze)
+  console.log(`Fetching trophy summary for ${onlineId}...`);
+  const summaryRes = await fetch('https://m.np.playstation.com/api/trophy/v1/users/me/trophySummary', { headers });
+  if (!summaryRes.ok) throw new Error(`Failed to fetch trophy summary: ${summaryRes.status}`);
+  const summary = await summaryRes.json();
+
+  const trophyLevel = summary.trophyLevel || 1;
+  const levelProgress = summary.progress || 0;
+  const tier = summary.tier || 1;
+  const counts = summary.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+  const totalTrophies = counts.bronze + counts.silver + counts.gold + counts.platinum;
+
+  // 3. User Titles / Games
+  console.log('Fetching game titles...');
+  const titlesRes = await fetch('https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles?limit=100', { headers });
+  if (!titlesRes.ok) throw new Error(`Failed to fetch titles: ${titlesRes.status}`);
+  const titlesData = await titlesRes.json();
+  const rawTitles = titlesData.trophyTitles || [];
+
+  console.log(`Found ${rawTitles.length} games with trophies.`);
+
+  const games = [];
+  const allRecentTrophies = [];
+
+  // 4. Fetch detailed trophy list for each title (rate limited with sleep)
+  for (let i = 0; i < Math.min(rawTitles.length, 30); i++) {
+    const title = rawTitles[i];
+    const commId = title.npCommunicationId;
+    const titleName = title.trophyTitleName;
+    const titleIcon = title.trophyTitleIconUrl;
+    const platform = title.trophyTitlePlatform || 'PS5';
+    const progress = title.progress || 0;
+    const earnedCounts = title.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+    const hasPlat = earnedCounts.platinum > 0;
+
+    console.log(`[${i + 1}/${Math.min(rawTitles.length, 30)}] Fetching trophies for "${titleName}"...`);
+    await sleep(200);
+
+    let trophies = [];
+    try {
+      const troRes = await fetch(
+        `https://m.np.playstation.com/api/trophy/v1/users/me/titles/${commId}/trophyGroups/all/trophies`,
+        { headers }
+      );
+      if (troRes.ok) {
+        const troData = await troRes.json();
+        trophies = (troData.trophies || []).map((t) => {
+          const item = {
+            trophyId: t.trophyId,
+            trophyHidden: !!t.trophyHidden,
+            trophyType: t.trophyType || 'bronze',
+            trophyName: t.trophyName || 'Секретный приз',
+            trophyDetail: t.trophyDetail || '',
+            trophyIconUrl: t.trophyIconUrl || '',
+            trophyRare: t.trophyRare ?? 0,
+            earned: !!t.earned,
+            earnedDateTime: t.earnedDateTime || null,
+            gameTitle: titleName,
+            gameIcon: titleIcon,
+            npCommunicationId: commId
+          };
+
+          if (item.earned && item.earnedDateTime) {
+            allRecentTrophies.push(item);
+          }
+          return item;
+        });
+      }
+    } catch (err) {
+      console.warn(`Warning: Could not fetch trophies for ${titleName}: ${err.message}`);
+    }
+
+    games.push({
+      npCommunicationId: commId,
+      titleName,
+      titleIconUrl: titleIcon,
+      platform,
+      progress,
+      platinumEarned: hasPlat,
+      earnedTrophies: earnedCounts,
+      totalTrophiesCount: trophies.length || (earnedCounts.bronze + earnedCounts.silver + earnedCounts.gold + earnedCounts.platinum),
+      lastUpdatedDateTime: title.lastUpdatedDateTime || null,
+      trophies
+    });
+  }
+
+  // Sort recent trophies by earned date descending
+  allRecentTrophies.sort((a, b) => new Date(b.earnedDateTime).getTime() - new Date(a.earnedDateTime).getTime());
+  const recentTrophies = allRecentTrophies.slice(0, 20);
+
+  return {
+    profile: {
+      onlineId,
+      avatarUrl,
+      aboutMe,
+      trophyLevel,
+      levelProgress,
+      levelTier: tier,
+      totalTrophies,
+      platinum: counts.platinum,
+      gold: counts.gold,
+      silver: counts.silver,
+      bronze: counts.bronze,
+      lastSyncAt: new Date().toISOString()
+    },
+    recentTrophies,
+    games
+  };
+}
+
+/**
+ * Step 4: Write to Supabase (if configured)
+ */
+async function syncToSupabase(payload) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    console.log('Supabase environment variables not provided. Skipping Supabase table sync.');
+    return;
+  }
+
+  console.log(`Syncing to Supabase at ${supabaseUrl}...`);
+  const headers = {
+    apikey: serviceKey,
+    Authorization: `Bearer ${serviceKey}`,
+    'Content-Type': 'application/json',
+    Prefer: 'resolution=merge-duplicates'
+  };
+
+  const p = payload.profile;
+
+  // Upsert profile
+  const profRes = await fetch(`${supabaseUrl}/rest/v1/psn_profiles`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify([{
+      online_id: p.onlineId,
+      avatar_url: p.avatarUrl,
+      about_me: p.aboutMe,
+      trophy_level: p.trophyLevel,
+      level_tier: p.levelTier,
+      level_progress: p.levelProgress,
+      total_trophies: p.totalTrophies,
+      platinum: p.platinum,
+      gold: p.gold,
+      silver: p.silver,
+      bronze: p.bronze,
+      last_sync_at: p.lastSyncAt,
+      is_public: true,
+      updated_at: new Date().toISOString()
+    }])
+  });
+
+  if (!profRes.ok) {
+    const txt = await profRes.text();
+    console.warn('Supabase profile upsert warning:', txt);
+  } else {
+    console.log('✓ Profile upserted to Supabase');
+  }
+
+  // Upsert games
+  const gameRows = payload.games.map((g) => ({
+    online_id: p.onlineId,
+    np_communication_id: g.npCommunicationId,
+    title_name: g.titleName,
+    title_icon_url: g.titleIconUrl,
+    title_platform: g.platform,
+    progress: g.progress,
+    platinum_earned: g.platinumEarned,
+    trophy_count_total: g.totalTrophiesCount,
+    trophy_count_earned: g.earnedTrophies.bronze + g.earnedTrophies.silver + g.earnedTrophies.gold + g.earnedTrophies.platinum,
+    trophy_count_bronze: g.earnedTrophies.bronze,
+    trophy_count_silver: g.earnedTrophies.silver,
+    trophy_count_gold: g.earnedTrophies.gold,
+    trophy_count_platinum: g.earnedTrophies.platinum,
+    last_played_at: g.lastUpdatedDateTime,
+    updated_at: new Date().toISOString()
+  }));
+
+  if (gameRows.length > 0) {
+    const gameRes = await fetch(`${supabaseUrl}/rest/v1/psn_games`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(gameRows)
+    });
+    if (gameRes.ok) console.log(`✓ ${gameRows.length} games upserted to Supabase`);
+  }
+
+  // Log sync history
+  await fetch(`${supabaseUrl}/rest/v1/psn_sync_history`, {
+    method: 'POST',
+    headers: { ...headers, Prefer: 'return=minimal' },
+    body: JSON.stringify([{
+      online_id: p.onlineId,
+      sync_status: 'success',
+      sync_source: process.env.GITHUB_ACTIONS ? 'github_actions' : 'manual_script',
+      games_synced: payload.games.length,
+      trophies_synced: payload.games.reduce((acc, g) => acc + (g.trophies?.length || 0), 0)
+    }])
+  }).catch(() => {});
+}
+
+/**
+ * Main Execution
+ */
+async function main() {
+  console.log('=== PlayStation Network Trophy Sync Worker ===');
+  const npsso = process.env.PSN_NPSSO?.trim();
+
+  if (!npsso) {
+    console.log('\n[NOTICE] PSN_NPSSO environment variable is not set.');
+    console.log('To synchronize real PSN trophies:');
+    console.log('1. Log into https://ca.account.sony.com/api/v1/ssocookie in your browser.');
+    console.log('2. Copy your 64-character "npsso" token.');
+    console.log('3. Set PSN_NPSSO in your environment or GitHub Secrets.\n');
+
+    if (fs.existsSync(TROPHIES_JSON_PATH)) {
+      console.log(`Current cached dataset exists at: ${TROPHIES_JSON_PATH}`);
+      return;
+    }
+
+    console.log('Creating initial base dataset for PlayStation 5 Welcome Hub...');
+    const defaultData = getBaseDataset();
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(defaultData, null, 2), 'utf8');
+    console.log(`Created ${TROPHIES_JSON_PATH}`);
+    return;
+  }
+
+  try {
+    const startTime = Date.now();
+    console.log('Authenticating with PlayStation Network...');
+    const code = await exchangeNpssoForCode(npsso);
+    const accessToken = await exchangeCodeForTokens(code);
+    console.log('✓ Successfully authenticated with Sony OAuth!');
+
+    const payload = await fetchPsnData(accessToken);
+    const durationSec = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`✓ Retrieved PSN data in ${durationSec}s: Level ${payload.profile.trophyLevel}, ${payload.profile.totalTrophies} trophies across ${payload.games.length} games.`);
+
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(payload, null, 2), 'utf8');
+    console.log(`✓ Saved to ${TROPHIES_JSON_PATH}`);
+
+    await syncToSupabase(payload);
+    console.log('=== Sync completed successfully! ===');
+  } catch (err) {
+    console.error('SYNC ERROR:', err.message);
+    process.exit(1);
+  }
+}
+
+/**
+ * High-fidelity default profile template (used when NPSSO is not yet configured)
+ */
+function getBaseDataset() {
+  return {
+    profile: {
+      onlineId: "Cr1mnsx",
+      avatarUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
+      aboutMe: "PlayStation 5 Enthusiast · Welcome Hub Creator",
+      trophyLevel: 284,
+      levelProgress: 42,
+      levelTier: 3,
+      totalTrophies: 1842,
+      platinum: 24,
+      gold: 148,
+      silver: 462,
+      bronze: 1208,
+      lastSyncAt: new Date().toISOString()
+    },
+    recentTrophies: [
+      {
+        trophyId: 1,
+        trophyType: "platinum",
+        trophyName: "Born in the '80s",
+        trophyDetail: "Получите все призы в Grand Theft Auto: Vice City – The Definitive Edition.",
+        trophyIconUrl: "assets/covers/gta_vc.jpg",
+        earned: true,
+        earnedDateTime: new Date(Date.now() - 3600000 * 4).toISOString(),
+        gameTitle: "Grand Theft Auto: Vice City",
+        npCommunicationId: "NPWR10001_00"
+      },
+      {
+        trophyId: 12,
+        trophyType: "gold",
+        trophyName: "Take the Cannoli",
+        trophyDetail: "Достигните криминального рейтинга «Крёстный отец».",
+        trophyIconUrl: "assets/covers/gta_vc.jpg",
+        earned: true,
+        earnedDateTime: new Date(Date.now() - 3600000 * 24).toISOString(),
+        gameTitle: "Grand Theft Auto: Vice City",
+        npCommunicationId: "NPWR10001_00"
+      },
+      {
+        trophyId: 15,
+        trophyType: "silver",
+        trophyName: "Los Santos Legend",
+        trophyDetail: "Завершите сюжетную кампанию GTA V на 100%.",
+        trophyIconUrl: "assets/covers/gta_v.jpg",
+        earned: true,
+        earnedDateTime: new Date(Date.now() - 3600000 * 72).toISOString(),
+        gameTitle: "Grand Theft Auto V",
+        npCommunicationId: "NPWR10002_00"
+      },
+      {
+        trophyId: 18,
+        trophyType: "gold",
+        trophyName: "Thy Flesh Consumed",
+        trophyDetail: "Пройдите все уровни DOOM на максимальной сложности Nightmare.",
+        trophyIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
+        earned: true,
+        earnedDateTime: new Date(Date.now() - 3600000 * 120).toISOString(),
+        gameTitle: "DOOM",
+        npCommunicationId: "NPWR10003_00"
+      }
+    ],
+    games: [
+      {
+        npCommunicationId: "NPWR10001_00",
+        titleName: "Grand Theft Auto: Vice City – The Definitive Edition",
+        titleIconUrl: "assets/covers/gta_vc.jpg",
+        platform: "PS5",
+        progress: 100,
+        platinumEarned: true,
+        totalTrophiesCount: 34,
+        earnedTrophies: { bronze: 19, silver: 9, gold: 5, platinum: 1 },
+        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 4).toISOString(),
+        trophies: [
+          {
+            trophyId: 1,
+            trophyType: "platinum",
+            trophyName: "Born in the '80s",
+            trophyDetail: "Получите все призы в Grand Theft Auto: Vice City.",
+            trophyIconUrl: "assets/covers/gta_vc.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 4).toISOString()
+          },
+          {
+            trophyId: 2,
+            trophyType: "gold",
+            trophyName: "Take the Cannoli",
+            trophyDetail: "Достигните криминального рейтинга «Крёстный отец».",
+            trophyIconUrl: "assets/covers/gta_vc.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 24).toISOString()
+          },
+          {
+            trophyId: 3,
+            trophyType: "silver",
+            trophyName: "Mischief Managed",
+            trophyDetail: "Выполните миссию «Keep Your Friends Close...».",
+            trophyIconUrl: "assets/covers/gta_vc.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 48).toISOString()
+          },
+          {
+            trophyId: 4,
+            trophyType: "bronze",
+            trophyName: "Safe Counsel",
+            trophyDetail: "Завершите миссию «The Party».",
+            trophyIconUrl: "assets/covers/gta_vc.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 96).toISOString()
+          }
+        ]
+      },
+      {
+        npCommunicationId: "NPWR10002_00",
+        titleName: "Grand Theft Auto V",
+        titleIconUrl: "assets/covers/gta_v.jpg",
+        platform: "PS5",
+        progress: 88,
+        platinumEarned: false,
+        totalTrophiesCount: 50,
+        earnedTrophies: { bronze: 32, silver: 10, gold: 3, platinum: 0 },
+        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 72).toISOString(),
+        trophies: [
+          {
+            trophyId: 1,
+            trophyType: "platinum",
+            trophyName: "Los Santos Legend",
+            trophyDetail: "Поздравляем! Вы главная звезда Вайнвуда!",
+            trophyIconUrl: "assets/covers/gta_v.jpg",
+            earned: false,
+            earnedDateTime: null
+          },
+          {
+            trophyId: 2,
+            trophyType: "gold",
+            trophyName: "Career Criminal",
+            trophyDetail: "Завершите игру на 100%.",
+            trophyIconUrl: "assets/covers/gta_v.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 72).toISOString()
+          },
+          {
+            trophyId: 3,
+            trophyType: "silver",
+            trophyName: "San Andreas Sightseer",
+            trophyDetail: "Исследуйте весь Лос-Сантос и округ Блейн.",
+            trophyIconUrl: "assets/covers/gta_v.jpg",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 140).toISOString()
+          }
+        ]
+      },
+      {
+        npCommunicationId: "NPWR10003_00",
+        titleName: "DOOM",
+        titleIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
+        platform: "PS4",
+        progress: 100,
+        platinumEarned: true,
+        totalTrophiesCount: 34,
+        earnedTrophies: { bronze: 18, silver: 11, gold: 4, platinum: 1 },
+        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 120).toISOString(),
+        trophies: [
+          {
+            trophyId: 1,
+            trophyType: "platinum",
+            trophyName: "Thy Flesh Consumed",
+            trophyDetail: "Получите все призы в DOOM.",
+            trophyIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
+            earned: true,
+            earnedDateTime: new Date(Date.now() - 3600000 * 120).toISOString()
+          }
+        ]
+      },
+      {
+        npCommunicationId: "NPWR10004_00",
+        titleName: "Celeste",
+        titleIconUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop",
+        platform: "PS4",
+        progress: 92,
+        platinumEarned: false,
+        totalTrophiesCount: 31,
+        earnedTrophies: { bronze: 16, silver: 9, gold: 3, platinum: 0 },
+        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 200).toISOString(),
+        trophies: []
+      },
+      {
+        npCommunicationId: "NPWR10005_00",
+        titleName: "Hollow Knight: Voidheart Edition",
+        titleIconUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200&h=200&fit=crop",
+        platform: "PS4",
+        progress: 74,
+        platinumEarned: false,
+        totalTrophiesCount: 35,
+        earnedTrophies: { bronze: 18, silver: 6, gold: 2, platinum: 0 },
+        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 300).toISOString(),
+        trophies: []
+      }
+    ]
+  };
+}
+
+main();

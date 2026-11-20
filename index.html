@@ -103,7 +103,7 @@
         <div class="ps5-welcome-hero-banner">
           <div class="ps5-welcome-hero-left">
             <div class="ps5-welcome-title-row">
-              <h1 class="ps5-welcome-hero-title" id="lblWelcomeHeroTitle">С возвращением, Player 1</h1>
+              <h1 class="ps5-welcome-hero-title" id="lblWelcomeHeroTitle">С возвращением, Cr1mnsx</h1>
               <span class="ps5-welcome-pulse-badge">
                 <span class="ps5-welcome-pulse-dot"></span>
                 <span>PS5 Hub · 4K 120Hz</span>
@@ -213,25 +213,25 @@
                   <span id="iconTrophyHeader" class="ps5-widget-icon"></span>
                   <span id="lblTrophies">Призы</span>
                 </div>
-                <span class="ps5-trophies-total" id="ps5TrophiesTotal">Всего: 570</span>
+                <span class="ps5-trophies-total" id="ps5TrophiesTotal">Всего: 1,842</span>
               </header>
 
               <div class="ps5-trophies-cups-row">
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupPlat"></div>
-                  <span class="ps5-trophy-num" id="ps5CountPlat">12</span>
+                  <span class="ps5-trophy-num" id="ps5CountPlat">24</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupGold"></div>
-                  <span class="ps5-trophy-num" id="ps5CountGold">48</span>
+                  <span class="ps5-trophy-num" id="ps5CountGold">148</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupSilver"></div>
-                  <span class="ps5-trophy-num" id="ps5CountSilver">126</span>
+                  <span class="ps5-trophy-num" id="ps5CountSilver">462</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupBronze"></div>
-                  <span class="ps5-trophy-num" id="ps5CountBronze">384</span>
+                  <span class="ps5-trophy-num" id="ps5CountBronze">1,208</span>
                 </div>
               </div>
 
@@ -239,12 +239,12 @@
                 <div class="ps5-trophy-level-row">
                   <div class="ps5-level-left">
                     <span class="ps5-level-crest" id="iconLevelCrest"></span>
-                    <span class="ps5-level-text" id="ps5TrophyLevel">Уровень 100</span>
+                    <span class="ps5-level-text" id="ps5TrophyLevel">Уровень 284</span>
                   </div>
-                  <span class="ps5-level-pct" id="ps5TrophyPct">48%</span>
+                  <span class="ps5-level-pct" id="ps5TrophyPct">42%</span>
                 </div>
                 <div class="ps5-level-bar-track">
-                  <div class="ps5-level-bar-fill" id="ps5TrophyBarFill" style="width: 48%;"></div>
+                  <div class="ps5-level-bar-fill" id="ps5TrophyBarFill" style="width: 42%;"></div>
                 </div>
               </footer>
             </article>
@@ -1027,6 +1027,183 @@
     </div>
   </div>
 
+  <!-- =========================================================================
+     PS5 TROPHY COLLECTION MODAL (1:1 PS5 Trophy Hub Architecture)
+     ========================================================================= -->
+  <div class="modal-sber-tips modal-tc-fullscreen" id="modalTrophyCollection" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="tcBackdrop"></div>
+    <div class="tc-dialog-box" role="dialog" aria-modal="true" aria-labelledby="tcDialogTitle">
+      <!-- Top Action Bar -->
+      <div class="tc-top-bar">
+        <div class="tc-top-brand">
+          <span class="tc-brand-tag">PLAYSTATION® NETWORK</span>
+          <h2 class="tc-brand-title" id="tcDialogTitle">Коллекция призов</h2>
+        </div>
+        <div class="tc-top-actions">
+          <button type="button" class="tc-btn-action" id="btnSyncTrophiesTop" title="Синхронизировать с PSN">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            <span id="lblSyncTrophiesTop">Синхронизировать</span>
+          </button>
+          <button type="button" class="sber-tips-close-btn" id="btnTcClose" title="Закрыть (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="tc-scrollable-body">
+        <!-- Hero Profile & Level Card -->
+        <div class="tc-hero-card">
+          <div class="tc-profile-identity">
+            <div class="tc-avatar-wrap">
+              <img id="tcProfileAvatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop" alt="PSN Avatar" class="tc-avatar-img">
+              <span class="tc-psplus-badge" title="PlayStation Plus">★</span>
+            </div>
+            <div class="tc-id-info">
+              <div class="tc-id-row">
+                <span class="tc-online-id" id="tcProfileOnlineId">Cr1mnsx</span>
+                <span class="tc-verified-pill" id="tcSyncPill">● PSN Live</span>
+              </div>
+              <div class="tc-sync-timestamp" id="tcSyncTimestamp">Синхронизировано недавно</div>
+            </div>
+          </div>
+
+          <!-- Trophy Level Crest & Progress -->
+          <div class="tc-level-cluster">
+            <div class="tc-level-badge">
+              <div class="tc-crest-icon">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="#f59e0b"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg>
+              </div>
+              <div class="tc-level-number-box">
+                <span class="tc-level-label">LEVEL</span>
+                <span class="tc-level-val" id="tcTrophyLevel">284</span>
+              </div>
+            </div>
+            <div class="tc-level-progress-col">
+              <div class="tc-level-progress-track">
+                <div class="tc-level-progress-bar" id="tcLevelProgressBar" style="width: 42%;"></div>
+              </div>
+              <div class="tc-level-progress-labels">
+                <span class="tc-progress-hint">До следующего уровня</span>
+                <span class="tc-progress-pct" id="tcLevelProgressPct">42%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4-Cup Counters Row -->
+          <div class="tc-cups-grid">
+            <div class="tc-cup-stat tc-cup-stat--total">
+              <span class="tc-cup-stat-label">Всего</span>
+              <span class="tc-cup-stat-val" id="tcTotalCount">1 842</span>
+            </div>
+            <div class="tc-cup-stat tc-cup-stat--plat">
+              <div class="tc-cup-svg" id="tcCupPlatSvg"></div>
+              <span class="tc-cup-stat-val" id="tcPlatCount">24</span>
+              <span class="tc-cup-tier-name">Platinum</span>
+            </div>
+            <div class="tc-cup-stat tc-cup-stat--gold">
+              <div class="tc-cup-svg" id="tcCupGoldSvg"></div>
+              <span class="tc-cup-stat-val" id="tcGoldCount">148</span>
+              <span class="tc-cup-tier-name">Gold</span>
+            </div>
+            <div class="tc-cup-stat tc-cup-stat--silver">
+              <div class="tc-cup-svg" id="tcCupSilverSvg"></div>
+              <span class="tc-cup-stat-val" id="tcSilverCount">462</span>
+              <span class="tc-cup-tier-name">Silver</span>
+            </div>
+            <div class="tc-cup-stat tc-cup-stat--bronze">
+              <div class="tc-cup-svg" id="tcCupBronzeSvg"></div>
+              <span class="tc-cup-stat-val" id="tcBronzeCount">1 208</span>
+              <span class="tc-cup-tier-name">Bronze</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 1: Recent Trophies -->
+        <div class="tc-section" id="tcRecentSection">
+          <div class="tc-section-header">
+            <h3 class="tc-section-title">Последние полученные призы</h3>
+            <span class="tc-section-hint">Недавние достижения на PlayStation</span>
+          </div>
+          <div class="tc-recent-scroll" id="tcRecentTrophiesList">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Section 2: My Games -->
+        <div class="tc-section">
+          <div class="tc-section-header">
+            <div class="tc-section-title-wrap">
+              <h3 class="tc-section-title">Мои игры</h3>
+              <span class="tc-games-counter-badge" id="tcGamesCount">5 игр</span>
+            </div>
+
+            <!-- Filters & Search -->
+            <div class="tc-controls-row">
+              <div class="tc-search-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <input type="text" class="tc-search-input" id="tcGamesSearchInput" placeholder="Поиск по названию игры..." autocomplete="off">
+              </div>
+
+              <div class="tc-filters-pills" id="tcFilterPills">
+                <button type="button" class="tc-filter-pill is-active" data-filter="all">Все игры</button>
+                <button type="button" class="tc-filter-pill" data-filter="platinum">С платиной</button>
+                <button type="button" class="tc-filter-pill" data-filter="completed">100% пройдено</button>
+                <button type="button" class="tc-filter-pill" data-filter="in_progress">В процессе</button>
+                <button type="button" class="tc-filter-pill" data-filter="not_started">Не начатые</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Games Bento / Grid -->
+          <div class="tc-games-grid" id="tcGamesGrid">
+            <!-- Dynamically populated game cards -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     GAME TROPHIES DETAIL MODAL (Single Game Trophy List)
+     ========================================================================= -->
+  <div class="modal-sber-tips modal-tc-fullscreen" id="modalGameTrophiesDetail" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="gameDetailBackdrop"></div>
+    <div class="tc-dialog-box tc-game-detail-box" role="dialog" aria-modal="true">
+      <div class="tc-top-bar">
+        <button type="button" class="tc-btn-back" id="btnGameDetailBack">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          <span>Назад к коллекции</span>
+        </button>
+        <button type="button" class="sber-tips-close-btn" id="btnGameDetailClose">✕</button>
+      </div>
+
+      <div class="tc-scrollable-body" id="gameDetailBody">
+        <!-- Dynamically populated with game banner, stats, and trophy items -->
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+     JSON IMPORT MODAL (Fallback when automated sync is offline)
+     ========================================================================= -->
+  <div class="modal-sber-tips" id="modalPsnJsonImport" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="jsonImportBackdrop"></div>
+    <div class="sber-tips-dialog" style="max-width: 580px;" role="dialog" aria-modal="true">
+      <button class="sber-tips-close-btn" id="btnJsonImportClose">✕</button>
+      <div class="sber-dialog-header">
+        <span class="sber-dialog-tag">ИМПОРТ ДАННЫХ PSN</span>
+        <h3 class="sber-dialog-title">Импорт трофеев из JSON</h3>
+        <p class="sber-dialog-sub">Вставьте JSON-структуру с профилем и списком игр для локального обновления</p>
+      </div>
+      <div style="margin-top: 14px;">
+        <textarea id="txtJsonImport" class="ps5-input" style="width: 100%; height: 180px; font-family: monospace; font-size: 12px; resize: vertical;" placeholder='{"profile": {"onlineId": "YourID", "trophyLevel": 200, ...}, "games": [...]}'></textarea>
+        <div id="jsonImportError" style="color: #ef4444; font-size: 13px; margin-top: 8px; display: none;"></div>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end;">
+        <button type="button" class="ps5-btn-sec" id="btnCancelJsonImport">Отмена</button>
+        <button type="button" class="sber-btn-primary" id="btnSubmitJsonImport">Импортировать</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Early inline resilience: ensure Friends buttons open modals instantly
     window.addEventListener('DOMContentLoaded', () => {
@@ -1043,6 +1220,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261118_v10"></script>
+  <script type="module" src="js/app.js?v=20261120_v11"></script>
 </body>
 </html>
