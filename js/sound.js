@@ -173,7 +173,15 @@ class PS5AudioManager {
       this._ensureContext();
       if (!this._ctx) return null;
 
-      const candidates = [entry.file, entry.altFile].filter(Boolean);
+      const candidates = [
+        entry.filePath,
+        `assets/audio/ps5/active/${entry.filename}`,
+        `assets/audio/ps5/reserved/${entry.filename}`,
+        `assets/audio/${entry.filename}`,
+        entry.file,
+        entry.altFile
+      ].filter(Boolean);
+
       for (const url of candidates) {
         try {
           const res = await fetch(url);
@@ -213,7 +221,10 @@ class PS5AudioManager {
     if (!entry) return;
 
     // Block reserved tier until corresponding feature is activated
-    if (entry.tier === PS5_AUDIO_TIERS.RESERVED && !this._allowReserved) {
+    if ((entry.status === "RESERVED" || entry.tier === PS5_AUDIO_TIERS.RESERVED) && !this._allowReserved) {
+      return;
+    }
+    if (entry.status === "MISSING") {
       return;
     }
 
@@ -244,6 +255,46 @@ class PS5AudioManager {
     } else {
       this._playProcedural(entry);
     }
+  }
+
+  testSound(soundKeyOrId) {
+    const entry = getSoundEntry(soundKeyOrId);
+    if (!entry || entry.status === "MISSING") {
+      return { success: false, entry, isLoaded: false };
+    }
+    this._ensureContext();
+    const prev = this._allowReserved;
+    this._allowReserved = true;
+    this.play(soundKeyOrId);
+    this._allowReserved = prev;
+    return { success: true, entry, isLoaded: true, file: entry.filePath || entry.filename, soundKey: entry.key };
+  }
+
+  cancelTesting() {
+    this._isTestingSequence = false;
+  }
+
+  async testAllActiveSounds(onProgress, onComplete) {
+    if (this._isTestingSequence) {
+      this.cancelTesting();
+      if (onComplete) onComplete(true);
+      return;
+    }
+
+    const { PS5_SOUND_CATALOG } = await import("./sound-catalog.js");
+    const activeList = PS5_SOUND_CATALOG.filter(s => s.status === "ACTIVE");
+    this._isTestingSequence = true;
+
+    for (let i = 0; i < activeList.length; i++) {
+      if (!this._isTestingSequence) break;
+      const sound = activeList[i];
+      if (onProgress) onProgress(sound, i, activeList.length);
+      this.testSound(sound.id);
+      await new Promise(r => setTimeout(r, 450));
+    }
+
+    this._isTestingSequence = false;
+    if (onComplete) onComplete(false);
   }
 
   _playBuffer(entry, buffer) {

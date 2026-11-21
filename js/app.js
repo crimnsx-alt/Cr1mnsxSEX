@@ -20,6 +20,12 @@ import {
 import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
 import { psnService } from "./psn-service.js";
 import { SoundEngine } from "./sound.js";
+import {
+  PS5_SOUND_CATALOG,
+  PS5_SOUND_MANIFEST_STATS,
+  PS5_SOUND_CATEGORIES,
+  getSoundEntry
+} from "./sound-catalog.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
 
@@ -39,7 +45,9 @@ const state = {
   widgetPreset: "default",
   trophyFilter: "all",
   trophySearch: "",
-  activeGameDetailId: null
+  activeGameDetailId: null,
+  soundLibrarySearch: "",
+  soundLibraryFilter: "all"
 };
 
 const $ = (sel) => document.querySelector(sel);
@@ -1543,6 +1551,13 @@ function renderSettingsNav() {
 function renderSettingsDetail(secId) {
   const sec = settingsSections.find((s) => s.id === secId) || settingsSections[0];
   const box = $("#settingsDetail");
+  if (!box) return;
+
+  if (sec.id === "ps5_sounds" || sec.isSoundLibrary) {
+    renderSoundLibrarySettings(box);
+    return;
+  }
+
   const secTitle = t(sec.title) || (state.lang === "ru" ? "Параметры" : "Settings");
   box.innerHTML = `
     <h3 style="font-size:20px;font-weight:400;display:flex;align-items:center;gap:10px;">${sec.icon || ""}<span>${secTitle}</span></h3>
@@ -1643,6 +1658,288 @@ function renderSettingsDetail(secId) {
     }
     box.appendChild(row);
   });
+}
+
+/* =========================================================================
+   TASK 11: PS5 SYSTEM SOUND TEST CENTER & INTERACTIVE CATALOG
+   ========================================================================= */
+
+function renderSoundLibrarySettings(box) {
+  const isRu = state.lang === "ru";
+  
+  box.innerHTML = `
+    <div class="ps5-sl-header">
+      <div class="ps5-sl-title-group">
+        <h3 class="ps5-sl-title">${PS5Icons.soundOn} <span>${isRu ? "Системные звуки PlayStation®5" : "PlayStation®5 System Sounds"}</span></h3>
+        <p class="ps5-sl-sub">${isRu ? "Оригинальная коллекция 45 звуковых эффектов PS5 (Khinsider Gamerip 2020) с распределением по системным действиям" : "Official 45 PS5 sound effects collection (Khinsider Gamerip 2020) mapped to system events"}</p>
+      </div>
+      <div class="ps5-sl-chips">
+        <span class="ps5-sl-chip active">✓ 26 ${isRu ? "Активных" : "Active"}</span>
+        <span class="ps5-sl-chip reserved">★ 4 ${isRu ? "В резерве" : "Reserved"}</span>
+        <span class="ps5-sl-chip missing">⚠ 15 ${isRu ? "Отсутствуют" : "Missing"}</span>
+      </div>
+    </div>
+
+    <!-- Global Volume & Test Controls -->
+    <div class="ps5-sl-controls-card">
+      <div class="ps5-sl-vol-col">
+        <div class="ps5-sl-vol-header">
+          <span>${isRu ? "Общая громкость (Master Volume)" : "Master Volume"}</span>
+          <span id="slMasterVolVal" class="ps5-sl-vol-num">${Math.round(SoundEngine.masterVolume * 100)}%</span>
+        </div>
+        <input type="range" id="slMasterVolSlider" min="0" max="1" step="0.05" value="${SoundEngine.masterVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <div class="ps5-sl-vol-col">
+        <div class="ps5-sl-vol-header">
+          <span>${isRu ? "Громкость интерфейса (SFX Volume)" : "Interface & SFX Volume"}</span>
+          <span id="slSfxVolVal" class="ps5-sl-vol-num">${Math.round(SoundEngine.uiVolume * 100)}%</span>
+        </div>
+        <input type="range" id="slSfxVolSlider" min="0" max="1" step="0.05" value="${SoundEngine.uiVolume}" style="width:100%; accent-color:#ffffff;" />
+      </div>
+
+      <div class="ps5-sl-btns-row">
+        <button type="button" class="sber-btn-primary" id="btnTestAllActiveSounds">
+          <span id="btnTestAllIcon">▶</span>
+          <span id="btnTestAllLabel">${isRu ? "Протестировать все активные звуки" : "Test All Active Sounds"}</span>
+        </button>
+        <button type="button" class="ps5-btn-sec ps5-btn-sec--sm" id="slBtnToggleMute">
+          ${SoundEngine.muted ? (isRu ? "Включить звук" : "Unmute") : (isRu ? "Выключить звук" : "Mute")}
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="ps5-sl-search-wrap">
+      <div class="ps5-sl-search-box">
+        <span class="ps5-sl-search-icon" style="color:rgba(255,255,255,0.4); display:flex; align-items:center;">${PS5Icons.search}</span>
+        <input type="text" id="slSearchInput" placeholder="${isRu ? "Поиск звука по названию, действию или категории..." : "Search sounds by name, action, or category..."}" value="${escapeHtml(state.soundLibrarySearch || "")}" />
+        ${state.soundLibrarySearch ? `<button type="button" id="slSearchClear" class="ps5-sl-clear-btn">✕</button>` : ""}
+      </div>
+      <div class="ps5-sl-filter-pills" id="slFilterPills">
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "all" ? " is-active" : ""}" data-filter="all">${isRu ? "Все (45)" : "All (45)"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "active" ? " is-active" : ""}" data-filter="active">${isRu ? "Активные (26)" : "Active (26)"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "reserved" ? " is-active" : ""}" data-filter="reserved">${isRu ? "В резерве (4)" : "Reserved (4)"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "missing" ? " is-active" : ""}" data-filter="missing">${isRu ? "Отсутствуют (15)" : "Missing (15)"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "navigation" ? " is-active" : ""}" data-filter="navigation">${isRu ? "Навигация" : "Navigation"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "confirmation" ? " is-active" : ""}" data-filter="confirmation">${isRu ? "Подтверждение" : "Confirmation"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "system_menu" ? " is-active" : ""}" data-filter="system_menu">${isRu ? "Меню" : "Menus"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "notifications" ? " is-active" : ""}" data-filter="notifications">${isRu ? "Уведомления" : "Notifications"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "trophies" ? " is-active" : ""}" data-filter="trophies">${isRu ? "Призы" : "Trophies"}</button>
+        <button type="button" class="sl-pill${state.soundLibraryFilter === "input" ? " is-active" : ""}" data-filter="input">${isRu ? "Ввод текста" : "Input"}</button>
+      </div>
+    </div>
+
+    <!-- Sound Cards List -->
+    <div class="ps5-sl-list" id="slCardsList"></div>
+  `;
+
+  renderSoundCardsList();
+  attachSoundLibraryListeners();
+}
+
+function renderSoundCardsList() {
+  const isRu = state.lang === "ru";
+  const listEl = $("#slCardsList");
+  if (!listEl) return;
+
+  const query = (state.soundLibrarySearch || "").trim().toLowerCase();
+  const filter = state.soundLibraryFilter || "all";
+
+  const filtered = PS5_SOUND_CATALOG.filter(s => {
+    // Category or status filter
+    if (filter === "active" && s.status !== "ACTIVE") return false;
+    if (filter === "reserved" && s.status !== "RESERVED") return false;
+    if (filter === "missing" && s.status !== "MISSING") return false;
+    if (["navigation", "confirmation", "system_menu", "notifications", "trophies", "input", "system", "social", "store", "assistant"].includes(filter)) {
+      if (s.category !== filter) return false;
+    }
+
+    // Search query
+    if (query) {
+      const matchName = s.name.toLowerCase().includes(query);
+      const matchKey = s.key.toLowerCase().includes(query);
+      const matchId = String(s.id) === query;
+      const matchAction = (s.action || "").toLowerCase().includes(query);
+      const matchDesc = (s.description || "").toLowerCase().includes(query);
+      return matchName || matchKey || matchId || matchAction || matchDesc;
+    }
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `
+      <div style="padding:48px 20px; text-align:center; color:rgba(255,255,255,0.4); font-size:14px;">
+        ${isRu ? "Звуки не найдены по текущему запросу" : "No sounds found matching criteria"}
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = filtered.map(s => {
+    const isMissing = s.status === "MISSING";
+    const isReserved = s.status === "RESERVED";
+    const isActive = s.status === "ACTIVE";
+
+    let badgeClass = "sl-badge--missing";
+    let badgeText = isRu ? "ОТСУТСТВУЕТ" : "MISSING";
+    if (isActive) {
+      badgeClass = "sl-badge--active";
+      badgeText = isRu ? "АКТИВЕН" : "ACTIVE";
+    } else if (isReserved) {
+      badgeClass = "sl-badge--reserved";
+      badgeText = isRu ? "В РЕЗЕРВЕ" : "RESERVED";
+    }
+
+    const durText = s.duration ? `${s.duration}s · 44.1kHz` : (isRu ? "Файл заблокирован на источнике (Cloudflare Turnstile)" : "File blocked by bot protection (Cloudflare Turnstile)");
+
+    return `
+      <div class="ps5-sl-card${isMissing ? " is-missing" : ""}" id="slCard-${s.id}" data-id="${s.id}">
+        <div class="ps5-sl-card-top">
+          <div class="ps5-sl-card-title-row">
+            <span class="ps5-sl-id-badge">#${s.id}</span>
+            <span class="ps5-sl-name">${escapeHtml(s.name)}</span>
+            <span class="ps5-sl-cat-badge">${s.category}</span>
+          </div>
+          <span class="sl-badge ${badgeClass}">${badgeText}</span>
+        </div>
+
+        <p class="ps5-sl-desc">${escapeHtml(s.description)}</p>
+
+        <div class="ps5-sl-meta-row">
+          <span class="ps5-sl-action">
+            <strong>${isRu ? "Назначение:" : "Bound to:"}</strong> ${escapeHtml(s.action || s.targetFeature || "")}
+          </span>
+          <span class="ps5-sl-tech">${durText}</span>
+        </div>
+
+        <div class="ps5-sl-card-footer">
+          <span class="ps5-sl-file-hint">${escapeHtml(s.filename)}</span>
+          ${isMissing ? `
+            <button type="button" class="ps5-sl-btn-play is-disabled" disabled title="${isRu ? "Файл заблокирован защитой сайта" : "File blocked by bot protection"}">
+              ✕ ${isRu ? "Недоступен" : "Unavailable"}
+            </button>
+          ` : `
+            <button type="button" class="ps5-sl-btn-play" data-play-id="${s.id}">
+              <span>▶</span> <span>${isRu ? "Прослушать" : "Play"}</span>
+            </button>
+          `}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  listEl.querySelectorAll(".ps5-sl-btn-play[data-play-id]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const soundId = parseInt(btn.dataset.playId, 10);
+      const card = $(`#slCard-${soundId}`);
+      if (card) {
+        card.classList.add("is-playing");
+        setTimeout(() => card.classList.remove("is-playing"), 600);
+      }
+      SoundEngine.testSound(soundId);
+    });
+  });
+}
+
+function attachSoundLibraryListeners() {
+  const masterSlider = $("#slMasterVolSlider");
+  const masterVal = $("#slMasterVolVal");
+  if (masterSlider) {
+    masterSlider.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value);
+      SoundEngine.setMasterVolume(val);
+      if (masterVal) masterVal.textContent = `${Math.round(val * 100)}%`;
+      SoundEngine.sliderLevelMeter();
+    });
+  }
+
+  const sfxSlider = $("#slSfxVolSlider");
+  const sfxVal = $("#slSfxVolVal");
+  if (sfxSlider) {
+    sfxSlider.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value);
+      SoundEngine.setUiVolume(val);
+      SoundEngine.setNavVolume(val * 0.9);
+      if (sfxVal) sfxVal.textContent = `${Math.round(val * 100)}%`;
+      SoundEngine.sliderLevelMeter();
+    });
+  }
+
+  const muteBtn = $("#slBtnToggleMute");
+  if (muteBtn) {
+    muteBtn.addEventListener("click", () => {
+      const isMuted = SoundEngine.toggle();
+      updateMuteButtonUI();
+      muteBtn.textContent = isMuted ? (state.lang === "ru" ? "Включить звук" : "Unmute") : (state.lang === "ru" ? "Выключить звук" : "Mute");
+      showToast("Аудио PS5", isMuted ? "Звук выключен" : "Звук включен", isMuted ? PS5Icons.soundMuted : PS5Icons.soundOn);
+    });
+  }
+
+  const searchInput = $("#slSearchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.soundLibrarySearch = e.target.value;
+      renderSoundCardsList();
+    });
+  }
+
+  const clearBtn = $("#slSearchClear");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      state.soundLibrarySearch = "";
+      if (searchInput) searchInput.value = "";
+      renderSoundCardsList();
+    });
+  }
+
+  const filterPills = $("#slFilterPills");
+  if (filterPills) {
+    filterPills.querySelectorAll(".sl-pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        filterPills.querySelectorAll(".sl-pill").forEach(p => p.classList.remove("is-active"));
+        pill.classList.add("is-active");
+        state.soundLibraryFilter = pill.dataset.filter || "all";
+        SoundEngine.focusMove();
+        renderSoundCardsList();
+      });
+    });
+  }
+
+  const testAllBtn = $("#btnTestAllActiveSounds");
+  if (testAllBtn) {
+    testAllBtn.addEventListener("click", () => {
+      const isRu = state.lang === "ru";
+      if (SoundEngine._isTestingSequence) {
+        SoundEngine.cancelTesting();
+        testAllBtn.classList.remove("is-testing");
+        $("#btnTestAllIcon").textContent = "▶";
+        $("#btnTestAllLabel").textContent = isRu ? "Протестировать все активные звуки" : "Test All Active Sounds";
+        return;
+      }
+
+      testAllBtn.classList.add("is-testing");
+      $("#btnTestAllIcon").textContent = "⏹";
+      $("#btnTestAllLabel").textContent = isRu ? "Остановить тестирование" : "Stop testing";
+
+      SoundEngine.testAllActiveSounds(
+        (sound, idx, total) => {
+          $("#btnTestAllLabel").textContent = `${isRu ? "Звук" : "Sound"} ${idx + 1} / ${total}: ${sound.name}`;
+          const card = $(`#slCard-${sound.id}`);
+          if (card) {
+            card.classList.add("is-playing");
+            card.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            setTimeout(() => card.classList.remove("is-playing"), 400);
+          }
+        },
+        () => {
+          testAllBtn.classList.remove("is-testing");
+          $("#btnTestAllIcon").textContent = "▶";
+          $("#btnTestAllLabel").textContent = isRu ? "Протестировать все активные звуки" : "Test All Active Sounds";
+        }
+      );
+    });
+  }
 }
 
 // ============================================================
@@ -3009,6 +3306,11 @@ function handleAction(action) {
     closeModal();
     if (state.category !== "games") switchCategory("games");
     return selectTile("explore", true);
+  }
+  if (action === "open:ps5_sounds" || action === "modal:ps5_sounds") {
+    state.settingsSection = "ps5_sounds";
+    openSettings();
+    return;
   }
   if (action === "modal:trophy_collection" || action === "modal:trophies") return openTrophyCollectionModal();
   if (action === "modal:psn_sync_details") return openPsnSyncDetailsModal();

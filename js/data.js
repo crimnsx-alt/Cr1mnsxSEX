@@ -525,8 +525,16 @@ export const settingsSections = [
       { label: { ru: "Громкость навигации (Navigation Volume)", en: "Navigation Volume (Focus Move)" }, val: "75%", slider: "nav_vol" },
       { label: { ru: "Громкость интерфейса (Interface Volume)", en: "Interface Volume (Enter / Cancel / Modals)" }, val: "80%", slider: "ui_vol" },
       { label: { ru: "Громкость уведомлений (Notification Volume)", en: "Notification Volume (Toasts / Trophies)" }, val: "90%", slider: "notif_vol" },
+      { label: { ru: "Каталог 45 звуков PS5 (Sound Library)", en: "Complete 45 PS5 System Sounds Library" }, val: { ru: "Открыть библиотеку звуков", en: "Open Sound Library" }, action: "open:ps5_sounds" },
       { label: { ru: "Проверка звука (Test Sound)", en: "Test Sound (Diagnostics)" }, val: { ru: "Воспроизвести тестовый сигнал", en: "Play Test Sound" }, action: "test_sound" }
     ]
+  },
+  {
+    id: "ps5_sounds",
+    title: { ru: "Системные звуки PS5", en: "PS5 System Sounds" },
+    icon: PS5Icons.soundOn,
+    isSoundLibrary: true,
+    items: []
   },
   {
     id: "accessories",
