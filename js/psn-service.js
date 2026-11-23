@@ -238,7 +238,9 @@ class PsnTrophyService {
    * Disconnect profile (clears custom import, reloads base sync)
    */
   disconnect() {
-    localStorage.removeItem(STORAGE_CUSTOM_KEY);
+    try {
+      localStorage.removeItem(STORAGE_CUSTOM_KEY);
+    } catch (_) {}
     return this.loadData();
   }
 

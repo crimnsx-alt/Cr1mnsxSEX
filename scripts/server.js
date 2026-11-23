@@ -30,6 +30,7 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+  console.log(`[REQ] ${req.method} ${req.url}`);
   // CORS & No-Cache headers to ensure instant, reliable loading in IDE webview
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');

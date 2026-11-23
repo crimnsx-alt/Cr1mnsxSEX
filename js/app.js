@@ -3887,7 +3887,10 @@ async function loadSberConfig() {
     } catch (_) {}
   }
 
-  const localSavedUrl = localStorage.getItem('ps5_donate_url');
+  let localSavedUrl = null;
+  try {
+    localSavedUrl = localStorage.getItem('ps5_donate_url');
+  } catch (_) {}
   if (localSavedUrl && typeof localSavedUrl === 'string') {
     const trimmed = localSavedUrl.trim();
     if (trimmed.startsWith('http') && !trimmed.includes('ваш_никнейм') && !trimmed.includes('your_nickname')) {
@@ -4020,7 +4023,9 @@ function initSberTips() {
         return;
       }
       SoundEngine.enter();
-      localStorage.setItem('ps5_donate_url', newUrl);
+      try {
+        localStorage.setItem('ps5_donate_url', newUrl);
+      } catch (_) {}
       sberConfig.target_url = newUrl;
       const match = newUrl.match(/\/r\/([a-zA-Z0-9_-]+)/);
       if (match) {
