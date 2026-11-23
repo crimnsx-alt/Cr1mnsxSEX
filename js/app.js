@@ -389,23 +389,99 @@ function animateNumberFlow(element, targetValue, options = {}) {
 }
 
 // ============================================================
-// ELITE UI MASTER: Aceternity / Magic UI Spotlight Cursor Mesh
+// ELITE UI MASTER: 21st.dev Spotlight & Subtle 3D Tilt Suite
 // ============================================================
-function initSpotlightCards() {
-  const container = document.getElementById("ps5BentoViewport");
-  if (!container) return;
+function initSpotlightAndTilt() {
+  const isTouch = window.matchMedia("(pointer: coarse)").matches;
+  if (isTouch) return;
 
-  container.addEventListener("pointermove", (e) => {
-    const widgets = container.querySelectorAll(".ps5-widget");
-    for (let i = 0; i < widgets.length; i++) {
-      const w = widgets[i];
-      const rect = w.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      w.style.setProperty("--mouse-x", `${x}px`);
-      w.style.setProperty("--mouse-y", `${y}px`);
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card";
+  document.querySelectorAll(selector).forEach((card) => {
+    if (!card.classList.contains("tilt-card")) {
+      card.classList.add("tilt-card");
+
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        card.style.setProperty("--mouse-x", `${x}px`);
+        card.style.setProperty("--mouse-y", `${y}px`);
+
+        // Subtle 3D tilt (max 4.2deg)
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -4.2;
+        const rotateY = ((x - centerX) / centerX) * 4.2;
+
+        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.012, 1.012, 1.012)`;
+      }, { passive: true });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "";
+      });
     }
-  }, { passive: true });
+  });
+
+  // Magnetic Pull on Main Action Buttons (3-5px attraction)
+  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying");
+  magneticButtons.forEach((btn) => {
+    if (!btn._hasMagnet) {
+      btn._hasMagnet = true;
+      btn.addEventListener("mousemove", (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - (rect.left + rect.width / 2);
+        const y = e.clientY - (rect.top + rect.height / 2);
+        btn.style.transform = `translate(${(x * 0.16).toFixed(1)}px, ${(y * 0.16).toFixed(1)}px) scale(1.03)`;
+      }, { passive: true });
+
+      btn.addEventListener("mouseleave", () => {
+        btn.style.transform = "";
+      });
+    }
+  });
+}
+
+function initScrollReveal() {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-revealed");
+        }
+      });
+    },
+    {
+      threshold: 0.08,
+      rootMargin: "0px 0px -30px 0px"
+    }
+  );
+
+  const targets = document.querySelectorAll(".ps5-widget, .tc-game-card, .ps5-media-card, .ps5-hero-trophy-card, .ps5-scroll-reveal");
+  targets.forEach((el, idx) => {
+    el.classList.add("ps5-scroll-reveal");
+    el.style.setProperty("--reveal-index", idx % 6);
+    observer.observe(el);
+  });
+}
+
+function initDynamicTopbar() {
+  const topbar = document.querySelector(".ps5-topbar");
+  if (!topbar) return;
+
+  const handleScroll = (scroller) => {
+    const y = scroller ? scroller.scrollTop : window.scrollY;
+    topbar.classList.toggle("scrolled", y > 10);
+  };
+
+  window.addEventListener("scroll", () => handleScroll(null), { passive: true });
+  document.getElementById("viewportStage")?.addEventListener("scroll", (e) => handleScroll(e.target), { passive: true });
+  document.getElementById("stageGameHub")?.addEventListener("scroll", (e) => handleScroll(e.target), { passive: true });
+  document.getElementById("ps5WelcomeView")?.addEventListener("scroll", (e) => handleScroll(e.target), { passive: true });
+}
+
+function initSpotlightCards() {
+  initSpotlightAndTilt();
 }
 
 function renderWelcomeBatteryRings() {
@@ -717,18 +793,21 @@ function renderActiveView() {
     exploreEl.hidden = true;
     heroEl.hidden = true;
     setBackground(item.bg || "assets/bg_monica.jpg");
+    initSpotlightAndTilt();
   } else if (item.viewType === "explore") {
     welcomeEl.hidden = true;
     exploreEl.hidden = false;
     heroEl.hidden = true;
     setBackground(item.bg, item.fallbackBg);
     renderExploreView(item);
+    initSpotlightAndTilt();
   } else {
     welcomeEl.hidden = true;
     exploreEl.hidden = true;
     heroEl.hidden = false;
     setBackground(item.bg, item.fallbackBg);
     renderGameHeroView(item);
+    initSpotlightAndTilt();
     if (state.isHubOpen) {
       renderGameHubContent(item);
     }
@@ -5079,6 +5158,8 @@ function init() {
   );
 
   initSpotlightCards();
+  initScrollReveal();
+  initDynamicTopbar();
   initMobileTouchGestures();
   updateNavTabIndicator();
   updateAmbientGlowTheme(state.activeId);

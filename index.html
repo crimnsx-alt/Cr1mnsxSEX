@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261123_spatialhub" />
+  <link rel="stylesheet" href="css/style.css?v=20261123_elite5" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -32,8 +32,12 @@
     <div class="ps5-bg-art" id="bgLayerA"></div>
     <div class="ps5-bg-art" id="bgLayerB"></div>
     <div class="ps5-bg-ambient-glow" id="bgAmbientGlow"></div>
+    <div class="ps5-ambient-aurora ps5-aurora-1"></div>
+    <div class="ps5-ambient-aurora ps5-aurora-2"></div>
+    <div class="ps5-ambient-aurora ps5-aurora-3"></div>
     <div class="ambient-grid" id="bgAmbientGrid"></div>
     <canvas id="ps5Particles" class="ps5-particles"></canvas>
+    <div class="ps5-noise-layer"></div>
     <div class="ps5-bg-vignette"></div>
   </div>
 
@@ -49,7 +53,7 @@
     <div id="stageHome" class="ps5-screen">
 
       <!-- TOP SYSTEM BAR -->
-      <header class="ps5-topbar">
+      <header class="ps5-topbar blur-fade-stagger" style="--stagger-index: 0">
         <nav class="ps5-nav-tabs" aria-label="Разделы системы">
           <span class="ps5-tab-indicator" id="navTabIndicator" aria-hidden="true"></span>
           <button class="ps5-tab is-active" id="tabGames" data-tab="games" type="button">Игры</button>
@@ -102,7 +106,7 @@
       </header>
 
       <!-- TOP-ALIGNED SYSTEM / GAME RIBBON -->
-      <section class="ps5-ribbon-wrap" aria-label="Лента разделов">
+      <section class="ps5-ribbon-wrap blur-fade-stagger" style="--stagger-index: 1" aria-label="Лента разделов">
         <div class="ps5-games-ribbon" id="ps5GamesRibbon"></div>
       </section>
 
@@ -110,17 +114,17 @@
       <main class="ps5-welcome-hub" id="ps5WelcomeView">
         <div class="ps5-welcome-hero-banner">
           <div class="ps5-welcome-hero-left">
-            <div class="ps5-welcome-title-row">
+            <div class="ps5-welcome-title-row blur-fade-stagger" style="--stagger-index: 2">
               <h1 class="ps5-welcome-hero-title" id="lblWelcomeHeroTitle">С возвращением, Cr1mnsx</h1>
               <span class="ps5-welcome-pulse-badge">
                 <span class="ps5-welcome-pulse-dot"></span>
                 <span>PS5 Hub · 4K 120Hz</span>
               </span>
             </div>
-            <p class="ps5-welcome-hero-sub" id="lblWelcomeHeroSub">PlayStation®5 System Software · Интерактивная веб-оболочка Welcome Hub</p>
+            <p class="ps5-welcome-hero-sub blur-fade-stagger" style="--stagger-index: 3" id="lblWelcomeHeroSub">PlayStation®5 System Software · Интерактивная веб-оболочка Welcome Hub</p>
           </div>
           <div class="ps5-welcome-hero-right">
-            <div class="ps5-welcome-featured-game" id="btnContinuePlaying" role="button" tabindex="0" title="Быстрый запуск последнего проекта">
+            <div class="ps5-welcome-featured-game blur-fade-stagger" style="--stagger-index: 4" id="btnContinuePlaying" role="button" tabindex="0" title="Быстрый запуск последнего проекта">
               <div class="ps5-wfg-thumb" style="background-image: url('assets/covers/gta_vc.jpg');"></div>
               <div class="ps5-wfg-info">
                 <span class="ps5-wfg-kicker">Продолжить игру</span>
@@ -148,7 +152,7 @@
         <div class="ps5-bento-viewport" id="ps5BentoViewport">
           <div class="ps5-bento-grid" id="ps5BentoTrack">
           <!-- Column 1: Online Friends (64%) + Store Showcase (31%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 5">
             <article class="ps5-widget ps5-widget--friends" id="widgetFriends" tabindex="0" role="region" aria-label="Друзья">
               <header class="ps5-widget-header">
                 <div class="ps5-widget-title-group">
@@ -201,7 +205,7 @@
           </div>
 
           <!-- Column 2: Accessibility (29%) + Trophies (66%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 6">
             <article class="ps5-widget ps5-widget--accessibility" id="widgetAccessibility" tabindex="0" role="button">
               <div class="ps5-acc-left">
                 <header class="ps5-widget-header">
@@ -259,7 +263,7 @@
           </div>
 
           <!-- Column 3: Battery Rings (29%) + Dedicated Console Storage (66%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 7">
             <article class="ps5-widget ps5-widget--battery" id="widgetBattery" tabindex="0" role="button">
               <div class="ps5-battery-rings-row" id="welcomeBatteryRings"></div>
             </article>
@@ -293,7 +297,7 @@
           </div>
 
           <!-- Column 4: Dedicated Wishlist (48%) + Activity (48%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 8">
             <article class="ps5-widget ps5-widget--wishlist" id="widgetWishlist" tabindex="0" role="button">
               <div class="ps5-wishlist-art" id="welcomeWishlistBg">
                 <div class="ps5-wishlist-scrim"></div>
@@ -329,7 +333,7 @@
           </div>
 
           <!-- Column 5: Media Gallery (48%) + Network Status (48%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 9">
             <article class="ps5-widget ps5-widget--media-slot" id="widgetMediaGallery" tabindex="0" role="button">
               <div class="ps5-slot-inner" id="welcomeMediaCardBg">
                 <div class="ps5-store-scrim"></div>
@@ -352,7 +356,7 @@
           </div>
 
           <!-- Column 6: PlayStation Plus (34%) + Remote Play (31%) + Trophy Progress (31%) -->
-          <div class="ps5-bento-col">
+          <div class="ps5-bento-col blur-fade-stagger" style="--stagger-index: 10">
             <article class="ps5-widget ps5-widget--media-slot" id="widgetPsPlus" tabindex="0" role="button">
               <div class="ps5-slot-inner" id="welcomePsPlusCardBg">
                 <div class="ps5-store-scrim"></div>
@@ -455,7 +459,7 @@
       </main>
 
       <!-- GLOBAL PS5 BOTTOM BAR (DualSense Controller Hints & Scroll Cue) -->
-      <footer class="ps5-bottom-bar" id="ps5BottomBar">
+      <footer class="ps5-bottom-bar blur-fade-stagger" style="--stagger-index: 11" id="ps5BottomBar">
         <div id="scrollDownCue" class="ps5-scroll-cue" role="button" tabindex="0" hidden>
           <span id="iconScrollDown"></span>
           <span id="lblScrollHubCue">Нажмите ↓ или прокрутите вниз — Центр игры</span>
@@ -1232,6 +1236,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261123_spatialhub"></script>
+  <script type="module" src="js/app.js?v=20261123_elite5"></script>
 </body>
 </html>
