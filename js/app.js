@@ -458,12 +458,17 @@ function renderWelcomeBatteryRings() {
 function renderControllerHints() {
   const el = $("#ps5ControllerHints");
   if (!el) return;
+  const isRu = state.lang === "ru";
   el.innerHTML = `
-    <span class="c-hint" data-action="cc" title="Нажмите для открытия Центра управления"><kbd class="c-glyph">PS</kbd> ${S("hintCC")}</span>
-    <span class="c-hint" data-action="select" title="Нажмите для выбора/запуска"><kbd class="c-glyph">${PS5Icons.gamepadCross}</kbd> ${S("hintSelect")}</span>
-    <span class="c-hint" data-action="search" title="Нажмите для поиска"><kbd class="c-glyph">${PS5Icons.gamepadTriangle}</kbd> ${S("hintSearch")}</span>
-    <span class="c-hint" data-action="tab" title="Нажмите для переключения вкладок"><kbd class="c-glyph">TAB</kbd> ${S("hintTab")}</span>
-    <span class="c-hint" data-action="back" title="Нажмите для возврата"><kbd class="c-glyph">${PS5Icons.gamepadCircle}</kbd> ${S("hintBack")}</span>
+    <div class="hints-group">
+      <span class="c-hint hint-item" data-action="nav" title="Стрелки влево/вправо"><span class="hint-key">←</span><span class="hint-key">→</span> ${isRu ? "Навигация" : "Navigate"}</span>
+      <span class="c-hint hint-item" data-action="select" title="Нажмите для выбора/запуска"><kbd class="c-glyph">${PS5Icons.gamepadCross}</kbd> <span class="hint-key">Enter</span> ${S("hintSelect")}</span>
+      <span class="c-hint hint-item" data-action="cc" title="Центр управления"><kbd class="c-glyph">PS</kbd> <span class="hint-key">Space</span> ${S("hintCC")}</span>
+      <span class="c-hint hint-item" data-action="search" title="Поиск"><kbd class="c-glyph">${PS5Icons.gamepadTriangle}</kbd> <span class="hint-key">⌘K</span> ${S("hintSearch")}</span>
+      <span class="c-hint hint-item" data-action="tab" title="Вкладка"><span class="hint-key">Tab</span> ${S("hintTab")}</span>
+      <span class="c-hint hint-item" data-action="back" title="Назад"><kbd class="c-glyph">${PS5Icons.gamepadCircle}</kbd> <span class="hint-key">Esc</span> ${S("hintBack")}</span>
+    </div>
+    <span class="spatial-ui-badge">SPATIAL UI // V2.0</span>
   `;
 }
 
@@ -816,6 +821,18 @@ function renderGameHeroView(item) {
     } else {
       secBtn.hidden = true;
     }
+  }
+
+  const copyBtn = $("#btnCopyGameLink");
+  if (copyBtn) {
+    copyBtn.onclick = () => {
+      const active = item;
+      const url = active?.externalUrl || active?.playUrl || window.location.href;
+      const title = t(active?.title) || "Проект";
+      copyTextFallback(url);
+      showToast(state.lang === "ru" ? "Ссылка" : "Link", state.lang === "ru" ? `Ссылка «${title}» скопирована` : `Link "${title}" copied`, PS5Icons.check);
+      SoundEngine.confirm();
+    };
   }
 
   // Right-bottom Trophy Summary
@@ -3468,9 +3485,28 @@ function showToast(title, message, icon = PS5Icons.controller) {
   }, 3400);
 }
 
+function copyTextFallback(text) {
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch {}
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+  const ok = document.execCommand("copy");
+  document.body.removeChild(textarea);
+  return ok;
+}
+
 async function copyToClipboard(text, label) {
   try {
-    await navigator.clipboard.writeText(text);
+    copyTextFallback(text);
     showToast("PlayStation®5", `${label} скопировано в буфер обмена`, PS5Icons.check);
   } catch {
     showToast("Контакт", text, PS5Icons.info);
@@ -5046,6 +5082,19 @@ function init() {
   initMobileTouchGestures();
   updateNavTabIndicator();
   updateAmbientGlowTheme(state.activeId);
+
+  const initialHash = window.location.hash.replace("#", "");
+  if (initialHash) {
+    const allItems = [...(ribbonCatalog.games || []), ...(ribbonCatalog.media || [])];
+    const match = allItems.find((it) => it.id === initialHash || it.id.replace("_", "-") === initialHash.replace("_", "-"));
+    if (match) {
+      if ((ribbonCatalog.media || []).some((m) => m.id === match.id) && state.category !== "media") {
+        switchCategory("media");
+      }
+      selectTile(match.id, false);
+    }
+  }
+
   window.addEventListener("resize", () => {
     updateNavTabIndicator();
     updateTrophyFilterIndicator();

@@ -9,8 +9,8 @@
   <title>PlayStation®5 — Welcome Hub &amp; System Shell</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261123_ps5framer" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=20261123_spatialhub" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -32,6 +32,7 @@
     <div class="ps5-bg-art" id="bgLayerA"></div>
     <div class="ps5-bg-art" id="bgLayerB"></div>
     <div class="ps5-bg-ambient-glow" id="bgAmbientGlow"></div>
+    <div class="ambient-grid" id="bgAmbientGrid"></div>
     <canvas id="ps5Particles" class="ps5-particles"></canvas>
     <div class="ps5-bg-vignette"></div>
   </div>
@@ -70,12 +71,14 @@
             <span id="muteIcon"></span>
           </button>
 
-          <button class="ps5-icon-btn" id="btnSearch" type="button" title="Поиск (/)" aria-label="Поиск">
+          <button class="ps5-icon-btn ps5-cmd-trigger" id="btnSearch" type="button" title="Быстрый поиск (Cmd+K или /)" aria-label="Поиск">
             <span id="iconSearchBtn"></span>
+            <span class="ps5-cmd-label">Поиск</span>
+            <kbd class="ps5-cmd-kbd">⌘K</kbd>
           </button>
 
           <button class="ps5-icon-btn ps5-notif-btn" id="btnNotifications" type="button" title="Уведомления PSN" aria-label="Уведомления">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
@@ -86,9 +89,12 @@
             <span id="iconSettingsBtn"></span>
           </button>
 
-          <button class="ps5-avatar-btn" id="btnProfile" type="button" title="Профиль Player 1" aria-label="Профиль пользователя">
-            <span id="iconProfileAvatar"></span>
-            <span class="ps5-online-dot"></span>
+          <button class="ps5-avatar-btn ps5-profile-pill" id="btnProfile" type="button" title="Профиль cr1mnsx · Коллекция трофеев" aria-label="Профиль пользователя">
+            <div class="avatar-dot">
+              <span id="iconProfileAvatar"></span>
+              <span class="ps5-online-dot"></span>
+            </div>
+            <span class="ps5-profile-name">cr1mnsx</span>
           </button>
 
           <time class="ps5-clock" id="ps5Clock">22:45</time>
@@ -412,14 +418,17 @@
             <p class="ps5-hero-desc" id="heroDesc"></p>
 
             <div class="ps5-hero-actions">
-              <button id="heroBtn" class="ps5-btn-play" type="button">
+              <button id="heroBtn" class="ps5-btn-play btn-primary" type="button">
                 <svg class="ps5-btn-play-icon" width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
                 <span id="heroBtnText">Играть</span>
               </button>
-              <button id="heroSecondaryBtn" class="ps5-btn-sec" type="button">
+              <button id="heroSecondaryBtn" class="ps5-btn-sec btn-glass" type="button">
                 <span id="heroSecBtnText">Подробнее</span>
               </button>
-              <button id="btnOptionsMenu" class="ps5-btn-dots" type="button" aria-label="Дополнительные параметры" title="Параметры">
+              <button id="btnCopyGameLink" class="ps5-btn-icon-copy btn-glass btn-icon-only" type="button" title="Скопировать ссылку" aria-label="Скопировать ссылку">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              </button>
+              <button id="btnOptionsMenu" class="ps5-btn-dots btn-glass btn-icon-only" type="button" aria-label="Дополнительные параметры" title="Параметры">
                 <span id="iconOptionsDots">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
                 </span>
@@ -1223,6 +1232,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261123_ps5framer"></script>
+  <script type="module" src="js/app.js?v=20261123_spatialhub"></script>
 </body>
 </html>

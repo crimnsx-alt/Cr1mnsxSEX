@@ -7989,3 +7989,495 @@ body.cc-open .viewport-stage {
     scroll-behavior: auto !important;
   }
 }
+
+/* ==========================================================================
+   SPATIAL HUB AESTHETICS & ICON ANIMATION SUITE (cr1mnsx_spatial_hub.html 1:1)
+   ========================================================================== */
+
+:root {
+  --spatial-bg-base: #05070b;
+  --spatial-surface-glass: rgba(255, 255, 255, 0.05);
+  --spatial-surface-glass-strong: rgba(16, 20, 28, 0.82);
+  --spatial-border-subtle: rgba(255, 255, 255, 0.11);
+  --spatial-border-focus: rgba(255, 255, 255, 0.92);
+  --spatial-text-primary: #f8fafc;
+  --spatial-text-secondary: rgba(248, 250, 252, 0.62);
+  --spatial-text-muted: rgba(248, 250, 252, 0.38);
+  --spatial-ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+  --spatial-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+  --radius-tile: 22px;
+  --radius-pill: 999px;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* 1. Spatial Ambient Perspective Grid */
+.ambient-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.6) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, black, transparent);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 70% 30%, black, transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 2. Top Bar Icon Buttons & Spatial Capsules */
+.ps5-icon-btn {
+  position: relative;
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background: var(--spatial-surface-glass) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  color: rgba(248, 250, 252, 0.75) !important;
+  cursor: pointer;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  transition: transform 0.3s var(--spatial-ease-spring),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.3s ease,
+              color 0.2s ease !important;
+}
+
+.ps5-icon-btn:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.3) !important;
+}
+
+.ps5-icon-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.ps5-icon-btn svg {
+  transition: transform 0.35s var(--spatial-ease-out-expo), filter 0.3s ease !important;
+}
+
+.ps5-icon-btn:hover svg {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.6));
+}
+
+/* Command Palette Trigger (Cmd+K) in Topbar */
+.ps5-cmd-trigger {
+  width: auto !important;
+  height: 36px !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 0 14px 0 12px !important;
+  gap: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+.ps5-cmd-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(248, 250, 252, 0.72);
+  letter-spacing: -0.01em;
+  transition: color 0.2s ease;
+}
+
+.ps5-cmd-kbd {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  line-height: 1;
+}
+
+.ps5-cmd-trigger:hover .ps5-cmd-label {
+  color: #ffffff;
+}
+
+/* Spatial Profile Pill */
+.ps5-profile-pill {
+  width: auto !important;
+  height: 36px !important;
+  border-radius: var(--radius-pill) !important;
+  padding: 4px 14px 4px 6px !important;
+  gap: 9px !important;
+  background: var(--spatial-surface-glass) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  cursor: pointer;
+  transition: transform 0.3s var(--spatial-ease-spring),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.3s ease !important;
+}
+
+.ps5-profile-pill:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38), 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.3) !important;
+}
+
+.ps5-profile-pill:active {
+  transform: scale(0.96) !important;
+}
+
+.ps5-profile-pill .avatar-dot {
+  position: relative;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ps5-profile-pill .ps5-online-dot {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  width: 8.5px;
+  height: 8.5px;
+  border-radius: 50%;
+  background: #22c55e !important;
+  border: 2px solid #060811 !important;
+  box-shadow: 0 0 6px #22c55e !important;
+}
+
+.ps5-profile-name {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #f8fafc;
+}
+
+/* Donation Button Pill */
+.ps5-top-tips-btn {
+  height: 36px !important;
+  border-radius: var(--radius-pill) !important;
+  background: rgba(255, 140, 0, 0.12) !important;
+  border: 1px solid rgba(255, 140, 0, 0.35) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 0 14px rgba(255, 140, 0, 0.18) !important;
+  backdrop-filter: blur(20px) !important;
+  color: #ffaa33 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 0 14px !important;
+  gap: 7px !important;
+  transition: transform 0.3s var(--spatial-ease-spring), background 0.25s ease, box-shadow 0.3s ease !important;
+}
+
+.ps5-top-tips-btn:hover {
+  background: rgba(255, 140, 0, 0.22) !important;
+  border-color: rgba(255, 160, 40, 0.6) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 24px rgba(255, 140, 0, 0.45) !important;
+}
+
+.ps5-top-tips-btn svg {
+  transition: transform 0.35s var(--spatial-ease-spring) !important;
+}
+
+.ps5-top-tips-btn:hover svg {
+  transform: scale(1.18) rotate(6deg);
+}
+
+/* Language Toggle Pill */
+.ps5-top-lang {
+  height: 36px !important;
+  min-width: 38px !important;
+  border-radius: var(--radius-pill) !important;
+  background: var(--spatial-surface-glass) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(20px) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: rgba(248, 250, 252, 0.75) !important;
+  cursor: pointer;
+  transition: transform 0.3s var(--spatial-ease-spring), background 0.25s ease, color 0.2s ease !important;
+}
+
+.ps5-top-lang:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: translateY(-2px) scale(1.05) !important;
+  color: #ffffff !important;
+}
+
+/* System Clock */
+.ps5-clock {
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: rgba(248, 250, 252, 0.65) !important;
+  min-width: 48px !important;
+  text-align: right !important;
+  letter-spacing: -0.01em !important;
+}
+
+/* 3. Spatial Game Ribbon Tiles & Gloss Reflection */
+.ps5-tile {
+  border-radius: var(--radius-tile) !important;
+  background: var(--spatial-surface-glass) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 10px 26px -6px rgba(0, 0, 0, 0.6) !important;
+  overflow: hidden !important;
+  transition: transform 0.45s var(--spatial-ease-out-expo),
+              flex-basis 0.45s var(--spatial-ease-out-expo),
+              width 0.45s var(--spatial-ease-out-expo),
+              height 0.45s var(--spatial-ease-out-expo),
+              border-color 0.3s ease,
+              box-shadow 0.45s var(--spatial-ease-out-expo),
+              opacity 0.35s ease,
+              filter 0.35s ease !important;
+}
+
+.ps5-tile:hover:not(.is-active) {
+  transform: translateY(-4px) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  opacity: 1 !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 18px 38px -8px rgba(0, 0, 0, 0.75), 0 0 20px rgba(56, 189, 248, 0.25) !important;
+}
+
+.ps5-tile.is-active {
+  border-radius: var(--radius-tile) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22), 0 0 36px rgba(56, 189, 248, 0.42), 0 24px 52px -12px rgba(0, 0, 0, 0.88), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
+  opacity: 1 !important;
+}
+
+.ps5-tile-art {
+  position: relative;
+  border-radius: 17px !important;
+  overflow: hidden;
+}
+
+.ps5-tile-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
+
+.ps5-tile svg {
+  transition: transform 0.4s var(--spatial-ease-out-expo), filter 0.35s ease !important;
+}
+
+.ps5-tile:hover svg {
+  transform: scale(1.1) translateY(-2px);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.5));
+}
+
+/* 4. Spatial Hero Buttons & Action Pills */
+.ps5-btn-play,
+.btn-primary {
+  border-radius: var(--radius-pill) !important;
+  background: #ffffff !important;
+  color: #05070b !important;
+  font-family: inherit !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 0 28px !important;
+  height: 48px !important;
+  border: none !important;
+  transition: transform 0.3s var(--spatial-ease-spring), box-shadow 0.3s ease, background 0.2s ease !important;
+}
+
+.ps5-btn-play:hover,
+.btn-primary:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 12px 32px -6px rgba(255, 255, 255, 0.36) !important;
+}
+
+.ps5-btn-play:active,
+.btn-primary:active {
+  transform: scale(0.98) !important;
+}
+
+.ps5-btn-sec,
+.btn-glass {
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  background: var(--spatial-surface-glass) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  color: #f8fafc !important;
+  font-family: inherit !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 22px !important;
+  height: 48px !important;
+  transition: transform 0.3s var(--spatial-ease-out-expo), background 0.25s ease, border-color 0.25s ease, box-shadow 0.3s ease !important;
+}
+
+.ps5-btn-sec:hover,
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.ps5-btn-sec:active,
+.btn-glass:active {
+  transform: scale(0.97) !important;
+}
+
+.btn-icon-only {
+  width: 48px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-pill) !important;
+}
+
+.btn-icon-only svg {
+  transition: transform 0.3s var(--spatial-ease-out-expo) !important;
+}
+
+.btn-icon-only:hover svg {
+  transform: scale(1.12);
+}
+
+/* 5. Bento Grid Cards & Inner SVG Elevation */
+.ps5-widget {
+  transition: transform 0.4s var(--spatial-ease-out-expo),
+              border-color 0.3s ease,
+              box-shadow 0.4s var(--spatial-ease-out-expo) !important;
+}
+
+.ps5-widget svg {
+  transition: transform 0.35s var(--spatial-ease-out-expo), filter 0.3s ease !important;
+}
+
+.ps5-widget:hover svg {
+  transform: scale(1.08);
+  filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.45));
+}
+
+/* 6. Meta Badges with Mono Typography */
+.meta-badge,
+.ps5-welcome-pulse-badge,
+.ps5-hero-publisher {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: var(--spatial-text-secondary) !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* 7. Spatial Footer Hints Bar */
+.ps5-bottom-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 14px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+  font-size: 12px !important;
+  color: var(--spatial-text-muted) !important;
+}
+
+.ps5-controller-hints {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+
+.hints-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 18px !important;
+  flex-wrap: wrap !important;
+}
+
+.hint-item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  color: var(--spatial-text-muted) !important;
+  transition: color 0.2s ease, transform 0.2s ease !important;
+}
+
+.hint-item:hover {
+  color: var(--spatial-text-primary) !important;
+  transform: translateY(-1px) !important;
+}
+
+.hint-key {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  padding: 2px 7px !important;
+  border-radius: 5px !important;
+  border: 1px solid var(--spatial-border-subtle) !important;
+  color: var(--spatial-text-secondary) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  line-height: 1 !important;
+}
+
+.spatial-ui-badge {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.08em !important;
+  color: var(--spatial-text-muted) !important;
+  text-transform: uppercase !important;
+  opacity: 0.75;
+}
+
+/* Responsive Spatial Topbar Tweaks */
+@media (max-width: 720px) {
+  .ps5-cmd-label,
+  .ps5-profile-name,
+  .spatial-ui-badge {
+    display: none !important;
+  }
+  .ps5-cmd-trigger {
+    padding: 0 10px !important;
+  }
+  .ps5-profile-pill {
+    padding: 4px !important;
+  }
+}
