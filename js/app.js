@@ -222,6 +222,67 @@ async function renderWelcomeFriends() {
   });
 }
 
+// ============================================================
+// ELITE UI MASTER: NumberFlow Odometer & Spring Animations
+// ============================================================
+function animateNumberFlow(element, targetValue, options = {}) {
+  if (!element) return;
+  const target = Number(targetValue) || 0;
+  const duration = options.duration || 950;
+  const prefix = options.prefix || "";
+  const suffix = options.suffix || "";
+  const formatter = options.formatter;
+
+  const prev = typeof element._numFlowVal === "number" ? element._numFlowVal : null;
+  element._numFlowVal = target;
+
+  if (prev === null || prev === target) {
+    element.textContent = formatter ? formatter(target) : `${prefix}${target.toLocaleString()}${suffix}`;
+    return;
+  }
+
+  const startVal = prev;
+  const startTime = performance.now();
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Framer spring-like exponential deceleration:
+    const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+    const curr = Math.round(startVal + (target - startVal) * ease);
+
+    element.textContent = formatter ? formatter(curr) : `${prefix}${curr.toLocaleString()}${suffix}`;
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      element.textContent = formatter ? formatter(target) : `${prefix}${target.toLocaleString()}${suffix}`;
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+// ============================================================
+// ELITE UI MASTER: Aceternity / Magic UI Spotlight Cursor Mesh
+// ============================================================
+function initSpotlightCards() {
+  const container = document.getElementById("ps5BentoViewport");
+  if (!container) return;
+
+  container.addEventListener("pointermove", (e) => {
+    const widgets = container.querySelectorAll(".ps5-widget");
+    for (let i = 0; i < widgets.length; i++) {
+      const w = widgets[i];
+      const rect = w.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      w.style.setProperty("--mouse-x", `${x}px`);
+      w.style.setProperty("--mouse-y", `${y}px`);
+    }
+  }, { passive: true });
+}
+
 function renderWelcomeBatteryRings() {
   const box = $("#welcomeBatteryRings");
   if (!box) return;
@@ -243,7 +304,8 @@ function renderWelcomeBatteryRings() {
               <circle cx="36" cy="36" r="31" class="ps5-ring-track" />
               <circle cx="36" cy="36" r="31" class="ps5-ring-progress ${d.colorClass}"
                 style="stroke: ${d.stroke};"
-                stroke-dasharray="${circumference.toFixed(1)}" stroke-dashoffset="${offset}" />
+                stroke-dasharray="${circumference.toFixed(1)}" stroke-dashoffset="${circumference.toFixed(1)}"
+                data-target-offset="${offset}" />
             </svg>
             <div class="ps5-ring-inner">
               <span class="ps5-ring-pct">${d.pct}%</span>
@@ -255,6 +317,17 @@ function renderWelcomeBatteryRings() {
       `;
     })
     .join("");
+
+  // Staggered sweep animation
+  requestAnimationFrame(() => {
+    const rings = box.querySelectorAll(".ps5-ring-progress");
+    rings.forEach((ring, idx) => {
+      setTimeout(() => {
+        const target = ring.getAttribute("data-target-offset");
+        if (target) ring.style.strokeDashoffset = target;
+      }, 60 + idx * 100);
+    });
+  });
 }
 
 function renderControllerHints() {
@@ -373,14 +446,17 @@ function applyLanguageAndTelemetry() {
   const silver = prof ? prof.silver : defaultProfileTelemetry.trophies.silver;
   const bronze = prof ? prof.bronze : defaultProfileTelemetry.trophies.bronze;
 
-  $("#ps5TrophiesTotal").textContent = `${S("totalPrefix")}: ${Number(total).toLocaleString()}`;
-  $("#ps5CountPlat").textContent = String(plat);
-  $("#ps5CountGold").textContent = String(gold);
-  $("#ps5CountSilver").textContent = String(silver);
-  $("#ps5CountBronze").textContent = String(bronze);
-  $("#ps5TrophyLevel").textContent = `${S("levelPrefix")} ${level}`;
-  $("#ps5TrophyPct").textContent = `${pct}%`;
-  $("#ps5TrophyBarFill").style.width = `${pct}%`;
+  animateNumberFlow($("#ps5TrophiesTotal"), total, { prefix: `${S("totalPrefix")}: ` });
+  animateNumberFlow($("#ps5CountPlat"), plat);
+  animateNumberFlow($("#ps5CountGold"), gold);
+  animateNumberFlow($("#ps5CountSilver"), silver);
+  animateNumberFlow($("#ps5CountBronze"), bronze);
+  animateNumberFlow($("#ps5TrophyLevel"), level, { prefix: `${S("levelPrefix")} ` });
+  animateNumberFlow($("#ps5TrophyPct"), pct, { suffix: "%" });
+  if ($("#ps5TrophyBarFill")) {
+    $("#ps5TrophyBarFill").style.transition = "width 0.85s var(--framer-spring)";
+    $("#ps5TrophyBarFill").style.width = `${pct}%`;
+  }
 
   // Profile Identity & Greeting on Welcome Hub
   const onlineId = prof?.onlineId || "Player 1";
@@ -4818,6 +4894,7 @@ function init() {
     { passive: true }
   );
 
+  initSpotlightCards();
   setInterval(updateClock, 10000);
   requestAnimationFrame(pollGamepads);
 }

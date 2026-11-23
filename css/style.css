@@ -7453,3 +7453,261 @@ body.hub-active .stage-game-hub {
 }
 
 
+
+
+/* ==========================================================================
+   ELITE UI MASTER DESIGN STANDARD (Apple / Linear / Framer / Aceternity Polish)
+   ========================================================================== */
+
+:root {
+  --framer-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --framer-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --framer-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ps5-glow-cyan: rgba(56, 189, 248, 0.45);
+  --ps5-glow-blue: rgba(0, 112, 209, 0.55);
+}
+
+/* 1. Staggered Cascade Entrance (Framer Motion Stagger Simulation) */
+.ps5-welcome-hero-banner {
+  animation: framerHeroIn 0.7s var(--framer-spring) both;
+}
+
+.ps5-bento-col:nth-child(1) {
+  animation: framerCardCascade 0.65s var(--framer-spring) 0.05s both;
+}
+
+.ps5-bento-col:nth-child(2) {
+  animation: framerCardCascade 0.65s var(--framer-spring) 0.12s both;
+}
+
+.ps5-bento-col:nth-child(3) {
+  animation: framerCardCascade 0.65s var(--framer-spring) 0.19s both;
+}
+
+@keyframes framerHeroIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes framerCardCascade {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.975);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 2. Aceternity / Magic UI Spotlight Cursor Mesh on Bento Cards */
+.ps5-widget {
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  position: relative;
+  will-change: transform, box-shadow;
+}
+
+.ps5-widget::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    440px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(56, 189, 248, 0.15) 0%,
+    rgba(0, 112, 209, 0.06) 40%,
+    transparent 72%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--framer-spring);
+  z-index: 1;
+}
+
+.ps5-widget:hover::after {
+  opacity: 1;
+}
+
+/* 3. Tactile Physical Micro-Feedback (Apple & Linear Spring Active) */
+button,
+.ps5-btn-primary,
+.ps5-btn-sec,
+.sber-btn-primary,
+.ps5-top-tips-btn,
+.ps5-icon-btn,
+.ps5-edit-widgets-btn,
+.ps5-welcome-featured-game,
+.ps5-widget {
+  will-change: transform;
+}
+
+button:active:not(:disabled),
+.ps5-edit-widgets-btn:active,
+.ps5-top-tips-btn:active,
+.ps5-icon-btn:active,
+.ps5-welcome-featured-game:active {
+  transform: scale(0.965) !important;
+  transition: transform 0.1s var(--framer-spring) !important;
+}
+
+.ps5-widget:active {
+  transform: translateY(-1.5px) scale(0.988) !important;
+  transition: transform 0.12s var(--framer-spring) !important;
+}
+
+/* 4. Active Game Tile Physical Breathing Aura */
+.ps5-tile.is-active {
+  animation: tileActiveGlow 3.6s ease-in-out infinite;
+}
+
+@keyframes tileActiveGlow {
+  0%, 100% {
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.45), 0 0 45px rgba(0, 112, 209, 0.3), 0 14px 35px rgba(0, 0, 0, 0.85);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(255, 255, 255, 0.7), 0 0 65px rgba(0, 112, 209, 0.55), 0 16px 42px rgba(0, 0, 0, 0.95);
+  }
+}
+
+/* Inactive Tile 3D Perspective Hover */
+.ps5-tile:hover:not(.is-active) {
+  transform: perspective(600px) translateY(-4px) scale(1.06) !important;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7), 0 0 22px rgba(56, 189, 248, 0.35) !important;
+}
+
+/* 5. Smooth Spring Underline on Navigation Tabs */
+.ps5-tab {
+  overflow: visible;
+}
+
+.ps5-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: #ffffff;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.65), 0 0 22px rgba(0, 112, 209, 0.5);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s var(--framer-spring);
+}
+
+.ps5-tab.is-active::after {
+  transform: scaleX(1);
+}
+
+/* 6. Platinum & Gold Trophy Luxurious Metallic Sheen Sweep */
+.ps5-trophy-tier-stat {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  padding: 6px;
+  transition: transform 0.25s var(--framer-spring), background 0.25s ease;
+}
+
+.ps5-trophy-tier-stat:hover {
+  transform: translateY(-3px) scale(1.04);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ps5-trophy-tier-stat--plat::before,
+.ps5-trophy-tier-stat--gold::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    65deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.25) 50%,
+    transparent 65%
+  );
+  transform: translateX(-120%);
+  pointer-events: none;
+  animation: trophySheenSweep 5s ease-in-out infinite;
+}
+
+.ps5-trophy-tier-stat--gold::before {
+  animation-delay: 2.5s;
+}
+
+@keyframes trophySheenSweep {
+  0%, 70% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+/* 7. Sonner-Style Spring Physical Toasts */
+.ps5-toast {
+  animation: ps5SonnerToastIn 0.42s var(--framer-bounce) forwards !important;
+  box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.8), 0 0 24px rgba(0, 112, 209, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
+
+@keyframes ps5SonnerToastIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px) scale(0.9);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ps5-toast:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 24px 54px -6px rgba(0, 0, 0, 0.9), 0 0 32px rgba(56, 189, 248, 0.45) !important;
+}
+
+/* 8. Fullscreen Modal Vaul/Spring Opening Physics */
+.modal-tc-fullscreen .tc-dialog-box {
+  transform: scale(0.94) translateY(20px);
+  transition: transform 0.42s var(--framer-spring), opacity 0.3s ease;
+}
+
+.modal-sber-tips.active .tc-dialog-box {
+  transform: scale(1) translateY(0);
+}
+
+/* 9. DualSense Battery Rings Smooth Physical Breathing Pulse */
+.ps5-battery-card {
+  transition: transform 0.28s var(--framer-spring);
+}
+
+.ps5-battery-card:hover {
+  transform: translateY(-3px) scale(1.05);
+}
+
+.ps5-ring-progress {
+  transition: stroke-dashoffset 1.1s var(--framer-spring), stroke 0.3s ease;
+}
+
+/* 10. NumberFlow Odometer Typography & Glint */
+.ps5-trophy-tier-count,
+.ps5-welcome-hero-title,
+.ps5-ring-pct,
+.ps5-storage-val {
+  font-feature-settings: "tnum" 1, "cv01" 1, "cv02" 1;
+  letter-spacing: -0.02em;
+}
