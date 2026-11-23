@@ -1,14 +1,27 @@
 /**
  * PlayStation®5 Twitch Broadcast Hub Service
- * Integrates Twitch Live Stream Player, Chat, Custom Streamer Management,
- * In-Dashboard Spatial Stage, and PS5 Picture-in-Picture (Pin to Side / PiP) mode.
+ * Integrates Real-time Live Status Telemetry, Official Avatars, Cinema Player,
+ * Live Chat, and In-Dashboard Spatial Stage with auto-selection of active streams.
  */
 
 import { SoundEngine } from "./sound.js";
 
-const STORAGE_KEY = "ps5_twitch_streamers_v1";
+const STORAGE_KEY = "ps5_twitch_streamers_v2";
 
 export const DEFAULT_TWITCH_STREAMERS = [
+  {
+    id: "sbomba3131",
+    channel: "sbomba3131",
+    name: "Сбомба",
+    color: "#f97316",
+    category: "Игры / Общение",
+    desc: "Сбомба (sbomba3131) — позитивные стримы, прохождения и челленджи",
+    url: "https://www.twitch.tv/sbomba3131",
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/4d62128d-fb6e-45a5-8865-0302106997a5-profile_image-300x300.png",
+    initial: "С",
+    isLive: true,
+    uptime: "2ч+"
+  },
   {
     id: "mafanyaking",
     channel: "mafanyaking",
@@ -17,7 +30,10 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Just Chatting",
     desc: "Мафаня — общение, игры, стримы и IRL",
     url: "https://www.twitch.tv/mafanyaking",
-    initial: "M"
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/640e8965-1b32-4428-bd45-6fe892746bf4-profile_image-300x300.png",
+    initial: "M",
+    isLive: false,
+    uptime: null
   },
   {
     id: "kussia88",
@@ -27,7 +43,10 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Just Chatting / Реакции",
     desc: "Каша — реакты, угарные нарезки и разговорные стримы",
     url: "https://www.twitch.tv/kussia88",
-    initial: "К"
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/0d44d834-a0f3-4c42-875c-61563c9ab20c-profile_image-300x300.png",
+    initial: "К",
+    isLive: false,
+    uptime: null
   },
   {
     id: "5opka",
@@ -37,7 +56,10 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Игры / Minecraft / Шоу",
     desc: "Кирилл Баранов (Пятёрка) — легендарные шоу, майнкрафт и стримы",
     url: "https://www.twitch.tv/5opka",
-    initial: "5"
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/e70b3a04-a290-43e5-854f-96a495a2a330-profile_image-300x300.png",
+    initial: "5",
+    isLive: false,
+    uptime: null
   },
   {
     id: "lenyapudge",
@@ -47,17 +69,10 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Dota 2 / Pudge",
     desc: "Лёня Пудж — топовый геймплей на Pudge и угар в Доте",
     url: "https://www.twitch.tv/lenyapudge",
-    initial: "Л"
-  },
-  {
-    id: "sbomba3131",
-    channel: "sbomba3131",
-    name: "Сбомба",
-    color: "#f97316",
-    category: "Игры / Общение",
-    desc: "Сбомба (sbomba3131) — позитивные стримы, прохождения и челленджи",
-    url: "https://www.twitch.tv/sbomba3131",
-    initial: "С"
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/88eac48e-2bad-4292-a4b8-1d8518ef199e-profile_image-300x300.png",
+    initial: "Л",
+    isLive: false,
+    uptime: null
   },
   {
     id: "bugorpro",
@@ -67,21 +82,28 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "CS2 / Шутеры / Игры",
     desc: "Бугор (bugorpro) — киберспорт, матчи CS2 и хардкорный гейминг",
     url: "https://www.twitch.tv/bugorpro",
-    initial: "Б"
+    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/58b00871-db29-4b86-a4bf-cfde10544560-profile_image-300x300.png",
+    initial: "Б",
+    isLive: false,
+    uptime: null
   }
 ];
 
 class TwitchBroadcastService {
   constructor() {
     this.streamers = this.loadStreamers();
-    this.activeChannel = this.streamers[0]?.channel || "mafanyaking";
+    // Default to the first live streamer or the first in list
+    const firstLive = this.streamers.find((s) => s.isLive);
+    this.activeChannel = firstLive ? firstLive.channel : (this.streamers[0]?.channel || "sbomba3131");
     this.isChatOpen = true;
     this.isInlineChatOpen = true;
     this.isPipActive = false;
     this.isHubActive = false;
     this.isInlineActive = false;
+    this.userHasManuallySelected = false;
     this.showToastCallback = null;
     this.currentRenderedChannel = null;
+    this.checkTimer = null;
   }
 
   setToastHandler(fn) {
@@ -106,7 +128,7 @@ class TwitchBroadcastService {
     } catch (e) {
       console.warn("[TwitchService] Failed to read localStorage:", e);
     }
-    return [...DEFAULT_TWITCH_STREAMERS];
+    return JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
   }
 
   saveStreamers() {
@@ -115,10 +137,6 @@ class TwitchBroadcastService {
     } catch (e) {
       console.warn("[TwitchService] Failed to write localStorage:", e);
     }
-  }
-
-  getStreamers() {
-    return this.streamers;
   }
 
   getActiveStreamer() {
@@ -132,7 +150,10 @@ class TwitchBroadcastService {
         category: "Twitch Live",
         desc: "Прямая трансляция канала",
         url: `https://www.twitch.tv/${this.activeChannel}`,
-        initial: this.activeChannel.charAt(0).toUpperCase()
+        avatar: "",
+        initial: this.activeChannel.charAt(0).toUpperCase(),
+        isLive: false,
+        uptime: null
       }
     );
   }
@@ -146,7 +167,7 @@ class TwitchBroadcastService {
     return trimmed.length > 0 ? trimmed : null;
   }
 
-  addStreamer(rawInput, customName = "") {
+  async addStreamer(rawInput, customName = "") {
     const channel = this.parseChannelInput(rawInput);
     if (!channel) {
       return { success: false, error: "Неверное имя канала или ссылка" };
@@ -166,24 +187,39 @@ class TwitchBroadcastService {
       name: name,
       color: randomColor,
       category: "Twitch Channel",
-      desc: `Пользовательский канал Twitch: ${channel}`,
+      desc: `Канал Twitch: ${channel}`,
       url: `https://www.twitch.tv/${channel}`,
+      avatar: "",
       initial: name.charAt(0).toUpperCase(),
-      custom: true
+      custom: true,
+      isLive: false,
+      uptime: null
     };
+
+    // Try fetching real avatar from decapi
+    try {
+      const avRes = await fetch(`https://decapi.me/twitch/avatar/${channel}`);
+      if (avRes.ok) {
+        const avUrl = (await avRes.text()).trim();
+        if (avUrl.startsWith("http")) newStreamer.avatar = avUrl;
+      }
+    } catch (_) {}
 
     this.streamers.push(newStreamer);
     this.saveStreamers();
+    this.userHasManuallySelected = true;
     this.selectStreamer(channel);
     this.renderSidebarList();
     this.renderInlineSidebarList();
+    this.checkSingleStreamerLive(newStreamer);
+
     return { success: true, streamer: newStreamer };
   }
 
   removeStreamer(channel) {
     this.streamers = this.streamers.filter((s) => s.channel.toLowerCase() !== channel.toLowerCase());
     if (this.streamers.length === 0) {
-      this.streamers = [...DEFAULT_TWITCH_STREAMERS];
+      this.streamers = JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
     }
     this.saveStreamers();
     if (this.activeChannel.toLowerCase() === channel.toLowerCase()) {
@@ -195,11 +231,13 @@ class TwitchBroadcastService {
   }
 
   resetDefaults() {
-    this.streamers = [...DEFAULT_TWITCH_STREAMERS];
+    this.streamers = JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
     this.saveStreamers();
+    this.userHasManuallySelected = false;
     this.selectStreamer(this.streamers[0].channel);
     this.renderSidebarList();
     this.renderInlineSidebarList();
+    this.checkAllStreamersLive(true);
   }
 
   getParentParams() {
@@ -210,7 +248,8 @@ class TwitchBroadcastService {
 
   getPlayerUrl(channel) {
     const parents = this.getParentParams();
-    return `https://player.twitch.tv/?channel=${encodeURIComponent(channel)}&${parents}&autoplay=true&muted=false`;
+    // autoplay=true and muted=false (with fallback muted=true for guaranteed browser start)
+    return `https://player.twitch.tv/?channel=${encodeURIComponent(channel)}&${parents}&autoplay=true&muted=true`;
   }
 
   getChatUrl(channel) {
@@ -218,10 +257,83 @@ class TwitchBroadcastService {
     return `https://www.twitch.tv/embed/${encodeURIComponent(channel)}/chat?${parents}&darkpopout`;
   }
 
-  getAvatarSvg(streamer) {
+  getAvatarSrc(streamer) {
+    if (streamer.avatar && streamer.avatar.startsWith("http")) {
+      return streamer.avatar;
+    }
     const initial = streamer.initial || streamer.name.charAt(0).toUpperCase();
     const color = streamer.color || "#9146FF";
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='${encodeURIComponent(color)}'/%3E%3Cstop offset='100%25' stop-color='%23121318'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='50' fill='url(%23g)'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='${encodeURIComponent(color)}' stroke-width='2' stroke-opacity='0.4'/%3E%3Ctext x='50' y='63' font-family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif' font-size='42' font-weight='800' fill='%23ffffff' text-anchor='middle'%3E${encodeURIComponent(initial)}%3C/text%3E%3C/svg%3E`;
+  }
+
+  formatUptime(raw) {
+    if (!raw) return "В эфире";
+    let str = raw.replace(/\s+/g, " ");
+    str = str.replace(/(\d+)\s*hours?/, "$1ч");
+    str = str.replace(/(\d+)\s*minutes?/, "$1м");
+    str = str.replace(/(\d+)\s*seconds?/, "");
+    str = str.replace(/,\s*/g, " ").trim();
+    return str || "В эфире";
+  }
+
+  // ============================================================
+  // REAL-TIME LIVE STATUS TELEMETRY
+  // ============================================================
+  async checkSingleStreamerLive(streamer) {
+    try {
+      const res = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(streamer.channel)}`, {
+        cache: "no-store"
+      });
+      if (res.ok) {
+        const text = (await res.text()).trim();
+        const isOffline =
+          text.toLowerCase().includes("offline") ||
+          text.toLowerCase().includes("not found") ||
+          text.length === 0;
+        streamer.isLive = !isOffline;
+        streamer.uptime = isOffline ? null : this.formatUptime(text);
+      }
+    } catch (_) {}
+  }
+
+  async checkAllStreamersLive(autoSelect = false) {
+    const checks = this.streamers.map(async (s) => {
+      await this.checkSingleStreamerLive(s);
+    });
+    await Promise.all(checks);
+
+    // Sort: Live streamers rise to top
+    this.streamers.sort((a, b) => {
+      if (a.isLive && !b.isLive) return -1;
+      if (!a.isLive && b.isLive) return 1;
+      return 0;
+    });
+
+    // Auto-select the live streamer so stream starts playing right away
+    if (autoSelect && !this.userHasManuallySelected) {
+      const liveStreamer = this.streamers.find((s) => s.isLive);
+      if (liveStreamer && liveStreamer.channel !== this.activeChannel) {
+        this.activeChannel = liveStreamer.channel;
+      }
+    }
+
+    if (this.isInlineActive) {
+      this.renderInlineSidebarList();
+      this.updateInlineStreamer(this.activeChannel);
+    }
+    if (this.isHubActive) {
+      this.renderSidebarList();
+      this.selectStreamer(this.activeChannel);
+    }
+  }
+
+  startStatusPolling() {
+    if (this.checkTimer) clearInterval(this.checkTimer);
+    this.checkTimer = setInterval(() => {
+      if (this.isInlineActive || this.isHubActive) {
+        this.checkAllStreamersLive(false);
+      }
+    }, 60000);
   }
 
   // ============================================================
@@ -235,8 +347,20 @@ class TwitchBroadcastService {
     if (!twitchView) return;
     twitchView.hidden = false;
 
+    // Check if a streamer is live and auto-select
+    if (!this.userHasManuallySelected) {
+      const liveStreamer = this.streamers.find((s) => s.isLive);
+      if (liveStreamer) {
+        this.activeChannel = liveStreamer.channel;
+      }
+    }
+
     this.renderInlineSidebarList();
     this.updateInlineStreamer(this.activeChannel);
+
+    // Run real-time status check in background
+    this.checkAllStreamersLive(!this.userHasManuallySelected);
+    this.startStatusPolling();
   }
 
   stopInlineStage() {
@@ -244,7 +368,11 @@ class TwitchBroadcastService {
     const twitchView = document.getElementById("ps5TwitchView");
     if (twitchView) twitchView.hidden = true;
 
-    // If PiP is not explicitly kept, stop iframes to free resources
+    if (this.checkTimer) {
+      clearInterval(this.checkTimer);
+      this.checkTimer = null;
+    }
+
     if (!this.isPipActive) {
       const pHolder = document.getElementById("twitchInlineIframeHolder");
       if (pHolder) pHolder.innerHTML = "";
@@ -264,19 +392,28 @@ class TwitchBroadcastService {
     container.innerHTML = this.streamers
       .map((s) => {
         const isActive = s.channel.toLowerCase() === this.activeChannel.toLowerCase();
-        const avatarSvg = this.getAvatarSvg(s);
+        const avatarSrc = this.getAvatarSrc(s);
+        const liveClass = s.isLive ? "is-live" : "is-offline";
+
         return `
-          <div class="twitch-in-card ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
+          <div class="twitch-in-card ${liveClass} ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
             <div class="twitch-in-avatar-wrap">
-              <img src="${avatarSvg}" alt="${s.name}" class="twitch-in-card-avatar" />
-              <span class="twitch-in-card-dot" style="background-color: ${s.color};"></span>
+              <img src="${avatarSrc}" alt="${s.name}" class="twitch-in-card-avatar" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <span class="twitch-in-card-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-in-card-info">
               <div class="twitch-in-card-name-row">
                 <span class="twitch-in-card-name">${s.name}</span>
-                ${isActive ? '<span class="twitch-in-active-pill">В ЭФИРЕ</span>' : ""}
+                ${
+                  s.isLive
+                    ? `<span class="twitch-in-live-badge"><span class="twitch-badge-pulse"></span>В ЭФИРЕ</span>`
+                    : `<span class="twitch-in-offline-badge">Офлайн</span>`
+                }
               </div>
-              <span class="twitch-in-card-handle">twitch.tv/${s.channel}</span>
+              <div class="twitch-in-card-sub-row">
+                <span class="twitch-in-card-handle">twitch.tv/${s.channel}</span>
+                ${s.isLive && s.uptime ? `<span class="twitch-in-card-uptime">${s.uptime}</span>` : ""}
+              </div>
             </div>
             ${
               s.custom
@@ -292,6 +429,7 @@ class TwitchBroadcastService {
       card.addEventListener("click", (e) => {
         if (e.target.closest(".twitch-in-card-del")) return;
         const ch = card.dataset.channel;
+        this.userHasManuallySelected = true;
         SoundEngine.focusMove();
         this.selectStreamer(ch);
       });
@@ -310,6 +448,23 @@ class TwitchBroadcastService {
   updateInlineStreamer(channel) {
     const streamer = this.getActiveStreamer();
 
+    // Top Status Strip Pill
+    const statusPill = document.querySelector(".twitch-cb-live-pill");
+    const statusText = document.getElementById("twitchInlineStatusText");
+    const telemetry = document.getElementById("twitchInlineTelemetry");
+
+    if (statusPill && statusText) {
+      if (streamer.isLive) {
+        statusPill.className = "twitch-cb-live-pill is-live";
+        statusText.textContent = `В ЭФИРЕ · 1080P 60FPS`;
+        if (telemetry) telemetry.textContent = `Трансляция активна ${streamer.uptime ? `(${streamer.uptime})` : ""}`;
+      } else {
+        statusPill.className = "twitch-cb-live-pill is-offline";
+        statusText.textContent = `НЕ В СЕТИ · ОФЛАЙН`;
+        if (telemetry) telemetry.textContent = `Трансляция завершена · Доступна запись (VOD)`;
+      }
+    }
+
     // Ambient Aura
     const aura = document.getElementById("twitchInlineAmbientAura");
     if (aura) {
@@ -321,7 +476,10 @@ class TwitchBroadcastService {
     if (nameEl) nameEl.textContent = streamer.name;
 
     const catEl = document.getElementById("twitchInlineCategory");
-    if (catEl) catEl.textContent = streamer.category || "Twitch Live";
+    if (catEl) {
+      catEl.textContent = streamer.isLive ? `${streamer.category} · В эфире` : `${streamer.category} · Офлайн`;
+      catEl.className = streamer.isLive ? "twitch-in-category is-live" : "twitch-in-category is-offline";
+    }
 
     const linkEl = document.getElementById("twitchInlineHandle");
     if (linkEl) {
@@ -330,14 +488,18 @@ class TwitchBroadcastService {
     }
 
     const bioEl = document.getElementById("twitchInlineBio");
-    if (bioEl) bioEl.textContent = streamer.desc || "Прямая трансляция канала";
+    if (bioEl) {
+      bioEl.textContent = streamer.isLive
+        ? `Прямой эфир на канале ${streamer.name} ${streamer.uptime ? `(в сети ${streamer.uptime})` : ""}`
+        : `${streamer.desc} · Сейчас не в сети`;
+    }
 
     const avatarEl = document.getElementById("twitchInlineAvatar");
     if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${this.getAvatarSvg(streamer)}" alt="${streamer.name}" />`;
+      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" onerror="this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
     }
 
-    // Update Player Iframe if channel changed
+    // Update Player Iframe if channel changed or empty
     const holder = document.getElementById("twitchInlineIframeHolder");
     if (holder && this.currentRenderedChannel !== channel) {
       holder.innerHTML = `
@@ -416,17 +578,21 @@ class TwitchBroadcastService {
     container.innerHTML = this.streamers
       .map((s) => {
         const isActive = s.channel.toLowerCase() === this.activeChannel.toLowerCase();
-        const avatarSvg = this.getAvatarSvg(s);
+        const avatarSrc = this.getAvatarSrc(s);
         return `
-          <div class="twitch-streamer-card ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
+          <div class="twitch-streamer-card ${s.isLive ? "is-live" : "is-offline"} ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
             <div class="twitch-card-avatar-wrap">
-              <img src="${avatarSvg}" alt="${s.name}" class="twitch-card-avatar" />
-              <span class="twitch-card-online-dot" style="background-color: ${s.color};"></span>
+              <img src="${avatarSrc}" alt="${s.name}" class="twitch-card-avatar" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <span class="twitch-card-online-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-card-info">
               <div class="twitch-card-name-row">
                 <span class="twitch-card-name">${s.name}</span>
-                ${isActive ? '<span class="twitch-card-active-pill">В ЭФИРЕ</span>' : ""}
+                ${
+                  s.isLive
+                    ? `<span class="twitch-card-active-pill">В ЭФИРЕ</span>`
+                    : `<span class="twitch-card-offline-pill">Офлайн</span>`
+                }
               </div>
               <span class="twitch-card-handle">twitch.tv/${s.channel}</span>
             </div>
@@ -444,6 +610,7 @@ class TwitchBroadcastService {
       card.addEventListener("click", (e) => {
         if (e.target.closest(".twitch-card-del-btn")) return;
         const ch = card.dataset.channel;
+        this.userHasManuallySelected = true;
         SoundEngine.focusMove();
         this.selectStreamer(ch);
       });
@@ -474,7 +641,7 @@ class TwitchBroadcastService {
       if (nameEl) nameEl.textContent = streamer.name;
 
       const catEl = document.getElementById("twitchMetaCategory");
-      if (catEl) catEl.textContent = streamer.category || "Twitch Live";
+      if (catEl) catEl.textContent = streamer.isLive ? `${streamer.category} · В эфире` : `${streamer.category} · Офлайн`;
 
       const linkEl = document.getElementById("twitchMetaLink");
       if (linkEl) {
@@ -487,7 +654,7 @@ class TwitchBroadcastService {
 
       const avatarEl = document.getElementById("twitchMetaAvatar");
       if (avatarEl) {
-        avatarEl.innerHTML = `<img src="${this.getAvatarSvg(streamer)}" alt="${streamer.name}" />`;
+        avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" />`;
       }
 
       this.renderPlayerIframe();
@@ -500,16 +667,16 @@ class TwitchBroadcastService {
       });
     }
 
-    // Update Inline Stage if active
+    // Update Inline Stage
     if (this.isInlineActive) {
       this.updateInlineStreamer(channel);
     }
 
-    // Update PiP if active
+    // Update PiP
     if (this.isPipActive) {
       const pipBody = document.getElementById("twitchPipBody");
       const pipName = document.getElementById("twitchPipName");
-      if (pipName) pipName.textContent = `${streamer.name} · LIVE`;
+      if (pipName) pipName.textContent = `${streamer.name} ${streamer.isLive ? "· LIVE" : "· Офлайн"}`;
       if (pipBody) {
         pipBody.innerHTML = `
           <iframe
@@ -581,6 +748,7 @@ class TwitchBroadcastService {
   openHub(initialChannel = null) {
     if (initialChannel) {
       this.activeChannel = initialChannel;
+      this.userHasManuallySelected = true;
     }
     this.isHubActive = true;
     this.closePip(false);
@@ -615,7 +783,6 @@ class TwitchBroadcastService {
     const streamer = this.getActiveStreamer();
     this.isPipActive = true;
 
-    // Close Modal if open
     const modal = document.getElementById("modalTwitchHub");
     if (modal) {
       modal.classList.remove("active");
@@ -628,7 +795,7 @@ class TwitchBroadcastService {
 
     if (pipWidget && pipBody) {
       pipWidget.hidden = false;
-      if (pipName) pipName.textContent = `${streamer.name} · LIVE`;
+      if (pipName) pipName.textContent = `${streamer.name} ${streamer.isLive ? "· LIVE" : "· Офлайн"}`;
       pipBody.innerHTML = `
         <iframe
           src="${this.getPlayerUrl(this.activeChannel)}"
@@ -641,7 +808,6 @@ class TwitchBroadcastService {
       `;
     }
 
-    // Clear big iframes
     const pWrap = document.getElementById("twitchIframeWrap");
     if (pWrap) pWrap.innerHTML = "";
     const cWrap = document.getElementById("twitchChatIframeWrap");
@@ -704,17 +870,18 @@ class TwitchBroadcastService {
     const handleAdd = () => {
       const val = inputNew?.value;
       if (!val) return;
-      const res = this.addStreamer(val);
-      if (res.success) {
-        inputNew.value = "";
-        addForm.hidden = true;
-        btnShowAdd?.classList.remove("is-active");
-        SoundEngine.chime();
-        this.toast("Канал добавлен", `Стример ${res.streamer.name} успешно добавлен в список`, null);
-      } else {
-        SoundEngine.error();
-        this.toast("Ошибка", res.error, null);
-      }
+      this.addStreamer(val).then((res) => {
+        if (res.success) {
+          inputNew.value = "";
+          addForm.hidden = true;
+          btnShowAdd?.classList.remove("is-active");
+          SoundEngine.chime();
+          this.toast("Канал добавлен", `Стример ${res.streamer.name} успешно добавлен в список`, null);
+        } else {
+          SoundEngine.error();
+          this.toast("Ошибка", res.error, null);
+        }
+      });
     };
 
     btnSubmit?.addEventListener("click", handleAdd);
@@ -775,17 +942,18 @@ class TwitchBroadcastService {
     const handleInlineAdd = () => {
       const val = inputInlineNew?.value;
       if (!val) return;
-      const res = this.addStreamer(val);
-      if (res.success) {
-        inputInlineNew.value = "";
-        inlineAddDrawer.hidden = true;
-        btnInlineShowAdd?.classList.remove("is-active");
-        SoundEngine.chime();
-        this.toast("Канал добавлен", `Стример ${res.streamer.name} успешно добавлен`, null);
-      } else {
-        SoundEngine.error();
-        this.toast("Ошибка", res.error, null);
-      }
+      this.addStreamer(val).then((res) => {
+        if (res.success) {
+          inputInlineNew.value = "";
+          inlineAddDrawer.hidden = true;
+          btnInlineShowAdd?.classList.remove("is-active");
+          SoundEngine.chime();
+          this.toast("Канал добавлен", `Стример ${res.streamer.name} успешно добавлен`, null);
+        } else {
+          SoundEngine.error();
+          this.toast("Ошибка", res.error, null);
+        }
+      });
     };
 
     btnInlineConfirm?.addEventListener("click", handleInlineAdd);
@@ -811,6 +979,7 @@ class TwitchBroadcastService {
     document.getElementById("btnInlineReload")?.addEventListener("click", () => {
       SoundEngine.focusMove();
       this.currentRenderedChannel = null;
+      this.checkAllStreamersLive(false);
       this.updateInlineStreamer(this.activeChannel);
     });
 
@@ -822,6 +991,9 @@ class TwitchBroadcastService {
       SoundEngine.closeDialog();
       this.closePip(true);
     });
+
+    // Early background live check
+    this.checkAllStreamersLive(true);
   }
 }
 

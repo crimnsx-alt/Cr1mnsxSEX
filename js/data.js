@@ -448,13 +448,13 @@ export const ribbonCatalog = {
     },
     {
       id: "twitch",
-      viewType: "game",
+      viewType: "twitch",
       title: { ru: "Twitch", en: "Twitch" },
       publisher: "Twitch Interactive, Inc.",
       kicker: { ru: "Прямые трансляции · Киберспорт", en: "Live Streams · Esports" },
       desc: {
-        ru: "Смотрите прямые эфиры любимых стримеров (Мафаня, Каша, Пятёрка, Лёня Пудж, Сбомба, Бугор), общайтесь в чате и закрепляйте плеер сбоку (PiP).",
-        en: "Watch your favorite streamers (Mafanya, Kussia, 5opka, Lenya Pudge, Sbomba, Bugor), chat in real time, and pin the player to side (PiP)."
+        ru: "Интерактивная студия трансляций: Мафаня, Каша, Пятёрка, Лёня Пудж, Сбомба, Бугор. Живой чат и Picture-in-Picture.",
+        en: "Interactive broadcast studio: Mafanya, Kussia, 5opka, Lenya Pudge, Sbomba, Bugor. Live chat and Pin-to-Side."
       },
       ctaText: { ru: "Смотреть стримы", en: "Watch Streams" },
       btnAction: "modal:twitch-hub",
@@ -465,20 +465,9 @@ export const ribbonCatalog = {
       thumb: PS5Icons.makeSceneArt("slot-2", "TWITCH"),
       progressPct: 100,
       playTime: "Студия PS5",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
-      activities: [
-        { title: "Мафаня (mafanyaking)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:mafanyaking" },
-        { title: "Каша (kussia88)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:kussia88" },
-        { title: "Пятёрка (5opka)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:5opka" },
-        { title: "Лёня Пудж (lenyapudge)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:lenyapudge" },
-        { title: "Сбомба (sbomba3131)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:sbomba3131" },
-        { title: "Бугор (bugorpro)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:bugorpro" },
-        { title: "Открыть всю студию Twitch", type: "Плеер PS5", progress: 100, timeEst: "Все каналы", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:twitch-hub" }
-      ],
-      news: [
-        { date: "Twitch Broadcast", title: "Поддержка Picture-in-Picture", desc: "Закрепляйте стрим в углу экрана (Pin to Side) и продолжайте исследовать меню PS5." },
-        { date: "Каналы", title: "Добавление своих стримеров", desc: "Нажмите «+ Добавить» в плеере, чтобы добавить любой канал Twitch." }
-      ]
+      trophies: null,
+      activities: [],
+      news: []
     }
   ]
 };

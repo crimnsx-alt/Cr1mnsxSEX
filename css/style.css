@@ -9012,6 +9012,20 @@ button:active:not(:disabled),
   border: 2px solid #10121a;
 }
 
+.twitch-card-online-dot.dot-online,
+.twitch-in-card-dot.dot-online {
+  background: #22c55e !important;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.8) !important;
+  animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+.twitch-card-online-dot.dot-offline,
+.twitch-in-card-dot.dot-offline {
+  background: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
 .twitch-card-info {
   flex: 1;
   min-width: 0;
@@ -9040,8 +9054,20 @@ button:active:not(:disabled),
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
   font-weight: 700;
-  color: #a78bfa;
-  background: rgba(145, 70, 255, 0.25);
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.twitch-card-offline-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 1px 5px;
   border-radius: 4px;
 }
@@ -9463,6 +9489,19 @@ button:active:not(:disabled),
   padding: 3px 8px;
   border-radius: 20px;
   border: 1px solid rgba(239, 68, 68, 0.45);
+  transition: all 0.2s ease;
+}
+
+.twitch-cb-live-pill.is-live {
+  background: rgba(239, 68, 68, 0.22);
+  border-color: rgba(239, 68, 68, 0.55);
+  color: #ffffff;
+}
+
+.twitch-cb-live-pill.is-offline {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .twitch-cb-dot {
@@ -9472,6 +9511,12 @@ button:active:not(:disabled),
   background-color: #ef4444;
   box-shadow: 0 0 8px #ef4444;
   animation: pulseDot 1.4s ease-in-out infinite;
+}
+
+.twitch-cb-live-pill.is-offline .twitch-cb-dot {
+  background-color: rgba(255, 255, 255, 0.35);
+  box-shadow: none;
+  animation: none;
 }
 
 .twitch-cb-telemetry {
@@ -9720,6 +9765,64 @@ button:active:not(:disabled),
   text-overflow: ellipsis;
 }
 
+.twitch-in-live-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 1px 6px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.twitch-badge-pulse {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+  margin-right: 4px;
+  animation: pulseDot 1.4s infinite;
+}
+
+.twitch-in-offline-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1px 5px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.twitch-in-card-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.twitch-in-card-uptime {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.12);
+  padding: 0 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
 .twitch-in-active-pill {
   font-family: 'JetBrains Mono', monospace;
   font-size: 9px;
@@ -9883,6 +9986,19 @@ button:active:not(:disabled),
   padding: 2px 7px;
   border-radius: 4px;
   font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.twitch-in-category.is-live {
+  color: #4ade80;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+}
+
+.twitch-in-category.is-offline {
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .twitch-in-handle {

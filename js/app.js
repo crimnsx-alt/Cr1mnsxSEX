@@ -402,23 +402,29 @@ function initSpotlightAndTilt() {
       card.classList.add("tilt-card");
 
       card.addEventListener("mousemove", (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        if (card._tiltTicking) return;
+        card._tiltTicking = true;
+        requestAnimationFrame(() => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
 
-        card.style.setProperty("--mouse-x", `${x}px`);
-        card.style.setProperty("--mouse-y", `${y}px`);
+          card.style.setProperty("--mouse-x", `${x}px`);
+          card.style.setProperty("--mouse-y", `${y}px`);
 
-        // Subtle 3D tilt (max 4.2deg)
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        const rotateX = ((y - centerY) / centerY) * -4.2;
-        const rotateY = ((x - centerX) / centerX) * 4.2;
+          // Subtle 3D tilt (max 4.2deg)
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -4.2;
+          const rotateY = ((x - centerX) / centerX) * 4.2;
 
-        card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.012, 1.012, 1.012)`;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.012, 1.012, 1.012)`;
+          card._tiltTicking = false;
+        });
       }, { passive: true });
 
       card.addEventListener("mouseleave", () => {
+        card._tiltTicking = false;
         card.style.transform = "";
       });
     }
@@ -953,7 +959,7 @@ function renderGameHeroView(item) {
 // ============================================================
 function openGameHub() {
   const item = getActiveItem();
-  if (!item || item.viewType !== "game" || state.isHubOpen) return;
+  if (!item || item.viewType !== "game" || item.id === "twitch" || state.isHubOpen) return;
   state.isHubOpen = true;
   document.body.classList.add("hub-active");
   renderGameHubContent(item);
@@ -3947,6 +3953,7 @@ function handleKeydown(e) {
     e.preventDefault();
     if (!state.isHubOpen) {
       const active = getActiveItem();
+      if (active?.id === "twitch") return;
       if (active?.viewType === "game") {
         openGameHub();
       } else {
@@ -3965,7 +3972,7 @@ function handleKeydown(e) {
         handleAction("modal:library");
       } else if (active.btnAction) {
         handleAction(active.btnAction);
-      } else if (active.viewType === "game") {
+      } else if (active.viewType === "game" && active.id !== "twitch") {
         openGameHub();
       }
     }
@@ -5183,6 +5190,8 @@ function init() {
     "wheel",
     (e) => {
       if (state.isControlCenterOpen || $("#searchOverlay").classList.contains("active") || $("#settingsOverlay").classList.contains("active") || $("#modalOverlay").classList.contains("active")) return;
+      const active = getActiveItem();
+      if (active?.id === "twitch" || active?.viewType !== "game") return;
       if (e.deltaY > 36 && !state.isHubOpen) openGameHub();
       else if (e.deltaY < -36 && state.isHubOpen && $("#stageGameHub").scrollTop <= 0) closeGameHub();
     },

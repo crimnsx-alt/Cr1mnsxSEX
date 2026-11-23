@@ -155,6 +155,11 @@ export class PS5ParticleEngine {
     if (this.rafId) return;
     let last = performance.now();
     const tick = (now) => {
+      if (document.hidden || document.body.classList.contains("view-twitch")) {
+        last = now;
+        this.rafId = requestAnimationFrame(tick);
+        return;
+      }
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       this.drawFrame(dt);
