@@ -281,9 +281,13 @@ class TwitchBroadcastService {
   // ============================================================
   async checkSingleStreamerLive(streamer) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 3800);
       const res = await fetch(`https://decapi.me/twitch/uptime/${encodeURIComponent(streamer.channel)}`, {
+        signal: controller.signal,
         cache: "no-store"
       });
+      clearTimeout(timeoutId);
       if (res.ok) {
         const text = (await res.text()).trim();
         const isOffline =

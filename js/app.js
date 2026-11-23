@@ -4951,62 +4951,93 @@ function initFriendsSystem() {
 }
 
 let lastGamepadPoll = 0;
+let isGamepadPolling = false;
+
 function pollGamepads() {
+  if (!isGamepadPolling) return;
   const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+  let anyConnected = false;
+
   if (gamepads && gamepads.length) {
-    const gp = Array.from(gamepads).find((g) => g && g.connected);
-    if (gp) {
-      const now = performance.now();
-      if (now - lastGamepadPoll > 200) {
-        const dLeft = gp.buttons[14]?.pressed || (gp.axes[0] && gp.axes[0] < -0.5);
-        const dRight = gp.buttons[15]?.pressed || (gp.axes[0] && gp.axes[0] > 0.5);
-        const dUp = gp.buttons[12]?.pressed || (gp.axes[1] && gp.axes[1] < -0.5);
-        const dDown = gp.buttons[13]?.pressed || (gp.axes[1] && gp.axes[1] > 0.5);
+    for (let i = 0; i < gamepads.length; i++) {
+      const gp = gamepads[i];
+      if (gp && gp.connected) {
+        anyConnected = true;
+        const now = performance.now();
+        if (now - lastGamepadPoll > 180) {
+          const dLeft = gp.buttons[14]?.pressed || (gp.axes[0] && gp.axes[0] < -0.5);
+          const dRight = gp.buttons[15]?.pressed || (gp.axes[0] && gp.axes[0] > 0.5);
+          const dUp = gp.buttons[12]?.pressed || (gp.axes[1] && gp.axes[1] < -0.5);
+          const dDown = gp.buttons[13]?.pressed || (gp.axes[1] && gp.axes[1] > 0.5);
 
-        const btnCross = gp.buttons[0]?.pressed;
-        const btnCircle = gp.buttons[1]?.pressed;
-        const btnSquare = gp.buttons[2]?.pressed;
-        const btnTriangle = gp.buttons[3]?.pressed;
-        const btnL1 = gp.buttons[4]?.pressed;
-        const btnR1 = gp.buttons[5]?.pressed;
-        const btnPS = gp.buttons[16]?.pressed;
+          const btnCross = gp.buttons[0]?.pressed;
+          const btnCircle = gp.buttons[1]?.pressed;
+          const btnTriangle = gp.buttons[3]?.pressed;
+          const btnL1 = gp.buttons[4]?.pressed;
+          const btnR1 = gp.buttons[5]?.pressed;
+          const btnPS = gp.buttons[16]?.pressed;
 
-        if (btnCross) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "Enter" }));
-        } else if (btnCircle) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "Escape" }));
-        } else if (btnTriangle) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "/" }));
-        } else if (btnPS) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: " " }));
-        } else if (btnL1) {
-          lastGamepadPoll = now;
-          switchCategory("games");
-        } else if (btnR1) {
-          lastGamepadPoll = now;
-          switchCategory("media");
-        } else if (dLeft) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
-        } else if (dRight) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowRight" }));
-        } else if (dUp) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowUp" }));
-        } else if (dDown) {
-          lastGamepadPoll = now;
-          handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+          if (btnCross) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "Enter" }));
+          } else if (btnCircle) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "Escape" }));
+          } else if (btnTriangle) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "/" }));
+          } else if (btnPS) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: " " }));
+          } else if (btnL1) {
+            lastGamepadPoll = now;
+            switchCategory("games");
+          } else if (btnR1) {
+            lastGamepadPoll = now;
+            switchCategory("media");
+          } else if (dLeft) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "ArrowLeft" }));
+          } else if (dRight) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "ArrowRight" }));
+          } else if (dUp) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+          } else if (dDown) {
+            lastGamepadPoll = now;
+            handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+          }
         }
       }
     }
   }
+
+  if (anyConnected) {
+    requestAnimationFrame(pollGamepads);
+  } else {
+    isGamepadPolling = false;
+  }
+}
+
+function tryStartGamepadPolling() {
+  if (isGamepadPolling) return;
+  isGamepadPolling = true;
   requestAnimationFrame(pollGamepads);
 }
+
+window.addEventListener("gamepadconnected", () => {
+  tryStartGamepadPolling();
+  showToast("DualSense Controller", "Беспроводной контроллер подключен", PS5Icons.dualsenseSilhouette);
+});
+
+window.addEventListener("gamepaddisconnected", () => {
+  const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+  const anyRemaining = Array.from(gamepads).some((g) => g && g.connected);
+  if (!anyRemaining) {
+    isGamepadPolling = false;
+  }
+});
 
 function init() {
   particleEngine = new PS5ParticleEngine($("#ps5Particles"));
@@ -5015,8 +5046,6 @@ function init() {
   hydrateStaticIcons();
   applyLanguageAndTelemetry();
   setupWelcomeHubScroll();
-  initSberTips();
-  initFriendsSystem();
 
   // One-time gesture listener to unlock Web Audio API and start ambient audio smoothly
   const unlockAudioOnGesture = () => {
@@ -5098,10 +5127,7 @@ function init() {
   $("#widgetRemotePlay")?.addEventListener("click", () => openRemotePlayModal());
   $("#widgetTrophyProgress")?.addEventListener("click", () => openTrophyCollectionModal());
 
-  // PSN Trophy Service Background Initialization & Live Updates
-  psnService.init().then(() => {
-    applyLanguageAndTelemetry();
-  });
+  // PSN Trophy Service Live Updates
   psnService.onUpdate(() => {
     applyLanguageAndTelemetry();
     if ($("#modalTrophyCollection")?.classList.contains("active")) {
@@ -5257,14 +5283,21 @@ function init() {
   );
 
   initSpotlightCards();
-  initScrollReveal();
   initDynamicTopbar();
   initMobileTouchGestures();
   updateNavTabIndicator();
   updateAmbientGlowTheme(state.activeId);
 
-  twitchService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
-  twitchService.init();
+  // Defer non-critical network background tasks to idle callback for ultra-fast First Paint
+  const scheduleIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 40));
+  scheduleIdle(() => {
+    initSberTips();
+    initFriendsSystem();
+    initScrollReveal();
+    psnService.init().then(() => applyLanguageAndTelemetry());
+    twitchService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
+    twitchService.init();
+  });
 
   const initialHash = window.location.hash.replace("#", "");
   if (initialHash) {
@@ -5291,7 +5324,12 @@ function init() {
     updateTrophyFilterIndicator();
   }, { passive: true });
   setInterval(updateClock, 10000);
-  requestAnimationFrame(pollGamepads);
+  try {
+    const gps = navigator.getGamepads ? navigator.getGamepads() : [];
+    if (Array.from(gps).some((g) => g && g.connected)) {
+      tryStartGamepadPolling();
+    }
+  } catch (_) {}
 }
 
 if (document.readyState === "loading") {
