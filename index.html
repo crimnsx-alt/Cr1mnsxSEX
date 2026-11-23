@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261123_twitchlive" />
+  <link rel="stylesheet" href="css/style.css?v=20261123_twitchinline" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -453,6 +453,130 @@
             </div>
             <div class="ps5-ht-bar">
               <div class="ps5-ht-bar-fill" id="heroTrophyBar"></div>
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <!-- VIEW 4: PS5 TWITCH INLINE BROADCAST THEATER -->
+      <main class="ps5-twitch-view blur-fade-stagger" id="ps5TwitchView" hidden>
+        <!-- Studio Top Control Bar -->
+        <div class="ps5-twitch-control-bar">
+          <div class="twitch-cb-left">
+            <span class="twitch-live-brand-badge">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+              <span>TWITCH BROADCAST STUDIO</span>
+            </span>
+            <div class="twitch-cb-live-pill">
+              <span class="twitch-cb-dot"></span>
+              <span id="twitchInlineStatusText">В ЭФИРЕ · 1080P 60FPS</span>
+            </div>
+            <span class="twitch-cb-telemetry" id="twitchInlineTelemetry">Прямой эфир сообщества</span>
+          </div>
+
+          <div class="twitch-cb-right">
+            <button type="button" class="twitch-cb-btn is-active" id="btnInlineToggleChat" title="Показать или скрыть чат">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span id="lblInlineToggleChat">Чат: Вкл</span>
+            </button>
+            <button type="button" class="twitch-cb-btn" id="btnInlinePip" title="Закрепить сбоку (Picture-in-Picture) при навигации">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><rect width="8" height="6" x="11" y="13" rx="1"/></svg>
+              <span>Pin to Side (PiP)</span>
+            </button>
+            <button type="button" class="twitch-cb-btn" id="btnInlineFullscreen" title="Развернуть во весь экран">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <span>Кинотеатр</span>
+            </button>
+            <button type="button" class="twitch-cb-btn" id="btnInlineExternal" title="Открыть в Twitch">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>Twitch.tv</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Studio Grid (Sidebar + Center Stage + Right Chat) -->
+        <div class="ps5-twitch-stage-layout">
+          <!-- Sidebar: Channels -->
+          <aside class="twitch-inline-sidebar">
+            <div class="twitch-inline-sidebar-header">
+              <div class="twitch-sidebar-heading">
+                <span class="twitch-sidebar-title">Стримеры</span>
+                <span class="twitch-channel-counter" id="twitchInlineChannelsCount">6</span>
+              </div>
+              <button type="button" class="twitch-inline-add-btn" id="btnInlineShowAdd" title="Добавить стримера">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>+ Добавить</span>
+              </button>
+            </div>
+
+            <!-- Expandable Add Form -->
+            <div class="twitch-inline-add-drawer" id="twitchInlineAddDrawer" hidden>
+              <div class="twitch-add-row">
+                <input type="text" id="inputInlineNewStreamer" class="twitch-inline-input" placeholder="Никнейм или twitch.tv/..." autocomplete="off" />
+                <button type="button" class="twitch-inline-confirm-btn" id="btnInlineAddConfirm">OK</button>
+              </div>
+              <span class="twitch-add-subtext">Например: mafanyaking или kussia88</span>
+            </div>
+
+            <!-- Streamers Cards List -->
+            <div class="twitch-inline-streamers-list" id="twitchInlineStreamersList">
+              <!-- Dynamically populated -->
+            </div>
+
+            <div class="twitch-inline-sidebar-bottom">
+              <button type="button" class="twitch-inline-reset-btn" id="btnInlineResetStreamers">
+                Восстановить исходные 6 каналов
+              </button>
+            </div>
+          </aside>
+
+          <!-- Center: Cinema Video Stage -->
+          <section class="twitch-inline-cinema-stage">
+            <div class="twitch-inline-player-box" id="twitchInlinePlayerBox">
+              <div class="twitch-inline-ambient-aura" id="twitchInlineAmbientAura"></div>
+              <div class="twitch-inline-iframe-holder" id="twitchInlineIframeHolder">
+                <!-- Player Iframe inserted here -->
+              </div>
+            </div>
+
+            <!-- Streamer Details & Control Footer -->
+            <div class="twitch-inline-meta-bar" id="twitchInlineMetaBar">
+              <div class="twitch-in-meta-left">
+                <div class="twitch-in-avatar" id="twitchInlineAvatar"></div>
+                <div class="twitch-in-details">
+                  <div class="twitch-in-title-row">
+                    <h3 class="twitch-in-name" id="twitchInlineName">Мафаня</h3>
+                    <span class="twitch-in-category" id="twitchInlineCategory">Just Chatting</span>
+                    <a href="https://www.twitch.tv/mafanyaking" target="_blank" rel="noopener" class="twitch-in-handle" id="twitchInlineHandle">twitch.tv/mafanyaking</a>
+                  </div>
+                  <p class="twitch-in-bio" id="twitchInlineBio">Мафаня — общение, игры, стримы и IRL</p>
+                </div>
+              </div>
+
+              <div class="twitch-in-meta-right">
+                <button type="button" class="twitch-in-btn" id="btnInlineShare" title="Скопировать ссылку">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Поделиться</span>
+                </button>
+                <button type="button" class="twitch-in-btn" id="btnInlineReload" title="Обновить трансляцию">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  <span>Обновить</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right: Twitch Chat Drawer -->
+          <aside class="twitch-inline-chat-drawer" id="twitchInlineChatDrawer">
+            <div class="twitch-in-chat-head">
+              <div class="twitch-in-chat-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                <span>ЧАТ TWITCH</span>
+              </div>
+              <span class="twitch-in-chat-badge">ONLINE</span>
+            </div>
+            <div class="twitch-in-chat-iframe-holder" id="twitchInlineChatHolder">
+              <!-- Chat Iframe inserted here -->
             </div>
           </aside>
         </div>
@@ -1377,6 +1501,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261123_twitchlive"></script>
+  <script type="module" src="js/app.js?v=20261123_twitchinline"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /**
  * PlayStation®5 Twitch Broadcast Hub Service
  * Integrates Twitch Live Stream Player, Chat, Custom Streamer Management,
- * and PS5 Picture-in-Picture (Pin to Side / PiP) mode.
+ * In-Dashboard Spatial Stage, and PS5 Picture-in-Picture (Pin to Side / PiP) mode.
  */
 
 import { SoundEngine } from "./sound.js";
@@ -76,9 +76,12 @@ class TwitchBroadcastService {
     this.streamers = this.loadStreamers();
     this.activeChannel = this.streamers[0]?.channel || "mafanyaking";
     this.isChatOpen = true;
+    this.isInlineChatOpen = true;
     this.isPipActive = false;
     this.isHubActive = false;
+    this.isInlineActive = false;
     this.showToastCallback = null;
+    this.currentRenderedChannel = null;
   }
 
   setToastHandler(fn) {
@@ -119,22 +122,24 @@ class TwitchBroadcastService {
   }
 
   getActiveStreamer() {
-    return this.streamers.find((s) => s.channel.toLowerCase() === this.activeChannel.toLowerCase()) || this.streamers[0] || {
-      id: this.activeChannel,
-      channel: this.activeChannel,
-      name: this.activeChannel,
-      color: "#9146FF",
-      category: "Twitch Live",
-      desc: "Прямая трансляция канала",
-      url: `https://www.twitch.tv/${this.activeChannel}`,
-      initial: this.activeChannel.charAt(0).toUpperCase()
-    };
+    return (
+      this.streamers.find((s) => s.channel.toLowerCase() === this.activeChannel.toLowerCase()) ||
+      this.streamers[0] || {
+        id: this.activeChannel,
+        channel: this.activeChannel,
+        name: this.activeChannel,
+        color: "#9146FF",
+        category: "Twitch Live",
+        desc: "Прямая трансляция канала",
+        url: `https://www.twitch.tv/${this.activeChannel}`,
+        initial: this.activeChannel.charAt(0).toUpperCase()
+      }
+    );
   }
 
   parseChannelInput(input) {
     if (!input) return null;
     let trimmed = input.trim();
-    // Support URLs: https://www.twitch.tv/username or twitch.tv/username/
     trimmed = trimmed.replace(/^https?:\/\//i, "");
     trimmed = trimmed.replace(/^(www\.)?twitch\.tv\//i, "");
     trimmed = trimmed.split("/")[0].split("?")[0].replace(/[^a-zA-Z0-9_]/g, "").toLowerCase();
@@ -171,6 +176,7 @@ class TwitchBroadcastService {
     this.saveStreamers();
     this.selectStreamer(channel);
     this.renderSidebarList();
+    this.renderInlineSidebarList();
     return { success: true, streamer: newStreamer };
   }
 
@@ -184,6 +190,7 @@ class TwitchBroadcastService {
       this.selectStreamer(this.streamers[0].channel);
     } else {
       this.renderSidebarList();
+      this.renderInlineSidebarList();
     }
   }
 
@@ -192,6 +199,7 @@ class TwitchBroadcastService {
     this.saveStreamers();
     this.selectStreamer(this.streamers[0].channel);
     this.renderSidebarList();
+    this.renderInlineSidebarList();
   }
 
   getParentParams() {
@@ -216,6 +224,188 @@ class TwitchBroadcastService {
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='${encodeURIComponent(color)}'/%3E%3Cstop offset='100%25' stop-color='%23121318'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='50' fill='url(%23g)'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='${encodeURIComponent(color)}' stroke-width='2' stroke-opacity='0.4'/%3E%3Ctext x='50' y='63' font-family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif' font-size='42' font-weight='800' fill='%23ffffff' text-anchor='middle'%3E${encodeURIComponent(initial)}%3C/text%3E%3C/svg%3E`;
   }
 
+  // ============================================================
+  // INLINE STAGE CONTROLLER (Directly inside PS5 Dashboard)
+  // ============================================================
+  renderInlineStage() {
+    this.isInlineActive = true;
+    this.closePip(false);
+
+    const twitchView = document.getElementById("ps5TwitchView");
+    if (!twitchView) return;
+    twitchView.hidden = false;
+
+    this.renderInlineSidebarList();
+    this.updateInlineStreamer(this.activeChannel);
+  }
+
+  stopInlineStage() {
+    this.isInlineActive = false;
+    const twitchView = document.getElementById("ps5TwitchView");
+    if (twitchView) twitchView.hidden = true;
+
+    // If PiP is not explicitly kept, stop iframes to free resources
+    if (!this.isPipActive) {
+      const pHolder = document.getElementById("twitchInlineIframeHolder");
+      if (pHolder) pHolder.innerHTML = "";
+      const cHolder = document.getElementById("twitchInlineChatHolder");
+      if (cHolder) cHolder.innerHTML = "";
+      this.currentRenderedChannel = null;
+    }
+  }
+
+  renderInlineSidebarList() {
+    const container = document.getElementById("twitchInlineStreamersList");
+    if (!container) return;
+
+    const countEl = document.getElementById("twitchInlineChannelsCount");
+    if (countEl) countEl.textContent = this.streamers.length;
+
+    container.innerHTML = this.streamers
+      .map((s) => {
+        const isActive = s.channel.toLowerCase() === this.activeChannel.toLowerCase();
+        const avatarSvg = this.getAvatarSvg(s);
+        return `
+          <div class="twitch-in-card ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
+            <div class="twitch-in-avatar-wrap">
+              <img src="${avatarSvg}" alt="${s.name}" class="twitch-in-card-avatar" />
+              <span class="twitch-in-card-dot" style="background-color: ${s.color};"></span>
+            </div>
+            <div class="twitch-in-card-info">
+              <div class="twitch-in-card-name-row">
+                <span class="twitch-in-card-name">${s.name}</span>
+                ${isActive ? '<span class="twitch-in-active-pill">В ЭФИРЕ</span>' : ""}
+              </div>
+              <span class="twitch-in-card-handle">twitch.tv/${s.channel}</span>
+            </div>
+            ${
+              s.custom
+                ? `<button type="button" class="twitch-in-card-del" data-del-channel="${s.channel}" title="Удалить канал">×</button>`
+                : ""
+            }
+          </div>
+        `;
+      })
+      .join("");
+
+    container.querySelectorAll(".twitch-in-card").forEach((card) => {
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".twitch-in-card-del")) return;
+        const ch = card.dataset.channel;
+        SoundEngine.focusMove();
+        this.selectStreamer(ch);
+      });
+    });
+
+    container.querySelectorAll(".twitch-in-card-del").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const ch = btn.dataset.delChannel;
+        SoundEngine.confirm();
+        this.removeStreamer(ch);
+      });
+    });
+  }
+
+  updateInlineStreamer(channel) {
+    const streamer = this.getActiveStreamer();
+
+    // Ambient Aura
+    const aura = document.getElementById("twitchInlineAmbientAura");
+    if (aura) {
+      aura.style.setProperty("--streamer-color", streamer.color || "#9146FF");
+    }
+
+    // Meta Bar
+    const nameEl = document.getElementById("twitchInlineName");
+    if (nameEl) nameEl.textContent = streamer.name;
+
+    const catEl = document.getElementById("twitchInlineCategory");
+    if (catEl) catEl.textContent = streamer.category || "Twitch Live";
+
+    const linkEl = document.getElementById("twitchInlineHandle");
+    if (linkEl) {
+      linkEl.href = streamer.url;
+      linkEl.textContent = `twitch.tv/${streamer.channel}`;
+    }
+
+    const bioEl = document.getElementById("twitchInlineBio");
+    if (bioEl) bioEl.textContent = streamer.desc || "Прямая трансляция канала";
+
+    const avatarEl = document.getElementById("twitchInlineAvatar");
+    if (avatarEl) {
+      avatarEl.innerHTML = `<img src="${this.getAvatarSvg(streamer)}" alt="${streamer.name}" />`;
+    }
+
+    // Update Player Iframe if channel changed
+    const holder = document.getElementById("twitchInlineIframeHolder");
+    if (holder && this.currentRenderedChannel !== channel) {
+      holder.innerHTML = `
+        <iframe
+          src="${this.getPlayerUrl(channel)}"
+          frameborder="0"
+          allowfullscreen="true"
+          scrolling="no"
+          allow="autoplay; fullscreen"
+          title="Twitch Player Inline - ${channel}">
+        </iframe>
+      `;
+      this.currentRenderedChannel = channel;
+    }
+
+    // Update Chat Iframe if open
+    if (this.isInlineChatOpen) {
+      this.renderInlineChat();
+    }
+
+    // Update active highlight in inline cards
+    document.querySelectorAll(".twitch-in-card").forEach((card) => {
+      card.classList.toggle("is-active", card.dataset.channel.toLowerCase() === channel.toLowerCase());
+    });
+  }
+
+  renderInlineChat() {
+    const holder = document.getElementById("twitchInlineChatHolder");
+    if (!holder) return;
+
+    holder.innerHTML = `
+      <iframe
+        src="${this.getChatUrl(this.activeChannel)}"
+        frameborder="0"
+        scrolling="no"
+        title="Twitch Chat Inline - ${this.activeChannel}">
+      </iframe>
+    `;
+  }
+
+  toggleInlineChat() {
+    this.isInlineChatOpen = !this.isInlineChatOpen;
+    const drawer = document.getElementById("twitchInlineChatDrawer");
+    const btn = document.getElementById("btnInlineToggleChat");
+    const lbl = document.getElementById("lblInlineToggleChat");
+
+    if (drawer) {
+      drawer.classList.toggle("is-closed", !this.isInlineChatOpen);
+    }
+    if (btn) {
+      btn.classList.toggle("is-active", this.isInlineChatOpen);
+    }
+    if (lbl) {
+      lbl.textContent = this.isInlineChatOpen ? "Чат: Вкл" : "Чат: Выкл";
+    }
+
+    if (this.isInlineChatOpen) {
+      this.renderInlineChat();
+    } else {
+      const holder = document.getElementById("twitchInlineChatHolder");
+      if (holder) holder.innerHTML = "";
+    }
+    SoundEngine.sliderStep();
+  }
+
+  // ============================================================
+  // FULLSCREEN MODAL DIALOG (Cinema Mode)
+  // ============================================================
   renderSidebarList() {
     const container = document.getElementById("twitchStreamersList");
     if (!container) return;
@@ -273,49 +463,66 @@ class TwitchBroadcastService {
     this.activeChannel = channel;
     const streamer = this.getActiveStreamer();
 
-    // Update Ambient Glow
-    const glowEl = document.getElementById("twitchAmbientGlow");
-    if (glowEl) {
-      glowEl.style.setProperty("--streamer-color", streamer.color || "#9146FF");
+    // Update Modal
+    if (this.isHubActive) {
+      const glowEl = document.getElementById("twitchAmbientGlow");
+      if (glowEl) {
+        glowEl.style.setProperty("--streamer-color", streamer.color || "#9146FF");
+      }
+
+      const nameEl = document.getElementById("twitchMetaName");
+      if (nameEl) nameEl.textContent = streamer.name;
+
+      const catEl = document.getElementById("twitchMetaCategory");
+      if (catEl) catEl.textContent = streamer.category || "Twitch Live";
+
+      const linkEl = document.getElementById("twitchMetaLink");
+      if (linkEl) {
+        linkEl.href = streamer.url;
+        linkEl.textContent = `twitch.tv/${streamer.channel}`;
+      }
+
+      const descEl = document.getElementById("twitchMetaDesc");
+      if (descEl) descEl.textContent = streamer.desc || "Прямая трансляция канала";
+
+      const avatarEl = document.getElementById("twitchMetaAvatar");
+      if (avatarEl) {
+        avatarEl.innerHTML = `<img src="${this.getAvatarSvg(streamer)}" alt="${streamer.name}" />`;
+      }
+
+      this.renderPlayerIframe();
+      if (this.isChatOpen) {
+        this.renderChatIframe();
+      }
+
+      document.querySelectorAll(".twitch-streamer-card").forEach((card) => {
+        card.classList.toggle("is-active", card.dataset.channel.toLowerCase() === channel.toLowerCase());
+      });
     }
 
-    // Update Meta Bar
-    const nameEl = document.getElementById("twitchMetaName");
-    if (nameEl) nameEl.textContent = streamer.name;
-
-    const catEl = document.getElementById("twitchMetaCategory");
-    if (catEl) catEl.textContent = streamer.category || "Twitch Live";
-
-    const linkEl = document.getElementById("twitchMetaLink");
-    if (linkEl) {
-      linkEl.href = streamer.url;
-      linkEl.textContent = `twitch.tv/${streamer.channel}`;
+    // Update Inline Stage if active
+    if (this.isInlineActive) {
+      this.updateInlineStreamer(channel);
     }
 
-    const descEl = document.getElementById("twitchMetaDesc");
-    if (descEl) descEl.textContent = streamer.desc || "Прямая трансляция канала";
-
-    const avatarEl = document.getElementById("twitchMetaAvatar");
-    if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${this.getAvatarSvg(streamer)}" alt="${streamer.name}" />`;
+    // Update PiP if active
+    if (this.isPipActive) {
+      const pipBody = document.getElementById("twitchPipBody");
+      const pipName = document.getElementById("twitchPipName");
+      if (pipName) pipName.textContent = `${streamer.name} · LIVE`;
+      if (pipBody) {
+        pipBody.innerHTML = `
+          <iframe
+            src="${this.getPlayerUrl(channel)}"
+            frameborder="0"
+            allowfullscreen="true"
+            scrolling="no"
+            allow="autoplay; fullscreen"
+            title="Twitch Mini Player - ${channel}">
+          </iframe>
+        `;
+      }
     }
-
-    // Update PiP Bar
-    const pipName = document.getElementById("twitchPipName");
-    if (pipName) pipName.textContent = `${streamer.name} (${streamer.channel})`;
-
-    // Update Video Iframe
-    this.renderPlayerIframe();
-
-    // Update Chat Iframe if open
-    if (this.isChatOpen) {
-      this.renderChatIframe();
-    }
-
-    // Update Active in Sidebar
-    document.querySelectorAll(".twitch-streamer-card").forEach((card) => {
-      card.classList.toggle("is-active", card.dataset.channel.toLowerCase() === channel.toLowerCase());
-    });
   }
 
   renderPlayerIframe() {
@@ -398,7 +605,6 @@ class TwitchBroadcastService {
     modal.setAttribute("aria-hidden", "true");
     SoundEngine.closeDialog();
 
-    // Clear iframes to stop playback and memory usage
     const pWrap = document.getElementById("twitchIframeWrap");
     if (pWrap) pWrap.innerHTML = "";
     const cWrap = document.getElementById("twitchChatIframeWrap");
@@ -409,7 +615,7 @@ class TwitchBroadcastService {
     const streamer = this.getActiveStreamer();
     this.isPipActive = true;
 
-    // Close Hub visually without destroying audio/stream
+    // Close Modal if open
     const modal = document.getElementById("modalTwitchHub");
     if (modal) {
       modal.classList.remove("active");
@@ -435,7 +641,7 @@ class TwitchBroadcastService {
       `;
     }
 
-    // Clear big modal iframe
+    // Clear big iframes
     const pWrap = document.getElementById("twitchIframeWrap");
     if (pWrap) pWrap.innerHTML = "";
     const cWrap = document.getElementById("twitchChatIframeWrap");
@@ -447,7 +653,11 @@ class TwitchBroadcastService {
 
   expandPip() {
     this.closePip(false);
-    this.openHub(this.activeChannel);
+    if (this.isInlineActive) {
+      this.updateInlineStreamer(this.activeChannel);
+    } else {
+      this.openHub(this.activeChannel);
+    }
   }
 
   closePip(shouldStop = true) {
@@ -461,7 +671,9 @@ class TwitchBroadcastService {
   }
 
   init() {
-    // Top Bar Buttons
+    // ------------------------------------------------------------
+    // Modal Event Listeners
+    // ------------------------------------------------------------
     document.getElementById("btnTwitchClose")?.addEventListener("click", () => this.closeHub());
     document.getElementById("twitchBackdrop")?.addEventListener("click", () => this.closeHub());
     document.getElementById("btnToggleChat")?.addEventListener("click", () => this.toggleChat());
@@ -471,7 +683,6 @@ class TwitchBroadcastService {
       window.open(st.url, "_blank", "noopener");
     });
 
-    // Add Streamer UI
     const addForm = document.getElementById("twitchAddForm");
     const btnShowAdd = document.getElementById("btnShowAddStreamer");
     const btnSubmit = document.getElementById("btnAddStreamerSubmit");
@@ -511,14 +722,12 @@ class TwitchBroadcastService {
       if (e.key === "Enter") handleAdd();
     });
 
-    // Reset Defaults Button
     document.getElementById("btnResetDefaultStreamers")?.addEventListener("click", () => {
       SoundEngine.confirm();
       this.resetDefaults();
       this.toast("Twitch Hub", "Список каналов сброшен к исходным 6 стримерам", null);
     });
 
-    // Share / Copy Link
     document.getElementById("btnCopyStreamLink")?.addEventListener("click", () => {
       const st = this.getActiveStreamer();
       if (navigator.clipboard) {
@@ -528,14 +737,86 @@ class TwitchBroadcastService {
       this.toast("Ссылка скопирована", st.url, null);
     });
 
-    // Reload Player
     document.getElementById("btnReloadPlayer")?.addEventListener("click", () => {
       SoundEngine.focusMove();
       this.renderPlayerIframe();
       if (this.isChatOpen) this.renderChatIframe();
     });
 
+    // ------------------------------------------------------------
+    // Inline Stage Event Listeners
+    // ------------------------------------------------------------
+    document.getElementById("btnInlineToggleChat")?.addEventListener("click", () => this.toggleInlineChat());
+    document.getElementById("btnInlinePip")?.addEventListener("click", () => this.enablePip());
+    document.getElementById("btnInlineFullscreen")?.addEventListener("click", () => this.openHub(this.activeChannel));
+    document.getElementById("btnInlineExternal")?.addEventListener("click", () => {
+      const st = this.getActiveStreamer();
+      window.open(st.url, "_blank", "noopener");
+    });
+
+    const inlineAddDrawer = document.getElementById("twitchInlineAddDrawer");
+    const btnInlineShowAdd = document.getElementById("btnInlineShowAdd");
+    const btnInlineConfirm = document.getElementById("btnInlineAddConfirm");
+    const inputInlineNew = document.getElementById("inputInlineNewStreamer");
+
+    btnInlineShowAdd?.addEventListener("click", () => {
+      if (!inlineAddDrawer) return;
+      const isHidden = inlineAddDrawer.hidden;
+      inlineAddDrawer.hidden = !isHidden;
+      if (!inlineAddDrawer.hidden) {
+        inputInlineNew?.focus();
+        btnInlineShowAdd.classList.add("is-active");
+      } else {
+        btnInlineShowAdd.classList.remove("is-active");
+      }
+      SoundEngine.sliderStep();
+    });
+
+    const handleInlineAdd = () => {
+      const val = inputInlineNew?.value;
+      if (!val) return;
+      const res = this.addStreamer(val);
+      if (res.success) {
+        inputInlineNew.value = "";
+        inlineAddDrawer.hidden = true;
+        btnInlineShowAdd?.classList.remove("is-active");
+        SoundEngine.chime();
+        this.toast("Канал добавлен", `Стример ${res.streamer.name} успешно добавлен`, null);
+      } else {
+        SoundEngine.error();
+        this.toast("Ошибка", res.error, null);
+      }
+    };
+
+    btnInlineConfirm?.addEventListener("click", handleInlineAdd);
+    inputInlineNew?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") handleInlineAdd();
+    });
+
+    document.getElementById("btnInlineResetStreamers")?.addEventListener("click", () => {
+      SoundEngine.confirm();
+      this.resetDefaults();
+      this.toast("Twitch Hub", "Список каналов сброшен к исходным 6 стримерам", null);
+    });
+
+    document.getElementById("btnInlineShare")?.addEventListener("click", () => {
+      const st = this.getActiveStreamer();
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(st.url);
+      }
+      SoundEngine.confirm();
+      this.toast("Ссылка скопирована", st.url, null);
+    });
+
+    document.getElementById("btnInlineReload")?.addEventListener("click", () => {
+      SoundEngine.focusMove();
+      this.currentRenderedChannel = null;
+      this.updateInlineStreamer(this.activeChannel);
+    });
+
+    // ------------------------------------------------------------
     // PiP Widget Controls
+    // ------------------------------------------------------------
     document.getElementById("btnTwitchPipExpand")?.addEventListener("click", () => this.expandPip());
     document.getElementById("btnTwitchPipClose")?.addEventListener("click", () => {
       SoundEngine.closeDialog();

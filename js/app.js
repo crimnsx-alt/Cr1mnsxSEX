@@ -778,34 +778,49 @@ function renderActiveView() {
   const welcomeEl = $("#ps5WelcomeView");
   const exploreEl = $("#ps5ExploreView");
   const heroEl = $("#ps5GameHeroView");
+  const twitchEl = $("#ps5TwitchView");
 
   $("#ccCardTitle").textContent = t(item.title);
   $("#ccCardSub").textContent = item.publisher || "PlayStation®5 System Shell";
 
   if ($("#scrollDownCue")) {
-    $("#scrollDownCue").hidden = item.viewType !== "game";
+    $("#scrollDownCue").hidden = item.viewType !== "game" || item.id === "twitch";
   }
 
-  document.body.classList.remove("view-welcome", "view-explore", "view-game");
-  document.body.classList.add(`view-${item.viewType || "game"}`);
+  document.body.classList.remove("view-welcome", "view-explore", "view-game", "view-twitch");
+  document.body.classList.add(`view-${item.id === "twitch" ? "twitch" : (item.viewType || "game")}`);
 
   if (item.viewType === "welcome") {
     welcomeEl.hidden = false;
     exploreEl.hidden = true;
     heroEl.hidden = true;
+    if (twitchEl) twitchEl.hidden = true;
+    twitchService.stopInlineStage();
     setBackground(item.bg || "assets/bg_monica.jpg");
     initSpotlightAndTilt();
   } else if (item.viewType === "explore") {
     welcomeEl.hidden = true;
     exploreEl.hidden = false;
     heroEl.hidden = true;
+    if (twitchEl) twitchEl.hidden = true;
+    twitchService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderExploreView(item);
+    initSpotlightAndTilt();
+  } else if (item.id === "twitch") {
+    welcomeEl.hidden = true;
+    exploreEl.hidden = true;
+    heroEl.hidden = true;
+    if (twitchEl) twitchEl.hidden = false;
+    setBackground(item.bg, item.fallbackBg);
+    twitchService.renderInlineStage();
     initSpotlightAndTilt();
   } else {
     welcomeEl.hidden = true;
     exploreEl.hidden = true;
     heroEl.hidden = false;
+    if (twitchEl) twitchEl.hidden = true;
+    twitchService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderGameHeroView(item);
     initSpotlightAndTilt();
