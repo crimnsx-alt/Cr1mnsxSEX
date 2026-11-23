@@ -453,24 +453,31 @@ export const ribbonCatalog = {
       publisher: "Twitch Interactive, Inc.",
       kicker: { ru: "Прямые трансляции · Киберспорт", en: "Live Streams · Esports" },
       desc: {
-        ru: "Смотрите прямые эфиры лучших стримеров, турниры PlayStation Tournaments и общайтесь с игровым сообществом в реальном времени.",
-        en: "Watch top streamers live, follow PlayStation Tournaments, and chat with millions of gamers in real time."
+        ru: "Смотрите прямые эфиры любимых стримеров (Мафаня, Каша, Пятёрка, Лёня Пудж, Сбомба, Бугор), общайтесь в чате и закрепляйте плеер сбоку (PiP).",
+        en: "Watch your favorite streamers (Mafanya, Kussia, 5opka, Lenya Pudge, Sbomba, Bugor), chat in real time, and pin the player to side (PiP)."
       },
-      ctaText: { ru: "Запустить", en: "Start" },
-      btnAction: "open:twitch",
-      secText: { ru: "К играм", en: "Games Tab" },
-      secAction: "home_reset",
+      ctaText: { ru: "Смотреть стримы", en: "Watch Streams" },
+      btnAction: "modal:twitch-hub",
+      secText: { ru: "Twitch.tv", en: "Twitch.tv" },
+      secAction: "open:twitch_external",
       iconSvg: PS5Icons.twitchTile,
       bg: PS5Icons.makeSceneArt("slot-2", "TWITCH LIVE"),
       thumb: PS5Icons.makeSceneArt("slot-2", "TWITCH"),
       progressPct: 100,
-      playTime: "Приложение PS5",
+      playTime: "Студия PS5",
       trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
       activities: [
-        { title: "Популярные трансляции", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "open:twitch" }
+        { title: "Мафаня (mafanyaking)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:mafanyaking" },
+        { title: "Каша (kussia88)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:kussia88" },
+        { title: "Пятёрка (5opka)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:5opka" },
+        { title: "Лёня Пудж (lenyapudge)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:lenyapudge" },
+        { title: "Сбомба (sbomba3131)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:sbomba3131" },
+        { title: "Бугор (bugorpro)", type: "Трансляция", progress: 100, timeEst: "В эфире", thumb: PS5Icons.makeSceneArt("slot-2"), action: "stream:bugorpro" },
+        { title: "Открыть всю студию Twitch", type: "Плеер PS5", progress: 100, timeEst: "Все каналы", thumb: PS5Icons.makeSceneArt("slot-2"), action: "modal:twitch-hub" }
       ],
       news: [
-        { date: "Twitch PS5", title: "Трансляция прямо с консоли", desc: "Нажмите кнопку Create на контроллере DualSense, чтобы мгновенно начать свой стрим." }
+        { date: "Twitch Broadcast", title: "Поддержка Picture-in-Picture", desc: "Закрепляйте стрим в углу экрана (Pin to Side) и продолжайте исследовать меню PS5." },
+        { date: "Каналы", title: "Добавление своих стримеров", desc: "Нажмите «+ Добавить» в плеере, чтобы добавить любой канал Twitch." }
       ]
     }
   ]
@@ -582,6 +589,13 @@ export const controlCenterItems = [
 
 export const searchCatalog = [
   { title: "Центр приветствия (Welcome Hub)", category: "Система", desc: "Горизонтальная лента виджетов PS5", action: "home_reset" },
+  { title: "Трансляции Twitch (Плеер и каналы)", category: "Медиа", desc: "Мафаня, Каша, Пятёрка, Лёня Пудж, Сбомба, Бугор", action: "modal:twitch-hub" },
+  { title: "Стрим: Мафаня (mafanyaking)", category: "Twitch", desc: "Прямой эфир Мафани на Twitch", action: "stream:mafanyaking" },
+  { title: "Стрим: Каша (kussia88)", category: "Twitch", desc: "Прямой эфир Каши на Twitch", action: "stream:kussia88" },
+  { title: "Стрим: Пятёрка (5opka)", category: "Twitch", desc: "Прямой эфир Пятёрки на Twitch", action: "stream:5opka" },
+  { title: "Стрим: Лёня Пудж (lenyapudge)", category: "Twitch", desc: "Прямой эфир Лёни Пуджа на Twitch", action: "stream:lenyapudge" },
+  { title: "Стрим: Сбомба (sbomba3131)", category: "Twitch", desc: "Прямой эфир Сбомбы на Twitch", action: "stream:sbomba3131" },
+  { title: "Стрим: Бугор (bugorpro)", category: "Twitch", desc: "Прямой эфир Бугра на Twitch", action: "stream:bugorpro" },
   { title: "Grand Theft Auto: Vice City", category: "WASM", desc: "Культовая классика в Вайс-Сити 1986 года", action: "launch:gta-vc" },
   { title: "Grand Theft Auto V", category: "WebGPU", desc: "Лос-Сантос и округ Блейн на движке RAGE", action: "launch:gta-v" },
   { title: "Need for Speed: Underground 2", category: "WASM", desc: "Ночной Бэйвью и тюнинг Nissan 350Z", action: "launch:nfs-u2" },

@@ -28,6 +28,7 @@ import {
 } from "./sound-catalog.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
+import { twitchService } from "./twitch-service.js";
 
 // ============================================================
 // State
@@ -3699,7 +3700,18 @@ function handleAction(action) {
     return launchPlayableGame(gameId);
   }
   if (action === "open:youtube") return window.open("https://youtube.com/gaming", "_blank", "noopener");
-  if (action === "open:twitch") return window.open("https://twitch.tv", "_blank", "noopener");
+  if (action === "modal:twitch-hub" || action === "open:twitch") {
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    return twitchService.openHub();
+  }
+  if (action.startsWith("stream:")) {
+    const channel = action.slice(7);
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    return twitchService.openHub(channel);
+  }
+  if (action === "open:twitch_external") return window.open("https://twitch.tv", "_blank", "noopener");
 
   const mapByAction = {
     "modal:slot-1": "slot-01",
@@ -3790,6 +3802,7 @@ function handleKeydown(e) {
   const inGameOpen = $("#inGameWindow") && $("#inGameWindow").classList.contains("active");
   const tcOpen = $("#modalTrophyCollection") && $("#modalTrophyCollection").classList.contains("active");
   const tcDetailOpen = $("#modalGameTrophiesDetail") && $("#modalGameTrophiesDetail").classList.contains("active");
+  const twitchOpen = $("#modalTwitchHub") && $("#modalTwitchHub").classList.contains("active");
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
     if (e.key === "Backspace") {
@@ -3804,6 +3817,10 @@ function handleKeydown(e) {
       return;
     }
     e.preventDefault();
+    if (twitchOpen) {
+      twitchService.closeHub();
+      return;
+    }
     if (tcDetailOpen) {
       $("#modalGameTrophiesDetail")?.classList.remove("active");
       $("#modalGameTrophiesDetail")?.setAttribute("aria-hidden", "true");
@@ -3827,7 +3844,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen) return;
+  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen || twitchOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -5164,15 +5181,26 @@ function init() {
   updateNavTabIndicator();
   updateAmbientGlowTheme(state.activeId);
 
+  twitchService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
+  twitchService.init();
+
   const initialHash = window.location.hash.replace("#", "");
   if (initialHash) {
-    const allItems = [...(ribbonCatalog.games || []), ...(ribbonCatalog.media || [])];
-    const match = allItems.find((it) => it.id === initialHash || it.id.replace("_", "-") === initialHash.replace("_", "-"));
-    if (match) {
-      if ((ribbonCatalog.media || []).some((m) => m.id === match.id) && state.category !== "media") {
-        switchCategory("media");
+    if (initialHash === "twitch" || initialHash === "twitch-hub") {
+      switchCategory("media");
+      selectTile("twitch", false);
+    } else if (initialHash.startsWith("stream-")) {
+      const ch = initialHash.replace("stream-", "");
+      twitchService.openHub(ch);
+    } else {
+      const allItems = [...(ribbonCatalog.games || []), ...(ribbonCatalog.media || [])];
+      const match = allItems.find((it) => it.id === initialHash || it.id.replace("_", "-") === initialHash.replace("_", "-"));
+      if (match) {
+        if ((ribbonCatalog.media || []).some((m) => m.id === match.id) && state.category !== "media") {
+          switchCategory("media");
+        }
+        selectTile(match.id, false);
       }
-      selectTile(match.id, false);
     }
   }
 
