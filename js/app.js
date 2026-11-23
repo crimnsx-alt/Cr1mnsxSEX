@@ -255,8 +255,11 @@ function triggerContentCrossfade() {
   const targets = [document.getElementById("ps5WelcomeView"), document.getElementById("ps5GameHeroView")].filter(Boolean);
   targets.forEach((el) => {
     el.classList.remove("ps5-content-crossfade");
-    void el.offsetWidth;
-    el.classList.add("ps5-content-crossfade");
+  });
+  requestAnimationFrame(() => {
+    targets.forEach((el) => {
+      el.classList.add("ps5-content-crossfade");
+    });
   });
 }
 
@@ -400,12 +403,17 @@ function initSpotlightAndTilt() {
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
+      let rect = null;
+
+      card.addEventListener("mouseenter", () => {
+        rect = card.getBoundingClientRect();
+      }, { passive: true });
 
       card.addEventListener("mousemove", (e) => {
         if (card._tiltTicking) return;
         card._tiltTicking = true;
         requestAnimationFrame(() => {
-          const rect = card.getBoundingClientRect();
+          if (!rect) rect = card.getBoundingClientRect();
           const x = e.clientX - rect.left;
           const y = e.clientY - rect.top;
 
@@ -425,24 +433,38 @@ function initSpotlightAndTilt() {
 
       card.addEventListener("mouseleave", () => {
         card._tiltTicking = false;
+        rect = null;
         card.style.transform = "";
       });
     }
   });
 
-  // Magnetic Pull on Main Action Buttons (3-5px attraction)
+  // Magnetic Pull on Main Action Buttons (3-5px attraction) with RAF and cached rect
   const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying");
   magneticButtons.forEach((btn) => {
     if (!btn._hasMagnet) {
       btn._hasMagnet = true;
+      let btnRect = null;
+
+      btn.addEventListener("mouseenter", () => {
+        btnRect = btn.getBoundingClientRect();
+      }, { passive: true });
+
       btn.addEventListener("mousemove", (e) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - (rect.left + rect.width / 2);
-        const y = e.clientY - (rect.top + rect.height / 2);
-        btn.style.transform = `translate(${(x * 0.16).toFixed(1)}px, ${(y * 0.16).toFixed(1)}px) scale(1.03)`;
+        if (btn._magnetTicking) return;
+        btn._magnetTicking = true;
+        requestAnimationFrame(() => {
+          if (!btnRect) btnRect = btn.getBoundingClientRect();
+          const x = e.clientX - (btnRect.left + btnRect.width / 2);
+          const y = e.clientY - (btnRect.top + btnRect.height / 2);
+          btn.style.transform = `translate(${(x * 0.16).toFixed(1)}px, ${(y * 0.16).toFixed(1)}px) scale(1.03)`;
+          btn._magnetTicking = false;
+        });
       }, { passive: true });
 
       btn.addEventListener("mouseleave", () => {
+        btn._magnetTicking = false;
+        btnRect = null;
         btn.style.transform = "";
       });
     }
@@ -476,9 +498,15 @@ function initDynamicTopbar() {
   const topbar = document.querySelector(".ps5-topbar");
   if (!topbar) return;
 
+  let ticking = false;
   const handleScroll = (scroller) => {
-    const y = scroller ? scroller.scrollTop : window.scrollY;
-    topbar.classList.toggle("scrolled", y > 10);
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = scroller ? scroller.scrollTop : window.scrollY;
+      topbar.classList.toggle("scrolled", y > 10);
+      ticking = false;
+    });
   };
 
   window.addEventListener("scroll", () => handleScroll(null), { passive: true });
@@ -556,22 +584,26 @@ function renderControllerHints() {
 }
 
 // ============================================================
-// Background Crossfade Engine (With Safe Fallback)
+// Background Crossfade Engine (With Safe Fallback & Cache)
 // ============================================================
+let currentAppliedBgUrl = "";
 function setBackground(url, fallbackUrl = "") {
   const bgA = $("#bgLayerA");
   const bgB = $("#bgLayerB");
   if (!url) {
     bgA.classList.remove("is-visible");
     bgB.classList.remove("is-visible");
+    currentAppliedBgUrl = "";
     return;
   }
+  if (url === currentAppliedBgUrl) return;
 
   const incoming = state.bgFlip ? bgA : bgB;
   const outgoing = state.bgFlip ? bgB : bgA;
   state.bgFlip = !state.bgFlip;
 
   const applyUrl = (finalUrl) => {
+    currentAppliedBgUrl = finalUrl;
     incoming.style.backgroundImage = `url('${finalUrl}')`;
     incoming.classList.add("is-visible");
     outgoing.classList.remove("is-visible");
@@ -581,6 +613,7 @@ function setBackground(url, fallbackUrl = "") {
     applyUrl(url);
   } else {
     const probe = new Image();
+    probe.decoding = "async";
     probe.onload = () => applyUrl(url);
     probe.onerror = () => applyUrl(fallbackUrl || PS5Icons.makeSceneArt("ps5-eco"));
     probe.src = url;
@@ -694,13 +727,36 @@ function applyLanguageAndTelemetry() {
 }
 
 // ============================================================
-// Top-Aligned Game Ribbon Renderer
+// Top-Aligned Game Ribbon Renderer (Optimized with zero-DOM re-render on tile switch)
 // ============================================================
-function renderRibbon() {
+function renderRibbon(forceRebuild = false) {
   const ribbonEl = $("#ps5GamesRibbon");
   if (!ribbonEl) return;
   const items = getCurrentList();
+
+  // Fast path: if ribbon already holds the current category tiles, just update classes and scroll
+  if (!forceRebuild && ribbonEl.dataset.renderedCat === state.category) {
+    const tiles = ribbonEl.querySelectorAll(".ps5-tile");
+    if (tiles.length === items.length) {
+      tiles.forEach((btn) => {
+        const isActive = btn.dataset.tileId === state.activeId;
+        btn.classList.toggle("is-active", isActive);
+      });
+      const activeBtn = ribbonEl.querySelector(`.ps5-tile[data-tile-id="${state.activeId}"]`);
+      if (activeBtn) {
+        activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        if (document.activeElement && document.activeElement.classList.contains("ps5-tile")) {
+          activeBtn.focus({ preventScroll: true });
+        }
+      }
+      return;
+    }
+  }
+
+  // Full DOM build (category switch or initial render)
+  ribbonEl.dataset.renderedCat = state.category;
   ribbonEl.innerHTML = "";
+  const frag = document.createDocumentFragment();
 
   items.forEach((item) => {
     const btn = document.createElement("button");
@@ -717,7 +773,7 @@ function renderRibbon() {
     } else {
       const safeThumb = item.thumb || PS5Icons.makeSceneArt("ps5-eco", t(item.title));
       const fb = item.fallbackBg || PS5Icons.makeSceneArt("ps5-eco", t(item.title));
-      innerArt = `<img src="${safeThumb}" alt="${t(item.title)}" onerror="this.onerror=null;this.src='${fb}'" />`;
+      innerArt = `<img src="${safeThumb}" alt="${t(item.title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fb}'" />`;
     }
 
     btn.innerHTML = `
@@ -729,7 +785,7 @@ function renderRibbon() {
       if (state.activeId !== item.id) {
         SoundEngine.focusMove();
       }
-    });
+    }, { passive: true });
 
     btn.addEventListener("click", () => {
       if (state.activeId !== item.id) {
@@ -741,8 +797,10 @@ function renderRibbon() {
       }
     });
 
-    ribbonEl.appendChild(btn);
+    frag.appendChild(btn);
   });
+
+  ribbonEl.appendChild(frag);
 
   const activeBtn = ribbonEl.querySelector(".ps5-tile.is-active");
   if (activeBtn) {
@@ -1052,7 +1110,7 @@ function switchCategory(cat) {
 
   if (state.isHubOpen) closeGameHub();
   SoundEngine.changePanel();
-  renderRibbon();
+  renderRibbon(true);
   renderActiveView();
 }
 

@@ -104,6 +104,7 @@ button:active,
   z-index: 0;
   pointer-events: none;
   background: radial-gradient(circle at 74% 18%, #0e1a36 0%, #060811 65%, #04050b 100%);
+  contain: strict;
 }
 
 .ps5-bg-art {
@@ -2208,6 +2209,8 @@ body.hub-active .ps5-screen {
   pointer-events: none;
   transition: transform 0.45s var(--ps5-ease), opacity 0.35s ease;
   will-change: transform, opacity;
+  content-visibility: auto;
+  contain-intrinsic-size: 800px;
 }
 
 body.hub-active .stage-game-hub {
@@ -2418,19 +2421,22 @@ body.hub-active .stage-game-hub {
   z-index: 95;
   background: rgba(6, 8, 17, 0.72);
   backdrop-filter: blur(34px);
+  -webkit-backdrop-filter: blur(34px);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 0 4.7vw 28px;
   opacity: 0;
   pointer-events: none;
+  visibility: hidden;
   transform: translateY(28px);
-  transition: opacity 0.28s var(--ps5-ease), transform 0.32s var(--ps5-ease);
+  transition: opacity 0.28s var(--ps5-ease), transform 0.32s var(--ps5-ease), visibility 0.28s ease;
 }
 
 .control-center-overlay.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
   transform: translateY(0);
 }
 
@@ -2686,18 +2692,21 @@ body.hub-active .stage-game-hub {
   z-index: 110;
   background: rgba(6, 8, 17, 0.8);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 4vh 5vw;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.22s ease;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
 }
 
 .ps5-overlay.active {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
 }
 
 .ps5-close-circle {
@@ -8239,10 +8248,9 @@ body.cc-open .viewport-stage {
   border-radius: var(--radius-tile) !important;
   background: var(--spatial-surface-glass) !important;
   border: 1px solid var(--spatial-border-subtle) !important;
-  backdrop-filter: blur(18px) !important;
-  -webkit-backdrop-filter: blur(18px) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 10px 26px -6px rgba(0, 0, 0, 0.6) !important;
   overflow: hidden !important;
+  will-change: transform;
   transition: transform 0.45s var(--spatial-ease-out-expo),
               flex-basis 0.45s var(--spatial-ease-out-expo),
               width 0.45s var(--spatial-ease-out-expo),
@@ -8516,29 +8524,29 @@ body.cc-open .viewport-stage {
    LAYER 2: Living Atmosphere in Rest (Aceternity Aurora + BorderBeam + Film Noise)
    -------------------------------------------------------------------------- */
 
-/* Aceternity Living Aurora Layers */
+/* Aceternity Living Aurora Layers (Optimized GPU blur & soft radial stops) */
 .ps5-ambient-aurora {
   position: absolute;
-  inset: -25%;
+  inset: -20%;
   border-radius: 50%;
-  filter: blur(90px);
+  filter: blur(40px);
   pointer-events: none;
   will-change: transform, opacity;
   mix-blend-mode: screen;
 }
 
 .ps5-aurora-1 {
-  background: radial-gradient(circle at 35% 30%, var(--scene-primary, #0070d1) 0%, transparent 65%);
+  background: radial-gradient(circle at 35% 30%, var(--scene-primary, #0070d1) 0%, rgba(0, 112, 209, 0.28) 32%, transparent 68%);
   animation: auroraDrift1 18s ease-in-out infinite alternate;
 }
 
 .ps5-aurora-2 {
-  background: radial-gradient(circle at 68% 68%, var(--scene-secondary, #38bdf8) 0%, transparent 60%);
+  background: radial-gradient(circle at 68% 68%, var(--scene-secondary, #38bdf8) 0%, rgba(56, 189, 248, 0.22) 34%, transparent 64%);
   animation: auroraDrift2 22s ease-in-out infinite alternate;
 }
 
 .ps5-aurora-3 {
-  background: radial-gradient(circle at 45% 85%, var(--scene-ambient-a, rgba(0, 112, 209, 0.28)) 0%, transparent 68%);
+  background: radial-gradient(circle at 45% 85%, var(--scene-ambient-a, rgba(0, 112, 209, 0.28)) 0%, rgba(0, 112, 209, 0.12) 38%, transparent 70%);
   animation: auroraDrift3 15s ease-in-out infinite alternate;
 }
 
@@ -8629,6 +8637,7 @@ body.cc-open .viewport-stage {
   pointer-events: none;
   animation: borderBeamRotate 5.5s linear infinite;
   z-index: 6;
+  contain: strict;
 }
 
 /* Shimmer Sweep on Primary CTA Button */
@@ -8652,6 +8661,7 @@ body.cc-open .viewport-stage {
   transform: translateX(-150%) skewX(-20deg);
   animation: btnShimmerSweep 5.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
   pointer-events: none;
+  will-change: transform;
 }
 
 @keyframes btnShimmerSweep {
