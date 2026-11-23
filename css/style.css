@@ -7711,3 +7711,281 @@ button:active:not(:disabled),
   font-feature-settings: "tnum" 1, "cv01" 1, "cv02" 1;
   letter-spacing: -0.02em;
 }
+
+
+/* ==========================================================================
+   ADVANCED PS5 & FRAMER 7-PATTERN ANIMATION SUITE
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   PATTERN 1: Dynamic Ambient Glow (Cinematic Dual Radial Gradients)
+   -------------------------------------------------------------------------- */
+:root {
+  --scene-primary: #0070d1;
+  --scene-secondary: #38bdf8;
+  --scene-ambient-a: rgba(0, 112, 209, 0.26);
+  --scene-ambient-b: rgba(56, 189, 248, 0.14);
+  --framer-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --framer-spring-bounce: cubic-bezier(0.175, 0.885, 0.32, 1.15);
+}
+
+.ps5-bg-ambient-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(900px circle at 18% 22%, var(--scene-ambient-a, rgba(0, 112, 209, 0.26)) 0%, transparent 68%),
+    radial-gradient(1050px circle at 82% 76%, var(--scene-ambient-b, rgba(56, 189, 248, 0.14)) 0%, transparent 64%);
+  transition: background 0.85s var(--framer-ease-out), opacity 0.85s ease;
+  will-change: background;
+  z-index: 1;
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 2: Floating Tabs Slider (Framer layoutId Pill Effect)
+   -------------------------------------------------------------------------- */
+.ps5-nav-tabs {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  backdrop-filter: blur(22px) saturate(190%);
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  border-radius: 9999px;
+  padding: 4px;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.ps5-tab-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  transition: transform 0.45s var(--framer-ease-out), width 0.45s var(--framer-ease-out);
+  will-change: transform, width;
+  z-index: 0;
+}
+
+.ps5-tab {
+  position: relative;
+  z-index: 1;
+  padding: 6px 18px !important;
+  border-radius: 9999px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  transition: color 0.25s ease !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.ps5-tab.is-active {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.ps5-tab::after {
+  display: none !important;
+}
+
+/* Trophy Modal Filters Floating Slider */
+.tc-filters-pills {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  overflow: hidden;
+}
+
+.tc-pill-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 9px;
+  background: rgba(0, 112, 209, 0.65);
+  border: 1px solid rgba(56, 189, 248, 0.65);
+  box-shadow: 0 4px 16px rgba(0, 112, 209, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  transition: transform 0.42s var(--framer-ease-out), width 0.42s var(--framer-ease-out);
+  will-change: transform, width;
+  z-index: 0;
+}
+
+.tc-filter-pill {
+  position: relative;
+  z-index: 1;
+  border-radius: 9px !important;
+  background: transparent !important;
+  border: none !important;
+  color: rgba(255, 255, 255, 0.65) !important;
+  transition: color 0.22s ease !important;
+}
+
+.tc-filter-pill.is-active {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 3: PS5 Focus Tiles & Specular Cards
+   -------------------------------------------------------------------------- */
+.ps5-widget,
+.tc-game-card,
+.ps5-tile {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 16px 36px -8px rgba(0, 0, 0, 0.6);
+}
+
+.ps5-tile-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--framer-ease-out);
+  will-change: transform;
+}
+
+.ps5-tile.is-active .ps5-tile-art img {
+  transform: scale(1.06);
+}
+
+.ps5-widget:hover,
+.tc-game-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 24px 50px -6px rgba(0, 0, 0, 0.8), 0 0 28px rgba(0, 112, 209, 0.35) !important;
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 4: Content Crossfade & Vertical Number Flow Transitions
+   -------------------------------------------------------------------------- */
+.ps5-content-crossfade {
+  animation: ps5Crossfade 0.42s var(--framer-ease-out) both;
+}
+
+@keyframes ps5Crossfade {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ps5-num-flow-digit {
+  display: inline-block;
+  transition: transform 0.4s var(--framer-ease-out), opacity 0.4s ease;
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 5: Vaul Drawer Pattern with Background Scaling (Control Center)
+   -------------------------------------------------------------------------- */
+.viewport-stage {
+  transition: transform 0.55s var(--framer-ease-out),
+              opacity 0.5s ease,
+              border-radius 0.55s var(--framer-ease-out),
+              box-shadow 0.55s ease;
+  will-change: transform, opacity, border-radius;
+  transform-origin: center top;
+}
+
+body.cc-open .viewport-stage {
+  transform: scale(0.95) translateY(10px) !important;
+  opacity: 0.48 !important;
+  border-radius: 28px !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 32px 80px rgba(0, 0, 0, 0.88);
+  pointer-events: none;
+}
+
+.control-center-overlay {
+  background: rgba(3, 6, 14, 0.65) !important;
+  backdrop-filter: blur(36px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(190%) !important;
+  transition: opacity 0.4s var(--framer-ease-out), visibility 0.4s ease !important;
+}
+
+.control-center-overlay .cc-modal-shell {
+  transform: translateY(48px) scale(0.97);
+  transition: transform 0.55s var(--framer-ease-out);
+  will-change: transform;
+}
+
+.control-center-overlay.active .cc-modal-shell {
+  transform: translateY(0) scale(1);
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 6: cmdk Command Palette & Sonner Bouncy Toasts
+   -------------------------------------------------------------------------- */
+.search-modal {
+  width: min(680px, 94vw) !important;
+  background: rgba(14, 18, 30, 0.90) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.5) !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 45px rgba(0, 112, 209, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(36px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(190%) !important;
+  transform: scale(0.96) translateY(-10px);
+  transition: transform 0.42s var(--framer-ease-out);
+  will-change: transform;
+}
+
+.ps5-overlay.active .search-modal {
+  transform: scale(1) translateY(0) !important;
+}
+
+.ps5-toast {
+  animation: ps5SonnerSpring 0.45s var(--framer-spring-bounce) forwards !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(26px) saturate(180%) !important;
+  box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.85), 0 0 28px rgba(0, 112, 209, 0.35) !important;
+}
+
+@keyframes ps5SonnerSpring {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.95);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) scale(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   PATTERN 7: Keyboard Navigation & A11y (prefers-reduced-motion)
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2.5px solid #ffffff !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.8) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

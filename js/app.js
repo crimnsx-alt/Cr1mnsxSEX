@@ -223,6 +223,131 @@ async function renderWelcomeFriends() {
 }
 
 // ============================================================
+// PATTERN 1: Dynamic Ambient Glow Palette Engine
+// ============================================================
+const AMBIENT_THEMES = {
+  welcome: { primary: "#0070d1", secondary: "#38bdf8", ambientA: "rgba(0, 112, 209, 0.28)", ambientB: "rgba(56, 189, 248, 0.16)" },
+  store: { primary: "#00439c", secondary: "#0070d1", ambientA: "rgba(0, 67, 156, 0.30)", ambientB: "rgba(0, 112, 209, 0.18)" },
+  gta_vc: { primary: "#f43f5e", secondary: "#06b6d4", ambientA: "rgba(244, 63, 94, 0.30)", ambientB: "rgba(6, 182, 212, 0.18)" },
+  gta_v: { primary: "#16a34a", secondary: "#f59e0b", ambientA: "rgba(22, 163, 74, 0.28)", ambientB: "rgba(245, 158, 11, 0.18)" },
+  nfs_u2: { primary: "#06b6d4", secondary: "#8b5cf6", ambientA: "rgba(6, 182, 212, 0.30)", ambientB: "rgba(139, 92, 246, 0.22)" },
+  simpsons: { primary: "#eab308", secondary: "#3b82f6", ambientA: "rgba(234, 179, 8, 0.28)", ambientB: "rgba(59, 130, 246, 0.18)" },
+  doom: { primary: "#dc2626", secondary: "#ea580c", ambientA: "rgba(220, 38, 38, 0.32)", ambientB: "rgba(234, 88, 12, 0.22)" },
+  astro: { primary: "#0284c7", secondary: "#38bdf8", ambientA: "rgba(2, 132, 199, 0.28)", ambientB: "rgba(56, 189, 248, 0.18)" },
+  spiderman2: { primary: "#ef4444", secondary: "#1e3a8a", ambientA: "rgba(239, 68, 68, 0.30)", ambientB: "rgba(30, 58, 138, 0.22)" },
+  quake3: { primary: "#d97706", secondary: "#b91c1c", ambientA: "rgba(217, 119, 6, 0.30)", ambientB: "rgba(185, 28, 28, 0.22)" },
+  gta_3: { primary: "#0284c7", secondary: "#64748b", ambientA: "rgba(2, 132, 199, 0.26)", ambientB: "rgba(100, 116, 139, 0.18)" },
+  minecraft: { primary: "#15803d", secondary: "#854d0e", ambientA: "rgba(21, 128, 61, 0.28)", ambientB: "rgba(133, 77, 14, 0.20)" },
+  library: { primary: "#6366f1", secondary: "#38bdf8", ambientA: "rgba(99, 102, 241, 0.28)", ambientB: "rgba(56, 189, 248, 0.18)" }
+};
+
+function updateAmbientGlowTheme(tileId) {
+  const theme = AMBIENT_THEMES[tileId] || AMBIENT_THEMES.welcome;
+  const root = document.documentElement;
+  root.style.setProperty("--scene-primary", theme.primary);
+  root.style.setProperty("--scene-secondary", theme.secondary);
+  root.style.setProperty("--scene-ambient-a", theme.ambientA);
+  root.style.setProperty("--scene-ambient-b", theme.ambientB);
+}
+
+function triggerContentCrossfade() {
+  const targets = [document.getElementById("ps5WelcomeView"), document.getElementById("ps5GameHeroView")].filter(Boolean);
+  targets.forEach((el) => {
+    el.classList.remove("ps5-content-crossfade");
+    void el.offsetWidth;
+    el.classList.add("ps5-content-crossfade");
+  });
+}
+
+// ============================================================
+// PATTERN 2: Floating Tabs Slider (Framer layoutId Pill)
+// ============================================================
+function updateNavTabIndicator() {
+  const nav = document.querySelector(".ps5-nav-tabs");
+  const activeTab = nav?.querySelector(".ps5-tab.is-active");
+  const indicator = document.getElementById("navTabIndicator");
+  if (!nav || !activeTab || !indicator) return;
+
+  const navRect = nav.getBoundingClientRect();
+  const tabRect = activeTab.getBoundingClientRect();
+  const left = tabRect.left - navRect.left;
+  const width = tabRect.width;
+
+  indicator.style.transform = `translateX(${left}px)`;
+  indicator.style.width = `${width}px`;
+}
+
+function updateTrophyFilterIndicator() {
+  const container = document.getElementById("tcFilterPills");
+  const activePill = container?.querySelector(".tc-filter-pill.is-active");
+  const indicator = document.getElementById("tcPillIndicator");
+  if (!container || !activePill || !indicator) return;
+
+  const contRect = container.getBoundingClientRect();
+  const pillRect = activePill.getBoundingClientRect();
+  const left = pillRect.left - contRect.left;
+  const width = pillRect.width;
+
+  indicator.style.transform = `translateX(${left}px)`;
+  indicator.style.width = `${width}px`;
+}
+
+// ============================================================
+// PATTERN 7: Mobile Touch Gestures (Swipe Nav & Vaul Drawer)
+// ============================================================
+function initMobileTouchGestures() {
+  let startX = 0;
+  let startY = 0;
+  let startTime = 0;
+
+  window.addEventListener("touchstart", (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    startTime = performance.now();
+  }, { passive: true });
+
+  window.addEventListener("touchend", (e) => {
+    if (!e.changedTouches || e.changedTouches.length === 0) return;
+    const endX = e.changedTouches[0].clientX;
+    const endY = e.changedTouches[0].clientY;
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const dt = performance.now() - startTime;
+
+    if (dt > 600) return;
+
+    // Horizontal Swipe on Ribbon / Stage
+    if (Math.abs(dx) > 50 && Math.abs(dy) < 60) {
+      const list = getCurrentList();
+      const idx = list.findIndex((it) => it.id === state.activeId);
+      if (idx !== -1) {
+        if (dx < 0) {
+          const next = list[(idx + 1) % list.length];
+          selectTile(next.id, true);
+        } else {
+          const prev = list[(idx - 1 + list.length) % list.length];
+          selectTile(prev.id, true);
+        }
+      }
+      return;
+    }
+
+    // Vertical Swipe: Swipe up from bottom edge opens Control Center
+    if (dy < -65 && startY > window.innerHeight - 120 && !state.isControlCenterOpen) {
+      toggleControlCenter();
+      return;
+    }
+
+    // Swipe down while Control Center is open closes it
+    if (dy > 65 && state.isControlCenterOpen) {
+      closeControlCenter();
+      return;
+    }
+  }, { passive: true });
+}
+
+// ============================================================
 // ELITE UI MASTER: NumberFlow Odometer & Spring Animations
 // ============================================================
 function animateNumberFlow(element, targetValue, options = {}) {
@@ -554,6 +679,9 @@ function selectTile(tileId, withSound = true) {
     closeGameHub();
   }
 
+  updateAmbientGlowTheme(tileId);
+  triggerContentCrossfade();
+
   renderRibbon();
   renderActiveView();
 }
@@ -800,6 +928,10 @@ function switchCategory(cat) {
   $("#tabGames").classList.toggle("is-active", cat === "games");
   $("#tabMedia").classList.toggle("is-active", cat === "media");
 
+  updateNavTabIndicator();
+  updateAmbientGlowTheme(state.activeId);
+  triggerContentCrossfade();
+
   if (state.isHubOpen) closeGameHub();
   SoundEngine.changePanel();
   renderRibbon();
@@ -839,6 +971,7 @@ function toggleControlCenter() {
   const overlay = $("#controlCenterOverlay");
   overlay.classList.toggle("active", state.isControlCenterOpen);
   overlay.setAttribute("aria-hidden", String(!state.isControlCenterOpen));
+  document.body.classList.toggle("cc-open", state.isControlCenterOpen);
   SoundEngine.controlCenter(state.isControlCenterOpen);
 }
 
@@ -848,6 +981,7 @@ function closeControlCenter() {
   const overlay = $("#controlCenterOverlay");
   overlay.classList.remove("active");
   overlay.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("cc-open");
   SoundEngine.controlCenter(false);
 }
 
@@ -2123,6 +2257,7 @@ function openTrophyCollectionModal() {
   SoundEngine.openDialog();
 
   renderTrophyCollectionModal();
+  setTimeout(updateTrophyFilterIndicator, 60);
 }
 
 function closeTrophyCollectionModal() {
@@ -3538,6 +3673,8 @@ function handleKeydown(e) {
   const settingsOpen = $("#settingsOverlay") && $("#settingsOverlay").classList.contains("active");
   const libOpen = $("#modalGameLibrary") && $("#modalGameLibrary").classList.contains("active");
   const inGameOpen = $("#inGameWindow") && $("#inGameWindow").classList.contains("active");
+  const tcOpen = $("#modalTrophyCollection") && $("#modalTrophyCollection").classList.contains("active");
+  const tcDetailOpen = $("#modalGameTrophiesDetail") && $("#modalGameTrophiesDetail").classList.contains("active");
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
     if (e.key === "Backspace") {
@@ -3552,6 +3689,16 @@ function handleKeydown(e) {
       return;
     }
     e.preventDefault();
+    if (tcDetailOpen) {
+      $("#modalGameTrophiesDetail")?.classList.remove("active");
+      $("#modalGameTrophiesDetail")?.setAttribute("aria-hidden", "true");
+      return;
+    }
+    if (tcOpen) {
+      $("#modalTrophyCollection")?.classList.remove("active");
+      $("#modalTrophyCollection")?.setAttribute("aria-hidden", "true");
+      return;
+    }
     if (inGameOpen) return closeInGameWindow();
     if (libOpen) return closeLibraryModal();
     if (friendAddOpen) return closeAddFriendModal();
@@ -3565,7 +3712,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen) return;
+  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -3573,7 +3720,7 @@ function handleKeydown(e) {
     e.preventDefault();
     return toggleControlCenter();
   }
-  if (e.key === "/") {
+  if (e.key === "/" || ((e.key === "k" || e.key === "K") && (e.metaKey || e.ctrlKey))) {
     e.preventDefault();
     return openSearch();
   }
@@ -4794,6 +4941,7 @@ function init() {
       $("#tcFilterPills")?.querySelectorAll(".tc-filter-pill")?.forEach((p) => p.classList.remove("is-active"));
       pill.classList.add("is-active");
       state.trophyFilter = pill.dataset.filter || "all";
+      updateTrophyFilterIndicator();
       SoundEngine.focusMove();
       renderTrophyGamesList();
     });
@@ -4895,6 +5043,13 @@ function init() {
   );
 
   initSpotlightCards();
+  initMobileTouchGestures();
+  updateNavTabIndicator();
+  updateAmbientGlowTheme(state.activeId);
+  window.addEventListener("resize", () => {
+    updateNavTabIndicator();
+    updateTrophyFilterIndicator();
+  }, { passive: true });
   setInterval(updateClock, 10000);
   requestAnimationFrame(pollGamepads);
 }

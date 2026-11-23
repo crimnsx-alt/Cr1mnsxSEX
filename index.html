@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261123_elite1" />
+  <link rel="stylesheet" href="css/style.css?v=20261123_ps5framer" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -31,6 +31,7 @@
   <div class="ps5-bg-layer" aria-hidden="true">
     <div class="ps5-bg-art" id="bgLayerA"></div>
     <div class="ps5-bg-art" id="bgLayerB"></div>
+    <div class="ps5-bg-ambient-glow" id="bgAmbientGlow"></div>
     <canvas id="ps5Particles" class="ps5-particles"></canvas>
     <div class="ps5-bg-vignette"></div>
   </div>
@@ -49,6 +50,7 @@
       <!-- TOP SYSTEM BAR -->
       <header class="ps5-topbar">
         <nav class="ps5-nav-tabs" aria-label="Разделы системы">
+          <span class="ps5-tab-indicator" id="navTabIndicator" aria-hidden="true"></span>
           <button class="ps5-tab is-active" id="tabGames" data-tab="games" type="button">Игры</button>
           <button class="ps5-tab" id="tabMedia" data-tab="media" type="button">Медиа</button>
         </nav>
@@ -1143,6 +1145,7 @@
               </div>
 
               <div class="tc-filters-pills" id="tcFilterPills">
+                <span class="tc-pill-indicator" id="tcPillIndicator" aria-hidden="true"></span>
                 <button type="button" class="tc-filter-pill is-active" data-filter="all">Все игры</button>
                 <button type="button" class="tc-filter-pill" data-filter="platinum">С платиной</button>
                 <button type="button" class="tc-filter-pill" data-filter="completed">100% пройдено</button>
@@ -1220,6 +1223,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261123_elite1"></script>
+  <script type="module" src="js/app.js?v=20261123_ps5framer"></script>
 </body>
 </html>
