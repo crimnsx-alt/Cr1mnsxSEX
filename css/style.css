@@ -10115,6 +10115,8 @@ button:active:not(:disabled),
   flex: 1;
   width: 100%;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .twitch-in-chat-iframe-holder iframe {
@@ -10122,6 +10124,66 @@ button:active:not(:disabled),
   height: 100%;
   border: none;
   display: block;
+}
+
+/* Fast Loading Skeletons for Twitch Media Stage */
+.twitch-iframe-skeleton {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: radial-gradient(circle at center, rgba(16, 20, 34, 0.96) 0%, rgba(6, 8, 14, 0.99) 100%);
+  z-index: 5;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.twitch-iframe-skeleton.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.twitch-skeleton-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.05) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: ps5TwitchShimmer 1.8s infinite cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.twitch-skeleton-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2.5px solid rgba(255, 255, 255, 0.12);
+  border-top-color: #9146FF;
+  border-radius: 50%;
+  animation: ps5TwitchSpin 0.8s linear infinite;
+  position: relative;
+  z-index: 2;
+}
+
+.twitch-skeleton-label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes ps5TwitchSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ps5TwitchShimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 @media (max-width: 1180px) {

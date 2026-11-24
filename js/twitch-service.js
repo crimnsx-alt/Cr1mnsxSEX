@@ -7,6 +7,8 @@
 import { SoundEngine } from "./sound.js";
 
 const STORAGE_KEY = "ps5_twitch_streamers_v2";
+const STATUS_CACHE_KEY = "ps5_twitch_status_cache_v2";
+const STATUS_CACHE_TTL = 60000; // 60s TTL for live telemetry to avoid redundant network spikes
 
 export const DEFAULT_TWITCH_STREAMERS = [
   {
@@ -103,6 +105,9 @@ class TwitchBroadcastService {
     this.userHasManuallySelected = false;
     this.showToastCallback = null;
     this.currentRenderedChannel = null;
+    this.currentRenderedChatChannel = null;
+    this._chatMountTimeout = null;
+    this._isCheckingStatus = false;
     this.checkTimer = null;
   }
 
@@ -116,19 +121,80 @@ class TwitchBroadcastService {
     }
   }
 
+  loadStatusCache() {
+    try {
+      const raw = localStorage.getItem(STATUS_CACHE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.channels && typeof parsed.timestamp === "number") {
+          return parsed;
+        }
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  saveStatusCache() {
+    try {
+      const data = {
+        timestamp: Date.now(),
+        channels: {}
+      };
+      this.streamers.forEach((s) => {
+        data.channels[s.channel.toLowerCase()] = {
+          isLive: !!s.isLive,
+          uptime: s.uptime,
+          avatar: s.avatar
+        };
+      });
+      localStorage.setItem(STATUS_CACHE_KEY, JSON.stringify(data));
+    } catch (_) {}
+  }
+
+  isStatusCacheFresh() {
+    const cache = this.loadStatusCache();
+    if (!cache) return false;
+    return (Date.now() - cache.timestamp) < STATUS_CACHE_TTL;
+  }
+
   loadStreamers() {
+    let list = null;
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          list = parsed;
         }
       }
     } catch (e) {
       console.warn("[TwitchService] Failed to read localStorage:", e);
     }
-    return JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
+    if (!list) {
+      list = JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
+    }
+
+    // Hydrate with persistent status cache immediately for 0ms rendering
+    const cache = this.loadStatusCache();
+    if (cache && cache.channels) {
+      list.forEach((s) => {
+        const c = cache.channels[s.channel.toLowerCase()];
+        if (c) {
+          s.isLive = !!c.isLive;
+          s.uptime = c.uptime || null;
+          if (c.avatar && c.avatar.startsWith("http")) s.avatar = c.avatar;
+        }
+      });
+    }
+
+    // Prioritize active live streamers to the top immediately
+    list.sort((a, b) => {
+      if (a.isLive && !b.isLive) return -1;
+      if (!a.isLive && b.isLive) return 1;
+      return 0;
+    });
+
+    return list;
   }
 
   saveStreamers() {
@@ -300,34 +366,63 @@ class TwitchBroadcastService {
     } catch (_) {}
   }
 
-  async checkAllStreamersLive(autoSelect = false) {
-    const checks = this.streamers.map(async (s) => {
-      await this.checkSingleStreamerLive(s);
-    });
-    await Promise.all(checks);
+  async checkAllStreamersLive(force = false, autoSelect = false) {
+    if (this._isCheckingStatus) return;
+    if (!force && this.isStatusCacheFresh()) {
+      return;
+    }
 
-    // Sort: Live streamers rise to top
-    this.streamers.sort((a, b) => {
-      if (a.isLive && !b.isLive) return -1;
-      if (!a.isLive && b.isLive) return 1;
-      return 0;
-    });
+    this._isCheckingStatus = true;
+    try {
+      const prevLiveMap = new Map(this.streamers.map((s) => [s.channel.toLowerCase(), s.isLive]));
+      const prevUptimeMap = new Map(this.streamers.map((s) => [s.channel.toLowerCase(), s.uptime]));
 
-    // Auto-select the live streamer so stream starts playing right away
-    if (autoSelect && !this.userHasManuallySelected) {
-      const liveStreamer = this.streamers.find((s) => s.isLive);
-      if (liveStreamer && liveStreamer.channel !== this.activeChannel) {
-        this.activeChannel = liveStreamer.channel;
+      const checks = this.streamers.map(async (s) => {
+        await this.checkSingleStreamerLive(s);
+      });
+      await Promise.all(checks);
+
+      // Check if anything actually changed
+      let hasChanged = false;
+      for (const s of this.streamers) {
+        const ch = s.channel.toLowerCase();
+        if (prevLiveMap.get(ch) !== s.isLive || prevUptimeMap.get(ch) !== s.uptime) {
+          hasChanged = true;
+          break;
+        }
       }
-    }
 
-    if (this.isInlineActive) {
-      this.renderInlineSidebarList();
-      this.updateInlineStreamer(this.activeChannel);
-    }
-    if (this.isHubActive) {
-      this.renderSidebarList();
-      this.selectStreamer(this.activeChannel);
+      // Sort: Live streamers rise to top
+      this.streamers.sort((a, b) => {
+        if (a.isLive && !b.isLive) return -1;
+        if (!a.isLive && b.isLive) return 1;
+        return 0;
+      });
+
+      this.saveStatusCache();
+      this.saveStreamers();
+
+      // Auto-select the live streamer so stream starts playing right away
+      if (autoSelect && !this.userHasManuallySelected) {
+        const liveStreamer = this.streamers.find((s) => s.isLive);
+        if (liveStreamer && liveStreamer.channel !== this.activeChannel) {
+          this.activeChannel = liveStreamer.channel;
+          hasChanged = true;
+        }
+      }
+
+      if (hasChanged) {
+        if (this.isInlineActive) {
+          this.renderInlineSidebarList();
+          this.updateInlineStreamer(this.activeChannel);
+        }
+        if (this.isHubActive) {
+          this.renderSidebarList();
+          this.selectStreamer(this.activeChannel);
+        }
+      }
+    } finally {
+      this._isCheckingStatus = false;
     }
   }
 
@@ -335,7 +430,7 @@ class TwitchBroadcastService {
     if (this.checkTimer) clearInterval(this.checkTimer);
     this.checkTimer = setInterval(() => {
       if (this.isInlineActive || this.isHubActive) {
-        this.checkAllStreamersLive(false);
+        this.checkAllStreamersLive(true);
       }
     }, 60000);
   }
@@ -359,11 +454,12 @@ class TwitchBroadcastService {
       }
     }
 
+    // Instant 0ms render from memory & cache
     this.renderInlineSidebarList();
     this.updateInlineStreamer(this.activeChannel);
 
-    // Run real-time status check in background
-    this.checkAllStreamersLive(!this.userHasManuallySelected);
+    // Silent background live check (will only update if cache expired or changed)
+    this.checkAllStreamersLive(false, !this.userHasManuallySelected);
     this.startStatusPolling();
   }
 
@@ -376,6 +472,10 @@ class TwitchBroadcastService {
       clearInterval(this.checkTimer);
       this.checkTimer = null;
     }
+    if (this._chatMountTimeout) {
+      clearTimeout(this._chatMountTimeout);
+      this._chatMountTimeout = null;
+    }
 
     if (!this.isPipActive) {
       const pHolder = document.getElementById("twitchInlineIframeHolder");
@@ -383,6 +483,7 @@ class TwitchBroadcastService {
       const cHolder = document.getElementById("twitchInlineChatHolder");
       if (cHolder) cHolder.innerHTML = "";
       this.currentRenderedChannel = null;
+      this.currentRenderedChatChannel = null;
     }
   }
 
@@ -402,7 +503,7 @@ class TwitchBroadcastService {
         return `
           <div class="twitch-in-card ${liveClass} ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
             <div class="twitch-in-avatar-wrap">
-              <img src="${avatarSrc}" alt="${s.name}" class="twitch-in-card-avatar" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <img src="${avatarSrc}" alt="${s.name}" class="twitch-in-card-avatar" loading="lazy" decoding="async" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
               <span class="twitch-in-card-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-in-card-info">
@@ -500,28 +601,43 @@ class TwitchBroadcastService {
 
     const avatarEl = document.getElementById("twitchInlineAvatar");
     if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" onerror="this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
+      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" loading="lazy" decoding="async" onerror="this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
     }
 
     // Update Player Iframe if channel changed or empty
     const holder = document.getElementById("twitchInlineIframeHolder");
     if (holder && this.currentRenderedChannel !== channel) {
+      this.currentRenderedChannel = channel;
       holder.innerHTML = `
+        <div class="twitch-iframe-skeleton" id="twitchInlinePlayerSkeleton">
+          <div class="twitch-skeleton-shimmer"></div>
+          <div class="twitch-skeleton-spinner"></div>
+          <span class="twitch-skeleton-label">Загрузка трансляции</span>
+        </div>
         <iframe
           src="${this.getPlayerUrl(channel)}"
           frameborder="0"
           allowfullscreen="true"
           scrolling="no"
-          allow="autoplay; fullscreen"
+          loading="eager"
+          fetchpriority="high"
+          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
           title="Twitch Player Inline - ${channel}">
         </iframe>
       `;
-      this.currentRenderedChannel = channel;
+      const pIframe = holder.querySelector("iframe");
+      const pSkeleton = holder.querySelector(".twitch-iframe-skeleton");
+      if (pIframe && pSkeleton) {
+        pIframe.addEventListener("load", () => {
+          pSkeleton.classList.add("is-hidden");
+          setTimeout(() => pSkeleton?.remove(), 400);
+        }, { once: true });
+      }
     }
 
-    // Update Chat Iframe if open
+    // Update Chat Iframe if open (with intelligent de-duplication)
     if (this.isInlineChatOpen) {
-      this.renderInlineChat();
+      this.renderInlineChat(channel);
     }
 
     // Update active highlight in inline cards
@@ -530,20 +646,51 @@ class TwitchBroadcastService {
     });
   }
 
-  renderInlineChat() {
+  renderInlineChat(channel = null, force = false) {
     const holder = document.getElementById("twitchInlineChatHolder");
     if (!holder) return;
 
-    holder.innerHTML = `
-      <iframe
-        src="${this.getChatUrl(this.activeChannel)}"
-        frameborder="0"
-        scrolling="no"
-        title="Twitch Chat Inline - ${this.activeChannel}">
-      </iframe>
-    `;
-  }
+    const targetChannel = channel || this.activeChannel;
 
+    // Fast-path: already rendered and iframe is alive, do NOT destroy and reload!
+    if (!force && this.currentRenderedChatChannel === targetChannel && holder.querySelector("iframe")) {
+      return;
+    }
+
+    this.currentRenderedChatChannel = targetChannel;
+    if (this._chatMountTimeout) {
+      clearTimeout(this._chatMountTimeout);
+      this._chatMountTimeout = null;
+    }
+
+    // Immediate PS5 Skeleton Shimmer
+    holder.innerHTML = `
+      <div class="twitch-iframe-skeleton" id="twitchInlineChatSkeleton">
+        <div class="twitch-skeleton-shimmer"></div>
+        <div class="twitch-skeleton-spinner"></div>
+        <span class="twitch-skeleton-label">Чат трансляции</span>
+      </div>
+    `;
+
+    // Micro-defer mounting of chat iframe by 150ms so player gets 100% bandwidth
+    this._chatMountTimeout = setTimeout(() => {
+      const iframe = document.createElement("iframe");
+      iframe.src = this.getChatUrl(targetChannel);
+      iframe.frameBorder = "0";
+      iframe.scrolling = "no";
+      iframe.title = `Twitch Chat Inline - ${targetChannel}`;
+      iframe.setAttribute("loading", "lazy");
+
+      const skeleton = holder.querySelector(".twitch-iframe-skeleton");
+      iframe.addEventListener("load", () => {
+        if (skeleton) skeleton.classList.add("is-hidden");
+        setTimeout(() => skeleton?.remove(), 400);
+      }, { once: true });
+
+      holder.appendChild(iframe);
+      this._chatMountTimeout = null;
+    }, 150);
+  }
   toggleInlineChat() {
     this.isInlineChatOpen = !this.isInlineChatOpen;
     const drawer = document.getElementById("twitchInlineChatDrawer");
@@ -561,10 +708,15 @@ class TwitchBroadcastService {
     }
 
     if (this.isInlineChatOpen) {
-      this.renderInlineChat();
+      this.renderInlineChat(this.activeChannel, true);
     } else {
+      if (this._chatMountTimeout) {
+        clearTimeout(this._chatMountTimeout);
+        this._chatMountTimeout = null;
+      }
       const holder = document.getElementById("twitchInlineChatHolder");
       if (holder) holder.innerHTML = "";
+      this.currentRenderedChatChannel = null;
     }
     SoundEngine.sliderStep();
   }
@@ -702,16 +854,31 @@ class TwitchBroadcastService {
 
     const url = this.getPlayerUrl(this.activeChannel);
     wrap.innerHTML = `
+      <div class="twitch-iframe-skeleton" id="twitchModalPlayerSkeleton">
+        <div class="twitch-skeleton-shimmer"></div>
+        <div class="twitch-skeleton-spinner"></div>
+        <span class="twitch-skeleton-label">Загрузка плеера</span>
+      </div>
       <iframe
         id="twitchPlayerIframe"
         src="${url}"
         frameborder="0"
         allowfullscreen="true"
         scrolling="no"
-        allow="autoplay; fullscreen"
+        loading="eager"
+        fetchpriority="high"
+        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
         title="Twitch Player - ${this.activeChannel}">
       </iframe>
     `;
+    const pIframe = wrap.querySelector("iframe");
+    const pSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
+    if (pIframe && pSkeleton) {
+      pIframe.addEventListener("load", () => {
+        pSkeleton.classList.add("is-hidden");
+        setTimeout(() => pSkeleton?.remove(), 400);
+      }, { once: true });
+    }
   }
 
   renderChatIframe() {
@@ -720,14 +887,28 @@ class TwitchBroadcastService {
 
     const url = this.getChatUrl(this.activeChannel);
     wrap.innerHTML = `
+      <div class="twitch-iframe-skeleton" id="twitchModalChatSkeleton">
+        <div class="twitch-skeleton-shimmer"></div>
+        <div class="twitch-skeleton-spinner"></div>
+        <span class="twitch-skeleton-label">Подключение чата</span>
+      </div>
       <iframe
         id="twitchChatIframe"
         src="${url}"
         frameborder="0"
         scrolling="no"
+        loading="lazy"
         title="Twitch Chat - ${this.activeChannel}">
       </iframe>
     `;
+    const cIframe = wrap.querySelector("iframe");
+    const cSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
+    if (cIframe && cSkeleton) {
+      cIframe.addEventListener("load", () => {
+        cSkeleton.classList.add("is-hidden");
+        setTimeout(() => cSkeleton?.remove(), 400);
+      }, { once: true });
+    }
   }
 
   toggleChat() {
@@ -983,8 +1164,10 @@ class TwitchBroadcastService {
     document.getElementById("btnInlineReload")?.addEventListener("click", () => {
       SoundEngine.focusMove();
       this.currentRenderedChannel = null;
-      this.checkAllStreamersLive(false);
+      this.currentRenderedChatChannel = null;
+      this.checkAllStreamersLive(true, false);
       this.updateInlineStreamer(this.activeChannel);
+      this.toast("Обновление", "Трансляция и статус стримеров обновляются...", null);
     });
 
     // ------------------------------------------------------------
@@ -996,8 +1179,8 @@ class TwitchBroadcastService {
       this.closePip(true);
     });
 
-    // Early background live check
-    this.checkAllStreamersLive(true);
+    // Silent background live check if cache is expired
+    this.checkAllStreamersLive(false, true);
   }
 }
 

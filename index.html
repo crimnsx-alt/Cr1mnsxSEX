@@ -10,7 +10,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/style.css?v=20261123_ultraspeed" />
+  <!-- Preconnect & DNS-Prefetch for instantaneous Twitch player, chat & telemetry loading -->
+  <link rel="preconnect" href="https://player.twitch.tv" crossorigin />
+  <link rel="preconnect" href="https://static.twitchcdn.net" crossorigin />
+  <link rel="preconnect" href="https://embed.twitch.tv" crossorigin />
+  <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin />
+  <link rel="dns-prefetch" href="https://www.twitch.tv" />
+  <link rel="dns-prefetch" href="https://static-cdn.jtvnw.net" />
+  <link rel="dns-prefetch" href="https://decapi.me" />
+  <link rel="stylesheet" href="css/style.css?v=20261124_twitchfast" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -1501,6 +1509,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261123_ultraspeed"></script>
+  <script type="module" src="js/app.js?v=20261124_twitchfast"></script>
 </body>
 </html>
