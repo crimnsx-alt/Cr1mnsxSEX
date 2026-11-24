@@ -10251,6 +10251,17 @@ body.view-youtube .ps5-youtube-view {
   display: flex;
 }
 
+body.view-youtube .ps5-bg-art {
+  background-position: center 25%;
+  filter: brightness(0.68) contrast(1.08) saturate(1.1);
+}
+
+body.view-youtube .ps5-bg-vignette {
+  background:
+    linear-gradient(to bottom, rgba(4, 7, 16, 0.72) 0%, rgba(4, 7, 16, 0.28) 32%, rgba(4, 7, 16, 0.52) 70%, rgba(4, 7, 16, 0.94) 100%),
+    radial-gradient(circle at 50% 45%, transparent 35%, rgba(4, 7, 16, 0.65) 95%);
+}
+
 .ps5-youtube-control-bar {
   display: flex;
   align-items: center;
