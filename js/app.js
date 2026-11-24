@@ -30,6 +30,7 @@ import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
 import { twitchService } from "./twitch-service.js";
 import { youtubeService } from "./youtube-service.js";
+import { brawlService } from "./brawl-service.js";
 
 // ============================================================
 // State
@@ -400,7 +401,7 @@ function initSpotlightAndTilt() {
   const isTouch = window.matchMedia("(pointer: coarse)").matches;
   if (isTouch) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .series-other-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .yt-player-series-cue";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .starr-drop-box, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .yt-player-series-cue";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
@@ -846,16 +847,17 @@ function renderActiveView() {
   const heroEl = $("#ps5GameHeroView");
   const twitchEl = $("#ps5TwitchView");
   const youtubeEl = $("#ps5YoutubeView");
+  const brawlEl = $("#ps5BrawlStarsView");
 
   $("#ccCardTitle").textContent = t(item.title);
   $("#ccCardSub").textContent = item.publisher || "PlayStation®5 System Shell";
 
   if ($("#scrollDownCue")) {
-    $("#scrollDownCue").hidden = item.viewType !== "game" || item.id === "twitch" || item.id === "youtube";
+    $("#scrollDownCue").hidden = item.viewType !== "game" || item.id === "twitch" || item.id === "youtube" || item.id === "brawl-stars";
   }
 
-  document.body.classList.remove("view-welcome", "view-explore", "view-game", "view-twitch", "view-youtube");
-  document.body.classList.add(`view-${item.id === "twitch" ? "twitch" : (item.id === "youtube" ? "youtube" : (item.viewType || "game"))}`);
+  document.body.classList.remove("view-welcome", "view-explore", "view-game", "view-twitch", "view-youtube", "view-brawl");
+  document.body.classList.add(`view-${item.id === "twitch" ? "twitch" : (item.id === "youtube" ? "youtube" : (item.id === "brawl-stars" ? "brawl" : (item.viewType || "game")))}`);
 
   if (item.viewType === "welcome") {
     welcomeEl.hidden = false;
@@ -865,6 +867,8 @@ function renderActiveView() {
     twitchService.stopInlineStage();
     if (youtubeEl) youtubeEl.hidden = true;
     youtubeService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = true;
+    brawlService.stopInlineStage();
     setBackground(item.bg || "assets/bg_monica.jpg");
     initSpotlightAndTilt();
   } else if (item.viewType === "explore") {
@@ -875,6 +879,8 @@ function renderActiveView() {
     twitchService.stopInlineStage();
     if (youtubeEl) youtubeEl.hidden = true;
     youtubeService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = true;
+    brawlService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderExploreView(item);
     initSpotlightAndTilt();
@@ -884,6 +890,8 @@ function renderActiveView() {
     heroEl.hidden = true;
     if (youtubeEl) youtubeEl.hidden = true;
     youtubeService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = true;
+    brawlService.stopInlineStage();
     if (twitchEl) twitchEl.hidden = false;
     setBackground(item.bg, item.fallbackBg);
     twitchService.renderInlineStage();
@@ -894,9 +902,23 @@ function renderActiveView() {
     heroEl.hidden = true;
     if (twitchEl) twitchEl.hidden = true;
     twitchService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = true;
+    brawlService.stopInlineStage();
     if (youtubeEl) youtubeEl.hidden = false;
     setBackground(item.bg, item.fallbackBg);
     youtubeService.renderInlineStage();
+    initSpotlightAndTilt();
+  } else if (item.id === "brawl-stars") {
+    welcomeEl.hidden = true;
+    exploreEl.hidden = true;
+    heroEl.hidden = true;
+    if (twitchEl) twitchEl.hidden = true;
+    twitchService.stopInlineStage();
+    if (youtubeEl) youtubeEl.hidden = true;
+    youtubeService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = false;
+    setBackground(item.bg || "assets/brawl/brawl_bg.jpg", item.fallbackBg);
+    brawlService.renderInlineStage();
     initSpotlightAndTilt();
   } else {
     welcomeEl.hidden = true;
@@ -906,6 +928,8 @@ function renderActiveView() {
     twitchService.stopInlineStage();
     if (youtubeEl) youtubeEl.hidden = true;
     youtubeService.stopInlineStage();
+    if (brawlEl) brawlEl.hidden = true;
+    brawlService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderGameHeroView(item);
     initSpotlightAndTilt();
@@ -3734,6 +3758,25 @@ function handleAction(action) {
     if (state.category !== "games") switchCategory("games");
     return selectTile("explore", true);
   }
+  if (action === "open:brawl-stars" || action === "open:brawl") {
+    closeModal();
+    if (state.category !== "games") switchCategory("games");
+    return selectTile("brawl-stars", true);
+  }
+  if (action === "brawl:sync") {
+    SoundEngine.enter();
+    return brawlService.fetchLiveProfile(true);
+  }
+  if (action === "brawl:starr-drop") {
+    closeModal();
+    if (state.category !== "games") switchCategory("games");
+    selectTile("brawl-stars", true);
+    setTimeout(() => {
+      const btn = document.getElementById("btnBrawlTabStarrDrop");
+      if (btn) btn.click();
+    }, 120);
+    return;
+  }
   if (action === "open:ps5_sounds" || action === "modal:ps5_sounds") {
     state.settingsSection = "ps5_sounds";
     openSettings();
@@ -5365,6 +5408,16 @@ function init() {
       switchCategory("media");
       selectTile("youtube", false);
       youtubeService.openHub();
+    } else if (initialHash === "brawl" || initialHash === "brawl-stars") {
+      switchCategory("games");
+      selectTile("brawl-stars", false);
+    } else if (initialHash === "starr-drop") {
+      switchCategory("games");
+      selectTile("brawl-stars", false);
+      setTimeout(() => {
+        const btn = document.getElementById("btnBrawlTabStarrDrop");
+        if (btn) btn.click();
+      }, 120);
     } else if (initialHash === "vlad" || initialHash === "series" || initialHash === "vlad-klevye-mashiny") {
       switchCategory("media");
       selectTile("youtube", false);

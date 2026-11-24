@@ -108,6 +108,8 @@ export const PS5Icons = {
 
   twitchTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><path d="M9 7h26v17l-6 6h-6l-4 4v-4H9V7z" fill="#9146ff"/><rect x="23.5" y="14" width="3" height="7" fill="#ffffff"/><rect x="17.5" y="14" width="3" height="7" fill="#ffffff"/></svg>`,
 
+  brawlStarsTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><defs><linearGradient id="bsGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFDD00"/><stop offset="50%" stop-color="#FF9900"/><stop offset="100%" stop-color="#FF3300"/></linearGradient></defs><rect x="4" y="4" width="36" height="36" rx="10" fill="#181428"/><circle cx="22" cy="22" r="14" fill="url(#bsGrad)"/><path d="M22 10.5l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1z" fill="#FFFFFF"/><circle cx="18.5" cy="21.5" r="2" fill="#181428"/><circle cx="25.5" cy="21.5" r="2" fill="#181428"/><path d="M19 25.5h6v1.5h-6z" fill="#181428"/></svg>`,
+
   dualsenseSilhouette: `<svg viewBox="0 0 36 26" width="24" height="17" fill="#ffffff" aria-hidden="true"><path d="M10.5 4.5h15c3.2 0 5.6 2.5 6.3 5.7l1.4 7.2c.5 2.4-1.3 4.6-3.7 4.6-1.4 0-2.7-.7-3.5-1.9l-2.6-3.6H12.6L10 20.1c-.8 1.2-2.1 1.9-3.5 1.9-2.4 0-4.2-2.2-3.7-4.6l1.4-7.2C4.9 7 7.3 4.5 10.5 4.5z"/></svg>`,
 
   earbudsSilhouette: `<svg viewBox="0 0 36 26" width="24" height="17" fill="#ffffff" aria-hidden="true"><path d="M13 4.5c-3 0-5.2 2.6-5.2 6.2 0 3.2 1.8 5.8 4.4 6.2 1.2.2 2.3-.6 2.3-1.9V6.8c0-1.3-1-2.3-1.5-2.3zm-1.8 4.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6z"/><path d="M23 7.5c3 0 5.2 2.6 5.2 6.2 0 3.2-1.8 5.8-4.4 6.2-1.2.2-2.3-.6-2.3-1.9V9.8c0-1.3 1-2.3 1.5-2.3zm1.8 4.8a1.8 1.8 0 1 1 0 3.6 1.8 1.8 0 0 1 0-3.6z"/></svg>`,

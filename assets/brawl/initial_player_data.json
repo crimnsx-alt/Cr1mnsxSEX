@@ -1,0 +1,8092 @@
+{
+  "tag": "2RGUQJQ0R",
+  "name": "Cr1mnsx",
+  "nameColor": "#a2e3fe",
+  "icon": {
+    "id": 28001148
+  },
+  "trophies": 42512,
+  "highestTrophies": 42512,
+  "totalPrestigeLevel": 14,
+  "fame": 20865,
+  "fameTierName": "MARTIAN FAME II",
+  "expLevel": 123,
+  "expPoints": 78971,
+  "isQualifiedFromChampionshipChallenge": false,
+  "3vs3Victories": 2840,
+  "soloVictories": 633,
+  "duoVictories": 918,
+  "bestRoboRumbleTime": 5,
+  "bestTimeAsBigBrawler": 0,
+  "rankedSeasonId": 51,
+  "rankedRank": 10,
+  "rankedRankName": "DIAMOND I",
+  "rankedElo": 3000,
+  "highestSeasonRankedRank": 10,
+  "highestSeasonRankedRankName": "DIAMOND I",
+  "highestSeasonRankedElo": 3000,
+  "highestAllTimeRankedRank": 12,
+  "highestAllTimeRankedRankName": "DIAMOND III",
+  "highestAllTimeRankedElo": 4067,
+  "club": {
+    "tag": "80RYCLU9Q",
+    "name": "0.3.7|teams"
+  },
+  "brawlers": {
+    "shelly": {
+      "id": 16000000,
+      "name": "SHELLY",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1004,
+      "highestTrophies": 1004,
+      "prestigeLevel": 1,
+      "currentWinStreak": 1,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29000722,
+        "name": "HOOT HOOT SHELLY"
+      },
+      "gadgets": [
+        {
+          "id": 23000255,
+          "name": "FAST FORWARD"
+        },
+        {
+          "id": 23000288,
+          "name": "CLAY PIGEONS"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000076,
+          "name": "SHELL SHOCK"
+        },
+        {
+          "id": 23000135,
+          "name": "BAND-AID"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000613,
+          "name": "DOUBLE BARREL"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "colt": {
+      "id": 16000001,
+      "name": "COLT",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1005,
+      "highestTrophies": 1005,
+      "prestigeLevel": 1,
+      "currentWinStreak": 2,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29000805,
+        "name": "PARAGON MECHA\nCOLT"
+      },
+      "gadgets": [
+        {
+          "id": 23000273,
+          "name": "SPEEDLOADER"
+        },
+        {
+          "id": 23000319,
+          "name": "SILVER BULLET"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000077,
+          "name": "SLICK BOOTS"
+        },
+        {
+          "id": 23000138,
+          "name": "MAGNUM SPECIAL"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000614,
+          "name": "DUAL WIELDING"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "bull": {
+      "id": 16000002,
+      "name": "BULL",
+      "power": 8,
+      "rank": 2,
+      "trophies": 422,
+      "highestTrophies": 422,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000391,
+        "name": "B-800"
+      },
+      "gadgets": [
+        {
+          "id": 23000310,
+          "name": "STOMPER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000616,
+          "name": "JAWS OF STEEL"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "brock": {
+      "id": 16000003,
+      "name": "BROCK",
+      "power": 8,
+      "rank": 2,
+      "trophies": 371,
+      "highestTrophies": 371,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29001677,
+        "name": "CYBER BROCK III"
+      },
+      "gadgets": [
+        {
+          "id": 23000245,
+          "name": "ROCKET LACES"
+        },
+        {
+          "id": 23000316,
+          "name": "ROCKET FUEL"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000688,
+          "name": "ROCKET BARRAGE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "rico": {
+      "id": 16000004,
+      "name": "RICO",
+      "power": 7,
+      "rank": 2,
+      "trophies": 324,
+      "highestTrophies": 324,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000009,
+        "name": "RICO"
+      },
+      "gadgets": [
+        {
+          "id": 23000246,
+          "name": "MULTIBALL LAUNCHER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000776,
+          "name": "TRICK SHOT KING"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": true
+      }
+    },
+    "spike": {
+      "id": 16000005,
+      "name": "SPIKE",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1087,
+      "highestTrophies": 1087,
+      "prestigeLevel": 1,
+      "currentWinStreak": 2,
+      "maxWinStreak": 20,
+      "skin": {
+        "id": 29000751,
+        "name": "TOON SPIKE"
+      },
+      "gadgets": [
+        {
+          "id": 23000247,
+          "name": "POPPING PINCUSHION"
+        },
+        {
+          "id": 23000406,
+          "name": "LIFE PLANT"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000001,
+          "name": "HEALTH",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000081,
+          "name": "FERTILIZE"
+        },
+        {
+          "id": 23000151,
+          "name": "CURVEBALL"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000615,
+          "name": "BLOOMING SEASON"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "barley": {
+      "id": 16000006,
+      "name": "BARLEY",
+      "power": 8,
+      "rank": 2,
+      "trophies": 361,
+      "highestTrophies": 361,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29000012,
+        "name": "BARLEY"
+      },
+      "gadgets": [
+        {
+          "id": 23000250,
+          "name": "STICKY SYRUP MIXER"
+        },
+        {
+          "id": 23000293,
+          "name": "HERBAL TONIC"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000757,
+          "name": "BOTTLED-UP RAGE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "jessie": {
+      "id": 16000007,
+      "name": "JESSIE",
+      "power": 9,
+      "rank": 2,
+      "trophies": 403,
+      "highestTrophies": 403,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000013,
+        "name": "JESSIE"
+      },
+      "gadgets": [
+        {
+          "id": 23000251,
+          "name": "SPARK PLUG"
+        },
+        {
+          "id": 23000295,
+          "name": "RECOIL SPRING"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000083,
+          "name": "ENERGIZE"
+        },
+        {
+          "id": 23000149,
+          "name": "SHOCKY"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000630,
+          "name": "SCRAPPY 2.0"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "nita": {
+      "id": 16000008,
+      "name": "NITA",
+      "power": 10,
+      "rank": 2,
+      "trophies": 477,
+      "highestTrophies": 477,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29000079,
+        "name": "SHIBA NITA"
+      },
+      "gadgets": [
+        {
+          "id": 23000249,
+          "name": "BEAR PAWS"
+        },
+        {
+          "id": 23000314,
+          "name": "FAUX FUR"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000084,
+          "name": "BEAR WITH ME"
+        },
+        {
+          "id": 23000136,
+          "name": "HYPER BEAR"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "dynamike": {
+      "id": 16000009,
+      "name": "DYNAMIKE",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1000,
+      "highestTrophies": 1003,
+      "prestigeLevel": 1,
+      "currentWinStreak": 0,
+      "maxWinStreak": 10,
+      "skin": {
+        "id": 29000395,
+        "name": "MOLDY MIKE"
+      },
+      "gadgets": [
+        {
+          "id": 23000258,
+          "name": "FIDGET SPINNER"
+        },
+        {
+          "id": 23000294,
+          "name": "SATCHEL CHARGE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000085,
+          "name": "DYNA-JUMP"
+        },
+        {
+          "id": 23000155,
+          "name": "DEMOLITION"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000652,
+          "name": "BOOMER"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "el_primo": {
+      "id": 16000010,
+      "name": "EL PRIMO",
+      "power": 8,
+      "rank": 3,
+      "trophies": 512,
+      "highestTrophies": 512,
+      "prestigeLevel": 0,
+      "currentWinStreak": 5,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29000437,
+        "name": "EL CORAZÓN"
+      },
+      "gadgets": [
+        {
+          "id": 23000264,
+          "name": "SUPLEX SUPPLEMENT"
+        },
+        {
+          "id": 23000292,
+          "name": "ASTEROID BELT"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000679,
+          "name": "GRAVITY LEAP"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": true,
+        "hyperCharge": false
+      }
+    },
+    "mortis": {
+      "id": 16000011,
+      "name": "MORTIS",
+      "power": 10,
+      "rank": 3,
+      "trophies": 501,
+      "highestTrophies": 508,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000063,
+        "name": "TOP HAT MORTIS"
+      },
+      "gadgets": [
+        {
+          "id": 23000265,
+          "name": "COMBO SPINNER"
+        },
+        {
+          "id": 23000290,
+          "name": "CREATURE OF THE NIGHT"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000087,
+          "name": "CREEPY HARVEST"
+        },
+        {
+          "id": 23000154,
+          "name": "COILED SNAKE"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "crow": {
+      "id": 16000012,
+      "name": "CROW",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1121,
+      "highestTrophies": 1133,
+      "prestigeLevel": 1,
+      "currentWinStreak": 0,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29001490,
+        "name": "DRAGON CROW VI"
+      },
+      "gadgets": [
+        {
+          "id": 23000243,
+          "name": "INSTAPOISON"
+        },
+        {
+          "id": 23000286,
+          "name": "SLOWING TOXIN"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000088,
+          "name": "EXTRA TOXIC"
+        },
+        {
+          "id": 23000143,
+          "name": "CARRION CROW"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000650,
+          "name": "UTILITY KNIVES"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "poco": {
+      "id": 16000013,
+      "name": "POCO",
+      "power": 8,
+      "rank": 3,
+      "trophies": 526,
+      "highestTrophies": 526,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000021,
+        "name": "POCO"
+      },
+      "gadgets": [
+        {
+          "id": 23000267,
+          "name": "TUNING FORK"
+        },
+        {
+          "id": 23000350,
+          "name": "PROTECTIVE TUNES"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000822,
+          "name": "MEDIC'S MELODY"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": false,
+        "hyperCharge": true
+      }
+    },
+    "bo": {
+      "id": 16000014,
+      "name": "BO",
+      "power": 8,
+      "rank": 3,
+      "trophies": 524,
+      "highestTrophies": 524,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29001049,
+        "name": "CUPID BO"
+      },
+      "gadgets": [
+        {
+          "id": 23000263,
+          "name": "SUPER TOTEM"
+        },
+        {
+          "id": 23000289,
+          "name": "TRIPWIRE"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000896,
+          "name": "CATCH A BEAR"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "piper": {
+      "id": 16000015,
+      "name": "PIPER",
+      "power": 8,
+      "rank": 2,
+      "trophies": 352,
+      "highestTrophies": 352,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000023,
+        "name": "PIPER"
+      },
+      "gadgets": [
+        {
+          "id": 23000291,
+          "name": "HOMEMADE RECIPE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "pam": {
+      "id": 16000016,
+      "name": "PAM",
+      "power": 9,
+      "rank": 2,
+      "trophies": 405,
+      "highestTrophies": 407,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000556,
+        "name": "STONKS PAM"
+      },
+      "gadgets": [
+        {
+          "id": 23000257,
+          "name": "PULSE MODULATOR"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000092,
+          "name": "MAMA'S HUG"
+        },
+        {
+          "id": 23000139,
+          "name": "MAMA'S SQUEEZE"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000898,
+          "name": "MAMA'S LOVE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "tara": {
+      "id": 16000017,
+      "name": "TARA",
+      "power": 8,
+      "rank": 2,
+      "trophies": 387,
+      "highestTrophies": 391,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000032,
+        "name": "TARA"
+      },
+      "gadgets": [
+        {
+          "id": 23000356,
+          "name": "SUPPORT FROM BEYOND"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "darryl": {
+      "id": 16000018,
+      "name": "DARRYL",
+      "power": 9,
+      "rank": 3,
+      "trophies": 510,
+      "highestTrophies": 510,
+      "prestigeLevel": 0,
+      "currentWinStreak": 4,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29001758,
+        "name": "TRASH GOBLIN\nDARRYL"
+      },
+      "gadgets": [
+        {
+          "id": 23000260,
+          "name": "RECOILING ROTATOR"
+        },
+        {
+          "id": 23000313,
+          "name": "TAR BARREL"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000001,
+          "name": "HEALTH",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000094,
+          "name": "STEEL HOOPS"
+        },
+        {
+          "id": 23000157,
+          "name": "ROLLING RELOAD"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "penny": {
+      "id": 16000019,
+      "name": "PENNY",
+      "power": 9,
+      "rank": 2,
+      "trophies": 424,
+      "highestTrophies": 424,
+      "prestigeLevel": 0,
+      "currentWinStreak": 4,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000041,
+        "name": "PENNY"
+      },
+      "gadgets": [
+        {
+          "id": 23000248,
+          "name": "SALTY BARREL"
+        },
+        {
+          "id": 23000287,
+          "name": "TRUSTY SPYGLASS"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000099,
+          "name": "HEAVY COFFERS"
+        },
+        {
+          "id": 23000142,
+          "name": "MASTER BLASTER"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "frank": {
+      "id": 16000020,
+      "name": "FRANK",
+      "power": 9,
+      "rank": 2,
+      "trophies": 369,
+      "highestTrophies": 371,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29000042,
+        "name": "FRANK"
+      },
+      "gadgets": [
+        {
+          "id": 23000351,
+          "name": "IRRESISTIBLE ATTRACTION"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000104,
+          "name": "POWER GRAB"
+        },
+        {
+          "id": 23000153,
+          "name": "SPONGE"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "gene": {
+      "id": 16000021,
+      "name": "GENE",
+      "power": 8,
+      "rank": 2,
+      "trophies": 405,
+      "highestTrophies": 405,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000172,
+        "name": "EVIL GENE"
+      },
+      "gadgets": [
+        {
+          "id": 23000352,
+          "name": "VENGEFUL SPIRITS"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000690,
+          "name": "HYPER HANDS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "tick": {
+      "id": 16000022,
+      "name": "TICK",
+      "power": 7,
+      "rank": 2,
+      "trophies": 383,
+      "highestTrophies": 383,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000243,
+        "name": "SNOWMAN TICK"
+      },
+      "gadgets": [
+        {
+          "id": 23000253,
+          "name": "MINE MANIA"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "leon": {
+      "id": 16000023,
+      "name": "LEON",
+      "power": 11,
+      "rank": 6,
+      "trophies": 2136,
+      "highestTrophies": 2142,
+      "prestigeLevel": 2,
+      "currentWinStreak": 2,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29001368,
+        "name": "TIGER LEON II"
+      },
+      "gadgets": [
+        {
+          "id": 23000276,
+          "name": "CLONE PROJECTOR"
+        },
+        {
+          "id": 23000408,
+          "name": "LOLLIPOP DROP"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000001,
+          "name": "HEALTH",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000119,
+          "name": "SMOKE TRAILS"
+        },
+        {
+          "id": 23000141,
+          "name": "INVISIHEAL"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000651,
+          "name": "LIMBO"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "rosa": {
+      "id": 16000024,
+      "name": "ROSA",
+      "power": 9,
+      "rank": 2,
+      "trophies": 393,
+      "highestTrophies": 393,
+      "prestigeLevel": 0,
+      "currentWinStreak": 4,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000992,
+        "name": "SUGARPLUM ROSA"
+      },
+      "gadgets": [
+        {
+          "id": 23000242,
+          "name": "GROW LIGHT"
+        },
+        {
+          "id": 23000348,
+          "name": "UNFRIENDLY BUSHES"
+        }
+      ],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000124,
+          "name": "PLANT LIFE"
+        },
+        {
+          "id": 23000147,
+          "name": "THORNY GLOVES"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000628,
+          "name": "GRASPING ROOTS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "carl": {
+      "id": 16000025,
+      "name": "CARL",
+      "power": 8,
+      "rank": 2,
+      "trophies": 418,
+      "highestTrophies": 420,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000308,
+        "name": "SURFER CARL"
+      },
+      "gadgets": [
+        {
+          "id": 23000262,
+          "name": "HEAT EJECTOR"
+        },
+        {
+          "id": 23000317,
+          "name": "FLYING HOOK"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "bibi": {
+      "id": 16000026,
+      "name": "BIBI",
+      "power": 9,
+      "rank": 2,
+      "trophies": 405,
+      "highestTrophies": 407,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29000081,
+        "name": "BIBI"
+      },
+      "gadgets": [
+        {
+          "id": 23000275,
+          "name": "VITAMIN BOOSTER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000134,
+          "name": "HOME RUN"
+        },
+        {
+          "id": 23000146,
+          "name": "BATTING STANCE"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000683,
+          "name": "OUT OF BOUNDS"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "8-bit": {
+      "id": 16000027,
+      "name": "8-BIT",
+      "power": 8,
+      "rank": 2,
+      "trophies": 448,
+      "highestTrophies": 448,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000849,
+        "name": "PIANO 8-BIT"
+      },
+      "gadgets": [
+        {
+          "id": 23000259,
+          "name": "CHEAT CARTRIDGE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000854,
+          "name": "AIMBOT"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": true
+      }
+    },
+    "sandy": {
+      "id": 16000028,
+      "name": "SANDY",
+      "power": 8,
+      "rank": 1,
+      "trophies": 176,
+      "highestTrophies": 176,
+      "prestigeLevel": 0,
+      "currentWinStreak": 11,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29000113,
+        "name": "SANDY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000685,
+          "name": "SWIFT WINDS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "bea": {
+      "id": 16000029,
+      "name": "BEA",
+      "power": 8,
+      "rank": 2,
+      "trophies": 416,
+      "highestTrophies": 418,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29001282,
+        "name": "AEB"
+      },
+      "gadgets": [
+        {
+          "id": 23000271,
+          "name": "HONEY MOLASSES"
+        },
+        {
+          "id": 23000312,
+          "name": "RATTLED HIVE"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000895,
+          "name": "PROTECT THE QUEEN"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "emz": {
+      "id": 16000030,
+      "name": "EMZ",
+      "power": 7,
+      "rank": 2,
+      "trophies": 339,
+      "highestTrophies": 339,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000119,
+        "name": "EMZ"
+      },
+      "gadgets": [
+        {
+          "id": 23000274,
+          "name": "FRIENDZONER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000778,
+          "name": "OVERHYPED HAZE"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "mr__p": {
+      "id": 16000031,
+      "name": "MR. P",
+      "power": 7,
+      "rank": 2,
+      "trophies": 345,
+      "highestTrophies": 345,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000152,
+        "name": "AGENT P"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "max": {
+      "id": 16000032,
+      "name": "MAX",
+      "power": 8,
+      "rank": 2,
+      "trophies": 378,
+      "highestTrophies": 378,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000127,
+        "name": "MAX"
+      },
+      "gadgets": [
+        {
+          "id": 23000254,
+          "name": "PHASE SHIFTER"
+        },
+        {
+          "id": 23000311,
+          "name": "SNEAKY SNEAKERS"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "jacky": {
+      "id": 16000034,
+      "name": "JACKY",
+      "power": 7,
+      "rank": 2,
+      "trophies": 338,
+      "highestTrophies": 338,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000189,
+        "name": "ULTRA DRILLER JACKY"
+      },
+      "gadgets": [
+        {
+          "id": 23000256,
+          "name": "PNEUMATIC BOOSTER"
+        },
+        {
+          "id": 23000486,
+          "name": "REBUILD"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "gale": {
+      "id": 16000035,
+      "name": "GALE",
+      "power": 9,
+      "rank": 2,
+      "trophies": 374,
+      "highestTrophies": 376,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000155,
+        "name": "GALE"
+      },
+      "gadgets": [
+        {
+          "id": 23000277,
+          "name": "NORTH WIND WALL"
+        },
+        {
+          "id": 23000407,
+          "name": "TWISTER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000228,
+          "name": "BLUSTERY BLOW"
+        },
+        {
+          "id": 23000229,
+          "name": "FREEZING SNOW"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "nani": {
+      "id": 16000036,
+      "name": "NANI",
+      "power": 9,
+      "rank": 3,
+      "trophies": 507,
+      "highestTrophies": 530,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000156,
+        "name": "NANI"
+      },
+      "gadgets": [
+        {
+          "id": 23000278,
+          "name": "WARPIN' TIME"
+        },
+        {
+          "id": 23000353,
+          "name": "RETURN TO SENDER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000234,
+          "name": "AUTOFOCUS"
+        },
+        {
+          "id": 23000235,
+          "name": "TEMPERED STEEL"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000825,
+          "name": "BIG PEEP"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "sprout": {
+      "id": 16000037,
+      "name": "SPROUT",
+      "power": 9,
+      "rank": 2,
+      "trophies": 325,
+      "highestTrophies": 327,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000382,
+        "name": "RUBY PRINCE SPROUT"
+      },
+      "gadgets": [
+        {
+          "id": 23000244,
+          "name": "GARDEN MULCHER"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000240,
+          "name": "OVERGROWTH"
+        },
+        {
+          "id": 23000241,
+          "name": "PHOTOSYNTHESIS"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000681,
+          "name": "THORNS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "surge": {
+      "id": 16000038,
+      "name": "SURGE",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1000,
+      "highestTrophies": 1000,
+      "prestigeLevel": 1,
+      "currentWinStreak": 4,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29001079,
+        "name": "SURGE LIGHTYEAR"
+      },
+      "gadgets": [
+        {
+          "id": 23000285,
+          "name": "POWER SURGE"
+        },
+        {
+          "id": 23000485,
+          "name": "POWER SHIELD"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000000,
+          "name": "SPEED",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000283,
+          "name": "TO THE MAX!"
+        },
+        {
+          "id": 23000284,
+          "name": "SERVE ICE COLD"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000826,
+          "name": "JUICED UP!"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "colette": {
+      "id": 16000039,
+      "name": "COLETTE",
+      "power": 10,
+      "rank": 2,
+      "trophies": 398,
+      "highestTrophies": 398,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29000962,
+        "name": "CUCKOO COLETTE"
+      },
+      "gadgets": [
+        {
+          "id": 23000302,
+          "name": "NA-AH!"
+        },
+        {
+          "id": 23000457,
+          "name": "GOTCHA!"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000300,
+          "name": "PUSH IT"
+        },
+        {
+          "id": 23000301,
+          "name": "MASS TAX"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": true,
+        "hyperCharge": false
+      }
+    },
+    "amber": {
+      "id": 16000040,
+      "name": "AMBER",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1011,
+      "highestTrophies": 1011,
+      "prestigeLevel": 1,
+      "currentWinStreak": 2,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29000911,
+        "name": "BUBBLE TROUBLE AMBER"
+      },
+      "gadgets": [
+        {
+          "id": 23000309,
+          "name": "FIRE STARTERS"
+        },
+        {
+          "id": 23000488,
+          "name": "DANCING FLAMES"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000307,
+          "name": "WILD FLAMES"
+        },
+        {
+          "id": 23000308,
+          "name": "SCORCHIN' SIPHON"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000970,
+          "name": "OIL SPILL"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": true
+      }
+    },
+    "lou": {
+      "id": 16000041,
+      "name": "LOU",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1004,
+      "highestTrophies": 1004,
+      "prestigeLevel": 1,
+      "currentWinStreak": 2,
+      "maxWinStreak": 10,
+      "skin": {
+        "id": 29000991,
+        "name": "RUDE LOU"
+      },
+      "gadgets": [
+        {
+          "id": 23000326,
+          "name": "ICE BLOCK"
+        },
+        {
+          "id": 23000400,
+          "name": "AVALANCHE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000324,
+          "name": "COLD SNAP"
+        },
+        {
+          "id": 23000325,
+          "name": "HYPOTHERMIA"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000631,
+          "name": "SLUSHIE STORM"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "byron": {
+      "id": 16000042,
+      "name": "BYRON",
+      "power": 7,
+      "rank": 2,
+      "trophies": 374,
+      "highestTrophies": 374,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000239,
+        "name": "BYRON"
+      },
+      "gadgets": [
+        {
+          "id": 23000333,
+          "name": "SHOT IN THE ARM"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "edgar": {
+      "id": 16000043,
+      "name": "EDGAR",
+      "power": 8,
+      "rank": 2,
+      "trophies": 426,
+      "highestTrophies": 426,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000240,
+        "name": "EDGAR"
+      },
+      "gadgets": [
+        {
+          "id": 23000340,
+          "name": "LET'S FLY"
+        },
+        {
+          "id": 23000403,
+          "name": "HARDCORE"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": true
+      }
+    },
+    "ruffs": {
+      "id": 16000044,
+      "name": "RUFFS",
+      "power": 8,
+      "rank": 3,
+      "trophies": 504,
+      "highestTrophies": 504,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29001005,
+        "name": "SOUS CHEF RUFFS"
+      },
+      "gadgets": [
+        {
+          "id": 23000402,
+          "name": "AIR SUPPORT"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000860,
+          "name": "THE GOODEST BOY"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "stu": {
+      "id": 16000045,
+      "name": "STU",
+      "power": 8,
+      "rank": 2,
+      "trophies": 384,
+      "highestTrophies": 384,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 0,
+      "skin": {
+        "id": 29000265,
+        "name": "STU"
+      },
+      "gadgets": [
+        {
+          "id": 23000364,
+          "name": "SPEED ZONE"
+        },
+        {
+          "id": 23000401,
+          "name": "BREAKTHROUGH"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "belle": {
+      "id": 16000046,
+      "name": "BELLE",
+      "power": 7,
+      "rank": 2,
+      "trophies": 380,
+      "highestTrophies": 380,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29001139,
+        "name": "BEACH BELLE"
+      },
+      "gadgets": [
+        {
+          "id": 23000371,
+          "name": "NEST EGG"
+        },
+        {
+          "id": 23000463,
+          "name": "REVERSE POLARITY"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000682,
+          "name": "MAGNETIC"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "squeak": {
+      "id": 16000047,
+      "name": "SQUEAK",
+      "power": 9,
+      "rank": 2,
+      "trophies": 387,
+      "highestTrophies": 389,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29000272,
+        "name": "SQUEAK"
+      },
+      "gadgets": [
+        {
+          "id": 23000378,
+          "name": "WINDUP"
+        },
+        {
+          "id": 23000462,
+          "name": "RESIDUE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000376,
+          "name": "CHAIN REACTION"
+        },
+        {
+          "id": 23000377,
+          "name": "SUPER STICKY"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "grom": {
+      "id": 16000048,
+      "name": "GROM",
+      "power": 8,
+      "rank": 2,
+      "trophies": 297,
+      "highestTrophies": 297,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29000278,
+        "name": "GROM"
+      },
+      "gadgets": [
+        {
+          "id": 23000385,
+          "name": "WATCHTOWER"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "buzz": {
+      "id": 16000049,
+      "name": "BUZZ",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1002,
+      "highestTrophies": 1008,
+      "prestigeLevel": 1,
+      "currentWinStreak": 0,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29000343,
+        "name": "BORN BAD BUZZ"
+      },
+      "gadgets": [
+        {
+          "id": 23000392,
+          "name": "RESERVE BUOY"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000001,
+          "name": "HEALTH",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000390,
+          "name": "TOUGHER TORPEDO"
+        },
+        {
+          "id": 23000391,
+          "name": "EYES SHARP"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000680,
+          "name": "BUZZWATCH"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "griff": {
+      "id": 16000050,
+      "name": "GRIFF",
+      "power": 7,
+      "rank": 2,
+      "trophies": 308,
+      "highestTrophies": 310,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000289,
+        "name": "GRIFF"
+      },
+      "gadgets": [
+        {
+          "id": 23000399,
+          "name": "PIGGY BANK"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000971,
+          "name": "TAX REBATE"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "ash": {
+      "id": 16000051,
+      "name": "ASH",
+      "power": 7,
+      "rank": 2,
+      "trophies": 364,
+      "highestTrophies": 364,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000603,
+        "name": "KRAMPUS ASH"
+      },
+      "gadgets": [
+        {
+          "id": 23000416,
+          "name": "CHILL PILL"
+        },
+        {
+          "id": 23000465,
+          "name": "ROTTEN BANANA"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "meg": {
+      "id": 16000052,
+      "name": "MEG",
+      "power": 8,
+      "rank": 2,
+      "trophies": 308,
+      "highestTrophies": 308,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 13,
+      "skin": {
+        "id": 29000360,
+        "name": "MEG"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000897,
+          "name": "TUNGSTEN TOUGHNESS"
+        }
+      ],
+      "buffies": {
+        "gadget": true,
+        "starPower": true,
+        "hyperCharge": true
+      }
+    },
+    "lola": {
+      "id": 16000053,
+      "name": "LOLA",
+      "power": 8,
+      "rank": 2,
+      "trophies": 415,
+      "highestTrophies": 415,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29001048,
+        "name": "LOOPY LOLA"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000909,
+          "name": "INFLATED EGO"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "fang": {
+      "id": 16000054,
+      "name": "FANG",
+      "power": 11,
+      "rank": 2,
+      "trophies": 479,
+      "highestTrophies": 482,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29001598,
+        "name": "DEKU: FANG"
+      },
+      "gadgets": [
+        {
+          "id": 23000464,
+          "name": "ROUNDHOUSE KICK"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000438,
+          "name": "FRESH KICKS"
+        },
+        {
+          "id": 23000439,
+          "name": "DIVINE SOLES"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000653,
+          "name": "DRAGON KICK"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "eve": {
+      "id": 16000056,
+      "name": "EVE",
+      "power": 7,
+      "rank": 2,
+      "trophies": 274,
+      "highestTrophies": 274,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000460,
+        "name": "EVE"
+      },
+      "gadgets": [
+        {
+          "id": 23000454,
+          "name": "GOTTA GO!"
+        },
+        {
+          "id": 23000455,
+          "name": "MOTHERLY LOVE"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "janet": {
+      "id": 16000057,
+      "name": "JANET",
+      "power": 11,
+      "rank": 2,
+      "trophies": 416,
+      "highestTrophies": 416,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29001278,
+        "name": "TRICKY JANET"
+      },
+      "gadgets": [
+        {
+          "id": 23000472,
+          "name": "DROP THE BASS"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000000,
+          "name": "SPEED",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000470,
+          "name": "STAGE VIEW"
+        },
+        {
+          "id": 23000471,
+          "name": "VOCAL WARM UP"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000888,
+          "name": "MAGNUM OPUS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "bonnie": {
+      "id": 16000058,
+      "name": "BONNIE",
+      "power": 7,
+      "rank": 2,
+      "trophies": 343,
+      "highestTrophies": 343,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000496,
+        "name": "BONNIE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001003,
+          "name": "DAREDEVIL"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "otis": {
+      "id": 16000059,
+      "name": "OTIS",
+      "power": 8,
+      "rank": 2,
+      "trophies": 250,
+      "highestTrophies": 250,
+      "prestigeLevel": 0,
+      "currentWinStreak": 4,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000621,
+        "name": "ONI OTIS"
+      },
+      "gadgets": [
+        {
+          "id": 23000497,
+          "name": "DORMANT STAR"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "sam": {
+      "id": 16000060,
+      "name": "SAM",
+      "power": 1,
+      "rank": 1,
+      "trophies": 189,
+      "highestTrophies": 189,
+      "prestigeLevel": 0,
+      "currentWinStreak": 9,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29000559,
+        "name": "SAM"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "gus": {
+      "id": 16000061,
+      "name": "GUS",
+      "power": 8,
+      "rank": 1,
+      "trophies": 231,
+      "highestTrophies": 231,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 1,
+      "skin": {
+        "id": 29000730,
+        "name": "BOY SCOUT GUS"
+      },
+      "gadgets": [
+        {
+          "id": 23000514,
+          "name": "KNOCKBACK SPIRIT"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "buster": {
+      "id": 16000062,
+      "name": "BUSTER",
+      "power": 4,
+      "rank": 1,
+      "trophies": 153,
+      "highestTrophies": 153,
+      "prestigeLevel": 0,
+      "currentWinStreak": 10,
+      "maxWinStreak": 10,
+      "skin": {
+        "id": 29000594,
+        "name": "CHAINSAW BUSTER"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "chester": {
+      "id": 16000063,
+      "name": "CHESTER",
+      "power": 10,
+      "rank": 2,
+      "trophies": 357,
+      "highestTrophies": 357,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 10,
+      "skin": {
+        "id": 29000807,
+        "name": "LOKI CHESTER"
+      },
+      "gadgets": [
+        {
+          "id": 23000529,
+          "name": "PRANKSTER'S SURPRISE"
+        },
+        {
+          "id": 23000530,
+          "name": "CANDY BEANS"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000527,
+          "name": "SINGLE BELL'O'MANIA"
+        },
+        {
+          "id": 23000528,
+          "name": "JESTER'S PRIVILEGE"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "gray": {
+      "id": 16000064,
+      "name": "GRAY",
+      "power": 9,
+      "rank": 1,
+      "trophies": 183,
+      "highestTrophies": 183,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000598,
+        "name": "GRAY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000535,
+          "name": "FAKE INJURY"
+        },
+        {
+          "id": 23000536,
+          "name": "NEW PERSPECTIVE"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "mandy": {
+      "id": 16000065,
+      "name": "MANDY",
+      "power": 4,
+      "rank": 1,
+      "trophies": 116,
+      "highestTrophies": 116,
+      "prestigeLevel": 0,
+      "currentWinStreak": 8,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29000601,
+        "name": "MANDY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000894,
+          "name": "SUGAR FOR ALL!"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "r-t": {
+      "id": 16000066,
+      "name": "R-T",
+      "power": 10,
+      "rank": 1,
+      "trophies": 227,
+      "highestTrophies": 228,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29000627,
+        "name": "R-T"
+      },
+      "gadgets": [
+        {
+          "id": 23000555,
+          "name": "OUT OF LINE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000553,
+          "name": "QUICK MATHS"
+        },
+        {
+          "id": 23000554,
+          "name": "RECORDING"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "willow": {
+      "id": 16000067,
+      "name": "WILLOW",
+      "power": 1,
+      "rank": 1,
+      "trophies": 102,
+      "highestTrophies": 102,
+      "prestigeLevel": 0,
+      "currentWinStreak": 7,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29000629,
+        "name": "WILLOW"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "maisie": {
+      "id": 16000068,
+      "name": "MAISIE",
+      "power": 8,
+      "rank": 1,
+      "trophies": 172,
+      "highestTrophies": 172,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29001016,
+        "name": "TITANIUM MAISIE"
+      },
+      "gadgets": [
+        {
+          "id": 23000571,
+          "name": "DISENGAGE!"
+        },
+        {
+          "id": 23000572,
+          "name": "FINISH THEM!"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000000,
+          "name": "SPEED",
+          "level": 3
+        }
+      ],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "hank": {
+      "id": 16000069,
+      "name": "HANK",
+      "power": 1,
+      "rank": 1,
+      "trophies": 99,
+      "highestTrophies": 99,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 4,
+      "skin": {
+        "id": 29000665,
+        "name": "HANK"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000893,
+          "name": "HOMING FISH-ILES"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "cordelius": {
+      "id": 16000070,
+      "name": "CORDELIUS",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1055,
+      "highestTrophies": 1061,
+      "prestigeLevel": 1,
+      "currentWinStreak": 1,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29000995,
+        "name": "PAPER CORDELIUS"
+      },
+      "gadgets": [
+        {
+          "id": 23000587,
+          "name": "REPLANTING"
+        },
+        {
+          "id": 23000588,
+          "name": "POISON MUSHROOM"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000585,
+          "name": "COMBOSHROOMS"
+        },
+        {
+          "id": 23000586,
+          "name": "MUSHROOM KINGDOM"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000684,
+          "name": "COMPLETE DARKNESS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "doug": {
+      "id": 16000071,
+      "name": "DOUG",
+      "power": 8,
+      "rank": 1,
+      "trophies": 240,
+      "highestTrophies": 240,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 14,
+      "skin": {
+        "id": 29000808,
+        "name": "TRUE GOLD DOUG"
+      },
+      "gadgets": [
+        {
+          "id": 23000595,
+          "name": "DOUBLE SAUSAGE"
+        },
+        {
+          "id": 23000596,
+          "name": "EXTRA MUSTARD"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001006,
+          "name": "FREE TOPPINGS"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "pearl": {
+      "id": 16000072,
+      "name": "PEARL",
+      "power": 9,
+      "rank": 2,
+      "trophies": 360,
+      "highestTrophies": 360,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29000696,
+        "name": "PEARL"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23000601,
+          "name": "HEAT RETENTION"
+        },
+        {
+          "id": 23000602,
+          "name": "HEAT SHIELD"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000618,
+          "name": "PYROLYTIC"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "chuck": {
+      "id": 16000073,
+      "name": "CHUCK",
+      "power": 1,
+      "rank": 1,
+      "trophies": 107,
+      "highestTrophies": 107,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000697,
+        "name": "CHUCK"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "charlie": {
+      "id": 16000074,
+      "name": "CHARLIE",
+      "power": 6,
+      "rank": 1,
+      "trophies": 136,
+      "highestTrophies": 136,
+      "prestigeLevel": 0,
+      "currentWinStreak": 9,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29000728,
+        "name": "ROSIE CHARLIE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "mico": {
+      "id": 16000075,
+      "name": "MICO",
+      "power": 9,
+      "rank": 2,
+      "trophies": 307,
+      "highestTrophies": 309,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 12,
+      "skin": {
+        "id": 29000738,
+        "name": "MICO"
+      },
+      "gadgets": [
+        {
+          "id": 23000639,
+          "name": "CLIPPING SCREAM"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000637,
+          "name": "MONKEY BUSINESS"
+        },
+        {
+          "id": 23000638,
+          "name": "RECORD SMASH"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "kit": {
+      "id": 16000076,
+      "name": "KIT",
+      "power": 10,
+      "rank": 2,
+      "trophies": 324,
+      "highestTrophies": 324,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 13,
+      "skin": {
+        "id": 29001076,
+        "name": "CUDDLY KIT"
+      },
+      "gadgets": [
+        {
+          "id": 23000648,
+          "name": "CARDBOARD BOX"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000646,
+          "name": "POWER HUNGRY"
+        },
+        {
+          "id": 23000647,
+          "name": "OVERLY ATTACHED"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "larry___lawrie": {
+      "id": 16000077,
+      "name": "LARRY & LAWRIE",
+      "power": 1,
+      "rank": 1,
+      "trophies": 111,
+      "highestTrophies": 111,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29000819,
+        "name": "GLITCH\nLARRY & LAWRIE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "melodie": {
+      "id": 16000078,
+      "name": "MELODIE",
+      "power": 6,
+      "rank": 1,
+      "trophies": 195,
+      "highestTrophies": 195,
+      "prestigeLevel": 0,
+      "currentWinStreak": 12,
+      "maxWinStreak": 12,
+      "skin": {
+        "id": 29000773,
+        "name": "MELODIE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "angelo": {
+      "id": 16000079,
+      "name": "ANGELO",
+      "power": 1,
+      "rank": 1,
+      "trophies": 62,
+      "highestTrophies": 62,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29000776,
+        "name": "ANGELO"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "draco": {
+      "id": 16000080,
+      "name": "DRACO",
+      "power": 9,
+      "rank": 2,
+      "trophies": 317,
+      "highestTrophies": 317,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29000853,
+        "name": "DRACO"
+      },
+      "gadgets": [
+        {
+          "id": 23000736,
+          "name": "UPPER CUT"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000734,
+          "name": "EXPOSE"
+        },
+        {
+          "id": 23000735,
+          "name": "SHREDDING"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "lily": {
+      "id": 16000081,
+      "name": "LILY",
+      "power": 7,
+      "rank": 1,
+      "trophies": 228,
+      "highestTrophies": 228,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29000854,
+        "name": "LILY"
+      },
+      "gadgets": [
+        {
+          "id": 23000754,
+          "name": "VANISH"
+        },
+        {
+          "id": 23000755,
+          "name": "REPOT"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "berry": {
+      "id": 16000082,
+      "name": "BERRY",
+      "power": 8,
+      "rank": 2,
+      "trophies": 296,
+      "highestTrophies": 296,
+      "prestigeLevel": 0,
+      "currentWinStreak": 17,
+      "maxWinStreak": 17,
+      "skin": {
+        "id": 29000918,
+        "name": "BERRY"
+      },
+      "gadgets": [
+        {
+          "id": 23000767,
+          "name": "SECRET FORMULA"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "clancy": {
+      "id": 16000083,
+      "name": "CLANCY",
+      "power": 1,
+      "rank": 1,
+      "trophies": 151,
+      "highestTrophies": 151,
+      "prestigeLevel": 0,
+      "currentWinStreak": 9,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29000919,
+        "name": "CLANCY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000933,
+          "name": "RECALL OF DUTY"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "moe": {
+      "id": 16000084,
+      "name": "MOE",
+      "power": 8,
+      "rank": 1,
+      "trophies": 175,
+      "highestTrophies": 175,
+      "prestigeLevel": 0,
+      "currentWinStreak": 4,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29001062,
+        "name": "MOON DRILLER MOE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "kenji": {
+      "id": 16000085,
+      "name": "KENJI",
+      "power": 9,
+      "rank": 2,
+      "trophies": 276,
+      "highestTrophies": 276,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 12,
+      "skin": {
+        "id": 29000968,
+        "name": "KENJI"
+      },
+      "gadgets": [
+        {
+          "id": 23000817,
+          "name": "DASHI DASH"
+        },
+        {
+          "id": 23000818,
+          "name": "HOSOMAKI HEALING"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000815,
+          "name": "STUDIED THE BLADE"
+        },
+        {
+          "id": 23000816,
+          "name": "NIGIRI NEMESIS"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000972,
+          "name": "ALL YOU CAN EAT"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "shade": {
+      "id": 16000086,
+      "name": "SHADE",
+      "power": 11,
+      "rank": 3,
+      "trophies": 709,
+      "highestTrophies": 709,
+      "prestigeLevel": 0,
+      "currentWinStreak": 7,
+      "maxWinStreak": 10,
+      "skin": {
+        "id": 29001023,
+        "name": "SHADE"
+      },
+      "gadgets": [
+        {
+          "id": 23000835,
+          "name": "JUMP SCARE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000001,
+          "name": "HEALTH",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000832,
+          "name": "SPOOKY SPEEDSTER"
+        },
+        {
+          "id": 23000833,
+          "name": "HARDENED HOODIE"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000979,
+          "name": "THE FRIGHTENER"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "juju": {
+      "id": 16000087,
+      "name": "JUJU",
+      "power": 4,
+      "rank": 1,
+      "trophies": 172,
+      "highestTrophies": 172,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29001024,
+        "name": "JUJU"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001034,
+          "name": "BOKOR"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "meeple": {
+      "id": 16000089,
+      "name": "MEEPLE",
+      "power": 7,
+      "rank": 1,
+      "trophies": 239,
+      "highestTrophies": 239,
+      "prestigeLevel": 0,
+      "currentWinStreak": 15,
+      "maxWinStreak": 15,
+      "skin": {
+        "id": 29001085,
+        "name": "MEEPLE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "ollie": {
+      "id": 16000090,
+      "name": "OLLIE",
+      "power": 7,
+      "rank": 1,
+      "trophies": 218,
+      "highestTrophies": 219,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 13,
+      "skin": {
+        "id": 29001086,
+        "name": "OLLIE"
+      },
+      "gadgets": [
+        {
+          "id": 23000886,
+          "name": "ALL EYEZ ON ME"
+        }
+      ],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "lumi": {
+      "id": 16000091,
+      "name": "LUMI",
+      "power": 6,
+      "rank": 1,
+      "trophies": 142,
+      "highestTrophies": 142,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29001346,
+        "name": "ELEVEN LUMI"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23000980,
+          "name": "DRUM SOLO"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "finx": {
+      "id": 16000092,
+      "name": "FINX",
+      "power": 6,
+      "rank": 1,
+      "trophies": 61,
+      "highestTrophies": 61,
+      "prestigeLevel": 0,
+      "currentWinStreak": 5,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29001095,
+        "name": "FINX"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001051,
+          "name": "TEMPORAL TRAVELING"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "jae-yong": {
+      "id": 16000093,
+      "name": "JAE-YONG",
+      "power": 8,
+      "rank": 1,
+      "trophies": 217,
+      "highestTrophies": 217,
+      "prestigeLevel": 0,
+      "currentWinStreak": 9,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29001155,
+        "name": "JAE-YONG"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001054,
+          "name": "CROWD-PLEASER"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "kaze": {
+      "id": 16000094,
+      "name": "KAZE",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1049,
+      "highestTrophies": 1049,
+      "prestigeLevel": 1,
+      "currentWinStreak": 1,
+      "maxWinStreak": 22,
+      "skin": {
+        "id": 29001208,
+        "name": "FRUITY KAZE"
+      },
+      "gadgets": [
+        {
+          "id": 23000941,
+          "name": "HENSOJUTSU"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23000938,
+          "name": "ADVANCED TECHNIQUES"
+        },
+        {
+          "id": 23000939,
+          "name": "GRATUITY INCLUDED"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23000943,
+          "name": "ANCIENT ENERGY"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "alli": {
+      "id": 16000095,
+      "name": "ALLI",
+      "power": 1,
+      "rank": 1,
+      "trophies": 51,
+      "highestTrophies": 51,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 2,
+      "skin": {
+        "id": 29001246,
+        "name": "ALLI"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "trunk": {
+      "id": 16000096,
+      "name": "TRUNK",
+      "power": 1,
+      "rank": 1,
+      "trophies": 149,
+      "highestTrophies": 149,
+      "prestigeLevel": 0,
+      "currentWinStreak": 6,
+      "maxWinStreak": 6,
+      "skin": {
+        "id": 29001501,
+        "name": "ROYALE TRUNK"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "mina": {
+      "id": 16000097,
+      "name": "MINA",
+      "power": 1,
+      "rank": 1,
+      "trophies": 0,
+      "highestTrophies": 0,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 0,
+      "skin": {
+        "id": 29001291,
+        "name": "MINA"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "ziggy": {
+      "id": 16000098,
+      "name": "ZIGGY",
+      "power": 1,
+      "rank": 1,
+      "trophies": 124,
+      "highestTrophies": 124,
+      "prestigeLevel": 0,
+      "currentWinStreak": 8,
+      "maxWinStreak": 8,
+      "skin": {
+        "id": 29001292,
+        "name": "ZIGGY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "pierce": {
+      "id": 16000099,
+      "name": "PIERCE",
+      "power": 8,
+      "rank": 2,
+      "trophies": 318,
+      "highestTrophies": 318,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 9,
+      "skin": {
+        "id": 29001340,
+        "name": "PIERCE"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001220,
+          "name": "SECOND WAVE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "gigi": {
+      "id": 16000100,
+      "name": "GIGI",
+      "power": 1,
+      "rank": 1,
+      "trophies": 164,
+      "highestTrophies": 164,
+      "prestigeLevel": 0,
+      "currentWinStreak": 7,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29001341,
+        "name": "GIGI"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001211,
+          "name": "PAS DE DEUX"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "glowy": {
+      "id": 16000101,
+      "name": "GLOWY",
+      "power": 1,
+      "rank": 1,
+      "trophies": 0,
+      "highestTrophies": 0,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 0,
+      "skin": {
+        "id": 29001400,
+        "name": "GLOWY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001221,
+          "name": "YOU NEED A FRIEND"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "sirius": {
+      "id": 16000102,
+      "name": "SIRIUS",
+      "power": 11,
+      "rank": 5,
+      "trophies": 1001,
+      "highestTrophies": 1001,
+      "prestigeLevel": 1,
+      "currentWinStreak": 1,
+      "maxWinStreak": 14,
+      "skin": {
+        "id": 29001401,
+        "name": "SIRIUS"
+      },
+      "gadgets": [
+        {
+          "id": 23001191,
+          "name": "A STARR IS BORN"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23001189,
+          "name": "DUSK RUNNERS"
+        },
+        {
+          "id": 23001190,
+          "name": "THE DARKEST STARR"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23001231,
+          "name": "UNLIMITED POWER!"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "najia": {
+      "id": 16000103,
+      "name": "NAJIA",
+      "power": 9,
+      "rank": 1,
+      "trophies": 162,
+      "highestTrophies": 162,
+      "prestigeLevel": 0,
+      "currentWinStreak": 11,
+      "maxWinStreak": 11,
+      "skin": {
+        "id": 29001510,
+        "name": "NAJIA"
+      },
+      "gadgets": [
+        {
+          "id": 23001218,
+          "name": "POISON PUDDLES"
+        }
+      ],
+      "gears": [],
+      "starPowers": [
+        {
+          "id": 23001216,
+          "name": "POISONOUS PROTECTOR"
+        },
+        {
+          "id": 23001217,
+          "name": "VENOMOUS"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "damian": {
+      "id": 16000104,
+      "name": "DAMIAN",
+      "power": 9,
+      "rank": 2,
+      "trophies": 343,
+      "highestTrophies": 343,
+      "prestigeLevel": 0,
+      "currentWinStreak": 1,
+      "maxWinStreak": 19,
+      "skin": {
+        "id": 29001564,
+        "name": "DAMIAN"
+      },
+      "gadgets": [
+        {
+          "id": 23001248,
+          "name": "WALL OF SOUND"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23001245,
+          "name": "CROWDKILL"
+        },
+        {
+          "id": 23001246,
+          "name": "VULGAR DISPLAY OF PUNCH"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23001285,
+          "name": "JUMP IN THE FIRE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "starr_nova": {
+      "id": 16000105,
+      "name": "STARR NOVA",
+      "power": 6,
+      "rank": 1,
+      "trophies": 60,
+      "highestTrophies": 60,
+      "prestigeLevel": 0,
+      "currentWinStreak": 3,
+      "maxWinStreak": 3,
+      "skin": {
+        "id": 29001599,
+        "name": "STARR NOVA"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [
+        {
+          "id": 23001284,
+          "name": "STARR NOVA: THE HYPERCHARGE"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "bolt": {
+      "id": 16000106,
+      "name": "BOLT",
+      "power": 1,
+      "rank": 1,
+      "trophies": 118,
+      "highestTrophies": 118,
+      "prestigeLevel": 0,
+      "currentWinStreak": 7,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29001620,
+        "name": "BOLT"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "nori": {
+      "id": 16000107,
+      "name": "NORI",
+      "power": 11,
+      "rank": 3,
+      "trophies": 609,
+      "highestTrophies": 611,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 12,
+      "skin": {
+        "id": 29001640,
+        "name": "NORI"
+      },
+      "gadgets": [
+        {
+          "id": 23001298,
+          "name": "GONNA NEED A BIGGER NET"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        },
+        {
+          "id": 62000004,
+          "name": "SHIELD",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23001295,
+          "name": "BIG HAUL"
+        },
+        {
+          "id": 23001296,
+          "name": "HIS MOTHER'S SON"
+        }
+      ],
+      "hyperCharges": [
+        {
+          "id": 23001472,
+          "name": "MASTER FISHERMAN"
+        }
+      ],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "wendy": {
+      "id": 16000108,
+      "name": "WENDY",
+      "power": 2,
+      "rank": 1,
+      "trophies": 102,
+      "highestTrophies": 102,
+      "prestigeLevel": 0,
+      "currentWinStreak": 7,
+      "maxWinStreak": 7,
+      "skin": {
+        "id": 29001653,
+        "name": "WENDY"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "cosmo": {
+      "id": 16000109,
+      "name": "COSMO",
+      "power": 1,
+      "rank": 1,
+      "trophies": 0,
+      "highestTrophies": 0,
+      "prestigeLevel": 0,
+      "currentWinStreak": 0,
+      "maxWinStreak": 0,
+      "skin": {
+        "id": 29001756,
+        "name": "COSMO"
+      },
+      "gadgets": [],
+      "gears": [],
+      "starPowers": [],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    },
+    "vince": {
+      "id": 16000110,
+      "name": "VINCE",
+      "power": 9,
+      "rank": 1,
+      "trophies": 140,
+      "highestTrophies": 140,
+      "prestigeLevel": 0,
+      "currentWinStreak": 2,
+      "maxWinStreak": 5,
+      "skin": {
+        "id": 29001757,
+        "name": "VINCE"
+      },
+      "gadgets": [
+        {
+          "id": 23001452,
+          "name": "HOT COFFEE"
+        }
+      ],
+      "gears": [
+        {
+          "id": 62000002,
+          "name": "DAMAGE",
+          "level": 3
+        }
+      ],
+      "starPowers": [
+        {
+          "id": 23001450,
+          "name": "COME TO PAPA"
+        },
+        {
+          "id": 23001451,
+          "name": "BUG BANDAGE"
+        }
+      ],
+      "hyperCharges": [],
+      "buffies": {
+        "gadget": false,
+        "starPower": false,
+        "hyperCharge": false
+      }
+    }
+  },
+  "battles": [
+    {
+      "timestamp": "2026-11-24T07:12:36.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001280,
+        "mode": "trioShowdown",
+        "modeId": 38,
+        "map": "Crossing the Coast"
+      },
+      "result": "Rank 1",
+      "victory": true,
+      "trophyChange": 17,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2U9G9GPC8J",
+            "name": "HEVESLİ MAISIE",
+            "brawler": "edgar",
+            "brawlerTrophies": 654,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "GQYY0R98Y",
+            "name": "Diesel",
+            "brawler": "pierce",
+            "brawlerTrophies": 1660,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 692,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "JV99CR8GQ",
+            "name": "eleni",
+            "brawler": "belle",
+            "brawlerTrophies": 468,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "GQGJGC0QL",
+            "name": "♡Anna♡",
+            "brawler": "kit",
+            "brawlerTrophies": 793,
+            "brawlerRank": null,
+            "brawlerPower": 7,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "JJUCL928U",
+            "name": "mariaaa",
+            "brawler": "nori",
+            "brawlerTrophies": 793,
+            "brawlerRank": null,
+            "brawlerPower": 5,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2R092U2R29",
+            "name": "sigmasjds",
+            "brawler": "mico",
+            "brawlerTrophies": 100,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2CGC9GCRLQ",
+            "name": "pıtırcık💖🖤",
+            "brawler": "colette",
+            "brawlerTrophies": 1059,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2CJU9VVRL9",
+            "name": "~Esma~",
+            "brawler": "fang",
+            "brawlerTrophies": 1534,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YUGL0PR2Y",
+            "name": "乂Axelandle乂",
+            "brawler": "sam",
+            "brawlerTrophies": 458,
+            "brawlerRank": null,
+            "brawlerPower": 7,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2UL2P20LCR",
+            "name": "•~BLUE WATER|®",
+            "brawler": "mortis",
+            "brawlerTrophies": 1319,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2QC2L0YVP",
+            "name": "SarpYT",
+            "brawler": "starr_nova",
+            "brawlerTrophies": 923,
+            "brawlerRank": null,
+            "brawlerPower": 8,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-23T09:57:31.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000367,
+        "mode": "knockout",
+        "modeId": 20,
+        "map": "Goldarm Gulch"
+      },
+      "result": "Defeat",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": 80,
+      "starPlayerTag": "2GP828VLU9",
+      "teams": [
+        [
+          {
+            "tag": "R9CJGJ2J2",
+            "name": "‧͙⁺˚ςɭєςɭє･˚⁺‧͙",
+            "brawler": "leon",
+            "brawlerTrophies": 1006,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 1,
+              "deaths": 1,
+              "damageDealt": 23419,
+              "healing": 180,
+              "damageTaken": 6780
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2GP828VLU9",
+            "name": "🇹🇷Ahmet🇹🇷",
+            "brawler": "thunder_frogs",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 3,
+              "deaths": 0,
+              "damageDealt": 26624,
+              "healing": 2520,
+              "damageTaken": 2520
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "80R80LGU8",
+            "name": "ĤÔŁŁĨ",
+            "brawler": "brock",
+            "brawlerTrophies": 1377,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 1,
+              "deaths": 1,
+              "damageDealt": 19728,
+              "healing": 2262,
+              "damageTaken": 8262
+            },
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LYP0R9UC2",
+            "name": "StratoPause",
+            "brawler": "thunder_frogs",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 0,
+              "deaths": 2,
+              "damageDealt": 1020,
+              "healing": 4560,
+              "damageTaken": 18560
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "8GJ9PUCC2",
+            "name": "UltimaKD",
+            "brawler": "darryl",
+            "brawlerTrophies": 1225,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 1,
+              "deaths": 2,
+              "damageDealt": 9120,
+              "healing": 12531,
+              "damageTaken": 34531
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "spike",
+            "brawlerTrophies": 1087,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 1,
+              "deaths": 2,
+              "damageDealt": 7422,
+              "healing": 4680,
+              "damageTaken": 16680
+            },
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T15:56:43.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000011,
+        "mode": "gemGrab",
+        "modeId": 0,
+        "map": "Undermine"
+      },
+      "result": "Defeat",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": 99,
+      "starPlayerTag": "82J9RJJ08",
+      "teams": [
+        [
+          {
+            "tag": "YJYRRY0VG",
+            "name": "Yasin_06",
+            "brawler": "8-bit",
+            "brawlerTrophies": 998,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 3,
+              "deaths": 3,
+              "damageDealt": 37913,
+              "healing": 12168,
+              "damageTaken": 43368,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "YJUR0GU9L",
+            "name": "ToSＢａｆｆｙＱｉｎ",
+            "brawler": "brock",
+            "brawlerTrophies": 1057,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 4,
+              "deaths": 5,
+              "damageDealt": 39490,
+              "healing": 1720,
+              "damageTaken": 31720,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "spike",
+            "brawlerTrophies": 1087,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 0,
+              "deaths": 5,
+              "damageDealt": 29753,
+              "healing": 1120,
+              "damageTaken": 31120,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CPLP0Y9J",
+            "name": "chillguy",
+            "brawler": "hank",
+            "brawlerTrophies": 415,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 2,
+              "deaths": 2,
+              "damageDealt": 14570,
+              "healing": 19242,
+              "damageTaken": 43242,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 8
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "YRJ2RPGCP",
+            "name": "보니하니",
+            "brawler": "emz",
+            "brawlerTrophies": 2028,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 4,
+              "deaths": 3,
+              "damageDealt": 23436,
+              "healing": 15486,
+              "damageTaken": 38886,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "82J9RJJ08",
+            "name": "뽀로로타요",
+            "brawler": "clancy",
+            "brawlerTrophies": 2004,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 7,
+              "deaths": 2,
+              "damageDealt": 68202,
+              "healing": 7980,
+              "damageTaken": 25028,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 5
+              }
+            },
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T15:49:19.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001288,
+        "mode": "bounty",
+        "modeId": 3,
+        "map": "Tasty Berry"
+      },
+      "result": "Victory",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": 81,
+      "starPlayerTag": "2GLC98VG28",
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "spike",
+            "brawlerTrophies": 1087,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 3,
+              "deaths": 1,
+              "damageDealt": 34691,
+              "healing": 3568,
+              "damageTaken": 11232,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 9
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "80YULR980L",
+            "name": "MELEK🫶",
+            "brawler": "edgar",
+            "brawlerTrophies": 451,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": {
+              "kills": 1,
+              "deaths": 5,
+              "damageDealt": 22229,
+              "healing": 4645,
+              "damageTaken": 43065,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 4
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "LVVYYLVYG",
+            "name": "{{Efe_187}}",
+            "brawler": "piper",
+            "brawlerTrophies": 250,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": {
+              "kills": 2,
+              "deaths": 2,
+              "damageDealt": 12169,
+              "healing": 1200,
+              "damageTaken": 11280,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 7
+              }
+            },
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UCVR9CGPY",
+            "name": "сладкоежка",
+            "brawler": "crow",
+            "brawlerTrophies": 455,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 2,
+              "deaths": 2,
+              "damageDealt": 14625,
+              "healing": 4368,
+              "damageTaken": 18920,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 5
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "URVGLRVG",
+            "name": "Jamnior",
+            "brawler": "leon",
+            "brawlerTrophies": 2011,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 2,
+              "deaths": 2,
+              "damageDealt": 19551,
+              "healing": 5185,
+              "damageTaken": 18385,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 4
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2GLC98VG28",
+            "name": "187",
+            "brawler": "nita",
+            "brawlerTrophies": 1017,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 4,
+              "deaths": 2,
+              "damageDealt": 31401,
+              "healing": 14984,
+              "damageTaken": 31784,
+              "modeStat": {
+                "type": "bountyStars",
+                "value": 9
+              }
+            },
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T15:47:04.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000011,
+        "mode": "gemGrab",
+        "modeId": 0,
+        "map": "Undermine"
+      },
+      "result": "Victory",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": 87,
+      "starPlayerTag": "2GPC0CPPUR",
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "spike",
+            "brawlerTrophies": 1087,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 5,
+              "deaths": 0,
+              "damageDealt": 69939,
+              "healing": 2822,
+              "damageTaken": 6596,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 1
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "99L9R9CY",
+            "name": "Milan_tween",
+            "brawler": "frank",
+            "brawlerTrophies": 951,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 7,
+              "deaths": 1,
+              "damageDealt": 57235,
+              "healing": 14769,
+              "damageTaken": 37302,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 2
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2GPC0CPPUR",
+            "name": "Meïssa _64",
+            "brawler": "colt",
+            "brawlerTrophies": 495,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": {
+              "kills": 6,
+              "deaths": 0,
+              "damageDealt": 56607,
+              "healing": 2974,
+              "damageTaken": 6836,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 10
+              }
+            },
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "80Y82YVVJL",
+            "name": "Mahdi",
+            "brawler": "draco",
+            "brawlerTrophies": 375,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 0,
+              "deaths": 6,
+              "damageDealt": 33154,
+              "healing": 2800,
+              "damageTaken": 70000,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "808U00YPGP",
+            "name": "fileproo",
+            "brawler": "fang",
+            "brawlerTrophies": 340,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 0,
+              "deaths": 6,
+              "damageDealt": 9665,
+              "healing": 7768,
+              "damageTaken": 65368,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          },
+          {
+            "tag": "2V9LVU0LYP",
+            "name": "COLT (JOKER)",
+            "brawler": "edgar",
+            "brawlerTrophies": 849,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": {
+              "kills": 1,
+              "deaths": 6,
+              "damageDealt": 7915,
+              "healing": 4013,
+              "damageTaken": 48413,
+              "modeStat": {
+                "type": "gemsHeld",
+                "value": 0
+              }
+            },
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T15:40:51.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000793,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Double Trouble"
+      },
+      "result": "Rank 2",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2VJ8R00GRU",
+            "name": "SCL|Dark🥥",
+            "brawler": "brock",
+            "brawlerTrophies": 21,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "brock",
+            "brawlerTrophies": 352,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QJV20CR2V",
+            "name": "retsuko",
+            "brawler": "bea",
+            "brawlerTrophies": 1228,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JCVQUGVVV",
+            "name": "mauroicardi💛❤️",
+            "brawler": "angelo",
+            "brawlerTrophies": 17,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2GQRCRY2VC",
+            "name": "FUT|MELODIE",
+            "brawler": "angelo",
+            "brawlerTrophies": 281,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "CU99R2C0Y",
+            "name": "daria",
+            "brawler": "angelo",
+            "brawlerTrophies": 1016,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VCQU0R8YV",
+            "name": "memo:))))",
+            "brawler": "angelo",
+            "brawlerTrophies": 1292,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "282YPUGGQ",
+            "name": "kri🥥",
+            "brawler": "mandy",
+            "brawlerTrophies": 406,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RRGG2VLC8",
+            "name": "ggg",
+            "brawler": "mandy",
+            "brawlerTrophies": 151,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UVRR8YURR",
+            "name": "samy ☆",
+            "brawler": "belle",
+            "brawlerTrophies": 1059,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T15:36:38.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000793,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Double Trouble"
+      },
+      "result": "Rank 4",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "RG2PVQJVV",
+            "name": "ADAŚ",
+            "brawler": "brock",
+            "brawlerTrophies": 336,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CRC8QQ80J",
+            "name": "небесный",
+            "brawler": "pierce",
+            "brawlerTrophies": 271,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QL09UQVUG",
+            "name": "pro oğuz",
+            "brawler": "pierce",
+            "brawlerTrophies": 78,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "pierce",
+            "brawlerTrophies": 352,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9JRV0VJGV",
+            "name": "MAD CAT",
+            "brawler": "mandy",
+            "brawlerTrophies": 1013,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UYY9JCV9L",
+            "name": "无敌_Refl3x_nt.",
+            "brawler": "belle",
+            "brawlerTrophies": 1042,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CYVPURVUG",
+            "name": "Germes",
+            "brawler": "belle",
+            "brawlerTrophies": 358,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "99U908UY8",
+            "name": "бобофончик",
+            "brawler": "belle",
+            "brawlerTrophies": 241,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2PJC02L29C",
+            "name": "Геншинёнок",
+            "brawler": "piper",
+            "brawlerTrophies": 35,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UCQY82822",
+            "name": "NOBODY",
+            "brawler": "piper",
+            "brawlerTrophies": 72,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T13:55:53.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000792,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Cavern Churn"
+      },
+      "result": "Rank 5",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RULGJP2PR",
+            "name": "™Sorry NooB™",
+            "brawler": "mico",
+            "brawlerTrophies": 289,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8YJC9R8YL",
+            "name": "ZROxY",
+            "brawler": "mico",
+            "brawlerTrophies": 379,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2Y0Q9YPJC",
+            "name": "『STΞVO』",
+            "brawler": "mico",
+            "brawlerTrophies": 249,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "UGVQ8QPR8",
+            "name": "Roberto pro",
+            "brawler": "mico",
+            "brawlerTrophies": 1021,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "lily",
+            "brawlerTrophies": 512,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "GLPQYGY0C",
+            "name": "doga",
+            "brawler": "kenji",
+            "brawlerTrophies": 689,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "P92CU2P9G",
+            "name": "kiifran",
+            "brawler": "kenji",
+            "brawlerTrophies": 1006,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CVQCJ0PGY",
+            "name": "Vasco 🤬🧜🏼",
+            "brawler": "kenji",
+            "brawlerTrophies": 215,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QRUYPVCP0",
+            "name": "udhd",
+            "brawler": "edgar",
+            "brawlerTrophies": 1015,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "88G29PRPJ",
+            "name": "🤡IceMortis👾",
+            "brawler": "mortis",
+            "brawlerTrophies": 536,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-22T13:52:36.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000792,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Cavern Churn"
+      },
+      "result": "Rank 1",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "mico",
+            "brawlerTrophies": 512,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2J2C0JQYYQ",
+            "name": "Александр",
+            "brawler": "mico",
+            "brawlerTrophies": 513,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VLCQVUQQQ",
+            "name": "imp/KEREM",
+            "brawler": "lily",
+            "brawlerTrophies": 1028,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V8PJYUVQQ",
+            "name": "imparator ch",
+            "brawler": "kenji",
+            "brawlerTrophies": 124,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LRRJPCQ2Q",
+            "name": "palolobabinks75",
+            "brawler": "kenji",
+            "brawlerTrophies": 252,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JRQJCLJR",
+            "name": "Zeynep 💗💓💞",
+            "brawler": "kenji",
+            "brawlerTrophies": 1013,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2GQGUVY889",
+            "name": "הראל",
+            "brawler": "edgar",
+            "brawlerTrophies": 1353,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YC89J0QQG",
+            "name": "⚔️JayJay⚔️",
+            "brawler": "edgar",
+            "brawlerTrophies": 205,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V0LGQUGLR",
+            "name": "🤟🤟🤟",
+            "brawler": "mortis",
+            "brawlerTrophies": 1016,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "CLV2LC82G",
+            "name": "mmariio.19",
+            "brawler": "el_primo",
+            "brawlerTrophies": 1013,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-21T12:05:12.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000789,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Rockwall Brawl"
+      },
+      "result": "Rank 4",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "90LURGUC0",
+            "name": "trebor 💛🐣",
+            "brawler": "cordelius",
+            "brawlerTrophies": 1000,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "GRCQ8RR9Y",
+            "name": "ivan",
+            "brawler": "cordelius",
+            "brawlerTrophies": 1157,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UV9V9QG2C",
+            "name": "DokiDoki",
+            "brawler": "shade",
+            "brawlerTrophies": 158,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 2136,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JP0VCR9P8",
+            "name": "Hura",
+            "brawler": "shade",
+            "brawlerTrophies": 208,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LRUCL2GVC",
+            "name": "⚽️cristo⚽️",
+            "brawler": "shade",
+            "brawlerTrophies": 1000,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RU8V99Y0Q",
+            "name": "LUCİFEAR",
+            "brawler": "nori",
+            "brawlerTrophies": 680,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JJVQC9QGU",
+            "name": "K4cp3r3k👙😈",
+            "brawler": "kaze",
+            "brawlerTrophies": 1007,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "GVYGCCJ0G",
+            "name": "CrisTal",
+            "brawler": "kenji",
+            "brawlerTrophies": 1335,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VLJ98982C",
+            "name": "Купил WinRAR",
+            "brawler": "kenji",
+            "brawlerTrophies": 1351,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-21T12:02:40.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000789,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Rockwall Brawl"
+      },
+      "result": "Rank 2",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2J9L9PVCLR",
+            "name": "ZelDrez",
+            "brawler": "cordelius",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "cordelius",
+            "brawlerTrophies": 2136,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "20J9PY020",
+            "name": "Bobby",
+            "brawler": "shade",
+            "brawlerTrophies": 1000,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9GVR0VCC",
+            "name": "CM|LUKAS",
+            "brawler": "nori",
+            "brawlerTrophies": 1084,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VPPQ90QL2",
+            "name": "ПРИЛИПАЛА ЛИЛИ",
+            "brawler": "nori",
+            "brawlerTrophies": 276,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2URCYU28QR",
+            "name": "LEVIN/code@@",
+            "brawler": "kaze",
+            "brawlerTrophies": 1177,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "20GY8YUV8",
+            "name": "Brillazini",
+            "brawler": "kenji",
+            "brawlerTrophies": 1050,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "P2CCQ020P",
+            "name": "By|Nyrox ~",
+            "brawler": "kenji",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RV00VPUUP",
+            "name": "plmrchk",
+            "brawler": "kenji",
+            "brawlerTrophies": 1007,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JCLRJY9C8",
+            "name": "67gamer",
+            "brawler": "leon",
+            "brawlerTrophies": 676,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-21T12:00:08.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000791,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Acid Lakes"
+      },
+      "result": "Rank 6",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2V9UGV0URP",
+            "name": "احمد",
+            "brawler": "buzz",
+            "brawlerTrophies": 258,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LYVU2LVGQ",
+            "name": "a_dem06212",
+            "brawler": "buzz",
+            "brawlerTrophies": 79,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CGPP9QPPL",
+            "name": "©Fantom4ik кчау",
+            "brawler": "poco",
+            "brawlerTrophies": 270,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CGLG2QPLV",
+            "name": "『火』₵ Ɏ ฿ E ℞ X^",
+            "brawler": "lumi",
+            "brawlerTrophies": 216,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UGRQCLPCC",
+            "name": "🌟Kuroshi🌟",
+            "brawler": "lumi",
+            "brawlerTrophies": 507,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "colette",
+            "brawlerTrophies": 62,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LJ29R0VUV",
+            "name": "Meyranıızcnm",
+            "brawler": "colette",
+            "brawlerTrophies": 213,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RUUV22UV8",
+            "name": "BS|HMB|NICO",
+            "brawler": "pam",
+            "brawlerTrophies": 333,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RJ8UUU88R",
+            "name": "😈BERAT😈",
+            "brawler": "angelo",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2LLP92UUC8",
+            "name": "KIZIL IRMAK",
+            "brawler": "angelo",
+            "brawlerTrophies": 11,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-21T11:57:54.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000791,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Acid Lakes"
+      },
+      "result": "Rank 7",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "P0RUC9VR0",
+            "name": "ᴋ͢͢͢ᴎ͟͞ɪ͟͞ԍ͟͞💗",
+            "brawler": "buzz",
+            "brawlerTrophies": 514,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "L8CR2YCQY",
+            "name": "NOEL999",
+            "brawler": "buzz",
+            "brawlerTrophies": 500,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JVQ99G9P",
+            "name": "jose",
+            "brawler": "janet",
+            "brawlerTrophies": 500,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8PY80JLPR",
+            "name": "GX GnoccoFritto",
+            "brawler": "poco",
+            "brawlerTrophies": 1123,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CG8C22G20",
+            "name": "xx.xmarƁÜĻ",
+            "brawler": "poco",
+            "brawlerTrophies": 168,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "Y80LVQ2P2",
+            "name": "Giacomo",
+            "brawler": "lumi",
+            "brawlerTrophies": 306,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "lumi",
+            "brawlerTrophies": 62,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "222JG8UQG",
+            "name": "Jacinto",
+            "brawler": "lumi",
+            "brawlerTrophies": 292,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9U0QYU9VP",
+            "name": "🌺💐Eylül 🎀✨️",
+            "brawler": "pam",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "P8JJ92PY",
+            "name": "C1klo_suso",
+            "brawler": "angelo",
+            "brawlerTrophies": 165,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-21T11:55:20.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000791,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Acid Lakes"
+      },
+      "result": "Rank 9",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2QYGJQVUP",
+            "name": "miya stars",
+            "brawler": "buzz",
+            "brawlerTrophies": 337,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RQ09GC99Y",
+            "name": "MatyJo",
+            "brawler": "buzz",
+            "brawlerTrophies": 168,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "999RY82QJ",
+            "name": "Angel",
+            "brawler": "janet",
+            "brawlerTrophies": 254,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RQYUPC0UY",
+            "name": "SK|DraGon",
+            "brawler": "janet",
+            "brawlerTrophies": 1016,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UJYR0G2G8",
+            "name": "🌴Cristian🌴",
+            "brawler": "poco",
+            "brawlerTrophies": 172,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2Y8LQLG900",
+            "name": "пуш3праём",
+            "brawler": "poco",
+            "brawlerTrophies": 97,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V0PRR00C8",
+            "name": "меч. мира",
+            "brawler": "poco",
+            "brawlerTrophies": 81,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "898JRYU0",
+            "name": "nati💥",
+            "brawler": "pam",
+            "brawlerTrophies": 311,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "angelo",
+            "brawlerTrophies": 62,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2LU9899JC8",
+            "name": "con13ernz",
+            "brawler": "angelo",
+            "brawlerTrophies": 309,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T13:59:42.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000790,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Feast or Famine"
+      },
+      "result": "Rank 6",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2UGRG9CCYV",
+            "name": "Mortis auf die1",
+            "brawler": "glowy",
+            "brawlerTrophies": 429,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "GGRVGY92J",
+            "name": "kawy",
+            "brawler": "berry",
+            "brawlerTrophies": 1011,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2Q29JGVRPV",
+            "name": "oyun canavarı",
+            "brawler": "berry",
+            "brawlerTrophies": 209,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "QVC9V2LR",
+            "name": "GIG|Marlon",
+            "brawler": "berry",
+            "brawlerTrophies": 351,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2P90GRYL",
+            "name": "chupcha pesn",
+            "brawler": "berry",
+            "brawlerTrophies": 522,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "doug",
+            "brawlerTrophies": 526,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QU9802CQP",
+            "name": "TÜRKİYEM BENİM",
+            "brawler": "doug",
+            "brawlerTrophies": 1010,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9G0QUCU2C",
+            "name": "➤ℓᵒˢᵗ|ԋʊռƚɛʀ♬",
+            "brawler": "byron",
+            "brawlerTrophies": 711,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "PL0URPYPC",
+            "name": "bucsii",
+            "brawler": "byron",
+            "brawlerTrophies": 500,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "L28CVL8VQ",
+            "name": "sh♤k◇●♡♧",
+            "brawler": "poco",
+            "brawlerTrophies": 451,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T13:57:35.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000790,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Feast or Famine"
+      },
+      "result": "Rank 7",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "GJ008P8RV",
+            "name": "haltita",
+            "brawler": "glowy",
+            "brawlerTrophies": 405,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2L02RJR288",
+            "name": "wika<3",
+            "brawler": "glowy",
+            "brawlerTrophies": 466,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RCQ8JYQQJ",
+            "name": "🥳🥳🥳🥳🥳🥳",
+            "brawler": "berry",
+            "brawlerTrophies": 87,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UJJCVURCV",
+            "name": "marsal3120",
+            "brawler": "berry",
+            "brawlerTrophies": 1003,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2GC990CJJJ",
+            "name": "The gamer",
+            "brawler": "berry",
+            "brawlerTrophies": 198,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QJ2GGRJ8C",
+            "name": "bjjjj",
+            "brawler": "gus",
+            "brawlerTrophies": 380,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "byron",
+            "brawlerTrophies": 526,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "PY2RJV9G",
+            "name": "The Antoni",
+            "brawler": "byron",
+            "brawlerTrophies": 1125,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "QUUC08JYR",
+            "name": "NIGHT|BLAME",
+            "brawler": "byron",
+            "brawlerTrophies": 1010,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UVCUCGJPL",
+            "name": "Rutra1607",
+            "brawler": "poco",
+            "brawlerTrophies": 313,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T13:51:33.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000790,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Feast or Famine"
+      },
+      "result": "Rank 1",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "glowy",
+            "brawlerTrophies": 526,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2ULPRJPL8R",
+            "name": "Benji",
+            "brawler": "doug",
+            "brawlerTrophies": 279,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UQLPVQVVG",
+            "name": "Pan",
+            "brawler": "gus",
+            "brawlerTrophies": 255,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RUUCGV80P",
+            "name": "niya",
+            "brawler": "gus",
+            "brawlerTrophies": 21,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QVPVVV9VL",
+            "name": "🥀i'm | ethan⛩️",
+            "brawler": "byron",
+            "brawlerTrophies": 823,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CRL802UGP",
+            "name": "ardenkill",
+            "brawler": "byron",
+            "brawlerTrophies": 1006,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CQQG8JUL8",
+            "name": "Ерокс 67",
+            "brawler": "byron",
+            "brawlerTrophies": 297,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2LU8CR9G8R",
+            "name": "Iva",
+            "brawler": "poco",
+            "brawlerTrophies": 315,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UQP808VGP",
+            "name": "❤️‍🔥6️⃣7️⃣🏒",
+            "brawler": "poco",
+            "brawlerTrophies": 326,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VP0CQ09VJ",
+            "name": "imtokyo",
+            "brawler": "poco",
+            "brawlerTrophies": 311,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T07:04:40.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000793,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Double Trouble"
+      },
+      "result": "Rank 1",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "sam",
+            "brawlerTrophies": 448,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YCU0GR80U",
+            "name": "FUT|ARDA",
+            "brawler": "najia",
+            "brawlerTrophies": 335,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "YG0YRVPUP",
+            "name": "YT:Viral Boom",
+            "brawler": "carl",
+            "brawlerTrophies": 301,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8RC0PQ9PR",
+            "name": "HİLECİ 77777777",
+            "brawler": "carl",
+            "brawlerTrophies": 267,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UUVCQ2LQ2",
+            "name": "oylesine",
+            "brawler": "carl",
+            "brawlerTrophies": 368,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RQPGLYRCV",
+            "name": "⚡️🔥kz$🎥",
+            "brawler": "carl",
+            "brawlerTrophies": 310,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YC90QYY8",
+            "name": "YaFo",
+            "brawler": "carl",
+            "brawlerTrophies": 515,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RG0CQG2GP",
+            "name": "bidone",
+            "brawler": "carl",
+            "brawlerTrophies": 1012,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "VPRYP08CG",
+            "name": "૮ ྀིᴗ͈ . ᴗ͈ ྀིა",
+            "brawler": "pearl",
+            "brawlerTrophies": 431,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "QLRPLYVQL",
+            "name": "Funiki13",
+            "brawler": "pearl",
+            "brawlerTrophies": 329,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T07:02:45.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000793,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Double Trouble"
+      },
+      "result": "Rank 8",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2L08URJYR0",
+            "name": "Wynxá🪽",
+            "brawler": "sam",
+            "brawlerTrophies": 564,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2G0JP8LUQ8",
+            "name": "Mr incognito",
+            "brawler": "sam",
+            "brawlerTrophies": 525,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "JGQ8Q0JGQ",
+            "name": "sam",
+            "brawler": "mico",
+            "brawlerTrophies": 1147,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "GPVQPUGVY",
+            "name": "Ystery",
+            "brawler": "najia",
+            "brawlerTrophies": 237,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2GUC2QU90L",
+            "name": "Bs/apple",
+            "brawler": "najia",
+            "brawlerTrophies": 542,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RJ9G2URUU",
+            "name": "Samürai",
+            "brawler": "najia",
+            "brawlerTrophies": 250,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UVQYPQQVR",
+            "name": "METEALİ",
+            "brawler": "melodie",
+            "brawlerTrophies": 188,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "melodie",
+            "brawlerTrophies": 448,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2Y0JV2RU",
+            "name": "Pier",
+            "brawler": "carl",
+            "brawlerTrophies": 645,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "28RG0PYGCY",
+            "name": "Meera🇵🇸",
+            "brawler": "carl",
+            "brawlerTrophies": 488,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T07:00:08.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000793,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Double Trouble"
+      },
+      "result": "Rank 7",
+      "victory": false,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2C8PRC0VRR",
+            "name": "NaviSallyy Navi",
+            "brawler": "sam",
+            "brawlerTrophies": 282,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "ULVUJG2V",
+            "name": "pepa",
+            "brawler": "sam",
+            "brawlerTrophies": 527,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CQ2Y2UP8R",
+            "name": "FUT|MUHAMMED MU",
+            "brawler": "sam",
+            "brawlerTrophies": 0,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UY9Y89CVJ",
+            "name": "hubo pro player",
+            "brawler": "mico",
+            "brawlerTrophies": 274,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UVQU88PUQ",
+            "name": "HMB|saikou",
+            "brawler": "najia",
+            "brawlerTrophies": 2003,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2C2L28CYL2",
+            "name": "FUT/çınar",
+            "brawler": "najia",
+            "brawlerTrophies": 303,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "melodie",
+            "brawlerTrophies": 448,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "22VJCRGP29",
+            "name": "kfjcjfj ji",
+            "brawler": "carl",
+            "brawlerTrophies": 1004,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V92L8CV29",
+            "name": "Avadakedavra",
+            "brawler": "pearl",
+            "brawlerTrophies": 1455,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "QVRG29CCL",
+            "name": "𓆉︎",
+            "brawler": "8-bit",
+            "brawlerTrophies": 1015,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-20T04:58:43.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15000752,
+        "mode": "gunGame",
+        "modeId": 39,
+        "map": "Skull Creek"
+      },
+      "result": "Rank 1",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "ziggy",
+            "brawlerTrophies": 61,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2U80JPUC29",
+            "name": "Brawler",
+            "brawler": "mina",
+            "brawlerTrophies": 1048,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "28JL0GQV0C",
+            "name": "Brawler",
+            "brawler": "alli",
+            "brawlerTrophies": 1048,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2JUVJPJPJG",
+            "name": "Brawler",
+            "brawler": "alli",
+            "brawlerTrophies": 1059,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2LCPRLLCJL",
+            "name": "Brawler",
+            "brawler": "kaze",
+            "brawlerTrophies": 1052,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VPJVPRUL2",
+            "name": "КРУТЫШКА СКУИК",
+            "brawler": "kaze",
+            "brawlerTrophies": 1012,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QY0CYRCVR",
+            "name": "Brawler",
+            "brawler": "kaze",
+            "brawlerTrophies": 1044,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "292R2V8P2Y",
+            "name": "Brawler",
+            "brawler": "kaze",
+            "brawlerTrophies": 1060,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CGRG88P9Q",
+            "name": "tomar753",
+            "brawler": "kaze",
+            "brawlerTrophies": 1047,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YVQ9YGV90",
+            "name": "Brawler",
+            "brawler": "kaze",
+            "brawlerTrophies": 1043,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-18T08:15:33.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001229,
+        "mode": "megaShowdown",
+        "modeId": 75,
+        "map": "Patchwork Peril"
+      },
+      "result": "Rank 10",
+      "victory": true,
+      "trophyChange": null,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "80VQ20P2L8",
+            "name": "pro omer",
+            "brawler": "edgar",
+            "brawlerTrophies": 1120,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V99PJGJU",
+            "name": "Sydney Sweeney",
+            "brawler": "gigi",
+            "brawlerTrophies": 970,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YCURYUPUV",
+            "name": "ζ͜͡⸙м̲ᴀƨ͠ᴛεʀ҂🖤",
+            "brawler": "jacky",
+            "brawlerTrophies": 888,
+            "brawlerRank": null,
+            "brawlerPower": 8,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "Y08L02YVC",
+            "name": "EPHTEIN кира",
+            "brawler": "sirius",
+            "brawlerTrophies": 561,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "C8UJLL0U",
+            "name": "Ghost",
+            "brawler": "gigi",
+            "brawlerTrophies": 483,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "22VJ8PP09J",
+            "name": "milaoaoa",
+            "brawler": "buzz",
+            "brawlerTrophies": 832,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UC98R0C28",
+            "name": "366",
+            "brawler": "shelly",
+            "brawlerTrophies": 1369,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VLCLJ98UV",
+            "name": "пацан на районе",
+            "brawler": "fang",
+            "brawlerTrophies": 1196,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VQCJLG9C8",
+            "name": "ice 🧊",
+            "brawler": "mortis",
+            "brawlerTrophies": 1384,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 692,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2C2QCY2YYR",
+            "name": "mangolufusetea",
+            "brawler": "nori",
+            "brawlerTrophies": 411,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CQ8LQVJQG",
+            "name": "govnozhui228",
+            "brawler": "glowy",
+            "brawlerTrophies": 532,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "PVQ0LJ2RG",
+            "name": "Wendy",
+            "brawler": "starr_nova",
+            "brawlerTrophies": 218,
+            "brawlerRank": null,
+            "brawlerPower": 3,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VRCPQ8VGR",
+            "name": "машкара",
+            "brawler": "shelly",
+            "brawlerTrophies": 1035,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "L9PRC908",
+            "name": "DutkaDak",
+            "brawler": "nori",
+            "brawlerTrophies": 510,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "RPJQPLQR9",
+            "name": "кристини",
+            "brawler": "emz",
+            "brawlerTrophies": 472,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UCJP88CJU",
+            "name": "Pipers",
+            "brawler": "nita",
+            "brawlerTrophies": 894,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UJGJP0CU9",
+            "name": "XUEGLOT 228",
+            "brawler": "kit",
+            "brawlerTrophies": 577,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2PJ2C2GGY8",
+            "name": "Wizard",
+            "brawler": "pearl",
+            "brawlerTrophies": 853,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2YVQVCRG9L",
+            "name": "Anton Pro",
+            "brawler": "nori",
+            "brawlerTrophies": 488,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-18T08:13:10.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001229,
+        "mode": "megaShowdown",
+        "modeId": 75,
+        "map": "Patchwork Peril"
+      },
+      "result": "Rank 3",
+      "victory": true,
+      "trophyChange": 20,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "800RJGG8YL",
+            "name": "Bno",
+            "brawler": "edgar",
+            "brawlerTrophies": 2115,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V0CL2QQU2",
+            "name": "BOO:)",
+            "brawler": "surge",
+            "brawlerTrophies": 1104,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 672,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "P0J8G902V",
+            "name": "anastasiiak",
+            "brawler": "nori",
+            "brawlerTrophies": 409,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QR8QUPLUU",
+            "name": "《 £e●|\\| 》",
+            "brawler": "surge",
+            "brawlerTrophies": 573,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QJJC9R90Q",
+            "name": "Savaşçı",
+            "brawler": "bolt",
+            "brawlerTrophies": 1595,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "R8YJRVCQ",
+            "name": "Mr.Mister",
+            "brawler": "pearl",
+            "brawlerTrophies": 950,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UVJCCU2QQ",
+            "name": "your mommy.",
+            "brawler": "colette",
+            "brawlerTrophies": 1289,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CQ2RC9PGV",
+            "name": "Kajfa",
+            "brawler": "nori",
+            "brawlerTrophies": 771,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CC88P20YY",
+            "name": "AwkwardSpider",
+            "brawler": "vince",
+            "brawlerTrophies": 258,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V9JG8J8P2",
+            "name": "SK/IBINIJUNIOR",
+            "brawler": "rico",
+            "brawlerTrophies": 1376,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "Y2YRGQ28G",
+            "name": "чкпеся",
+            "brawler": "willow",
+            "brawlerTrophies": 908,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9Y2YCVJY9",
+            "name": "TT=/Fuolix",
+            "brawler": "glowy",
+            "brawlerTrophies": 977,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VGG292U20",
+            "name": "SASUKE",
+            "brawler": "edgar",
+            "brawlerTrophies": 2000,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "9L2CQJ0JC",
+            "name": "who's ur daddy",
+            "brawler": "vince",
+            "brawlerTrophies": 404,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2J892GUJUG",
+            "name": "єбанько",
+            "brawler": "kit",
+            "brawlerTrophies": 274,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "Y2LCYQJQC",
+            "name": "52",
+            "brawler": "nori",
+            "brawlerTrophies": 1817,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QC99VQRQP",
+            "name": "xav3524",
+            "brawler": "janet",
+            "brawlerTrophies": 507,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "99VUQ82R",
+            "name": "Vlad",
+            "brawler": "mandy",
+            "brawlerTrophies": 359,
+            "brawlerRank": null,
+            "brawlerPower": 7,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "YGJ2LC2JC",
+            "name": "YaMaha",
+            "brawler": "charlie",
+            "brawlerTrophies": 432,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-18T08:08:51.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001229,
+        "mode": "megaShowdown",
+        "modeId": 75,
+        "map": "Patchwork Peril"
+      },
+      "result": "Rank 7",
+      "victory": true,
+      "trophyChange": 9,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2V908UVJ20",
+            "name": "xyu",
+            "brawler": "griff",
+            "brawlerTrophies": 680,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "PY2CUCJYJ",
+            "name": "Faruk",
+            "brawler": "kit",
+            "brawlerTrophies": 720,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2R820GJ8C2",
+            "name": "PZR|Globus",
+            "brawler": "juju",
+            "brawlerTrophies": 812,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "98J08Q92R",
+            "name": "fallen angel",
+            "brawler": "bibi",
+            "brawlerTrophies": 1434,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2Q09LQ9Q22",
+            "name": "ryba4ina2",
+            "brawler": "barley",
+            "brawlerTrophies": 1019,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "28P8CJUQL0",
+            "name": "zz",
+            "brawler": "kit",
+            "brawlerTrophies": 960,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 663,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VL8G9YJ8P",
+            "name": "Konse",
+            "brawler": "surge",
+            "brawlerTrophies": 237,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VP09LLQQP",
+            "name": "мама",
+            "brawler": "cordelius",
+            "brawlerTrophies": 756,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UUQL0VJ2J",
+            "name": "STG|MISHYZDIN",
+            "brawler": "frank",
+            "brawlerTrophies": 524,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LU0828GUV",
+            "name": "Джем",
+            "brawler": "chester",
+            "brawlerTrophies": 395,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V0YY9PLVP",
+            "name": "Amir Akame",
+            "brawler": "surge",
+            "brawlerTrophies": 1067,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "J09LL0L2C",
+            "name": "€Tørręttõ₴",
+            "brawler": "nori",
+            "brawlerTrophies": 1863,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QUL8GVG9",
+            "name": "lol",
+            "brawler": "alli",
+            "brawlerTrophies": 717,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "20909U98R",
+            "name": "hesaint",
+            "brawler": "shelly",
+            "brawlerTrophies": 459,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "JP908JY9",
+            "name": "Groot",
+            "brawler": "alli",
+            "brawlerTrophies": 714,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8QLC289UR",
+            "name": ">3",
+            "brawler": "otis",
+            "brawlerTrophies": 232,
+            "brawlerRank": null,
+            "brawlerPower": 5,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UYC8V08U2",
+            "name": "§‰±]¡¿/\\",
+            "brawler": "damian",
+            "brawlerTrophies": 694,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2UJ8G2G88U",
+            "name": "rdnkir",
+            "brawler": "sirius",
+            "brawlerTrophies": 1172,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "PUVVCVRGR",
+            "name": "frozen",
+            "brawler": "vince",
+            "brawlerTrophies": 1794,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    },
+    {
+      "timestamp": "2026-11-18T08:03:20.000Z",
+      "ranked": false,
+      "event": {
+        "id": 15001229,
+        "mode": "megaShowdown",
+        "modeId": 75,
+        "map": "Patchwork Peril"
+      },
+      "result": "Rank 6",
+      "victory": true,
+      "trophyChange": 13,
+      "type": "ranked",
+      "duration": null,
+      "starPlayerTag": null,
+      "teams": [
+        [
+          {
+            "tag": "2RQ0YJC82U",
+            "name": "chiefxd",
+            "brawler": "leon",
+            "brawlerTrophies": 609,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2U9U8QQ2RQ",
+            "name": "Sanyaka.",
+            "brawler": "lily",
+            "brawlerTrophies": 774,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VYQ9GPLPR",
+            "name": "Пацанчик🥵",
+            "brawler": "buzz",
+            "brawlerTrophies": 1768,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "U0PJ08Q9",
+            "name": "Raphaela",
+            "brawler": "vince",
+            "brawlerTrophies": 672,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VQR8UL0RJ",
+            "name": "Julia Pencel",
+            "brawler": "gray",
+            "brawlerTrophies": 313,
+            "brawlerRank": null,
+            "brawlerPower": 1,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2RGUQJQ0R",
+            "name": "Cr1mnsx",
+            "brawler": "shade",
+            "brawlerTrophies": 650,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "LQULJJPQ8",
+            "name": "Progasi",
+            "brawler": "kit",
+            "brawlerTrophies": 638,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "Y22PCY0JY",
+            "name": "пес",
+            "brawler": "mico",
+            "brawlerTrophies": 953,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8GPYPQJUC",
+            "name": "Mar3",
+            "brawler": "leon",
+            "brawlerTrophies": 926,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CCRGLP9VL",
+            "name": "Рома",
+            "brawler": "8-bit",
+            "brawlerTrophies": 1199,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CR2Y82JQ0",
+            "name": "edson",
+            "brawler": "vince",
+            "brawlerTrophies": 1241,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2QY22GURGQ",
+            "name": "RM",
+            "brawler": "sirius",
+            "brawlerTrophies": 337,
+            "brawlerRank": null,
+            "brawlerPower": 8,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "8GCPYV2QR",
+            "name": "[бан]koyla🍋",
+            "brawler": "damian",
+            "brawlerTrophies": 645,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "80289G98Y2",
+            "name": "ПАМПУШКА ЭДГАР",
+            "brawler": "edgar",
+            "brawlerTrophies": 913,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2890VRCJ2",
+            "name": "Prizrak",
+            "brawler": "kit",
+            "brawlerTrophies": 453,
+            "brawlerRank": null,
+            "brawlerPower": 11,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2V2U822P00",
+            "name": "СПИДРАН 500 К",
+            "brawler": "brock",
+            "brawlerTrophies": 1261,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2VQJ09C2PY",
+            "name": "Крутая🫶🏻",
+            "brawler": "edgar",
+            "brawlerTrophies": 1207,
+            "brawlerRank": null,
+            "brawlerPower": 10,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "28V9YRLQ9J",
+            "name": "vanjsk1i",
+            "brawler": "bibi",
+            "brawlerTrophies": 684,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "2CY2LQ2Y2V",
+            "name": "KOMA🤫🇬🇪",
+            "brawler": "kaze",
+            "brawlerTrophies": 1192,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ],
+        [
+          {
+            "tag": "QGR2RYPUY",
+            "name": "друн",
+            "brawler": "kit",
+            "brawlerTrophies": 514,
+            "brawlerRank": null,
+            "brawlerPower": 9,
+            "stats": null,
+            "bannedBrawler": null
+          }
+        ]
+      ]
+    }
+  ],
+  "popularProfile": null,
+  "premium": false
+}

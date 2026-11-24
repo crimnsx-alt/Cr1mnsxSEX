@@ -1,6 +1,6 @@
 /**
- * Data for "Влад клевые машины" (2026) series from https://mafanya.sex/series/vlad-klevye-mashiny
- * 16 episodes, 3 seasons of IRL meetings, official ratings, trailer, cast, photos and series links.
+ * Data for "Влад клевые машины" (2026) series
+ * 16 episodes, 3 seasons of IRL meetings, official ratings, trailer, cast, and photos.
  */
 
 export const VLAD_SERIES_INFO = {
@@ -15,11 +15,11 @@ export const VLAD_SERIES_INFO = {
   ratingsCount: 289,
   poster: "assets/series/vlad_poster.webp",
   backdrop: "assets/bg_mafanya_vlad.webp",
-  trailerUrl: "https://cdn.mafanya.sex/media/ffeb91f61f23509c94cb9a657aff8323.mp4",
-  trailerPoster: "https://cdn.mafanya.sex/media/86687c5bc36ed32b0f04b3cbf658c433.webp",
+  trailerUrl: "assets/series/vlad_trailer.mp4",
+  trailerPoster: "assets/series/vlad_trailer_poster.webp",
   trailerDuration: "0:45",
   description: "Всё начинается с обычного пранка, который должен был закончиться одним стримом. Но после знакомства Влада с Мафаней всё идёт совсем не по плану. Новые знакомства, конфликты и неожиданные события постепенно превращают отдельные стримы в одну большую историю. Влад становится постоянным героем этого лора, проходит через множество странных ситуаций и постепенно превращается из «Влада Клёвые Тачки» в того, кого сегодня знают как Диора Армани. То, что начиналось как обычный пранк, со временем становится полноценной историей со своими героями, событиями и продолжением.",
-  officialUrl: "https://mafanya.sex/series/vlad-klevye-mashiny"
+  officialUrl: ""
 };
 
 export const VLAD_SEASONS = [
@@ -251,23 +251,23 @@ export const VLAD_CAST = [
   {
     name: "Мафаня",
     role: "Главный герой · Илья Фомин",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_mafanya.webp",
-    link: "https://mafanya.sex/u/mafanya"
+    link: "https://www.twitch.tv/mafanyaking"
   },
   {
     name: "Лёня Пудж",
     role: "Друг / Соратник",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_lenya.webp",
-    link: "https://mafanya.sex/u/lenyapudge"
+    link: "https://www.twitch.tv/lenyapudge"
   },
   {
     name: "Максимка",
     role: "Участник лора",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_maksimka.webp",
-    link: "https://mafanya.sex/u/maxemo4ka"
+    link: ""
   },
   {
     name: "Каша",
@@ -286,9 +286,9 @@ export const VLAD_CAST = [
   {
     name: "Зеля",
     role: "Владос Занос",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_zelya.webp",
-    link: "https://mafanya.sex/u/vlados-zanos"
+    link: ""
   },
   {
     name: "Некоглай",
@@ -300,16 +300,16 @@ export const VLAD_CAST = [
   {
     name: "Ульяна",
     role: "Уля / Стример",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_ulyana.webp",
-    link: "https://mafanya.sex/u/ulyalin4ik"
+    link: ""
   },
   {
     name: "Бугор",
     role: "Yung Hata",
-    status: "аккаунт на сайте",
+    status: "актер сериала",
     photo: "assets/series/cast_bugor.webp",
-    link: "https://mafanya.sex/u/yung-hata"
+    link: "https://www.twitch.tv/bugorpro"
   },
   {
     name: "Максос",
@@ -340,15 +340,4 @@ export const VLAD_PHOTOS = [
   "assets/series/vlad_photo_3.webp",
   "assets/series/vlad_photo_4.webp",
   "assets/series/vlad_photo_5.webp"
-];
-
-export const OTHER_SERIES = [
-  {
-    id: "zaklyatie-lizki",
-    title: "Заклятие Лизки",
-    year: 2021,
-    rating: 8.7,
-    poster: "assets/series/zaklyatie_poster.webp",
-    url: "https://mafanya.sex/series/zaklyatie-lizki"
-  }
 ];

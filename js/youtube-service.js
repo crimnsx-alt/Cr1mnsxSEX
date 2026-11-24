@@ -11,8 +11,7 @@ import {
   VLAD_SERIES_INFO,
   VLAD_SEASONS,
   VLAD_CAST,
-  VLAD_PHOTOS,
-  OTHER_SERIES
+  VLAD_PHOTOS
 } from "./vlad-series-data.js";
 
 const STORAGE_KEY = "ps5_youtube_videos_v2";
@@ -448,7 +447,7 @@ class YouTubeCinemaService {
   }
 
   // ============================================================
-  // SERIES HUB METHODS ("Влад клевые машины" from mafanya.sex)
+  // SERIES HUB METHODS ("Влад клевые машины")
   // ============================================================
   updateModeIndicator() {
     requestAnimationFrame(() => {

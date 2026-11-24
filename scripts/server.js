@@ -43,6 +43,37 @@ const server = http.createServer((req, res) => {
   }
 
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
+
+  // Dedicated Brawl Stars Ninja live data proxy endpoint
+  if (reqPath === '/api/brawl/player') {
+    const ninjaUrl = 'https://brawltime.ninja/api/trpc/player.byTag?input=%7B%22json%22%3A%222RGUQJQ0R%22%7D';
+    fetch(ninjaUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+        'Accept': 'application/json'
+      }
+    })
+      .then(async (apiRes) => {
+        if (!apiRes.ok) throw new Error(`Ninja API responded with ${apiRes.status}`);
+        const data = await apiRes.json();
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(data));
+      })
+      .catch((err) => {
+        console.warn('[Proxy Fallback] Live fetch failed, serving initial_player_data.json:', err.message);
+        const fallbackPath = path.join(ROOT_DIR, 'assets', 'brawl', 'initial_player_data.json');
+        if (fs.existsSync(fallbackPath)) {
+          const content = fs.readFileSync(fallbackPath, 'utf8');
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(content);
+        } else {
+          res.writeHead(502, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: err.message }));
+        }
+      });
+    return;
+  }
+
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
   }
