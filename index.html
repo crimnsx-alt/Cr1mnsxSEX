@@ -610,6 +610,19 @@
             <span class="youtube-cb-telemetry" id="ytTelemetryText">5 видео · 4K UHD · Автообновление</span>
           </div>
 
+          <!-- Mode Switcher: YouTube Cinema vs "Влад клевые машины" Series Hub -->
+          <div class="youtube-mode-tabs" role="tablist" aria-label="Разделы контента Мафани">
+            <button type="button" class="yt-mode-tab is-active" id="btnYtModeCinema" role="tab" aria-selected="true" aria-controls="ps5YoutubeCinemaLayout">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <span>Видеотека YouTube</span>
+            </button>
+            <button type="button" class="yt-mode-tab" id="btnYtModeSeries" role="tab" aria-selected="false" aria-controls="ps5YoutubeSeriesLayout">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+              <span>Сериал: Влад клевые машины</span>
+              <span class="yt-series-chip">9.6★</span>
+            </button>
+          </div>
+
           <div class="youtube-cb-right">
             <button type="button" class="youtube-cb-btn" id="btnYoutubeSync" title="Проверить наличие новых видео на канале">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
@@ -626,8 +639,8 @@
           </div>
         </div>
 
-        <!-- Main Studio Grid (Center Cinema Stage + Right Playlist) -->
-        <div class="ps5-youtube-stage-layout">
+        <!-- Mode 1: Main Studio Grid (Center Cinema Stage + Right Playlist) -->
+        <div class="ps5-youtube-stage-layout" id="ps5YoutubeCinemaLayout">
           <!-- Center Cinema Player Stage -->
           <section class="youtube-inline-cinema-stage">
             <div class="youtube-inline-player-box" id="youtubeInlinePlayerBox">
@@ -679,6 +692,130 @@
               <!-- Dynamically populated video cards -->
             </div>
           </aside>
+        </div>
+
+        <!-- Mode 2: PS5 SERIES VIEW: "ВЛАД КЛЕВЫЕ МАШИНЫ" (mafanya.sex) -->
+        <div class="ps5-series-layout" id="ps5YoutubeSeriesLayout" hidden>
+          <div class="series-scroll-container" id="seriesScrollContainer">
+            <!-- Hero Header: 3D Poster, Meta, Synopsis, Actions -->
+            <section class="series-hero-card">
+              <div class="series-poster-wrap">
+                <img src="assets/series/vlad_poster.webp" alt="Влад клевые машины" class="series-poster-img" />
+                <span class="series-poster-badge">16+</span>
+              </div>
+              <div class="series-hero-content">
+                <div class="series-badge-row">
+                  <span class="series-pill-year">2026</span>
+                  <span class="series-pill-count">16 СТРИМОВ</span>
+                  <span class="series-pill-rating">★ 9.6 / 10 · 289 оценок зрителей</span>
+                  <span class="series-pill-cat">СЕРИАЛ</span>
+                </div>
+                <h2 class="series-hero-title">Влад клевые машины</h2>
+                <p class="series-hero-desc">
+                  Всё начинается с обычного пранка, который должен был закончиться одним стримом. Но после знакомства Влада с Мафаней всё идёт совсем не по плану. Новые знакомства, конфликты и неожиданные события постепенно превращают отдельные стримы в одну большую историю. Влад становится постоянным героем этого лора, проходит через множество странных ситуаций и постепенно превращается из «Влада Клёвые Тачки» в того, кого сегодня знают как Диора Армани. То, что начиналось как обычный пранк, со временем становится полноценной историей со своими героями, событиями и продолжением.
+                </p>
+                <div class="series-hero-actions">
+                  <button type="button" class="series-action-btn primary" id="btnPlaySeriesTrailer">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>Смотреть трейлер</span>
+                    <span class="series-btn-sub">0:45</span>
+                  </button>
+                  <button type="button" class="series-action-btn" id="btnSeriesRecap1">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff0000"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>1 часть лора</span>
+                  </button>
+                  <button type="button" class="series-action-btn" id="btnSeriesRecap2">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff0000"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>2 часть лора</span>
+                  </button>
+                  <button type="button" class="series-action-btn" id="btnSeriesRecap3">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff0000"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <span>3 часть (Финал)</span>
+                  </button>
+                  <a href="https://mafanya.sex/series/vlad-klevye-mashiny" target="_blank" rel="noopener" class="series-action-btn ghost">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    <span>mafanya.sex</span>
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            <!-- Section 2: All IRL Meetings & Episodes Grid -->
+            <section class="series-episodes-section">
+              <div class="series-section-header">
+                <div class="series-sec-title-wrap">
+                  <span class="series-marker"></span>
+                  <h3 class="series-sec-heading">Все ирл встречи и их видео итоги</h3>
+                </div>
+                <div class="series-season-filter-pills" id="seriesSeasonFilter">
+                  <button type="button" class="series-filter-pill is-active" data-season="all">Все (16)</button>
+                  <button type="button" class="series-filter-pill" data-season="1">Сезон 1 (9)</button>
+                  <button type="button" class="series-filter-pill" data-season="2">Сезон 2 (3)</button>
+                  <button type="button" class="series-filter-pill" data-season="3">Сезон 3 (4)</button>
+                </div>
+              </div>
+
+              <!-- Episodes Grid Container -->
+              <div class="series-episodes-grid" id="seriesEpisodesGrid">
+                <!-- Dynamically populated from VLAD_SEASONS -->
+              </div>
+            </section>
+
+            <!-- Section 3: Cast Members (12 actors) -->
+            <section class="series-cast-section">
+              <div class="series-section-header">
+                <div class="series-sec-title-wrap">
+                  <span class="series-marker"></span>
+                  <h3 class="series-sec-heading">Актерский состав сериала</h3>
+                </div>
+                <span class="series-sec-sub">12 участников</span>
+              </div>
+              <div class="series-cast-scroll" id="seriesCastList">
+                <!-- Dynamically populated from VLAD_CAST -->
+              </div>
+            </section>
+
+            <!-- Section 4: Photo Gallery & Other Series -->
+            <div class="series-photos-and-more-grid">
+              <!-- Photos -->
+              <section class="series-photos-section">
+                <div class="series-section-header">
+                  <div class="series-sec-title-wrap">
+                    <span class="series-marker"></span>
+                    <h3 class="series-sec-heading">Фотографии со съемок</h3>
+                  </div>
+                  <span class="series-sec-sub">5 кадров</span>
+                </div>
+                <div class="series-photos-row" id="seriesPhotosRow">
+                  <!-- Photos from VLAD_PHOTOS -->
+                </div>
+              </section>
+
+              <!-- Other Series -->
+              <section class="series-other-section">
+                <div class="series-section-header">
+                  <div class="series-sec-title-wrap">
+                    <span class="series-marker"></span>
+                    <h3 class="series-sec-heading">Другие сериалы</h3>
+                  </div>
+                </div>
+                <div class="series-other-card">
+                  <div class="series-other-thumb">
+                    <img src="assets/series/zaklyatie_poster.webp" alt="Заклятие Лизки" />
+                    <span class="series-other-rating">★ 8.7</span>
+                  </div>
+                  <div class="series-other-info">
+                    <h4 class="series-other-title">Заклятие Лизки (2021)</h4>
+                    <p class="series-other-sub">Культовый сериал Ильи Мафани</p>
+                    <a href="https://mafanya.sex/series/zaklyatie-lizki" target="_blank" rel="noopener" class="series-other-link">
+                      <span>Открыть на mafanya.sex</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
         </div>
       </main>
 
@@ -1605,6 +1742,46 @@
           <h4 class="yt-hub-pl-heading">Все видеоролики канала (@Mafanya122)</h4>
           <div class="youtube-hub-playlist" id="youtubeHubPlaylist">
             <!-- Playlist items injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: VLAD SERIES TRAILER CINEMA DIALOG -->
+  <div class="modal-sber-tips modal-tc-fullscreen modal-youtube-fullscreen modal-series-trailer" id="modalSeriesTrailer" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="seriesTrailerBackdrop"></div>
+    <div class="tc-dialog-box youtube-dialog-box series-trailer-dialog-box" role="dialog" aria-modal="true" aria-labelledby="seriesTrailerTitle">
+      <div class="tc-top-bar youtube-top-bar">
+        <div class="tc-top-brand">
+          <div class="youtube-brand-tag-row">
+            <span class="tc-brand-tag">PLAYSTATION® SERIES CINEMA</span>
+            <span class="youtube-hd-pill">1080P FHD</span>
+          </div>
+          <h2 class="tc-brand-title" id="seriesTrailerTitle">Влад клевые машины · Официальный трейлер</h2>
+        </div>
+        <div class="tc-top-actions">
+          <a href="https://mafanya.sex/series/vlad-klevye-mashiny" target="_blank" rel="noopener" class="tc-btn-action" title="Открыть сериал на mafanya.sex">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>mafanya.sex</span>
+          </a>
+          <button type="button" class="sber-tips-close-btn" id="btnSeriesTrailerClose" title="Закрыть (Esc)">✕</button>
+        </div>
+      </div>
+      <div class="series-trailer-body">
+        <div class="series-trailer-player-wrap" id="seriesTrailerPlayerWrap">
+          <!-- Video element injected dynamically -->
+        </div>
+        <div class="series-trailer-info-bar">
+          <div class="series-trailer-info-meta">
+            <h3 class="series-trailer-meta-title">«Влад клевые машины» (2026) · Официальный промо-трейлер</h3>
+            <p class="series-trailer-meta-desc">16 стримов, 3 сезона, история превращения в Диора Армани. Рейтинг 9.6 / 10 по оценкам 289 зрителей.</p>
+          </div>
+          <div class="series-trailer-actions">
+            <button type="button" class="series-trailer-btn-recap" id="btnTrailerWatchRecap1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span>Смотреть 1 часть лора</span>
+            </button>
           </div>
         </div>
       </div>

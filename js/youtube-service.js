@@ -3,9 +3,17 @@
  * Features real-time video library for channel @Mafanya122 (МАФАНЯ КИНГ),
  * automated RSS feed polling for new uploads, cinema player,
  * ambient aura backlighting, and instant 0ms cached loading.
+ * Also powers "Влад клевые машины" Series Hub (16 streams, 3 seasons, cast, photos).
  */
 
 import { SoundEngine } from "./sound.js";
+import {
+  VLAD_SERIES_INFO,
+  VLAD_SEASONS,
+  VLAD_CAST,
+  VLAD_PHOTOS,
+  OTHER_SERIES
+} from "./vlad-series-data.js";
 
 const STORAGE_KEY = "ps5_youtube_videos_v2";
 const CACHE_KEY = "ps5_youtube_cache_v2";
@@ -87,6 +95,9 @@ class YouTubeCinemaService {
     this.showToastCallback = null;
     this._isSyncing = false;
     this.syncTimer = null;
+    this.currentMode = "cinema"; // "cinema" | "series"
+    this.activeSeasonFilter = "all"; // "all" | "1" | "2" | "3"
+    this.isTrailerOpen = false;
   }
 
   setToastHandler(fn) {
@@ -284,6 +295,7 @@ class YouTubeCinemaService {
 
   stopInlineStage() {
     this.isInlineActive = false;
+    this.closeTrailer(false);
     const view = document.getElementById("ps5YoutubeView");
     if (view) view.hidden = true;
 
@@ -426,6 +438,195 @@ class YouTubeCinemaService {
   }
 
   // ============================================================
+  // SERIES HUB METHODS ("Влад клевые машины" from mafanya.sex)
+  // ============================================================
+  switchMode(mode) {
+    this.currentMode = mode;
+    SoundEngine.focusMove();
+
+    const cinemaBtn = document.getElementById("btnYtModeCinema");
+    const seriesBtn = document.getElementById("btnYtModeSeries");
+    const cinemaLayout = document.getElementById("ps5YoutubeCinemaLayout");
+    const seriesLayout = document.getElementById("ps5YoutubeSeriesLayout");
+
+    if (mode === "cinema") {
+      cinemaBtn?.classList.add("is-active");
+      cinemaBtn?.setAttribute("aria-selected", "true");
+      seriesBtn?.classList.remove("is-active");
+      seriesBtn?.setAttribute("aria-selected", "false");
+
+      if (cinemaLayout) cinemaLayout.hidden = false;
+      if (seriesLayout) seriesLayout.hidden = true;
+
+      const tele = document.getElementById("ytTelemetryText");
+      if (tele) tele.textContent = `${this.videos.length} видео · 4K UHD · Автообновление`;
+    } else {
+      seriesBtn?.classList.add("is-active");
+      seriesBtn?.setAttribute("aria-selected", "true");
+      cinemaBtn?.classList.remove("is-active");
+      cinemaBtn?.setAttribute("aria-selected", "false");
+
+      if (cinemaLayout) cinemaLayout.hidden = true;
+      if (seriesLayout) seriesLayout.hidden = false;
+
+      const tele = document.getElementById("ytTelemetryText");
+      if (tele) tele.textContent = "16 стримов · 3 сезона · Рейтинг 9.6★";
+
+      this.renderSeriesView();
+    }
+  }
+
+  renderSeriesView() {
+    this.renderSeriesEpisodes();
+    this.renderSeriesCast();
+    this.renderSeriesPhotos();
+  }
+
+  renderSeriesEpisodes() {
+    const grid = document.getElementById("seriesEpisodesGrid");
+    if (!grid) return;
+
+    let seasonsToRender = VLAD_SEASONS;
+    if (this.activeSeasonFilter !== "all") {
+      const sNum = parseInt(this.activeSeasonFilter, 10);
+      seasonsToRender = VLAD_SEASONS.filter((s) => s.seasonNumber === sNum);
+    }
+
+    let allEps = [];
+    seasonsToRender.forEach((s) => {
+      s.episodes.forEach((ep) => {
+        allEps.push({
+          ...ep,
+          seasonNumber: s.seasonNumber,
+          recapYoutubeId: s.recapYoutubeId,
+          recapTitle: s.recapTitle
+        });
+      });
+    });
+
+    grid.innerHTML = allEps
+      .map((ep) => {
+        const badgeClass =
+          ep.tier === "legendary"
+            ? "badge-legendary"
+            : ep.tier === "great"
+            ? "badge-great"
+            : "badge-good";
+        return `
+          <div class="series-ep-card" data-slug="${ep.slug}">
+            <div class="series-ep-top">
+              <span class="series-ep-rating-badge ${badgeClass}">${ep.rating.toFixed(1)} ★ ${ep.tierLabel}</span>
+              <span class="series-ep-season-badge">Сезон ${ep.seasonNumber} · Серия ${ep.number}</span>
+            </div>
+            <h4 class="series-ep-title">${ep.title}</h4>
+            <div class="series-ep-meta-row">
+              <span>⏱ ${ep.duration} мин</span>
+              <span>👥 ${ep.votes} оценок</span>
+            </div>
+            <div class="series-ep-actions">
+              <a href="${ep.vkUrl}" target="_blank" rel="noopener" class="series-ep-btn vk" title="Смотреть трансляцию на VK Видео">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.785 17.75c-6.19 0-9.72-4.24-9.87-11.3h3.09c.1 5.18 2.39 7.38 4.2 7.83V6.45h2.91v4.47c1.78-.19 3.65-2.22 4.28-4.47h2.91c-.49 2.76-2.52 4.79-3.97 5.63 1.45.68 3.76 2.45 4.64 5.67h-3.21c-.69-2.16-2.42-3.83-4.7-3.95v3.95h-.24z"/></svg>
+                <span>VK Видео</span>
+              </a>
+              <a href="${ep.tgUrl}" target="_blank" rel="noopener" class="series-ep-btn tg" title="Смотреть запись в Telegram">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 0 0-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.52 2.77-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+                <span>Telegram</span>
+              </a>
+            </div>
+          </div>
+        `;
+      })
+      .join("");
+  }
+
+  renderSeriesCast() {
+    const container = document.getElementById("seriesCastList");
+    if (!container) return;
+
+    container.innerHTML = VLAD_CAST
+      .map((c) => {
+        const linkAttr = c.link ? `href="${c.link}" target="_blank" rel="noopener"` : `role="article"`;
+        const tag = c.link ? "a" : "div";
+        return `
+          <${tag} ${linkAttr} class="series-cast-card" title="${c.name} — ${c.role}">
+            <div class="series-cast-thumb-wrap">
+              <img src="${c.photo}" alt="${c.name}" loading="lazy" decoding="async" />
+            </div>
+            <h5 class="series-cast-name">${c.name}</h5>
+            <span class="series-cast-role">${c.role}</span>
+          </${tag}>
+        `;
+      })
+      .join("");
+  }
+
+  renderSeriesPhotos() {
+    const row = document.getElementById("seriesPhotosRow");
+    if (!row) return;
+
+    row.innerHTML = VLAD_PHOTOS
+      .map((p, idx) => `
+        <div class="series-photo-card" role="button" tabindex="0" title="Кадр со съемок #${idx + 1}">
+          <img src="${p}" alt="Кадр со съемок #${idx + 1}" loading="lazy" decoding="async" />
+        </div>
+      `)
+      .join("");
+
+    row.querySelectorAll(".series-photo-card").forEach((card, idx) => {
+      card.addEventListener("click", () => {
+        SoundEngine.focusMove();
+        window.open(VLAD_PHOTOS[idx], "_blank", "noopener");
+      });
+    });
+  }
+
+  openTrailer() {
+    this.isTrailerOpen = true;
+    const modal = document.getElementById("modalSeriesTrailer");
+    const wrap = document.getElementById("seriesTrailerPlayerWrap");
+    if (!modal || !wrap) return;
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    SoundEngine.openDialog();
+
+    wrap.innerHTML = `
+      <video
+        src="${VLAD_SERIES_INFO.trailerUrl}"
+        poster="${VLAD_SERIES_INFO.trailerPoster}"
+        controls
+        autoplay
+        playsinline
+        preload="auto"
+        style="width: 100%; height: 100%; object-fit: contain; background: #000;">
+      </video>
+    `;
+  }
+
+  closeTrailer(withSound = true) {
+    const wasOpen = this.isTrailerOpen;
+    this.isTrailerOpen = false;
+    const modal = document.getElementById("modalSeriesTrailer");
+    const wrap = document.getElementById("seriesTrailerPlayerWrap");
+    if (!modal) return;
+
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    if (withSound && wasOpen) {
+      SoundEngine.modalClose();
+    }
+
+    if (wrap) {
+      const vid = wrap.querySelector("video");
+      if (vid) {
+        vid.pause();
+        vid.src = "";
+      }
+      wrap.innerHTML = "";
+    }
+  }
+
+  // ============================================================
   // FULLSCREEN CINEMA MODAL
   // ============================================================
   openHub(initialVideoId = null) {
@@ -444,14 +645,17 @@ class YouTubeCinemaService {
     this.renderHubPlayer();
   }
 
-  closeHub() {
+  closeHub(withSound = true) {
+    const wasActive = this.isHubActive;
     this.isHubActive = false;
     const modal = document.getElementById("modalYoutubeHub");
     if (!modal) return;
 
     modal.classList.remove("active");
     modal.setAttribute("aria-hidden", "true");
-    SoundEngine.closeDialog();
+    if (withSound && wasActive) {
+      SoundEngine.modalClose();
+    }
 
     const wrap = document.getElementById("youtubeHubPlayerWrap");
     if (wrap) wrap.innerHTML = "";
@@ -529,6 +733,14 @@ class YouTubeCinemaService {
   }
 
   init() {
+    // Mode switcher
+    document.getElementById("btnYtModeCinema")?.addEventListener("click", () => {
+      this.switchMode("cinema");
+    });
+    document.getElementById("btnYtModeSeries")?.addEventListener("click", () => {
+      this.switchMode("series");
+    });
+
     // Top bar actions
     document.getElementById("btnYoutubeSync")?.addEventListener("click", () => {
       SoundEngine.confirm();
@@ -543,12 +755,61 @@ class YouTubeCinemaService {
       window.open(MAFANYA_CHANNEL_URL, "_blank", "noopener");
     });
 
-    // Modal controls
+    // Modal controls (YouTube Hub)
     document.getElementById("btnYoutubeHubClose")?.addEventListener("click", () => this.closeHub());
     document.getElementById("youtubeHubBackdrop")?.addEventListener("click", () => this.closeHub());
     document.getElementById("btnYoutubeHubExt")?.addEventListener("click", () => {
       const v = this.getActiveVideo();
       window.open(v.url, "_blank", "noopener");
+    });
+
+    // Series Trailer Modal controls
+    document.getElementById("btnPlaySeriesTrailer")?.addEventListener("click", () => {
+      this.openTrailer();
+    });
+    document.querySelector(".series-poster-wrap")?.addEventListener("click", () => {
+      this.openTrailer();
+    });
+    document.getElementById("btnSeriesTrailerClose")?.addEventListener("click", () => {
+      this.closeTrailer();
+    });
+    document.getElementById("seriesTrailerBackdrop")?.addEventListener("click", () => {
+      this.closeTrailer();
+    });
+
+    // Series Recap Launch Buttons
+    document.getElementById("btnSeriesRecap1")?.addEventListener("click", () => {
+      SoundEngine.confirm();
+      this.switchMode("cinema");
+      this.selectVideo("FGy7KWr7BrM");
+    });
+    document.getElementById("btnSeriesRecap2")?.addEventListener("click", () => {
+      SoundEngine.confirm();
+      this.switchMode("cinema");
+      this.selectVideo("R-ILS0pketc");
+    });
+    document.getElementById("btnSeriesRecap3")?.addEventListener("click", () => {
+      SoundEngine.confirm();
+      this.switchMode("cinema");
+      this.selectVideo("Z9A2LxrRjuk");
+    });
+    document.getElementById("btnTrailerWatchRecap1")?.addEventListener("click", () => {
+      this.closeTrailer();
+      this.switchMode("cinema");
+      this.selectVideo("FGy7KWr7BrM");
+    });
+
+    // Season Filter Pills
+    document.querySelectorAll("#seriesSeasonFilter .series-filter-pill").forEach((pill) => {
+      pill.addEventListener("click", () => {
+        SoundEngine.focusMove();
+        const season = pill.dataset.season;
+        this.activeSeasonFilter = season;
+        document.querySelectorAll("#seriesSeasonFilter .series-filter-pill").forEach((p) => {
+          p.classList.toggle("is-active", p.dataset.season === season);
+        });
+        this.renderSeriesEpisodes();
+      });
     });
 
     // Background sync on init

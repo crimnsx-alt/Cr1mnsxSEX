@@ -3914,6 +3914,7 @@ function handleKeydown(e) {
   const tcDetailOpen = $("#modalGameTrophiesDetail") && $("#modalGameTrophiesDetail").classList.contains("active");
   const twitchOpen = $("#modalTwitchHub") && $("#modalTwitchHub").classList.contains("active");
   const youtubeOpen = $("#modalYoutubeHub") && $("#modalYoutubeHub").classList.contains("active");
+  const trailerOpen = $("#modalSeriesTrailer") && $("#modalSeriesTrailer").classList.contains("active");
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
     if (e.key === "Backspace") {
@@ -3934,6 +3935,10 @@ function handleKeydown(e) {
     }
     if (youtubeOpen) {
       youtubeService.closeHub();
+      return;
+    }
+    if (trailerOpen) {
+      youtubeService.closeTrailer();
       return;
     }
     if (tcDetailOpen) {
@@ -5352,6 +5357,10 @@ function init() {
       switchCategory("media");
       selectTile("youtube", false);
       youtubeService.openHub();
+    } else if (initialHash === "vlad" || initialHash === "series" || initialHash === "vlad-klevye-mashiny") {
+      switchCategory("media");
+      selectTile("youtube", false);
+      youtubeService.switchMode("series");
     } else if (initialHash.startsWith("youtube-video-") || initialHash.startsWith("yt-")) {
       const vid = initialHash.replace(/^youtube-video-|^yt-/, "");
       switchCategory("media");
