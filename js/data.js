@@ -565,7 +565,7 @@ export const settingsSections = [
     title: { ru: "Пользователи и учетные записи", en: "Users and Accounts" },
     icon: PS5Icons.profile,
     items: [
-      { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Player 1 (PS5)", action: "modal:psn" },
+      { label: { ru: "Активная учетная запись", en: "Active Account" }, val: "Cr1mnsx (PS5)", action: "modal:psn" },
       { label: { ru: "Сетевой статус", en: "Online Status" }, val: { ru: "Статус не проверен", en: "Status unverified" } }
     ]
   },

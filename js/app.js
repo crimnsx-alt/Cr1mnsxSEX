@@ -708,7 +708,7 @@ function applyLanguageAndTelemetry() {
   }
 
   // Profile Identity & Greeting on Welcome Hub
-  const onlineId = prof?.onlineId || "Player 1";
+  const onlineId = prof?.onlineId || "Cr1mnsx";
   if ($("#lblWelcomeHeroTitle")) {
     $("#lblWelcomeHeroTitle").textContent = state.lang === "ru" ? `С возвращением, ${onlineId}` : `Welcome back, ${onlineId}`;
   }
@@ -834,6 +834,8 @@ function selectTile(tileId, withSound = true) {
   renderRibbon();
   renderActiveView();
 }
+window.selectTile = selectTile;
+window.switchCategory = switchCategory;
 
 // ============================================================
 // View Stage Switcher (Welcome Hub | Explore | Game Home)
@@ -2497,7 +2499,7 @@ function renderTrophyCollectionModal() {
   // Profile Identity
   const avatarEl = $("#tcProfileAvatar");
   if (avatarEl && profile.avatarUrl) avatarEl.src = profile.avatarUrl;
-  $("#tcProfileOnlineId").textContent = profile.onlineId || "Player 1";
+  $("#tcProfileOnlineId").textContent = profile.onlineId || "Cr1mnsx";
 
   const pill = $("#tcSyncPill");
   if (pill) {
@@ -5453,6 +5455,21 @@ function init() {
       }
     }
   }
+
+  window.openSettings = openSettings;
+  window.closeSettings = closeSettings;
+  window.openSearch = openSearch;
+  window.closeSearch = closeSearch;
+  window.openControlCenter = () => { if (!state.isControlCenterOpen) toggleControlCenter(); };
+  window.closeControlCenter = closeControlCenter;
+  window.toggleControlCenter = toggleControlCenter;
+  window.openTrophyCollectionModal = openTrophyCollectionModal;
+  window.closeTrophyCollectionModal = closeTrophyCollectionModal;
+  window.openGameHub = openGameHub;
+  window.closeGameHub = closeGameHub;
+  window.youtubeService = youtubeService;
+  window.twitchService = twitchService;
+  window.brawlService = brawlService;
 
   window.addEventListener("resize", () => {
     updateNavTabIndicator();

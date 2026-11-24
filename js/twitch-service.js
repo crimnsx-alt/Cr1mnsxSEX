@@ -956,7 +956,7 @@ class TwitchBroadcastService {
 
     modal.classList.remove("active");
     modal.setAttribute("aria-hidden", "true");
-    SoundEngine.closeDialog();
+    SoundEngine.modalClose();
 
     const pWrap = document.getElementById("twitchIframeWrap");
     if (pWrap) pWrap.innerHTML = "";
@@ -1175,7 +1175,7 @@ class TwitchBroadcastService {
     // ------------------------------------------------------------
     document.getElementById("btnTwitchPipExpand")?.addEventListener("click", () => this.expandPip());
     document.getElementById("btnTwitchPipClose")?.addEventListener("click", () => {
-      SoundEngine.closeDialog();
+      SoundEngine.modalClose();
       this.closePip(true);
     });
 

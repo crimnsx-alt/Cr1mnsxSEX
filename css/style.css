@@ -967,10 +967,14 @@ body.hub-active .ps5-screen {
   flex: 66 1 0;
   min-height: 0;
   height: auto;
-  padding: 1.8vh 1.3vw;
+  padding: 1.2vh 1.2vw;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.ps5-widget--friends:has(.ps5-friends-empty) #btnOpenAddFriend {
+  display: none !important;
 }
 
 .ps5-friends-online-badge {
@@ -4295,6 +4299,15 @@ body.hub-active .stage-game-hub {
   box-shadow: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.7), 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
+.tc-top-actions .sber-tips-close-btn,
+.tc-top-bar .sber-tips-close-btn,
+.youtube-hub-topbar .sber-tips-close-btn,
+.twitch-hub-topbar .sber-tips-close-btn {
+  position: static !important;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+
 .sber-tips-header {
   display: flex;
   align-items: center;
@@ -4872,38 +4885,38 @@ body.hub-active .stage-game-hub {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 14px 10px;
+  padding: 8px 6px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px dashed rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-  gap: 6px;
+  border-radius: 14px;
+  gap: 4px;
 }
 
 .ps5-fe-icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: rgba(56, 189, 248, 0.1);
   border: 1px solid rgba(56, 189, 248, 0.2);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .ps5-fe-title {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
 }
 
 .ps5-fe-desc {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--ps5-text-muted);
-  margin: 0 0 6px 0;
+  margin: 0 0 4px 0;
   max-width: 220px;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .ps5-btn-empty-add {
@@ -13853,5 +13866,62 @@ body.view-youtube .ps5-bg-vignette {
   }
   .brawl-battle-card {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE CONTROL BARS (1440px / 1366px Laptop & Small Displays)
+   Prevents Text & Button Overlaps Across YouTube, Twitch & Brawl Stars
+   ========================================================================== */
+@media (max-width: 1440px) {
+  .ps5-youtube-control-bar,
+  .ps5-twitch-control-bar,
+  .ps5-brawl-control-bar {
+    gap: 8px !important;
+    padding: 6px 12px !important;
+  }
+  .youtube-cb-telemetry,
+  .youtube-cb-tele,
+  .twitch-cb-telemetry,
+  .brawl-cb-tele,
+  .brawl-cb-telemetry {
+    display: none !important;
+  }
+  .youtube-cb-btn,
+  .twitch-cb-btn,
+  .brawl-cb-btn {
+    padding: 6px 11px !important;
+    font-size: 11px !important;
+    gap: 5px !important;
+  }
+  .youtube-cb-channel-pill {
+    padding: 4px 10px !important;
+    font-size: 11.5px !important;
+  }
+  .youtube-brand-badge {
+    padding: 4px 8px !important;
+    font-size: 10px !important;
+  }
+  .youtube-brand-badge span {
+    display: none !important;
+  }
+  .yt-mode-tab {
+    padding: 5px 11px !important;
+    font-size: 11.5px !important;
+  }
+  .brawl-mode-tab {
+    padding: 5px 10px !important;
+    font-size: 11px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .twitch-live-brand-badge span,
+  .brawl-brand-badge span {
+    font-size: 10px !important;
+  }
+  .youtube-cb-channel-pill {
+    padding: 4px 8px !important;
+    font-size: 11px !important;
   }
 }

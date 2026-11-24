@@ -958,6 +958,7 @@ class PS5AudioManager {
   tick() { this.focusMove(); }
   modalOpen() { this.openDialog(); }
   modalClose() { this.cancel(); }
+  closeDialog() { this.cancel(); }
   controlCenter(isOpen = true) {
     if (isOpen) this.openControlCenter();
     else this.closeControlCenter();
