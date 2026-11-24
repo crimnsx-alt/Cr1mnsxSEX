@@ -400,7 +400,7 @@ function initSpotlightAndTilt() {
   const isTouch = window.matchMedia("(pointer: coarse)").matches;
   if (isTouch) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .series-other-card, .yt-in-card, .twitch-in-card";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .series-other-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .yt-player-series-cue";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
@@ -441,7 +441,7 @@ function initSpotlightAndTilt() {
   });
 
   // Magnetic Pull on Main Action Buttons (3-5px attraction) with RAF and cached rect
-  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying, .series-action-btn, .yt-mode-tab, .series-filter-pill, .series-ep-btn, .twitch-cb-btn, .youtube-cb-btn");
+  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying, .series-action-btn, .yt-mode-tab, .series-filter-pill, .series-ep-btn, .twitch-cb-btn, .youtube-cb-btn, .yt-in-btn-series-spotlight");
   magneticButtons.forEach((btn) => {
     if (!btn._hasMagnet) {
       btn._hasMagnet = true;
@@ -3798,6 +3798,13 @@ function handleAction(action) {
   if (action.startsWith("launch:")) {
     const gameId = action.slice(7);
     return launchPlayableGame(gameId);
+  }
+  if (action === "series:vlad" || action === "open:vlad_series") {
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    if (state.category !== "media") switchCategory("media");
+    selectTile("youtube", false);
+    return youtubeService.switchMode("series");
   }
   if (action === "modal:youtube-hub" || action === "open:youtube_hub") {
     closeModal();

@@ -425,8 +425,8 @@ export const ribbonCatalog = {
       publisher: "МАФАНЯ КИНГ · @Mafanya122",
       kicker: { ru: "Официальный канал · 4K UHD", en: "Official Channel · 4K UHD" },
       desc: {
-        ru: "Интерактивный видео-театр: Лор с геем, Режиссерская версия, Zoom-пранки и эксклюзивные материалы в 4K качестве с автообновлением новых релизов.",
-        en: "Interactive video theater: Mafanya Lore series, Director's Cut, Zoom pranks, and exclusive 4K content with auto-updating RSS releases."
+        ru: "Видео-театр и сериал «Влад клёвые машины» (3 сезона, 16 стримов, рейтинг 9.6★): Лор с геем, Режиссерская версия, Zoom-пранки и трейлер в 4K UHD качестве с автообновлением.",
+        en: "Interactive video theater & 'Vlad Cool Cars' series (3 seasons, 16 streams, 9.6★ rating): Director's cut, lore, Zoom pranks, and trailer in 4K UHD."
       },
       ctaText: { ru: "В Кинотеатр", en: "Cinema" },
       btnAction: "modal:youtube-hub",
@@ -440,6 +440,14 @@ export const ribbonCatalog = {
       playTime: "Театр PS5",
       trophies: null,
       activities: [
+        {
+          title: "СЕРИАЛ: «Влад клёвые машины» (Все 16 стримов лора)",
+          type: "Культовый сериал · 9.6★",
+          progress: 100,
+          timeEst: "3 сезона",
+          thumb: "assets/series/vlad_poster.webp",
+          action: "series:vlad"
+        },
         {
           title: "РЕЖИССЕРСКАЯ ВЕРСИЯ ЛОРА С Г*ЕМ [доп материалы + похороны]",
           type: "Спецвыпуск · 4K",

@@ -284,6 +284,10 @@ class YouTubeCinemaService {
     if (!view) return;
     view.hidden = false;
 
+    if (!this._isInitialized) {
+      this.init();
+    }
+
     // Instant 0ms render
     this.renderInlinePlaylist();
     this.updateInlineVideo(this.activeVideoId);
@@ -504,7 +508,7 @@ class YouTubeCinemaService {
       if (seriesLayout) seriesLayout.hidden = true;
 
       const tele = document.getElementById("ytTelemetryText");
-      if (tele) tele.textContent = `${this.videos.length} видео · 4K UHD · Автообновление`;
+      if (tele) tele.textContent = `${this.videos.length} видео 4K UHD · + Сериал «Влад клёвые машины» (16 серий · 9.6★)`;
     } else {
       seriesBtn?.classList.add("is-active");
       seriesBtn?.setAttribute("aria-selected", "true");
@@ -796,6 +800,9 @@ class YouTubeCinemaService {
   }
 
   init() {
+    if (this._isInitialized) return;
+    this._isInitialized = true;
+
     // Mode switcher
     document.getElementById("btnYtModeCinema")?.addEventListener("click", () => {
       this.switchMode("cinema");
@@ -805,6 +812,15 @@ class YouTubeCinemaService {
     });
     this.updateModeIndicator();
     window.addEventListener("resize", () => this.updateModeIndicator(), { passive: true });
+
+    // Direct Quick-Jump Triggers to "Влад клёвые машины" Series Hub
+    const jumpToSeries = () => {
+      SoundEngine.confirm();
+      this.switchMode("series");
+    };
+    document.getElementById("btnDrawerSeriesSpotlight")?.addEventListener("click", jumpToSeries);
+    document.getElementById("btnMetaGoSeries")?.addEventListener("click", jumpToSeries);
+    document.getElementById("btnPlayerSeriesCue")?.addEventListener("click", jumpToSeries);
 
     // Top bar actions
     document.getElementById("btnYoutubeSync")?.addEventListener("click", () => {
