@@ -1062,7 +1062,7 @@ function renderGameHeroView(item) {
 // ============================================================
 function openGameHub() {
   const item = getActiveItem();
-  if (!item || item.viewType !== "game" || item.id === "twitch" || state.isHubOpen) return;
+  if (!item || item.viewType !== "game" || item.id === "twitch" || item.id === "youtube" || item.id === "brawl-stars" || state.isHubOpen) return;
   state.isHubOpen = true;
   document.body.classList.add("hub-active");
   renderGameHubContent(item);
@@ -4093,6 +4093,14 @@ function handleKeydown(e) {
     if (state.isHubOpen) {
       closeGameHub();
     } else {
+      const active = getActiveItem();
+      if (active?.id === "brawl-stars") {
+        const brawlEl = document.getElementById("ps5BrawlStarsView");
+        if (brawlEl && brawlEl.scrollTop > 10) {
+          brawlEl.scrollBy({ top: -160, behavior: "smooth" });
+          return;
+        }
+      }
       const tabTarget = state.category === "games" ? $("#tabGames") : $("#tabMedia");
       if (tabTarget) {
         tabTarget.focus();
@@ -4103,7 +4111,14 @@ function handleKeydown(e) {
     e.preventDefault();
     if (!state.isHubOpen) {
       const active = getActiveItem();
-      if (active?.id === "twitch") return;
+      if (active?.id === "twitch" || active?.id === "youtube") return;
+      if (active?.id === "brawl-stars") {
+        const brawlEl = document.getElementById("ps5BrawlStarsView");
+        if (brawlEl) {
+          brawlEl.scrollBy({ top: 160, behavior: "smooth" });
+        }
+        return;
+      }
       if (active?.viewType === "game") {
         openGameHub();
       } else {
@@ -5367,7 +5382,7 @@ function init() {
     (e) => {
       if (state.isControlCenterOpen || $("#searchOverlay").classList.contains("active") || $("#settingsOverlay").classList.contains("active") || $("#modalOverlay").classList.contains("active")) return;
       const active = getActiveItem();
-      if (active?.id === "twitch" || active?.id === "youtube" || active?.viewType !== "game") return;
+      if (active?.id === "twitch" || active?.id === "youtube" || active?.id === "brawl-stars" || active?.viewType !== "game") return;
       if (e.deltaY > 36 && !state.isHubOpen) openGameHub();
       else if (e.deltaY < -36 && state.isHubOpen && $("#stageGameHub").scrollTop <= 0) closeGameHub();
     },
