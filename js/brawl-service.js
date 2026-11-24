@@ -727,14 +727,17 @@ class BrawlStarsService {
 
         this.selectBrawler(card.dataset.brawler);
 
-        // Keep view smooth
-        const spot = document.getElementById("brawlSpotlightCard");
-        if (spot) {
-          const rect = spot.getBoundingClientRect();
-          if (rect.top < 60) {
-            spot.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+        // Smoothly scroll only the Brawl Stars view back up so the spotlight hero is visible without breaking the layout
+        const brawlView = document.getElementById("ps5BrawlStarsView");
+        if (brawlView && brawlView.scrollTop > 80) {
+          brawlView.scrollTo({ top: 0, behavior: "smooth" });
         }
+        // Safety guard: ensure outer shell containers are never scrolled out of place
+        if (window.scrollY !== 0) window.scrollTo(0, 0);
+        const stage = document.getElementById("viewportStage");
+        if (stage && stage.scrollTop !== 0) stage.scrollTop = 0;
+        const screen = document.getElementById("stageHome");
+        if (screen && screen.scrollTop !== 0) screen.scrollTop = 0;
       });
       card.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {

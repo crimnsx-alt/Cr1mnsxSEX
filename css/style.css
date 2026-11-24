@@ -164,6 +164,8 @@ body.hub-active .ps5-bg-art.is-visible {
 .ps5-screen {
   width: 100%;
   height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -427,7 +429,7 @@ body.hub-active .ps5-screen {
    3. TOP-ALIGNED GAME CAROUSEL / RIBBON (1:1 PS5 Geometry)
    ========================================================================== */
 .ps5-ribbon-wrap {
-  margin-top: 14px;
+  margin-top: -8px;
   width: 100%;
   flex-shrink: 0;
   position: relative;
@@ -435,7 +437,7 @@ body.hub-active .ps5-screen {
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
-  padding: 4px clamp(28px, 4vw, 56px) 52px;
+  padding: 26px clamp(28px, 4vw, 56px) 52px;
 }
 
 .ps5-ribbon-wrap::-webkit-scrollbar {
@@ -7594,10 +7596,10 @@ button:active:not(:disabled),
 
 @keyframes tileActiveGlow {
   0%, 100% {
-    box-shadow: 0 0 22px rgba(255, 255, 255, 0.45), 0 0 45px rgba(0, 112, 209, 0.3), 0 14px 35px rgba(0, 0, 0, 0.85);
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.4), 0 0 28px rgba(56, 189, 248, 0.28), 0 12px 28px rgba(0, 0, 0, 0.8);
   }
   50% {
-    box-shadow: 0 0 32px rgba(255, 255, 255, 0.7), 0 0 65px rgba(0, 112, 209, 0.55), 0 16px 42px rgba(0, 0, 0, 0.95);
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.6), 0 0 36px rgba(56, 189, 248, 0.42), 0 14px 34px rgba(0, 0, 0, 0.9);
   }
 }
 
@@ -8285,7 +8287,6 @@ body.cc-open .viewport-stage {
   border-radius: var(--radius-tile) !important;
   border-color: #ffffff !important;
   transform: translateY(-2px) !important;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.22), 0 0 36px rgba(56, 189, 248, 0.42), 0 24px 52px -12px rgba(0, 0, 0, 0.88), inset 0 1px 0 rgba(255, 255, 255, 0.6) !important;
   opacity: 1 !important;
 }
 
