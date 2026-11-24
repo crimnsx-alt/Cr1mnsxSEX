@@ -400,7 +400,7 @@ function initSpotlightAndTilt() {
   const isTouch = window.matchMedia("(pointer: coarse)").matches;
   if (isTouch) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .series-other-card, .yt-in-card, .twitch-in-card";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
@@ -441,7 +441,7 @@ function initSpotlightAndTilt() {
   });
 
   // Magnetic Pull on Main Action Buttons (3-5px attraction) with RAF and cached rect
-  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying");
+  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying, .series-action-btn, .yt-mode-tab, .series-filter-pill, .series-ep-btn, .twitch-cb-btn, .youtube-cb-btn");
   magneticButtons.forEach((btn) => {
     if (!btn._hasMagnet) {
       btn._hasMagnet = true;
@@ -471,6 +471,7 @@ function initSpotlightAndTilt() {
     }
   });
 }
+window.initSpotlightAndTilt = initSpotlightAndTilt;
 
 function initScrollReveal() {
   const observer = new IntersectionObserver(

@@ -287,6 +287,7 @@ class YouTubeCinemaService {
     // Instant 0ms render
     this.renderInlinePlaylist();
     this.updateInlineVideo(this.activeVideoId);
+    this.updateModeIndicator();
 
     // Silent background check for new uploads
     this.syncVideosFromRSS(false);
@@ -320,7 +321,7 @@ class YouTubeCinemaService {
       .map((v, idx) => {
         const isActive = v.id === this.activeVideoId;
         return `
-          <div class="yt-in-card ${isActive ? "is-active" : ""}" data-video-id="${v.id}" role="button" tabindex="0">
+          <div class="yt-in-card ${isActive ? "is-active" : ""}" data-video-id="${v.id}" role="button" tabindex="0" style="--stagger-index: ${idx};">
             <div class="yt-in-card-thumb-wrap">
               <img src="${v.thumbHd}" alt="${v.title}" class="yt-in-card-thumb" loading="lazy" decoding="async" onerror="this.src='${v.thumb}'" />
               ${v.duration ? `<span class="yt-in-card-duration">${v.duration}</span>` : ""}
@@ -332,6 +333,7 @@ class YouTubeCinemaService {
               <div class="yt-in-card-badge-row">
                 ${v.badge ? `<span class="yt-in-card-badge ${v.isNew ? "badge-new" : ""}">${v.badge}</span>` : ""}
                 <span class="yt-in-card-meta">${v.meta}</span>
+                ${isActive ? `<span class="ps5-soundwave-bars is-mini" aria-hidden="true"><span></span><span></span><span></span></span>` : ""}
               </div>
               <h4 class="yt-in-card-title">${v.title}</h4>
             </div>
@@ -347,6 +349,10 @@ class YouTubeCinemaService {
         this.selectVideo(vid);
       });
     });
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   updateInlineVideo(videoId) {
@@ -440,6 +446,45 @@ class YouTubeCinemaService {
   // ============================================================
   // SERIES HUB METHODS ("Влад клевые машины" from mafanya.sex)
   // ============================================================
+  updateModeIndicator() {
+    requestAnimationFrame(() => {
+      const indicator = document.getElementById("ytModeIndicator");
+      if (!indicator) return;
+      const activeBtn = document.querySelector(".yt-mode-tab.is-active");
+      if (!activeBtn) return;
+      const left = activeBtn.offsetLeft;
+      const width = activeBtn.offsetWidth;
+      indicator.style.transform = `translateX(${left}px)`;
+      indicator.style.width = `${width}px`;
+    });
+  }
+
+  animateNumber(el, start, end, duration = 800, decimals = 0) {
+    if (!el) return;
+    const startTime = performance.now();
+    const update = (now) => {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Apple fluid ease-out cubic
+      const ease = 1 - Math.pow(1 - progress, 3);
+      const current = start + (end - start) * ease;
+      el.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    };
+    requestAnimationFrame(update);
+  }
+
+  animateSeriesStats() {
+    const countEl = document.getElementById("seriesPillCountNum");
+    const ratingEl = document.getElementById("seriesPillRatingNum");
+    const votesEl = document.getElementById("seriesPillVotesNum");
+    if (countEl) this.animateNumber(countEl, 0, 16, 750, 0);
+    if (ratingEl) this.animateNumber(ratingEl, 4.0, 9.6, 950, 1);
+    if (votesEl) this.animateNumber(votesEl, 0, 289, 900, 0);
+  }
+
   switchMode(mode) {
     this.currentMode = mode;
     SoundEngine.focusMove();
@@ -469,10 +514,20 @@ class YouTubeCinemaService {
       if (cinemaLayout) cinemaLayout.hidden = true;
       if (seriesLayout) seriesLayout.hidden = false;
 
+      const sc = document.getElementById("seriesScrollContainer");
+      if (sc) sc.scrollTop = 0;
+
       const tele = document.getElementById("ytTelemetryText");
       if (tele) tele.textContent = "16 стримов · 3 сезона · Рейтинг 9.6★";
 
       this.renderSeriesView();
+      this.animateSeriesStats();
+    }
+
+    this.updateModeIndicator();
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
     }
   }
 
@@ -480,6 +535,10 @@ class YouTubeCinemaService {
     this.renderSeriesEpisodes();
     this.renderSeriesCast();
     this.renderSeriesPhotos();
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   renderSeriesEpisodes() {
@@ -505,7 +564,7 @@ class YouTubeCinemaService {
     });
 
     grid.innerHTML = allEps
-      .map((ep) => {
+      .map((ep, idx) => {
         const badgeClass =
           ep.tier === "legendary"
             ? "badge-legendary"
@@ -513,7 +572,7 @@ class YouTubeCinemaService {
             ? "badge-great"
             : "badge-good";
         return `
-          <div class="series-ep-card" data-slug="${ep.slug}">
+          <div class="series-ep-card ${ep.tier === 'legendary' ? 'is-legendary' : ''}" data-slug="${ep.slug}" style="--stagger-index: ${idx};">
             <div class="series-ep-top">
               <span class="series-ep-rating-badge ${badgeClass}">${ep.rating.toFixed(1)} ★ ${ep.tierLabel}</span>
               <span class="series-ep-season-badge">Сезон ${ep.seasonNumber} · Серия ${ep.number}</span>
@@ -537,6 +596,10 @@ class YouTubeCinemaService {
         `;
       })
       .join("");
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   renderSeriesCast() {
@@ -544,11 +607,11 @@ class YouTubeCinemaService {
     if (!container) return;
 
     container.innerHTML = VLAD_CAST
-      .map((c) => {
+      .map((c, idx) => {
         const linkAttr = c.link ? `href="${c.link}" target="_blank" rel="noopener"` : `role="article"`;
         const tag = c.link ? "a" : "div";
         return `
-          <${tag} ${linkAttr} class="series-cast-card" title="${c.name} — ${c.role}">
+          <${tag} ${linkAttr} class="series-cast-card" title="${c.name} — ${c.role}" style="--stagger-index: ${idx};">
             <div class="series-cast-thumb-wrap">
               <img src="${c.photo}" alt="${c.name}" loading="lazy" decoding="async" />
             </div>
@@ -566,7 +629,7 @@ class YouTubeCinemaService {
 
     row.innerHTML = VLAD_PHOTOS
       .map((p, idx) => `
-        <div class="series-photo-card" role="button" tabindex="0" title="Кадр со съемок #${idx + 1}">
+        <div class="series-photo-card" role="button" tabindex="0" title="Кадр со съемок #${idx + 1}" style="--stagger-index: ${idx};">
           <img src="${p}" alt="Кадр со съемок #${idx + 1}" loading="lazy" decoding="async" />
         </div>
       `)
@@ -740,6 +803,8 @@ class YouTubeCinemaService {
     document.getElementById("btnYtModeSeries")?.addEventListener("click", () => {
       this.switchMode("series");
     });
+    this.updateModeIndicator();
+    window.addEventListener("resize", () => this.updateModeIndicator(), { passive: true });
 
     // Top bar actions
     document.getElementById("btnYoutubeSync")?.addEventListener("click", () => {

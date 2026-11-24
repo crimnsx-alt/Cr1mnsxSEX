@@ -10315,6 +10315,57 @@ body.view-youtube .ps5-bg-vignette {
   -webkit-backdrop-filter: blur(16px);
 }
 
+/* Soundwave Equalizer Indicator (PS5 / Apple Music Style) */
+.ps5-soundwave-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 12px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.ps5-soundwave-bars span {
+  width: 2.5px;
+  background: #ff164a;
+  border-radius: 1px;
+  animation: ps5EqualizerPulse 0.85s ease-in-out infinite alternate;
+  will-change: height;
+}
+
+.ps5-soundwave-bars span:nth-child(1) {
+  height: 40%;
+  animation-delay: 0.1s;
+}
+
+.ps5-soundwave-bars span:nth-child(2) {
+  height: 95%;
+  animation-delay: 0.32s;
+}
+
+.ps5-soundwave-bars span:nth-child(3) {
+  height: 60%;
+  animation-delay: 0.2s;
+}
+
+.ps5-soundwave-bars.is-mini {
+  height: 10px;
+  gap: 1.5px;
+}
+
+.ps5-soundwave-bars.is-mini span {
+  width: 2px;
+}
+
+@keyframes ps5EqualizerPulse {
+  0% {
+    height: 20%;
+  }
+  100% {
+    height: 100%;
+  }
+}
+
 .youtube-cb-dot {
   width: 7px;
   height: 7px;
@@ -10651,24 +10702,34 @@ body.view-youtube .ps5-bg-vignette {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.06);
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
+              background 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
   outline: none;
+  position: relative;
+  overflow: hidden;
+  will-change: transform, opacity;
+  animation: ps5ItemStaggerCascade 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--stagger-index, 0) * 35ms);
 }
 
 .yt-in-card:hover {
   background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-3px) scale(1.012);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55), 0 0 16px rgba(255, 0, 51, 0.15);
 }
 
 .yt-in-card:active {
   transform: scale(0.97);
+  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .yt-in-card.is-active {
-  background: rgba(255, 0, 51, 0.12);
-  border-color: rgba(255, 0, 51, 0.45);
-  box-shadow: 0 4px 20px rgba(255, 0, 51, 0.2);
+  background: rgba(255, 0, 51, 0.14);
+  border-color: rgba(255, 0, 51, 0.5);
+  box-shadow: 0 4px 20px rgba(255, 0, 51, 0.25), inset 2px 0 0 #ff0033;
 }
 
 .yt-in-card-thumb-wrap {
@@ -10679,6 +10740,7 @@ body.view-youtube .ps5-bg-vignette {
   overflow: hidden;
   flex-shrink: 0;
   background: #000000;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .yt-in-card-thumb-wrap img {
@@ -10686,6 +10748,11 @@ body.view-youtube .ps5-bg-vignette {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.yt-in-card:hover .yt-in-card-thumb-wrap img {
+  transform: scale(1.08);
 }
 
 .yt-in-card-duration {
@@ -10994,20 +11061,41 @@ body.view-youtube .ps5-bg-vignette {
    PLAYSTATION®5 "ВЛАД КЛЕВЫЕ МАШИНЫ" SERIES HUB (mafanya.sex)
    ============================================================ */
 
-/* Segmented Mode Switcher Tabs */
+/* Segmented Mode Switcher Tabs (Framer layoutId Spring Pill) */
 .youtube-mode-tabs {
   display: flex;
+  position: relative;
   align-items: center;
-  background: rgba(0, 0, 0, 0.46);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.52);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
   padding: 3px;
   gap: 4px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.yt-mode-indicator {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  width: 156px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.34s cubic-bezier(0.2, 0.9, 0.3, 1), width 0.34s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform, width;
 }
 
 .yt-mode-tab {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -11016,22 +11104,25 @@ body.view-youtube .ps5-bg-vignette {
   font-size: 12px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.65);
-  background: transparent;
+  background: transparent !important;
   border: none;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: color 0.25s ease, transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1);
   white-space: nowrap;
+  outline: none;
 }
 
 .yt-mode-tab:hover {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.08);
+}
+
+.yt-mode-tab:active {
+  transform: scale(0.96);
 }
 
 .yt-mode-tab.is-active {
   color: #ffffff;
-  background: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.45);
 }
 
 .yt-series-chip {
@@ -11043,6 +11134,11 @@ body.view-youtube .ps5-bg-vignette {
   border-radius: 10px;
   font-family: 'JetBrains Mono', monospace;
   box-shadow: 0 0 8px rgba(255, 22, 74, 0.5);
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.yt-mode-tab:hover .yt-series-chip {
+  transform: scale(1.06);
 }
 
 /* Series Layout */
@@ -11072,6 +11168,10 @@ body.view-youtube .ps5-bg-vignette {
   scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
+.series-scroll-container > * {
+  flex-shrink: 0;
+}
+
 .series-scroll-container::-webkit-scrollbar {
   width: 6px;
 }
@@ -11089,17 +11189,68 @@ body.view-youtube .ps5-bg-vignette {
   background: rgba(255, 255, 255, 0.35);
 }
 
+/* --------------------------------------------------------------------------
+   PS5 STAGGERED CASCADE & SPOTLIGHT SUITE (Framer Motion / Apple Springs)
+   -------------------------------------------------------------------------- */
+@keyframes ps5ItemStaggerCascade {
+  0% {
+    opacity: 0;
+    transform: translateY(18px) scale(0.965);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
 /* Hero Header Card */
 .series-hero-card {
+  flex-shrink: 0;
   display: flex;
   gap: 24px;
   padding: 22px 26px;
-  background: rgba(14, 16, 24, 0.76);
+  background: rgba(14, 16, 24, 0.78);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 20px;
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65);
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s ease;
+  will-change: transform, box-shadow;
+}
+
+.series-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    480px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 22, 74, 0.12) 0%,
+    rgba(255, 255, 255, 0.04) 40%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.series-hero-card:hover::before {
+  opacity: 1;
+}
+
+.series-hero-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 35px rgba(255, 22, 74, 0.12);
 }
 
 .series-poster-wrap {
@@ -11113,6 +11264,11 @@ body.view-youtube .ps5-bg-vignette {
   border: 1.5px solid rgba(255, 255, 255, 0.14);
   flex-shrink: 0;
   cursor: pointer;
+  perspective: 800px;
+  transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform;
 }
 
 .series-poster-img {
@@ -11120,11 +11276,81 @@ body.view-youtube .ps5-bg-vignette {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-poster-wrap:hover {
+  transform: translateY(-4px) scale(1.035);
+  border-color: rgba(255, 22, 74, 0.55);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.8), 0 0 28px rgba(255, 22, 74, 0.3);
 }
 
 .series-poster-wrap:hover .series-poster-img {
-  transform: scale(1.04);
+  transform: scale(1.06);
+}
+
+/* Diagonal Specular Sheen Sweep on Poster */
+.series-poster-wrap::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -160%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.05) 70%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.75s cubic-bezier(0.2, 0.9, 0.3, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.series-poster-wrap:hover::after {
+  left: 160%;
+}
+
+/* Play Button Spring Overlay */
+.series-poster-play-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 0.28s cubic-bezier(0.2, 0.9, 0.3, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.series-poster-play-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff164a 0%, #ff4d6d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(255, 22, 74, 0.65);
+  transform: scale(0.65);
+  transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.32s ease;
+}
+
+.series-poster-wrap:hover .series-poster-play-overlay {
+  opacity: 1;
+}
+
+.series-poster-wrap:hover .series-poster-play-btn {
+  transform: scale(1);
+  box-shadow: 0 10px 28px rgba(255, 22, 74, 0.8), 0 0 24px rgba(255, 77, 109, 0.5);
 }
 
 .series-poster-badge {
@@ -11140,6 +11366,7 @@ body.view-youtube .ps5-bg-vignette {
   border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   backdrop-filter: blur(8px);
+  z-index: 4;
 }
 
 .series-hero-content {
@@ -11148,6 +11375,8 @@ body.view-youtube .ps5-bg-vignette {
   flex-direction: column;
   justify-content: center;
   min-width: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .series-badge-row {
@@ -11169,6 +11398,14 @@ body.view-youtube .ps5-bg-vignette {
   padding: 3px 10px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1), background 0.2s ease;
+}
+
+.series-pill-year:hover,
+.series-pill-count:hover,
+.series-pill-cat:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 .series-pill-rating {
@@ -11181,6 +11418,12 @@ body.view-youtube .ps5-bg-vignette {
   padding: 3px 10px;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(251, 191, 36, 0.15);
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.series-pill-rating:hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 0 18px rgba(251, 191, 36, 0.35);
 }
 
 .series-hero-title {
@@ -11207,6 +11450,8 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .series-action-btn {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -11215,7 +11460,10 @@ body.view-youtube .ps5-bg-vignette {
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.22s cubic-bezier(0.2, 0.9, 0.3, 1);
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
@@ -11223,13 +11471,15 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .series-action-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2.5px);
   background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .series-action-btn:active {
-  transform: scale(0.96);
+  transform: translateY(0) scale(0.96);
+  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-action-btn.primary {
@@ -11240,7 +11490,30 @@ body.view-youtube .ps5-bg-vignette {
 
 .series-action-btn.primary:hover {
   background: linear-gradient(135deg, #ff2a5a 0%, #ff6b85 100%);
-  box-shadow: 0 6px 24px rgba(255, 22, 74, 0.65);
+  box-shadow: 0 8px 26px rgba(255, 22, 74, 0.7);
+}
+
+/* Shimmer Sweep on Primary Action Button */
+.series-action-btn.primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  transform: skewX(-22deg);
+  transition: left 0.65s cubic-bezier(0.2, 0.9, 0.3, 1);
+  pointer-events: none;
+}
+
+.series-action-btn.primary:hover::before {
+  left: 140%;
 }
 
 .series-action-btn.ghost {
@@ -11278,6 +11551,7 @@ body.view-youtube .ps5-bg-vignette {
   height: 18px;
   background: #ff164a;
   border-radius: 2px;
+  box-shadow: 0 0 10px rgba(255, 22, 74, 0.6);
 }
 
 .series-sec-heading {
@@ -11307,18 +11581,31 @@ body.view-youtube .ps5-bg-vignette {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.65);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.22s cubic-bezier(0.2, 0.9, 0.3, 1);
+  outline: none;
 }
 
 .series-filter-pill:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.14);
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.series-filter-pill:active {
+  transform: translateY(0) scale(0.95);
+  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-filter-pill.is-active {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.22);
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 /* Episodes Grid */
@@ -11338,19 +11625,55 @@ body.view-youtube .ps5-bg-vignette {
   gap: 10px;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform, opacity;
+  animation: ps5ItemStaggerCascade 0.44s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--stagger-index, 0) * 32ms);
+}
+
+.series-ep-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    360px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(255, 255, 255, 0.08) 0%,
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.series-ep-card:hover::before {
+  opacity: 1;
 }
 
 .series-ep-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transform: translateY(-4px) scale(1.015);
+  border-color: rgba(255, 255, 255, 0.24);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 24px rgba(255, 22, 74, 0.12);
+}
+
+.series-ep-card:active {
+  transform: translateY(-1px) scale(0.985);
+  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-ep-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 2;
 }
 
 .series-ep-rating-badge {
@@ -11364,22 +11687,51 @@ body.view-youtube .ps5-bg-vignette {
   font-weight: 800;
 }
 
+/* Legendary Breathing Glow Pulse */
 .badge-legendary {
-  background: linear-gradient(135deg, #ff164a 0%, #ff4d6d 100%);
+  background: linear-gradient(135deg, #ff164a 0%, #ff5277 50%, #d90429 100%);
+  background-size: 200% 200%;
   color: #ffffff;
-  box-shadow: 0 2px 10px rgba(255, 22, 74, 0.4);
+  box-shadow: 0 2px 10px rgba(255, 22, 74, 0.45);
+  animation: legendaryGlow 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes legendaryGlow {
+  0% {
+    background-position: 0% 50%;
+    box-shadow: 0 2px 10px rgba(255, 22, 74, 0.45), 0 0 10px rgba(255, 22, 74, 0.2);
+  }
+  100% {
+    background-position: 100% 50%;
+    box-shadow: 0 3px 14px rgba(255, 22, 74, 0.75), 0 0 20px rgba(255, 80, 120, 0.45);
+  }
+}
+
+.series-ep-card.is-legendary:hover {
+  border-color: rgba(255, 22, 74, 0.45);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 22, 74, 0.22);
 }
 
 .badge-great {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
   box-shadow: 0 2px 10px rgba(16, 185, 129, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.badge-great:hover {
+  box-shadow: 0 3px 14px rgba(16, 185, 129, 0.55);
 }
 
 .badge-good {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: #ffffff;
   box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.badge-good:hover {
+  box-shadow: 0 3px 14px rgba(59, 130, 246, 0.55);
 }
 
 .series-ep-season-badge {
@@ -11396,6 +11748,8 @@ body.view-youtube .ps5-bg-vignette {
   line-height: 1.35;
   margin: 0;
   min-height: 38px;
+  position: relative;
+  z-index: 2;
 }
 
 .series-ep-meta-row {
@@ -11405,6 +11759,8 @@ body.view-youtube .ps5-bg-vignette {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.5);
   font-family: 'JetBrains Mono', monospace;
+  position: relative;
+  z-index: 2;
 }
 
 .series-ep-actions {
@@ -11412,6 +11768,8 @@ body.view-youtube .ps5-bg-vignette {
   align-items: center;
   gap: 8px;
   margin-top: auto;
+  position: relative;
+  z-index: 2;
 }
 
 .series-ep-btn {
@@ -11425,7 +11783,21 @@ body.view-youtube .ps5-bg-vignette {
   font-size: 11px;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-ep-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.series-ep-btn:active {
+  transform: scale(0.95);
+  transition: transform 80ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-ep-btn.vk {
@@ -11435,8 +11807,9 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .series-ep-btn.vk:hover {
-  background: rgba(0, 119, 255, 0.3);
+  background: rgba(0, 119, 255, 0.32);
   color: #ffffff;
+  border-color: rgba(0, 119, 255, 0.55);
 }
 
 .series-ep-btn.tg {
@@ -11446,8 +11819,9 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .series-ep-btn.tg:hover {
-  background: rgba(34, 158, 217, 0.3);
+  background: rgba(34, 158, 217, 0.32);
   color: #ffffff;
+  border-color: rgba(34, 158, 217, 0.55);
 }
 
 /* Cast Section */
@@ -11480,13 +11854,27 @@ body.view-youtube .ps5-bg-vignette {
   border-radius: 16px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform, opacity;
+  animation: ps5ItemStaggerCascade 0.42s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--stagger-index, 0) * 26ms);
 }
 
 .series-cast-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 22, 74, 0.4);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transform: translateY(-5px) scale(1.04);
+  border-color: rgba(255, 22, 74, 0.45);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 22, 74, 0.2);
+}
+
+.series-cast-card:active {
+  transform: translateY(-2px) scale(0.98);
+  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-cast-thumb-wrap {
@@ -11497,6 +11885,8 @@ body.view-youtube .ps5-bg-vignette {
   position: relative;
   margin-bottom: 8px;
   background: #050404;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .series-cast-thumb-wrap img {
@@ -11504,6 +11894,16 @@ body.view-youtube .ps5-bg-vignette {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-cast-card:hover .series-cast-thumb-wrap img {
+  transform: scale(1.1);
+}
+
+.series-cast-card:hover .series-cast-thumb-wrap {
+  border-color: rgba(255, 22, 74, 0.6);
+  box-shadow: 0 0 16px rgba(255, 22, 74, 0.35);
 }
 
 .series-cast-name {
@@ -11515,6 +11915,12 @@ body.view-youtube .ps5-bg-vignette {
   text-overflow: ellipsis;
   max-width: 114px;
   margin: 0;
+  transition: color 0.2s ease;
+}
+
+.series-cast-card:hover .series-cast-name {
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .series-cast-role {
@@ -11552,13 +11958,13 @@ body.view-youtube .ps5-bg-vignette {
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: #000;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.series-photo-card:hover {
-  transform: scale(1.04);
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  position: relative;
+  transition: transform 0.32s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.3s ease,
+              box-shadow 0.32s cubic-bezier(0.2, 0.9, 0.3, 1);
+  will-change: transform, opacity;
+  animation: ps5ItemStaggerCascade 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+  animation-delay: calc(var(--stagger-index, 0) * 40ms);
 }
 
 .series-photo-card img {
@@ -11566,6 +11972,34 @@ body.view-youtube .ps5-bg-vignette {
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-photo-card:hover {
+  transform: translateY(-4px) scale(1.05);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.75), 0 0 25px rgba(255, 255, 255, 0.15);
+}
+
+.series-photo-card:hover img {
+  transform: scale(1.08);
+}
+
+.series-photo-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-25deg);
+  transition: left 0.7s cubic-bezier(0.2, 0.9, 0.3, 1);
+  pointer-events: none;
+}
+
+.series-photo-card:hover::after {
+  left: 150%;
 }
 
 .series-other-section {
@@ -11582,6 +12016,19 @@ body.view-youtube .ps5-bg-vignette {
   border-radius: 16px;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1),
+              border-color 0.25s ease,
+              box-shadow 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-other-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65), 0 0 20px rgba(255, 77, 109, 0.15);
 }
 
 .series-other-thumb {
@@ -11591,12 +12038,18 @@ body.view-youtube .ps5-bg-vignette {
   overflow: hidden;
   position: relative;
   flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .series-other-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.series-other-card:hover .series-other-thumb img {
+  transform: scale(1.06);
 }
 
 .series-other-rating {
@@ -11639,12 +12092,12 @@ body.view-youtube .ps5-bg-vignette {
   font-weight: 600;
   color: #ff4d6d;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .series-other-link:hover {
   color: #ffffff;
-  transform: translateX(2px);
+  transform: translateX(4px);
 }
 
 /* Series Trailer Cinema Modal */
