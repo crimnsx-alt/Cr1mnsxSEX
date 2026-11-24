@@ -29,6 +29,7 @@ import {
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
 import { twitchService } from "./twitch-service.js";
+import { youtubeService } from "./youtube-service.js";
 
 // ============================================================
 // State
@@ -843,16 +844,17 @@ function renderActiveView() {
   const exploreEl = $("#ps5ExploreView");
   const heroEl = $("#ps5GameHeroView");
   const twitchEl = $("#ps5TwitchView");
+  const youtubeEl = $("#ps5YoutubeView");
 
   $("#ccCardTitle").textContent = t(item.title);
   $("#ccCardSub").textContent = item.publisher || "PlayStation®5 System Shell";
 
   if ($("#scrollDownCue")) {
-    $("#scrollDownCue").hidden = item.viewType !== "game" || item.id === "twitch";
+    $("#scrollDownCue").hidden = item.viewType !== "game" || item.id === "twitch" || item.id === "youtube";
   }
 
-  document.body.classList.remove("view-welcome", "view-explore", "view-game", "view-twitch");
-  document.body.classList.add(`view-${item.id === "twitch" ? "twitch" : (item.viewType || "game")}`);
+  document.body.classList.remove("view-welcome", "view-explore", "view-game", "view-twitch", "view-youtube");
+  document.body.classList.add(`view-${item.id === "twitch" ? "twitch" : (item.id === "youtube" ? "youtube" : (item.viewType || "game"))}`);
 
   if (item.viewType === "welcome") {
     welcomeEl.hidden = false;
@@ -860,6 +862,8 @@ function renderActiveView() {
     heroEl.hidden = true;
     if (twitchEl) twitchEl.hidden = true;
     twitchService.stopInlineStage();
+    if (youtubeEl) youtubeEl.hidden = true;
+    youtubeService.stopInlineStage();
     setBackground(item.bg || "assets/bg_monica.jpg");
     initSpotlightAndTilt();
   } else if (item.viewType === "explore") {
@@ -868,6 +872,8 @@ function renderActiveView() {
     heroEl.hidden = true;
     if (twitchEl) twitchEl.hidden = true;
     twitchService.stopInlineStage();
+    if (youtubeEl) youtubeEl.hidden = true;
+    youtubeService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderExploreView(item);
     initSpotlightAndTilt();
@@ -875,9 +881,21 @@ function renderActiveView() {
     welcomeEl.hidden = true;
     exploreEl.hidden = true;
     heroEl.hidden = true;
+    if (youtubeEl) youtubeEl.hidden = true;
+    youtubeService.stopInlineStage();
     if (twitchEl) twitchEl.hidden = false;
     setBackground(item.bg, item.fallbackBg);
     twitchService.renderInlineStage();
+    initSpotlightAndTilt();
+  } else if (item.id === "youtube") {
+    welcomeEl.hidden = true;
+    exploreEl.hidden = true;
+    heroEl.hidden = true;
+    if (twitchEl) twitchEl.hidden = true;
+    twitchService.stopInlineStage();
+    if (youtubeEl) youtubeEl.hidden = false;
+    setBackground(item.bg, item.fallbackBg);
+    youtubeService.renderInlineStage();
     initSpotlightAndTilt();
   } else {
     welcomeEl.hidden = true;
@@ -885,6 +903,8 @@ function renderActiveView() {
     heroEl.hidden = false;
     if (twitchEl) twitchEl.hidden = true;
     twitchService.stopInlineStage();
+    if (youtubeEl) youtubeEl.hidden = true;
+    youtubeService.stopInlineStage();
     setBackground(item.bg, item.fallbackBg);
     renderGameHeroView(item);
     initSpotlightAndTilt();
@@ -3778,6 +3798,17 @@ function handleAction(action) {
     const gameId = action.slice(7);
     return launchPlayableGame(gameId);
   }
+  if (action === "modal:youtube-hub" || action === "open:youtube_hub") {
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    return youtubeService.openHub();
+  }
+  if (action.startsWith("youtube-video:")) {
+    const vid = action.slice(14);
+    closeModal();
+    if ($("#searchOverlay")?.classList.contains("active")) closeSearch();
+    return youtubeService.openHub(vid);
+  }
   if (action === "open:youtube") return window.open("https://youtube.com/gaming", "_blank", "noopener");
   if (action === "modal:twitch-hub" || action === "open:twitch") {
     closeModal();
@@ -3882,6 +3913,7 @@ function handleKeydown(e) {
   const tcOpen = $("#modalTrophyCollection") && $("#modalTrophyCollection").classList.contains("active");
   const tcDetailOpen = $("#modalGameTrophiesDetail") && $("#modalGameTrophiesDetail").classList.contains("active");
   const twitchOpen = $("#modalTwitchHub") && $("#modalTwitchHub").classList.contains("active");
+  const youtubeOpen = $("#modalYoutubeHub") && $("#modalYoutubeHub").classList.contains("active");
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) {
     if (e.key === "Backspace") {
@@ -3898,6 +3930,10 @@ function handleKeydown(e) {
     e.preventDefault();
     if (twitchOpen) {
       twitchService.closeHub();
+      return;
+    }
+    if (youtubeOpen) {
+      youtubeService.closeHub();
       return;
     }
     if (tcDetailOpen) {
@@ -5275,7 +5311,7 @@ function init() {
     (e) => {
       if (state.isControlCenterOpen || $("#searchOverlay").classList.contains("active") || $("#settingsOverlay").classList.contains("active") || $("#modalOverlay").classList.contains("active")) return;
       const active = getActiveItem();
-      if (active?.id === "twitch" || active?.viewType !== "game") return;
+      if (active?.id === "twitch" || active?.id === "youtube" || active?.viewType !== "game") return;
       if (e.deltaY > 36 && !state.isHubOpen) openGameHub();
       else if (e.deltaY < -36 && state.isHubOpen && $("#stageGameHub").scrollTop <= 0) closeGameHub();
     },
@@ -5297,6 +5333,8 @@ function init() {
     psnService.init().then(() => applyLanguageAndTelemetry());
     twitchService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
     twitchService.init();
+    youtubeService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
+    youtubeService.init();
   });
 
   const initialHash = window.location.hash.replace("#", "");
@@ -5307,6 +5345,18 @@ function init() {
     } else if (initialHash.startsWith("stream-")) {
       const ch = initialHash.replace("stream-", "");
       twitchService.openHub(ch);
+    } else if (initialHash === "youtube") {
+      switchCategory("media");
+      selectTile("youtube", false);
+    } else if (initialHash === "youtube-hub") {
+      switchCategory("media");
+      selectTile("youtube", false);
+      youtubeService.openHub();
+    } else if (initialHash.startsWith("youtube-video-") || initialHash.startsWith("yt-")) {
+      const vid = initialHash.replace(/^youtube-video-|^yt-/, "");
+      switchCategory("media");
+      selectTile("youtube", false);
+      youtubeService.openHub(vid);
     } else {
       const allItems = [...(ribbonCatalog.games || []), ...(ribbonCatalog.media || [])];
       const match = allItems.find((it) => it.id === initialHash || it.id.replace("_", "-") === initialHash.replace("_", "-"));

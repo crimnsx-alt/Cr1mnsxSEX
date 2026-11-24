@@ -10,15 +10,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <!-- Preconnect & DNS-Prefetch for instantaneous Twitch player, chat & telemetry loading -->
+  <!-- Preconnect & DNS-Prefetch for instantaneous Twitch & YouTube media loading -->
   <link rel="preconnect" href="https://player.twitch.tv" crossorigin />
   <link rel="preconnect" href="https://static.twitchcdn.net" crossorigin />
   <link rel="preconnect" href="https://embed.twitch.tv" crossorigin />
   <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin />
+  <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin />
+  <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
+  <link rel="preconnect" href="https://i3.ytimg.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.twitch.tv" />
   <link rel="dns-prefetch" href="https://static-cdn.jtvnw.net" />
   <link rel="dns-prefetch" href="https://decapi.me" />
-  <link rel="stylesheet" href="css/style.css?v=20261124_twitchfast" />
+  <link rel="dns-prefetch" href="https://api.rss2json.com" />
+  <link rel="stylesheet" href="css/style.css?v=20261124_youtubetheater" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -585,6 +589,94 @@
             </div>
             <div class="twitch-in-chat-iframe-holder" id="twitchInlineChatHolder">
               <!-- Chat Iframe inserted here -->
+            </div>
+          </aside>
+        </div>
+      </main>
+
+      <!-- VIEW 5: PS5 YOUTUBE INLINE VIDEO THEATER -->
+      <main class="ps5-youtube-view blur-fade-stagger" id="ps5YoutubeView" hidden>
+        <!-- Studio Top Control Bar -->
+        <div class="ps5-youtube-control-bar">
+          <div class="youtube-cb-left">
+            <span class="youtube-brand-badge">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              <span>YOUTUBE VIDEO THEATER</span>
+            </span>
+            <div class="youtube-cb-channel-pill">
+              <span class="youtube-cb-dot"></span>
+              <span>@Mafanya122 · МАФАНЯ КИНГ</span>
+            </div>
+            <span class="youtube-cb-telemetry" id="ytTelemetryText">5 видео · 4K UHD · Автообновление</span>
+          </div>
+
+          <div class="youtube-cb-right">
+            <button type="button" class="youtube-cb-btn" id="btnYoutubeSync" title="Проверить наличие новых видео на канале">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+              <span>Обновить</span>
+            </button>
+            <button type="button" class="youtube-cb-btn" id="btnYoutubeFullscreen" title="Развернуть в полноэкранный кинотеатр">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+              <span>Кинотеатр</span>
+            </button>
+            <button type="button" class="youtube-cb-btn" id="btnYoutubeExternal" title="Открыть канал на YouTube">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>YouTube.com</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main Studio Grid (Center Cinema Stage + Right Playlist) -->
+        <div class="ps5-youtube-stage-layout">
+          <!-- Center Cinema Player Stage -->
+          <section class="youtube-inline-cinema-stage">
+            <div class="youtube-inline-player-box" id="youtubeInlinePlayerBox">
+              <div class="youtube-inline-ambient-aura"></div>
+              <div class="youtube-inline-iframe-holder" id="youtubeInlineIframeHolder">
+                <!-- YouTube Iframe injected here -->
+              </div>
+            </div>
+
+            <!-- Video Meta Details Bar -->
+            <div class="youtube-inline-meta-bar" id="youtubeInlineMetaBar">
+              <div class="yt-in-meta-left">
+                <div class="yt-in-avatar">
+                  <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/640e8965-1b32-4428-bd45-6fe892746bf4-profile_image-300x300.png" alt="Мафаня Кинг" loading="lazy" decoding="async" />
+                </div>
+                <div class="yt-in-details">
+                  <h3 class="yt-in-name" id="youtubeInlineVideoTitle">РЕЖИССЕРСКАЯ ВЕРСИЯ ЛОРА С Г*ЕМ</h3>
+                  <div class="yt-in-subline">
+                    <span class="yt-in-author">МАФАНЯ КИНГ · @Mafanya122</span>
+                    <span class="yt-in-meta-stats" id="youtubeInlineVideoMeta">360 тыс. · 6 дн. назад</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="yt-in-meta-right">
+                <button type="button" class="youtube-in-btn" id="btnYoutubeShare" title="Скопировать ссылку на видео">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  <span>Поделиться</span>
+                </button>
+                <button type="button" class="youtube-in-btn" id="btnYoutubeWatchExt" title="Смотреть на YouTube">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <span>На YouTube</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Right Playlist Drawer: All Videos of Channel -->
+          <aside class="youtube-inline-playlist-drawer">
+            <div class="youtube-pl-head">
+              <div class="youtube-pl-title-row">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect width="15" height="14" x="1" y="5" rx="2"/></svg>
+                <span>ВИДЕО КАНАЛА</span>
+              </div>
+              <span class="youtube-pl-counter" id="youtubeVideosCount">5 ВИДЕО</span>
+            </div>
+
+            <div class="youtube-inline-playlist" id="youtubeInlinePlaylist">
+              <!-- Dynamically populated video cards -->
             </div>
           </aside>
         </div>
@@ -1476,6 +1568,49 @@
     </div>
   </div>
 
+  <!-- MODAL: PS5 YOUTUBE THEATER DIALOG -->
+  <div class="modal-sber-tips modal-tc-fullscreen modal-youtube-fullscreen" id="modalYoutubeHub" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="youtubeHubBackdrop"></div>
+    <div class="tc-dialog-box youtube-dialog-box" role="dialog" aria-modal="true" aria-labelledby="youtubeDialogTitle">
+      <div class="tc-top-bar youtube-top-bar">
+        <div class="tc-top-brand">
+          <div class="youtube-brand-tag-row">
+            <span class="youtube-brand-tag">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#ff0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+              PLAYSTATION® YOUTUBE THEATER
+            </span>
+            <span class="youtube-live-pill">4K UHD</span>
+          </div>
+          <h2 class="tc-brand-title" id="youtubeDialogTitle">Мафаня Кинг · Видео</h2>
+        </div>
+        <div class="tc-top-actions">
+          <button type="button" class="tc-btn-action" id="btnYoutubeHubExt" title="Смотреть на YouTube.com">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            <span>YouTube.com</span>
+          </button>
+          <button type="button" class="sber-tips-close-btn" id="btnYoutubeHubClose" title="Закрыть (Esc)">✕</button>
+        </div>
+      </div>
+      <div class="youtube-hub-modal-body">
+        <div class="youtube-hub-player-wrap" id="youtubeHubPlayerWrap">
+          <!-- Modal Player injected here -->
+        </div>
+        <div class="youtube-hub-info-bar">
+          <div class="yt-hub-info-left">
+            <h3 class="yt-hub-info-title" id="youtubeHubTitle">Видео</h3>
+            <span class="yt-hub-info-meta" id="youtubeHubMeta">МАФАНЯ КИНГ · @Mafanya122</span>
+          </div>
+        </div>
+        <div class="youtube-hub-playlist-section">
+          <h4 class="yt-hub-pl-heading">Все видеоролики канала (@Mafanya122)</h4>
+          <div class="youtube-hub-playlist" id="youtubeHubPlaylist">
+            <!-- Playlist items injected here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- FLOATING PICTURE-IN-PICTURE (PiP) WIDGET -->
   <div class="ps5-twitch-pip" id="ps5TwitchPip" hidden>
     <div class="twitch-pip-header" id="twitchPipHeader">
@@ -1509,6 +1644,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261124_twitchfast"></script>
+  <script type="module" src="js/app.js?v=20261124_youtubetheater"></script>
 </body>
 </html>

@@ -420,30 +420,77 @@ export const ribbonCatalog = {
     },
     {
       id: "youtube",
-      viewType: "game",
-      title: { ru: "YouTube", en: "YouTube" },
-      publisher: "Google LLC",
-      kicker: { ru: "Медиасервис · 4K HDR 60 FPS", en: "Media Service · 4K HDR 60 FPS" },
+      viewType: "youtube",
+      title: { ru: "YouTube · Мафаня", en: "YouTube · Mafanya" },
+      publisher: "МАФАНЯ КИНГ · @Mafanya122",
+      kicker: { ru: "Официальный канал · 4K UHD", en: "Official Channel · 4K UHD" },
       desc: {
-        ru: "Смотрите любимые игровые каналы, прямые трансляции, руководства по прохождению и трейлеры в максимальном качестве 4K HDR.",
-        en: "Watch your favorite gaming creators, live streams, game walkthroughs, and official 4K HDR trailers."
+        ru: "Интерактивный видео-театр: Лор с геем, Режиссерская версия, Zoom-пранки и эксклюзивные материалы в 4K качестве с автообновлением новых релизов.",
+        en: "Interactive video theater: Mafanya Lore series, Director's Cut, Zoom pranks, and exclusive 4K content with auto-updating RSS releases."
       },
-      ctaText: { ru: "Запустить", en: "Start" },
-      btnAction: "open:youtube",
-      secText: { ru: "В браузер", en: "Browser" },
+      ctaText: { ru: "В Кинотеатр", en: "Cinema" },
+      btnAction: "modal:youtube-hub",
+      secText: { ru: "YouTube.com", en: "YouTube.com" },
       secAction: "open:youtube",
       iconSvg: PS5Icons.youtubeTile,
       bg: PS5Icons.makeSceneArt("media-slot", "YOUTUBE 4K"),
-      thumb: PS5Icons.makeSceneArt("media-slot", "YOUTUBE"),
+      thumb: "https://i.ytimg.com/vi/nr5Hy2uwrc4/maxresdefault.jpg",
       progressPct: 100,
-      playTime: "Приложение PS5",
-      trophies: { platinum: 0, gold: 0, silver: 0, bronze: 0 },
+      playTime: "Театр PS5",
+      trophies: null,
       activities: [
-        { title: "Рекомендованные стримы", type: "Прямой эфир", progress: 100, timeEst: "Онлайн", thumb: PS5Icons.makeSceneArt("media-slot"), action: "open:youtube" },
-        { title: "Официальные трейлеры PlayStation", type: "Канал PS", progress: 100, timeEst: "4K HDR", thumb: PS5Icons.makeSceneArt("slot-1"), action: "open:youtube" }
+        {
+          title: "РЕЖИССЕРСКАЯ ВЕРСИЯ ЛОРА С Г*ЕМ [доп материалы + похороны]",
+          type: "Спецвыпуск · 4K",
+          progress: 100,
+          timeEst: "38 мин",
+          thumb: "https://i.ytimg.com/vi/nr5Hy2uwrc4/hqdefault.jpg",
+          action: "youtube-video:nr5Hy2uwrc4"
+        },
+        {
+          title: "Я УМЕР, ЧТОБЫ НЕ ЖИТЬ С Г*ЕМ? [3 ЧАСТЬ] - ФИНАЛ",
+          type: "Финал 3 части",
+          progress: 100,
+          timeEst: "46 мин",
+          thumb: "https://i.ytimg.com/vi/Z9A2LxrRjuk/hqdefault.jpg",
+          action: "youtube-video:Z9A2LxrRjuk"
+        },
+        {
+          title: "ФУРРИ НАС*ЛЬНИК ПРИШЁЛ К ПСИХОЛОГУ… [ZOOM ПРАНК]",
+          type: "Zoom пранк",
+          progress: 100,
+          timeEst: "17 мин",
+          thumb: "https://i.ytimg.com/vi/lHYHXugAZF4/hqdefault.jpg",
+          action: "youtube-video:lHYHXugAZF4"
+        },
+        {
+          title: "МНЕ Г*Й СДЕЛАЛ ПРЕДЛОЖЕНИЕ [2 ЧАСТЬ ЛОРА МАФАНИ]",
+          type: "2 часть лора",
+          progress: 100,
+          timeEst: "35 мин",
+          thumb: "https://i.ytimg.com/vi/R-ILS0pketc/hqdefault.jpg",
+          action: "youtube-video:R-ILS0pketc"
+        },
+        {
+          title: "ЗАСТАВИЛ Г*Я ВЛЮБИТЬСЯ В СЕБЯ [ПОЛНЫЙ ЛОР СЕРИАЛА]",
+          type: "Полный сериал",
+          progress: 100,
+          timeEst: "1 ч 01 мин",
+          thumb: "https://i.ytimg.com/vi/FGy7KWr7BrM/hqdefault.jpg",
+          action: "youtube-video:FGy7KWr7BrM"
+        }
       ],
       news: [
-        { date: "YouTube PS5", title: "Поддержка пространственного звука", desc: "Смотрите видео со звуком 3D Tempest Audio на совместимых наушниках." }
+        {
+          date: "Канал @Mafanya122",
+          title: "Режиссерская версия лора уже на канале",
+          desc: "Дополнительные материалы 3-й части, влог со съемок и финальные сцены похорон."
+        },
+        {
+          date: "Автообновление RSS",
+          title: "Автоматическая синхронизация новых видео",
+          desc: "При публикации новых роликов на канале @Mafanya122 они автоматически появляются в видеотеке PS5."
+        }
       ]
     },
     {
