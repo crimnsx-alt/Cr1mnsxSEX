@@ -163,10 +163,6 @@ export default {
               psnOnlineId: prof.onlineId || url.searchParams.get("onlineId") || "Cr1mnsx",
               psnLinked: true,
               confirmedPsnPlatinums: counts.platinum,
-              profileUrls: [
-                `https://psn.gg/profile/${prof.onlineId || "Cr1mnsx"}`,
-                `https://psnprofiles.com/${prof.onlineId || "Cr1mnsx"}`
-              ],
               avatarUrl: (
                 prof.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl ||
                 prof.avatars?.[0]?.url ||

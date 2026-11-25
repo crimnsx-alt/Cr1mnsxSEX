@@ -10,6 +10,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { cachePsnIconsInDataset } from './cache-icons.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -242,10 +243,6 @@ async function fetchPsnData(accessToken) {
       psnOnlineId: onlineId,
       psnLinked: true,
       confirmedPsnPlatinums: counts.platinum,
-      profileUrls: [
-        `https://psn.gg/profile/${onlineId}`,
-        `https://psnprofiles.com/${onlineId}`
-      ],
       avatarUrl,
       aboutMe,
       trophyLevel,
@@ -412,6 +409,13 @@ async function main() {
       }
     }
 
+    try {
+      const cacheRes = await cachePsnIconsInDataset(payload);
+      console.log(`✓ Cached PSN icons locally (${cacheRes.ok} ok, ${cacheRes.fail} failed)`);
+    } catch (cacheErr) {
+      console.warn(`Warning: Could not cache PSN icons locally: ${cacheErr.message}`);
+    }
+
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(payload, null, 2), 'utf8');
     console.log(`✓ Saved to ${TROPHIES_JSON_PATH} (total ${payload.games.length} games including browser ports)`);
@@ -434,10 +438,6 @@ function getBaseDataset() {
       psnOnlineId: "Cr1mnsx",
       psnLinked: false,
       confirmedPsnPlatinums: 2,
-      profileUrls: [
-        "https://psn.gg/profile/Cr1mnsx",
-        "https://psnprofiles.com/Cr1mnsx"
-      ],
       avatarUrl: "assets/brawl/avatars/player_avatar.webp",
       aboutMe: "Brawl Stars (#2RGUQJQ0R) & PlayStation 5",
       trophyLevel: 0,

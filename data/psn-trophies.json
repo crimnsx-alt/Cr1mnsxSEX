@@ -4,11 +4,7 @@
     "psnOnlineId": "Cr1mnsx",
     "psnLinked": true,
     "confirmedPsnPlatinums": 2,
-    "profileUrls": [
-      "https://psn.gg/profile/Cr1mnsx",
-      "https://psnprofiles.com/Cr1mnsx"
-    ],
-    "avatarUrl": "https://static-resource.np.community.playstation.net/avatar_s/WWS_A/A2114_s.png",
+    "avatarUrl": "assets/psn/avatar.png",
     "aboutMe": "",
     "trophyLevel": 200,
     "levelProgress": 93,
@@ -27,12 +23,13 @@
       "trophyType": "bronze",
       "trophyName": "Невидимка",
       "trophyDetail": "Ограбить ювелирный магазин, избежав обнаружения.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/ca80c0ae-6634-4584-892c-c87b6a7a1164.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_38.jpg",
       "trophyRare": 0,
       "earned": true,
       "earnedDateTime": "2026-11-24T09:31:46Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/ca80c0ae-6634-4584-892c-c87b6a7a1164.png"
     },
     {
       "trophyId": 22,
@@ -40,12 +37,13 @@
       "trophyType": "bronze",
       "trophyName": "Нам понадобится лодка побольше",
       "trophyDetail": "Выполнить последнее задание, связанное с Кентоном.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/c7e9d4cc-6ff9-4aee-a430-a2e70f170c30.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_22.jpg",
       "trophyRare": 0,
       "earned": true,
       "earnedDateTime": "2026-11-24T06:12:10Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/c7e9d4cc-6ff9-4aee-a430-a2e70f170c30.png"
     },
     {
       "trophyId": 52,
@@ -53,12 +51,13 @@
       "trophyType": "bronze",
       "trophyName": "Транжира",
       "trophyDetail": "Потратить 100 000 $ в магазинах.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/9b956bc1-a781-4940-8c1c-5abe1d6a412c.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_52.jpg",
       "trophyRare": 1,
       "earned": true,
       "earnedDateTime": "2026-11-22T17:12:40Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/9b956bc1-a781-4940-8c1c-5abe1d6a412c.png"
     },
     {
       "trophyId": 33,
@@ -66,12 +65,13 @@
       "trophyType": "bronze",
       "trophyName": "Терапевтический шопинг",
       "trophyDetail": "Вместе с партнером ограбить 3 магазина подряд, не теряя уровень розыска.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/6eb16a2c-d0eb-43dc-9af2-df696cb6efbb.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_33.jpg",
       "trophyRare": 0,
       "earned": true,
       "earnedDateTime": "2026-11-22T12:15:03Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/6eb16a2c-d0eb-43dc-9af2-df696cb6efbb.png"
     },
     {
       "trophyId": 43,
@@ -79,12 +79,13 @@
       "trophyType": "bronze",
       "trophyName": "В начале…",
       "trophyDetail": "Выпить коктейль с видом на Оушен-Бич.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/a8b8a271-df7e-4412-a9f8-fb80c40bc197.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_43.jpg",
       "trophyRare": 0,
       "earned": true,
       "earnedDateTime": "2026-11-22T11:40:41Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/a8b8a271-df7e-4412-a9f8-fb80c40bc197.png"
     },
     {
       "trophyId": 19,
@@ -92,12 +93,13 @@
       "trophyType": "bronze",
       "trophyName": "Снасть в масть",
       "trophyDetail": "Победить Кэла в рыболовном состязании.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/4bed4178-e7ac-4869-a449-6f419742bbb3.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_19.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-22T07:28:23Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/4bed4178-e7ac-4869-a449-6f419742bbb3.png"
     },
     {
       "trophyId": 3,
@@ -105,12 +107,13 @@
       "trophyType": "bronze",
       "trophyName": "С****и, жопы, наркоденьги",
       "trophyDetail": "Завершить 2-ю главу.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/8a7c5bc6-16e0-46b9-97b8-873fb4663540.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_3.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-21T18:12:08Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/8a7c5bc6-16e0-46b9-97b8-873fb4663540.png"
     },
     {
       "trophyId": 34,
@@ -118,12 +121,13 @@
       "trophyType": "bronze",
       "trophyName": "Наметанный глаз",
       "trophyDetail": "Найти 100 транспортных средств.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/44e80081-95a6-4802-af36-7c33bc0085dc.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_34.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-21T17:54:53Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/44e80081-95a6-4802-af36-7c33bc0085dc.png"
     },
     {
       "trophyId": 45,
@@ -131,12 +135,13 @@
       "trophyType": "bronze",
       "trophyName": "Идем в боулинг",
       "trophyDetail": "Зачистить боулинг-клуб, принадлежащий «кольтам».",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/43eb4fb6-fc23-49c4-bafd-bf85c0fca9c8.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_45.jpg",
       "trophyRare": 1,
       "earned": true,
       "earnedDateTime": "2026-11-21T14:32:00Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/43eb4fb6-fc23-49c4-bafd-bf85c0fca9c8.png"
     },
     {
       "trophyId": 32,
@@ -144,12 +149,13 @@
       "trophyType": "bronze",
       "trophyName": "Знойная парочка",
       "trophyDetail": "Вместе с партнером сбросить 4-зведочный уровень розыска и уйти от преследования.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/ac8702aa-3652-4e2d-aec8-91a6457ca897.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_32.jpg",
       "trophyRare": 1,
       "earned": true,
       "earnedDateTime": "2026-11-21T09:43:20Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/ac8702aa-3652-4e2d-aec8-91a6457ca897.png"
     },
     {
       "trophyId": 7,
@@ -157,12 +163,13 @@
       "trophyType": "bronze",
       "trophyName": "Ты веришь мне?",
       "trophyDetail": "Выполнить задание «Утренний моцион».",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/c66389f7-9630-4b18-853a-05a51b28d9a0.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_7.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-20T21:11:01Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/c66389f7-9630-4b18-853a-05a51b28d9a0.png"
     },
     {
       "trophyId": 49,
@@ -170,12 +177,13 @@
       "trophyType": "bronze",
       "trophyName": "Истина где-то рядом",
       "trophyDetail": "Что это вообще было?",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/2ff0616f-5649-4e3c-9e32-6553f71a5df7.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_49.jpg",
       "trophyRare": 1,
       "earned": true,
       "earnedDateTime": "2026-11-20T18:50:09Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/2ff0616f-5649-4e3c-9e32-6553f71a5df7.png"
     },
     {
       "trophyId": 2,
@@ -183,12 +191,13 @@
       "trophyType": "bronze",
       "trophyName": "Потерянный рай",
       "trophyDetail": "Завершить 1-ю главу.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/99df9de1-dd5c-4110-95da-7e1cba86f23a.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_2.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-20T15:09:54Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/99df9de1-dd5c-4110-95da-7e1cba86f23a.png"
     },
     {
       "trophyId": 1,
@@ -196,12 +205,13 @@
       "trophyType": "bronze",
       "trophyName": "Как в раю",
       "trophyDetail": "Выполнить задание «Крупный улов».",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/54be3243-2d20-4b5c-8c26-f4208c365aee.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR21085_00_1.jpg",
       "trophyRare": 3,
       "earned": true,
       "earnedDateTime": "2026-11-19T02:24:23Z",
       "gameTitle": "Grand Theft Auto VI",
-      "npCommunicationId": "NPWR21085_00"
+      "npCommunicationId": "NPWR21085_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/54be3243-2d20-4b5c-8c26-f4208c365aee.png"
     },
     {
       "trophyId": 32,
@@ -209,12 +219,13 @@
       "trophyType": "bronze",
       "trophyName": "Верховный повелитель Вольнир",
       "trophyDetail": "Победите верховного повелителя Вольнира.",
-      "trophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/91DE3D2EA1E08C97EC85841F707C1CE31C5E2983.PNG",
+      "trophyIconUrl": "assets/psn/recent/NPWR07897_00_32.jpg",
       "trophyRare": 3,
       "earned": true,
       "earnedDateTime": "2026-11-18T15:16:07Z",
       "gameTitle": "DARK SOULS III",
-      "npCommunicationId": "NPWR07897_00"
+      "npCommunicationId": "NPWR07897_00",
+      "remoteTrophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/91DE3D2EA1E08C97EC85841F707C1CE31C5E2983.PNG"
     },
     {
       "trophyId": 4,
@@ -222,12 +233,13 @@
       "trophyType": "silver",
       "trophyName": "Повелители пепла: Хранители Бездны",
       "trophyDetail": "Победите Хранителей Бездны, повелителей пепла.",
-      "trophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/8156D68BD2ADC686DB41244F490CDB30803B574C.PNG",
+      "trophyIconUrl": "assets/psn/recent/NPWR07897_00_4.jpg",
       "trophyRare": 3,
       "earned": true,
       "earnedDateTime": "2026-11-17T18:31:34Z",
       "gameTitle": "DARK SOULS III",
-      "npCommunicationId": "NPWR07897_00"
+      "npCommunicationId": "NPWR07897_00",
+      "remoteTrophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/8156D68BD2ADC686DB41244F490CDB30803B574C.PNG"
     },
     {
       "trophyId": 31,
@@ -235,12 +247,13 @@
       "trophyType": "bronze",
       "trophyName": "Дьяконы глубин",
       "trophyDetail": "Победите дьяконов глубин.",
-      "trophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/DE0A611A27F4E5CA6C66E4180AA235CFC412E519.PNG",
+      "trophyIconUrl": "assets/psn/recent/NPWR07897_00_31.jpg",
       "trophyRare": 3,
       "earned": true,
       "earnedDateTime": "2026-11-17T16:33:24Z",
       "gameTitle": "DARK SOULS III",
-      "npCommunicationId": "NPWR07897_00"
+      "npCommunicationId": "NPWR07897_00",
+      "remoteTrophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/DE0A611A27F4E5CA6C66E4180AA235CFC412E519.PNG"
     },
     {
       "trophyId": 21,
@@ -248,12 +261,13 @@
       "trophyType": "bronze",
       "trophyName": "Ковенант: Пальцы Розарии",
       "trophyDetail": "Вступите в ковенант «Пальцы Розарии».",
-      "trophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/526A44698A5E62475EA7B0D1DFA81C1E5506B2FA.PNG",
+      "trophyIconUrl": "assets/psn/recent/NPWR07897_00_21.jpg",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-17T16:10:42Z",
       "gameTitle": "DARK SOULS III",
-      "npCommunicationId": "NPWR07897_00"
+      "npCommunicationId": "NPWR07897_00",
+      "remoteTrophyIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/526A44698A5E62475EA7B0D1DFA81C1E5506B2FA.PNG"
     },
     {
       "trophyId": 9,
@@ -261,12 +275,13 @@
       "trophyType": "bronze",
       "trophyName": "Первая модификация",
       "trophyDetail": "Вы модифицировали оружие или одежду с помощью спирали или ткани.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/3a960aba-1328-42d2-82d9-3720c7fd0527.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR24321_00_9.png",
       "trophyRare": 3,
       "earned": true,
       "earnedDateTime": "2026-11-17T09:41:44Z",
       "gameTitle": "Horizon Zero Dawn™ Remastered",
-      "npCommunicationId": "NPWR24321_00"
+      "npCommunicationId": "NPWR24321_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/3a960aba-1328-42d2-82d9-3720c7fd0527.png"
     },
     {
       "trophyId": 24,
@@ -274,19 +289,20 @@
       "trophyType": "bronze",
       "trophyName": "Зачистить зараженную зону",
       "trophyDetail": "Вы убили все зараженные машины в зараженной зоне.",
-      "trophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/7e085fe8-9c74-4447-b342-7794e60f3864.png",
+      "trophyIconUrl": "assets/psn/recent/NPWR24321_00_24.png",
       "trophyRare": 2,
       "earned": true,
       "earnedDateTime": "2026-11-17T09:40:59Z",
       "gameTitle": "Horizon Zero Dawn™ Remastered",
-      "npCommunicationId": "NPWR24321_00"
+      "npCommunicationId": "NPWR24321_00",
+      "remoteTrophyIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/7e085fe8-9c74-4447-b342-7794e60f3864.png"
     }
   ],
   "games": [
     {
       "npCommunicationId": "NPWR21085_00",
       "titleName": "Grand Theft Auto VI",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/a71143e7-a67a-434e-b61d-38653cf9608f.png",
+      "titleIconUrl": "assets/psn/games/NPWR21085_00.png",
       "platform": "PS5",
       "progress": 20,
       "platinumEarned": false,
@@ -904,12 +920,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21085_00/a71143e7-a67a-434e-b61d-38653cf9608f.png"
     },
     {
       "npCommunicationId": "NPWR07897_00",
       "titleName": "DARK SOULS III",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/3F49215DC1A348E47575B58B205808F148F3D3A8.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR07897_00.png",
       "platform": "PS4",
       "progress": 20,
       "platinumEarned": false,
@@ -1395,12 +1412,13 @@
           "earned": true,
           "earnedDateTime": "2026-10-09T17:17:11Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07897_00_00B1B88693A993473272413EDB83CC197E895B34D1/3F49215DC1A348E47575B58B205808F148F3D3A8.PNG"
     },
     {
       "npCommunicationId": "NPWR24321_00",
       "titleName": "Horizon Zero Dawn™ Remastered",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/96674236-573c-422c-9754-0357cfde931d.png",
+      "titleIconUrl": "assets/psn/games/NPWR24321_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 6,
       "platinumEarned": false,
@@ -2282,12 +2300,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24321_00/96674236-573c-422c-9754-0357cfde931d.png"
     },
     {
       "npCommunicationId": "NPWR50656_00",
       "titleName": "Battlefield™ 6",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR50656_00/5886a741-0f5c-4993-9ac0-ab82791fa528.png",
+      "titleIconUrl": "assets/psn/games/NPWR50656_00.jpg",
       "platform": "PS5",
       "progress": 21,
       "platinumEarned": false,
@@ -2894,12 +2913,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR50656_00/5886a741-0f5c-4993-9ac0-ab82791fa528.png"
     },
     {
       "npCommunicationId": "NPWR45887_00",
       "titleName": "F1® 25",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR45887_00/f34a14eb-954c-4fe8-8db2-84c2915c4b36.png",
+      "titleIconUrl": "assets/psn/games/NPWR45887_00.jpg",
       "platform": "PS5",
       "progress": 7,
       "platinumEarned": false,
@@ -3429,12 +3449,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR45887_00/f34a14eb-954c-4fe8-8db2-84c2915c4b36.png"
     },
     {
       "npCommunicationId": "NPWR39730_00",
       "titleName": "Tomb Raider IV-VI Remastered",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39730_00/1f9e1715-b81b-49b3-91d7-9b8996de55a3.png",
+      "titleIconUrl": "assets/psn/games/NPWR39730_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -5306,12 +5327,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39730_00/1f9e1715-b81b-49b3-91d7-9b8996de55a3.png"
     },
     {
       "npCommunicationId": "NPWR33491_00",
       "titleName": "Kingdom Come: Deliverance II",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33491_00/3fa1919d-9fca-469a-9a50-e6ade1ee14ac.png",
+      "titleIconUrl": "assets/psn/games/NPWR33491_00.jpg",
       "platform": "PS5",
       "progress": 4,
       "platinumEarned": false,
@@ -6248,12 +6270,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33491_00/3fa1919d-9fca-469a-9a50-e6ade1ee14ac.png"
     },
     {
       "npCommunicationId": "NPWR38792_00",
       "titleName": "Mafia: The Old Country",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR38792_00/bde89590-a085-4d97-a18a-1ddc3388e1d4.png",
+      "titleIconUrl": "assets/psn/games/NPWR38792_00.jpg",
       "platform": "PS5",
       "progress": 38,
       "platinumEarned": false,
@@ -6959,12 +6982,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR38792_00/bde89590-a085-4d97-a18a-1ddc3388e1d4.png"
     },
     {
       "npCommunicationId": "NPWR24695_00",
       "titleName": "Cyberpunk 2077",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24695_00/68b955dc-1ec1-4494-a4b7-751a9c90fe58.png",
+      "titleIconUrl": "assets/psn/games/NPWR24695_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -7615,12 +7639,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24695_00/68b955dc-1ec1-4494-a4b7-751a9c90fe58.png"
     },
     {
       "npCommunicationId": "NPWR24059_00",
       "titleName": "Grand Theft Auto: San Andreas – The Definitive Edition",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24059_00/e64eede9-34dd-4459-bbd9-44261cf39552.png",
+      "titleIconUrl": "assets/psn/games/NPWR24059_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -8018,12 +8043,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24059_00/e64eede9-34dd-4459-bbd9-44261cf39552.png"
     },
     {
       "npCommunicationId": "NPWR09412_00",
       "titleName": "Red Dead Redemption 2",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR09412_00_005BE1C07B44C5D5137CFF609DF9C1BD125CE56787/E1C7515ADB58B892CCC0BB0D0F94512963E11203.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR09412_00.jpg",
       "platform": "PS4",
       "progress": 30,
       "platinumEarned": false,
@@ -8608,12 +8634,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR09412_00_005BE1C07B44C5D5137CFF609DF9C1BD125CE56787/E1C7515ADB58B892CCC0BB0D0F94512963E11203.PNG"
     },
     {
       "npCommunicationId": "NPWR06600_00",
       "titleName": "Assassin's Creed® Единство",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06600_00_00AFD97060968F822BF934F9BA406EF41310E6D63F/DA1157CCDD3B5A79EECCFFD97A5730424460FA91.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06600_00.jpg",
       "platform": "PS4",
       "progress": 43,
       "platinumEarned": false,
@@ -9264,12 +9291,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06600_00_00AFD97060968F822BF934F9BA406EF41310E6D63F/DA1157CCDD3B5A79EECCFFD97A5730424460FA91.PNG"
     },
     {
       "npCommunicationId": "NPWR08199_00",
       "titleName": "DARK SOULS™ Ⅱ: Scholar of the First Sin",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR08199_00_0041F9770FBE806110B69A2EA6A08590B7483E7FD5/AD01C3225C31F8DBD918D7E842C824ADE9432CEC.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR08199_00.jpg",
       "platform": "PS4",
       "progress": 32,
       "platinumEarned": false,
@@ -9700,12 +9728,13 @@
           "earned": true,
           "earnedDateTime": "2026-09-13T19:06:49Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR08199_00_0041F9770FBE806110B69A2EA6A08590B7483E7FD5/AD01C3225C31F8DBD918D7E842C824ADE9432CEC.PNG"
     },
     {
       "npCommunicationId": "NPWR15055_00",
       "titleName": "Far Cry® 3 Classic Edition",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15055_00_00DD9DF8496BB96F23870991DFCE71EB6079372CC1/914F467317C296B05EFF9079CA56D21226B80A60.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR15055_00.jpg",
       "platform": "PS4",
       "progress": 45,
       "platinumEarned": false,
@@ -10202,12 +10231,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15055_00_00DD9DF8496BB96F23870991DFCE71EB6079372CC1/914F467317C296B05EFF9079CA56D21226B80A60.PNG"
     },
     {
       "npCommunicationId": "NPWR24698_00",
       "titleName": "Ведьмак 3: Дикая охота",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24698_00/fc693846-74e7-4ce9-aff2-67b8d2cb7bd9.png",
+      "titleIconUrl": "assets/psn/games/NPWR24698_00.jpg",
       "platform": "PS5",
       "progress": 18,
       "platinumEarned": false,
@@ -11089,12 +11119,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24698_00/fc693846-74e7-4ce9-aff2-67b8d2cb7bd9.png"
     },
     {
       "npCommunicationId": "NPWR37139_00",
       "titleName": "Дожить до рассвета",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37139_00/d3e3d749-d309-41ed-88bb-67f9421bee65.png",
+      "titleIconUrl": "assets/psn/games/NPWR37139_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 4,
       "platinumEarned": false,
@@ -11426,12 +11457,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37139_00/d3e3d749-d309-41ed-88bb-67f9421bee65.png"
     },
     {
       "npCommunicationId": "NPWR13281_00",
       "titleName": "DARK SOULS™: REMASTERED",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13281_00_00A03E8F7ED2727FADE2548E45F2781D32F5D048F6/B26EE8644603C33DBEB01C4E172FB4972D069B2E.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR13281_00.jpg",
       "platform": "PS4",
       "progress": 42,
       "platinumEarned": false,
@@ -11895,12 +11927,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13281_00_00A03E8F7ED2727FADE2548E45F2781D32F5D048F6/B26EE8644603C33DBEB01C4E172FB4972D069B2E.PNG"
     },
     {
       "npCommunicationId": "NPWR05659_00",
       "titleName": "Dying Light",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05659_00_00E860F5334098230AE4381F20597847411D67981E/D9BBA0E08F3AC5104AA00346C8B3462A15F4322D.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR05659_00.jpg",
       "platform": "PS4",
       "progress": 3,
       "platinumEarned": false,
@@ -12672,12 +12705,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05659_00_00E860F5334098230AE4381F20597847411D67981E/D9BBA0E08F3AC5104AA00346C8B3462A15F4322D.PNG"
     },
     {
       "npCommunicationId": "NPWR20652_00",
       "titleName": "Helldivers 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20652_00/405f0b90-b5a9-42ec-8fef-4cdc52e77748.png",
+      "titleIconUrl": "assets/psn/games/NPWR20652_00.jpg",
       "platform": "PS5",
       "progress": 7,
       "platinumEarned": false,
@@ -13119,12 +13153,13 @@
           "earned": true,
           "earnedDateTime": "2026-08-14T07:58:44Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20652_00/405f0b90-b5a9-42ec-8fef-4cdc52e77748.png"
     },
     {
       "npCommunicationId": "NPWR29894_00",
       "titleName": "Assassin's Creed® Мираж",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR29894_00/9f6ed43e-781f-4232-a75b-1e5f36d31719.png",
+      "titleIconUrl": "assets/psn/games/NPWR29894_00.jpg",
       "platform": "PS5",
       "progress": 62,
       "platinumEarned": false,
@@ -13819,12 +13854,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR29894_00/9f6ed43e-781f-4232-a75b-1e5f36d31719.png"
     },
     {
       "npCommunicationId": "NPWR38263_00",
       "titleName": "Return to Moria",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR38263_00/4609ffe6-02cd-4532-b74e-52e0a13f3074.png",
+      "titleIconUrl": "assets/psn/games/NPWR38263_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -14145,12 +14181,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR38263_00/4609ffe6-02cd-4532-b74e-52e0a13f3074.png"
     },
     {
       "npCommunicationId": "NPWR23200_00",
       "titleName": "The Crew Motorfest",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23200_00/b22cc4a4-3cca-4215-adf4-9853a4599546.png",
+      "titleIconUrl": "assets/psn/games/NPWR23200_00.png",
       "platform": "PS5",
       "progress": 8,
       "platinumEarned": false,
@@ -14724,12 +14761,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23200_00/b22cc4a4-3cca-4215-adf4-9853a4599546.png"
     },
     {
       "npCommunicationId": "NPWR21647_00",
       "titleName": "Grand Theft Auto V",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21647_00/26efdb55-9e6d-4de9-943f-6b95768ae607.png",
+      "titleIconUrl": "assets/psn/games/NPWR21647_00.png",
       "platform": "PS5",
       "progress": 17,
       "platinumEarned": false,
@@ -15600,12 +15638,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21647_00/26efdb55-9e6d-4de9-943f-6b95768ae607.png"
     },
     {
       "npCommunicationId": "NPWR25220_00",
       "titleName": "Warhammer 40,000: Space Marine 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25220_00/f932b446-ed2f-4702-a22a-441ef156f983.png",
+      "titleIconUrl": "assets/psn/games/NPWR25220_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -16168,12 +16207,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25220_00/f932b446-ed2f-4702-a22a-441ef156f983.png"
     },
     {
       "npCommunicationId": "NPWR39854_00",
       "titleName": "F1® 24",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39854_00/723f1ed5-fab8-4bc8-a1b1-bd13e86ae1bb.png",
+      "titleIconUrl": "assets/psn/games/NPWR39854_00.jpg",
       "platform": "PS5",
       "progress": 10,
       "platinumEarned": false,
@@ -16747,12 +16787,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39854_00/723f1ed5-fab8-4bc8-a1b1-bd13e86ae1bb.png"
     },
     {
       "npCommunicationId": "NPWR20277_00",
       "titleName": "Demon's Souls",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20277_00/d229b5fa-5e0b-40e6-b7fc-54acc7855c53.png",
+      "titleIconUrl": "assets/psn/games/NPWR20277_00.jpg",
       "platform": "PS5",
       "progress": 8,
       "platinumEarned": false,
@@ -17172,12 +17213,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20277_00/d229b5fa-5e0b-40e6-b7fc-54acc7855c53.png"
     },
     {
       "npCommunicationId": "NPWR22610_00",
       "titleName": "Призы Battlefield 2042",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22610_00/e3a9a63b-2d98-4b93-84aa-95f4516323ce.png",
+      "titleIconUrl": "assets/psn/games/NPWR22610_00.jpg",
       "platform": "PS5",
       "progress": 34,
       "platinumEarned": false,
@@ -17575,12 +17617,13 @@
           "earned": true,
           "earnedDateTime": "2024-09-20T12:14:12Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22610_00/e3a9a63b-2d98-4b93-84aa-95f4516323ce.png"
     },
     {
       "npCommunicationId": "NPWR21115_00",
       "titleName": "Resident Evil Village",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21115_00/a61ffefb-5d49-4183-bf55-4a834551b499.png",
+      "titleIconUrl": "assets/psn/games/NPWR21115_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -18220,12 +18263,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21115_00/a61ffefb-5d49-4183-bf55-4a834551b499.png"
     },
     {
       "npCommunicationId": "NPWR22392_00",
       "titleName": "God of War Рагнарёк",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22392_00/e7fdc8c6-d6ee-4345-b174-3ccb46f617b0.png",
+      "titleIconUrl": "assets/psn/games/NPWR22392_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 7,
       "platinumEarned": false,
@@ -18766,12 +18810,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22392_00/e7fdc8c6-d6ee-4345-b174-3ccb46f617b0.png"
     },
     {
       "npCommunicationId": "NPWR13427_00",
       "titleName": "SHADOW OF THE COLOSSUS™. В ТЕНИ КОЛОССА",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13427_00_00E2ABB2A7677C776A0D3949075E086668343A20AD/1853FA15F00CD48C7AE198D62DA4E848FEE16561.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR13427_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -19202,12 +19247,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13427_00_00E2ABB2A7677C776A0D3949075E086668343A20AD/1853FA15F00CD48C7AE198D62DA4E848FEE16561.PNG"
     },
     {
       "npCommunicationId": "NPWR05212_00",
       "titleName": "WATCH_DOGS™",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05212_00_00452624979CAE2F1D56AB42E5FEDA24608E37E706/B6B667B6C1DE7C2574F260B46EF092C230481D9C.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR05212_00.jpg",
       "platform": "PS4",
       "progress": 1,
       "platinumEarned": false,
@@ -19770,12 +19816,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05212_00_00452624979CAE2F1D56AB42E5FEDA24608E37E706/B6B667B6C1DE7C2574F260B46EF092C230481D9C.PNG"
     },
     {
       "npCommunicationId": "NPWR25484_00",
       "titleName": "Grid Legends",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25484_00/d9827020-ebb4-4b6a-be2c-fba99d52eca4.png",
+      "titleIconUrl": "assets/psn/games/NPWR25484_00.png",
       "platform": "PS5",
       "progress": 3,
       "platinumEarned": false,
@@ -20789,12 +20836,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25484_00/d9827020-ebb4-4b6a-be2c-fba99d52eca4.png"
     },
     {
       "npCommunicationId": "NPWR10261_00",
       "titleName": "Нио",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10261_00_00CAA2186FFF8ED4ABC8FA441A9B72DB43BFD322F8/B4C5186F0DC63A3704590DCEAC632E16BB3B249F.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR10261_00.jpg",
       "platform": "PS4",
       "progress": 1,
       "platinumEarned": false,
@@ -21753,12 +21801,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10261_00_00CAA2186FFF8ED4ABC8FA441A9B72DB43BFD322F8/B4C5186F0DC63A3704590DCEAC632E16BB3B249F.PNG"
     },
     {
       "npCommunicationId": "NPWR37082_00",
       "titleName": "LEGO®: Приключения Horizon™",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37082_00/6fe996b5-6671-479e-8e3f-7a60976b57df.png",
+      "titleIconUrl": "assets/psn/games/NPWR37082_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 0,
       "platinumEarned": false,
@@ -22035,12 +22084,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37082_00/6fe996b5-6671-479e-8e3f-7a60976b57df.png"
     },
     {
       "npCommunicationId": "NPWR25067_00",
       "titleName": "ELDEN RING™",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25067_00/4e6e7018-2356-49b1-956d-dc313418404e.png",
+      "titleIconUrl": "assets/psn/games/NPWR25067_00.jpg",
       "platform": "PS5",
       "progress": 57,
       "platinumEarned": false,
@@ -22515,12 +22565,13 @@
           "earned": true,
           "earnedDateTime": "2025-12-02T11:56:46Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR25067_00/4e6e7018-2356-49b1-956d-dc313418404e.png"
     },
     {
       "npCommunicationId": "NPWR54382_00",
       "titleName": "Red Dead Redemption",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR54382_00/72b9f175-f568-4d6a-895f-b68dff78cf0e.png",
+      "titleIconUrl": "assets/psn/games/NPWR54382_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -23105,12 +23156,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR54382_00/72b9f175-f568-4d6a-895f-b68dff78cf0e.png"
     },
     {
       "npCommunicationId": "NPWR30769_00",
       "titleName": "SILENT HILL 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR30769_00/384b4eed-660a-414d-b102-e96b5a8e59a3.png",
+      "titleIconUrl": "assets/psn/games/NPWR30769_00.jpg",
       "platform": "PS5",
       "progress": 4,
       "platinumEarned": false,
@@ -23607,12 +23659,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR30769_00/384b4eed-660a-414d-b102-e96b5a8e59a3.png"
     },
     {
       "npCommunicationId": "NPWR28317_00",
       "titleName": "EA SPORTS™ WRC",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR28317_00/f02b10f4-fb84-4e06-a70c-5a7ba94bf70c.png",
+      "titleIconUrl": "assets/psn/games/NPWR28317_00.jpg",
       "platform": "PS5",
       "progress": 3,
       "platinumEarned": false,
@@ -23922,12 +23975,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR28317_00/f02b10f4-fb84-4e06-a70c-5a7ba94bf70c.png"
     },
     {
       "npCommunicationId": "NPWR24058_00",
       "titleName": "Grand Theft Auto III – The Definitive Edition",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24058_00/c004c7e8-87aa-48fa-a52f-161de45758d6.png",
+      "titleIconUrl": "assets/psn/games/NPWR24058_00.jpg",
       "platform": "PS5",
       "progress": 31,
       "platinumEarned": false,
@@ -24259,12 +24313,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24058_00/c004c7e8-87aa-48fa-a52f-161de45758d6.png"
     },
     {
       "npCommunicationId": "NPWR33408_00",
       "titleName": "Одни из нас™: Часть II Обновленная версия",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33408_00/8ae7cc78-b051-42d8-9f60-b69ee38e2396.png",
+      "titleIconUrl": "assets/psn/games/NPWR33408_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 18,
       "platinumEarned": false,
@@ -24772,12 +24827,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33408_00/8ae7cc78-b051-42d8-9f60-b69ee38e2396.png"
     },
     {
       "npCommunicationId": "NPWR39969_00",
       "titleName": "Alan Wake II",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39969_00/19bd1dd6-703d-467f-994b-85670c6754d0.png",
+      "titleIconUrl": "assets/psn/games/NPWR39969_00.jpg",
       "platform": "PS5",
       "progress": 2,
       "platinumEarned": false,
@@ -25769,12 +25825,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR39969_00/19bd1dd6-703d-467f-994b-85670c6754d0.png"
     },
     {
       "npCommunicationId": "NPWR26546_00",
       "titleName": "Одни из нас™: Часть I",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26546_00/b2bb541a-28d0-480a-90b5-763f0ef16619.png",
+      "titleIconUrl": "assets/psn/games/NPWR26546_00.jpg",
       "platform": "PS5",
       "progress": 35,
       "platinumEarned": false,
@@ -26106,12 +26163,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26546_00/b2bb541a-28d0-480a-90b5-763f0ef16619.png"
     },
     {
       "npCommunicationId": "NPWR33438_00",
       "titleName": "Atomic Heart",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33438_00/e206b513-3c2c-4f77-a4bc-720c1281b830.png",
+      "titleIconUrl": "assets/psn/games/NPWR33438_00.jpg",
       "platform": "PS5",
       "progress": 25,
       "platinumEarned": false,
@@ -27026,12 +27084,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33438_00/e206b513-3c2c-4f77-a4bc-720c1281b830.png"
     },
     {
       "npCommunicationId": "NPWR22385_00",
       "titleName": "Far Cry® 6",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22385_00/a0bfcc5f-03af-4104-877c-1499076cc22a.png",
+      "titleIconUrl": "assets/psn/games/NPWR22385_00.jpg",
       "platform": "PS5",
       "progress": 5,
       "platinumEarned": false,
@@ -28144,12 +28203,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22385_00/a0bfcc5f-03af-4104-877c-1499076cc22a.png"
     },
     {
       "npCommunicationId": "NPWR06302_00",
       "titleName": "Beyond: Two Souls™",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06302_00_000FD67BBE3B3A789A3FCBB8271D46A9D7B8A1F32B/C583904ACC3E3BF5734BECBACE7FBC7BDC256F1C.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06302_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -28668,12 +28728,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06302_00_000FD67BBE3B3A789A3FCBB8271D46A9D7B8A1F32B/C583904ACC3E3BF5734BECBACE7FBC7BDC256F1C.PNG"
     },
     {
       "npCommunicationId": "NPWR26589_00",
       "titleName": "Uncharted™: Наследие воров. Коллекция",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26589_00/303973cd-c371-4f83-88e3-d87d44ba6668.png",
+      "titleIconUrl": "assets/psn/games/NPWR26589_00.jpg",
       "platform": "PS5",
       "progress": 16,
       "platinumEarned": false,
@@ -29797,12 +29858,13 @@
           "earned": true,
           "earnedDateTime": "2024-12-02T14:45:52Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26589_00/303973cd-c371-4f83-88e3-d87d44ba6668.png"
     },
     {
       "npCommunicationId": "NPWR08268_00",
       "titleName": "God of War III Обновленная версия",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR08268_00_007C6460B26BBD12317E647A8F311FBF91DD928D4A/8E57416AFC918847A599DD0F7097FE4F64D1A552.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR08268_00.png",
       "platform": "PS4",
       "progress": 8,
       "platinumEarned": false,
@@ -30200,12 +30262,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR08268_00_007C6460B26BBD12317E647A8F311FBF91DD928D4A/8E57416AFC918847A599DD0F7097FE4F64D1A552.PNG"
     },
     {
       "npCommunicationId": "NPWR13387_00",
       "titleName": "Battlefield™ V",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13387_00_00D6B0FB69485C47618E10F0F190246D4D85AEC3E3/DC622399D70493741D1C282FEE3FC14327C61B25.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR13387_00.jpg",
       "platform": "PS4",
       "progress": 13,
       "platinumEarned": false,
@@ -30460,12 +30523,13 @@
           "earned": true,
           "earnedDateTime": "2025-06-22T19:16:22Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13387_00_00D6B0FB69485C47618E10F0F190246D4D85AEC3E3/DC622399D70493741D1C282FEE3FC14327C61B25.PNG"
     },
     {
       "npCommunicationId": "NPWR21175_00",
       "titleName": "Хогвартс. Наследие",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21175_00/1a7d23fd-c767-44ec-80d7-8b1e89910f91.png",
+      "titleIconUrl": "assets/psn/games/NPWR21175_00.jpg",
       "platform": "PS5",
       "progress": 7,
       "platinumEarned": false,
@@ -30984,12 +31048,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21175_00/1a7d23fd-c767-44ec-80d7-8b1e89910f91.png"
     },
     {
       "npCommunicationId": "NPWR12518_00",
       "titleName": "God of War",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR12518_00_009C1232E900005FE409857E926767DFE9CAC7F371/CCDC60CADE4B3970C348FEFDE0094BA95C0A802F.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR12518_00.png",
       "platform": "PS4",
       "progress": 31,
       "platinumEarned": false,
@@ -31409,12 +31474,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR12518_00_009C1232E900005FE409857E926767DFE9CAC7F371/CCDC60CADE4B3970C348FEFDE0094BA95C0A802F.PNG"
     },
     {
       "npCommunicationId": "NPWR23378_00",
       "titleName": "Marvel Человек-Паук 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23378_00/2ef8f325-47bd-4e1d-b731-cb8647b06a70.png",
+      "titleIconUrl": "assets/psn/games/NPWR23378_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 94,
       "platinumEarned": false,
@@ -31900,12 +31966,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23378_00/2ef8f325-47bd-4e1d-b731-cb8647b06a70.png"
     },
     {
       "npCommunicationId": "NPWR06221_00",
       "titleName": "Grand Theft Auto V",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06221_00_00943B71B23B3A5D98EB6CA419684E0F0A07FA8707/A3E52C438318CCEC6346EB2A31DBF31164A95A25.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06221_00.png",
       "platform": "PS4",
       "progress": 1,
       "platinumEarned": false,
@@ -32776,12 +32843,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06221_00_00943B71B23B3A5D98EB6CA419684E0F0A07FA8707/A3E52C438318CCEC6346EB2A31DBF31164A95A25.PNG"
     },
     {
       "npCommunicationId": "NPWR06804_00",
       "titleName": "Far Cry® 4",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06804_00_005C2762EFFDB94D064BDC04050E138FA17EA07031/CE09536EAAD560DCB1E0E12618C46AA185B28A2F.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06804_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -33432,12 +33500,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06804_00_005C2762EFFDB94D064BDC04050E138FA17EA07031/CE09536EAAD560DCB1E0E12618C46AA185B28A2F.PNG"
     },
     {
       "npCommunicationId": "NPWR17130_00",
       "titleName": "ЖИЗНЬ ПОСЛЕ",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR17130_00_002D14DB28AA079AB444D1AA3527D40F8F780DBAEE/81687E4B5151D16193E5EC2A558719BBCB6BD363.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR17130_00.jpg",
       "platform": "PS4",
       "progress": 16,
       "platinumEarned": false,
@@ -34121,12 +34190,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR17130_00_002D14DB28AA079AB444D1AA3527D40F8F780DBAEE/81687E4B5151D16193E5EC2A558719BBCB6BD363.PNG"
     },
     {
       "npCommunicationId": "NPWR09167_00",
       "titleName": "Marvel's Spider-Man",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR09167_00_007280BC379B5701D2D862A6574F73488DA1CDFBBA/871AF040ECAA2A94B7EB5534E062AEAF13D72C35.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR09167_00.jpg",
       "platform": "PS4",
       "progress": 16,
       "platinumEarned": false,
@@ -34953,12 +35023,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR09167_00_007280BC379B5701D2D862A6574F73488DA1CDFBBA/871AF040ECAA2A94B7EB5534E062AEAF13D72C35.PNG"
     },
     {
       "npCommunicationId": "NPWR30330_00",
       "titleName": "SONIC FRONTIERS",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR30330_00/a6575c03-53d4-46cb-887f-9c0d079f1fc4.png",
+      "titleIconUrl": "assets/psn/games/NPWR30330_00.jpg",
       "platform": "PS5",
       "progress": 12,
       "platinumEarned": false,
@@ -35422,12 +35493,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR30330_00/a6575c03-53d4-46cb-887f-9c0d079f1fc4.png"
     },
     {
       "npCommunicationId": "NPWR07964_00",
       "titleName": "Just Cause 3",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07964_00_00131DD4D585ABC9D26813AFD52FFE731176D434A3/A0BC289B1F6B0AAE7C202912E536CE73E6607E10.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR07964_00.jpg",
       "platform": "PS4",
       "progress": 1,
       "platinumEarned": false,
@@ -36177,12 +36249,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07964_00_00131DD4D585ABC9D26813AFD52FFE731176D434A3/A0BC289B1F6B0AAE7C202912E536CE73E6607E10.PNG"
     },
     {
       "npCommunicationId": "NPWR20842_00",
       "titleName": "Ratchet & Clank: Сквозь миры",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20842_00/38f31c81-2697-4d1e-b738-ba54af0ee14d.png",
+      "titleIconUrl": "assets/psn/games/NPWR20842_00.jpg",
       "platform": "PS5",
       "progress": 11,
       "platinumEarned": false,
@@ -36712,12 +36785,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20842_00/38f31c81-2697-4d1e-b738-ba54af0ee14d.png"
     },
     {
       "npCommunicationId": "NPWR23978_00",
       "titleName": "Dead Island 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23978_00/0c5a7314-cd39-41f6-ade7-75df3a027e53.png",
+      "titleIconUrl": "assets/psn/games/NPWR23978_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -37390,12 +37464,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR23978_00/0c5a7314-cd39-41f6-ade7-75df3a027e53.png"
     },
     {
       "npCommunicationId": "NPWR15473_00",
       "titleName": "Stick Fight: The Game",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15473_00_00BC4332108A87A776174BB7C8FADE00E3FC6B9952/BA11A9F99B3C43A1B8AC9EFDD05B8729CD04541B.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR15473_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -37716,12 +37791,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15473_00_00BC4332108A87A776174BB7C8FADE00E3FC6B9952/BA11A9F99B3C43A1B8AC9EFDD05B8729CD04541B.PNG"
     },
     {
       "npCommunicationId": "NPWR24586_00",
       "titleName": "Rabbids Легендарное путешествие",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR24586_00_00334FAD4817066864246A83B653841A474FDFDCE9/30EE3DA1BE6F36D12E40B97D2DB32C69F381B4CB.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR24586_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -37866,12 +37942,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR24586_00_00334FAD4817066864246A83B653841A474FDFDCE9/30EE3DA1BE6F36D12E40B97D2DB32C69F381B4CB.PNG"
     },
     {
       "npCommunicationId": "NPWR24071_00",
       "titleName": "EA SPORTS™ UFC® 5",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24071_00/3766b975-0d27-48c0-adb0-eab491096a09.png",
+      "titleIconUrl": "assets/psn/games/NPWR24071_00.jpg",
       "platform": "PS5",
       "progress": 17,
       "platinumEarned": false,
@@ -38236,12 +38313,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24071_00/3766b975-0d27-48c0-adb0-eab491096a09.png"
     },
     {
       "npCommunicationId": "NPWR07290_00",
       "titleName": "Дожить до рассвета",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07290_00_00B5670B887541F4DEFCD7AB125CC0333C8D821FA3/17EC3FCFAF91ECD0A2696071DE063351C4E62560.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR07290_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -38463,12 +38541,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07290_00_00B5670B887541F4DEFCD7AB125CC0333C8D821FA3/17EC3FCFAF91ECD0A2696071DE063351C4E62560.PNG"
     },
     {
       "npCommunicationId": "NPWR10772_00",
       "titleName": "SWORD ART ONLINE: HOLLOW REALIZATION",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10772_00_00BF8318C8894B1278893F64BC64C65E962B23F57C/3294C94375BF2DC3CFCE15C6574C4799C41443D3.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR10772_00.jpg",
       "platform": "PSVITA,PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -39064,12 +39143,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10772_00_00BF8318C8894B1278893F64BC64C65E962B23F57C/3294C94375BF2DC3CFCE15C6574C4799C41443D3.PNG"
     },
     {
       "npCommunicationId": "NPWR29622_00",
       "titleName": "CRISIS CORE –FINAL FANTASY VII– REUNION",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR29622_00/9bdbf1db-984a-4323-bc2d-b093e11dd673.png",
+      "titleIconUrl": "assets/psn/games/NPWR29622_00.jpg",
       "platform": "PS5",
       "progress": 4,
       "platinumEarned": false,
@@ -39643,12 +39723,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR29622_00/9bdbf1db-984a-4323-bc2d-b093e11dd673.png"
     },
     {
       "npCommunicationId": "NPWR22859_00",
       "titleName": "Ghost of Tsushima",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22859_00/d7213b2e-8048-40ae-859e-3ce1863b9390.png",
+      "titleIconUrl": "assets/psn/games/NPWR22859_00.jpg",
       "platform": "PS5,PSPC",
       "progress": 4,
       "platinumEarned": false,
@@ -40508,12 +40589,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22859_00/d7213b2e-8048-40ae-859e-3ce1863b9390.png"
     },
     {
       "npCommunicationId": "NPWR24830_00",
       "titleName": "eFootball™",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24830_00/9b56defc-26a7-4272-9b47-40af01d1e139.png",
+      "titleIconUrl": "assets/psn/games/NPWR24830_00.png",
       "platform": "PS5",
       "progress": 23,
       "platinumEarned": false,
@@ -40713,12 +40795,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24830_00/9b56defc-26a7-4272-9b47-40af01d1e139.png"
     },
     {
       "npCommunicationId": "NPWR15187_00",
       "titleName": "NBA LIVE 19",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15187_00_00B5FCD1E33CE7911333D6ACF363AFB0B052FDE259/F1C8E5E9D0AB7D43874687059C69A3796D73DC70.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR15187_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -41061,12 +41144,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR15187_00_00B5FCD1E33CE7911333D6ACF363AFB0B052FDE259/F1C8E5E9D0AB7D43874687059C69A3796D73DC70.PNG"
     },
     {
       "npCommunicationId": "NPWR41872_00",
       "titleName": "Призы EA SPORTS FC™ 25",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR41872_00/bbd2c8bc-d9eb-45ce-9ade-7f87b555af1f.png",
+      "titleIconUrl": "assets/psn/games/NPWR41872_00.jpg",
       "platform": "PS5",
       "progress": 8,
       "platinumEarned": false,
@@ -41519,12 +41603,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR41872_00/bbd2c8bc-d9eb-45ce-9ade-7f87b555af1f.png"
     },
     {
       "npCommunicationId": "NPWR14211_00",
       "titleName": "MudRunner",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR14211_00_0003A4BC039EF43E6D43B5D0B1470D4931ACA09A52/21A44D67B0425EB9DD500A75D1478D3698A24847.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR14211_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -42230,12 +42315,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR14211_00_0003A4BC039EF43E6D43B5D0B1470D4931ACA09A52/21A44D67B0425EB9DD500A75D1478D3698A24847.PNG"
     },
     {
       "npCommunicationId": "NPWR26027_00",
       "titleName": "RESIDENT EVIL 2",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26027_00/6c7dfd47-8a19-4782-9d18-130bc74efba0.png",
+      "titleIconUrl": "assets/psn/games/NPWR26027_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -42743,12 +42829,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR26027_00/6c7dfd47-8a19-4782-9d18-130bc74efba0.png"
     },
     {
       "npCommunicationId": "NPWR07591_00",
       "titleName": "DEAD OR ALIVE 5 Last Round",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07591_00_008166B473288F5F84695659AB16D48C8030E82010/B710CCE6A4DD149A3A4B497DCE5CD03382400AE1.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR07591_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -43289,12 +43376,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR07591_00_008166B473288F5F84695659AB16D48C8030E82010/B710CCE6A4DD149A3A4B497DCE5CD03382400AE1.PNG"
     },
     {
       "npCommunicationId": "NPWR20813_00",
       "titleName": "MARVEL Человек-Паук. Обновленная версия",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20813_00/5740990b-40e6-4396-8f3d-6ac02220fa90.png",
+      "titleIconUrl": "assets/psn/games/NPWR20813_00.jpg",
       "platform": "PS5",
       "progress": 95,
       "platinumEarned": true,
@@ -44176,12 +44264,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20813_00/5740990b-40e6-4396-8f3d-6ac02220fa90.png"
     },
     {
       "npCommunicationId": "NPWR21859_00",
       "titleName": "DEATH STRANDING DIRECTOR'S CUT",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21859_00/cd37d791-9d02-4cd6-a1b1-9033f7d0e35a.png",
+      "titleIconUrl": "assets/psn/games/NPWR21859_00.jpg",
       "platform": "PS5",
       "progress": 7,
       "platinumEarned": false,
@@ -44887,12 +44976,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21859_00/cd37d791-9d02-4cd6-a1b1-9033f7d0e35a.png"
     },
     {
       "npCommunicationId": "NPWR13872_00",
       "titleName": "Detroit: Стать человеком",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13872_00_00BE2C548A4C58B53BB438538BF2552A5EC3CB2454/9411A02B801534FF93B46D29DF61282875512079.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR13872_00.jpg",
       "platform": "PS4",
       "progress": 2,
       "platinumEarned": false,
@@ -45444,12 +45534,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR13872_00_00BE2C548A4C58B53BB438538BF2552A5EC3CB2454/9411A02B801534FF93B46D29DF61282875512079.PNG"
     },
     {
       "npCommunicationId": "NPWR05424_00",
       "titleName": "Призы Battlefield 4™",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05424_00_0079D3A7D09DC0290E8C4768B457E1E74B3187007B/1A675DE737EB2AAF7B5B0ACA34F48651F855A203.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR05424_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -46210,12 +46301,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05424_00_0079D3A7D09DC0290E8C4768B457E1E74B3187007B/1A675DE737EB2AAF7B5B0ACA34F48651F855A203.PNG"
     },
     {
       "npCommunicationId": "NPWR33639_00",
       "titleName": "STAR WARS Jedi: Survivor™",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33639_00/481c29b9-b5cf-4996-aa55-1b3346050e17.png",
+      "titleIconUrl": "assets/psn/games/NPWR33639_00.png",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -46822,12 +46914,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR33639_00/481c29b9-b5cf-4996-aa55-1b3346050e17.png"
     },
     {
       "npCommunicationId": "NPWR14350_00",
       "titleName": "The Crew® 2",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR14350_00_00D20733C8935EA45337EA5EA6BA2EA842F5F8CE52/0DBB044737B80AE1928BBF53ABE894057DD0AA1E.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR14350_00.jpg",
       "platform": "PS4",
       "progress": 10,
       "platinumEarned": false,
@@ -47225,12 +47318,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR14350_00_00D20733C8935EA45337EA5EA6BA2EA842F5F8CE52/0DBB044737B80AE1928BBF53ABE894057DD0AA1E.PNG"
     },
     {
       "npCommunicationId": "NPWR11435_00",
       "titleName": "Assassin's Creed® II",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR11435_00_00025CC40B8D85858575298BAA090D80E9E134D207/987B37AA2202ABB7055B12AD6E63A95EC077D01E.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR11435_00.png",
       "platform": "PS4",
       "progress": 5,
       "platinumEarned": false,
@@ -47804,12 +47898,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR11435_00_00025CC40B8D85858575298BAA090D80E9E134D207/987B37AA2202ABB7055B12AD6E63A95EC077D01E.PNG"
     },
     {
       "npCommunicationId": "NPWR11437_00",
       "titleName": "Assassin’s Creed® Откровения",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR11437_00_0034E02A5B10EA864673E7E129B40D853AD830A629/4882EE3E0AC8D3831789B971A59B3372F2049F21.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR11437_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -48372,12 +48467,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR11437_00_0034E02A5B10EA864673E7E129B40D853AD830A629/4882EE3E0AC8D3831789B971A59B3372F2049F21.PNG"
     },
     {
       "npCommunicationId": "NPWR24633_00",
       "titleName": "Assetto Corsa Competizione",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24633_00/573bc690-0d4e-4761-a68a-adcf67d5b9f5.png",
+      "titleIconUrl": "assets/psn/games/NPWR24633_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -48841,12 +48937,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24633_00/573bc690-0d4e-4761-a68a-adcf67d5b9f5.png"
     },
     {
       "npCommunicationId": "NPWR22835_00",
       "titleName": "Little Nightmares II",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22835_00/c6094b05-90e5-4462-9dea-63c5ae72e24b.png",
+      "titleIconUrl": "assets/psn/games/NPWR22835_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -49244,12 +49341,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22835_00/c6094b05-90e5-4462-9dea-63c5ae72e24b.png"
     },
     {
       "npCommunicationId": "NPWR19950_00",
       "titleName": "Сэкбой: Большое приключение",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR19950_00/28286d6e-d0b0-492f-8e0e-573ad62184ef.png",
+      "titleIconUrl": "assets/psn/games/NPWR19950_00.jpg",
       "platform": "PS5",
       "progress": 4,
       "platinumEarned": false,
@@ -49768,12 +49866,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR19950_00/28286d6e-d0b0-492f-8e0e-573ad62184ef.png"
     },
     {
       "npCommunicationId": "NPWR24223_00",
       "titleName": "Call of Duty® Modern Warfare® II",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24223_00/4bf6ce0f-4c4c-42a2-b3d0-66c295cbd7aa.png",
+      "titleIconUrl": "assets/psn/games/NPWR24223_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -51722,12 +51821,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR24223_00/4bf6ce0f-4c4c-42a2-b3d0-66c295cbd7aa.png"
     },
     {
       "npCommunicationId": "NPWR21586_00",
       "titleName": "Стражи Галактики Marvel",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21586_00/90bdc331-87d5-4dab-bc1b-892dd8326b03.png",
+      "titleIconUrl": "assets/psn/games/NPWR21586_00.jpg",
       "platform": "PS5",
       "progress": 3,
       "platinumEarned": false,
@@ -52389,12 +52489,13 @@
           "earned": true,
           "earnedDateTime": "2024-09-06T17:25:05Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21586_00/90bdc331-87d5-4dab-bc1b-892dd8326b03.png"
     },
     {
       "npCommunicationId": "NPWR20004_00",
       "titleName": "Returnal",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20004_00/f60fd55f-a01f-4274-a865-d8356dc0fd9c.png",
+      "titleIconUrl": "assets/psn/games/NPWR20004_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -52825,12 +52926,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20004_00/f60fd55f-a01f-4274-a865-d8356dc0fd9c.png"
     },
     {
       "npCommunicationId": "NPWR43648_00",
       "titleName": "Harry Potter: Quidditch Champions",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR43648_00/b2ad5dbe-2e6f-42f2-ab64-e5b79c2cc973.png",
+      "titleIconUrl": "assets/psn/games/NPWR43648_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -53195,12 +53297,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR43648_00/b2ad5dbe-2e6f-42f2-ab64-e5b79c2cc973.png"
     },
     {
       "npCommunicationId": "NPWR20188_00",
       "titleName": "ASTRO's PLAYROOM",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20188_00/9f84e2fc-0cd2-40f1-bfdb-6774fe3a69f6.png",
+      "titleIconUrl": "assets/psn/games/NPWR20188_00.jpg",
       "platform": "PS5",
       "progress": 4,
       "platinumEarned": false,
@@ -53774,12 +53877,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20188_00/9f84e2fc-0cd2-40f1-bfdb-6774fe3a69f6.png"
     },
     {
       "npCommunicationId": "NPWR28177_00",
       "titleName": "The Dark Pictures Anthology: Little Hope",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR28177_00/9b7fbaa8-a068-4d45-8f49-ad6f5c7b315f.png",
+      "titleIconUrl": "assets/psn/games/NPWR28177_00.jpg",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -54133,12 +54237,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR28177_00/9b7fbaa8-a068-4d45-8f49-ad6f5c7b315f.png"
     },
     {
       "npCommunicationId": "NPWR37258_00",
       "titleName": "The First Descendant",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37258_00/f537e4fe-0359-4ed8-a3ed-dd7816573562.png",
+      "titleIconUrl": "assets/psn/games/NPWR37258_00.jpg",
       "platform": "PS5",
       "progress": 9,
       "platinumEarned": false,
@@ -54426,12 +54531,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR37258_00/f537e4fe-0359-4ed8-a3ed-dd7816573562.png"
     },
     {
       "npCommunicationId": "NPWR41929_00",
       "titleName": "Zenless Zone Zero",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR41929_00/b0f42af7-32b8-4afc-bab0-c2574eb85bb7.png",
+      "titleIconUrl": "assets/psn/games/NPWR41929_00.jpg",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -55665,12 +55771,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR41929_00/b0f42af7-32b8-4afc-bab0-c2574eb85bb7.png"
     },
     {
       "npCommunicationId": "NPWR22022_00",
       "titleName": "Fortnite: «Сражение с Бурей»",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22022_00/920d4c14-5908-4085-9cc9-6132e1174146.png",
+      "titleIconUrl": "assets/psn/games/NPWR22022_00.png",
       "platform": "PS5",
       "progress": 0,
       "platinumEarned": false,
@@ -56189,12 +56296,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR22022_00/920d4c14-5908-4085-9cc9-6132e1174146.png"
     },
     {
       "npCommunicationId": "NPWR10664_00",
       "titleName": "WATCH_DOGS® 2",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10664_00_00BAACC91992A4BE505DA8EB812912D69C6213263D/AFCE1FCA1C353496D7CAFBAAE5F89DDC6BFD5356.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR10664_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -56823,12 +56931,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR10664_00_00BAACC91992A4BE505DA8EB812912D69C6213263D/AFCE1FCA1C353496D7CAFBAAE5F89DDC6BFD5356.PNG"
     },
     {
       "npCommunicationId": "NPWR20954_00",
       "titleName": "Assassin’s Creed® Вальгалла",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20954_00/102a0034-0ea4-4e6a-8931-331d1c4e3fe1.png",
+      "titleIconUrl": "assets/psn/games/NPWR20954_00.jpg",
       "platform": "PS5",
       "progress": 2,
       "platinumEarned": false,
@@ -57886,12 +57995,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20954_00/102a0034-0ea4-4e6a-8931-331d1c4e3fe1.png"
     },
     {
       "npCommunicationId": "NPWR06418_00",
       "titleName": "Одни из нас™ обновленная версия",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06418_00_00152378687F66194A957179F8D1FA81A759297BDC/70A10BD8B6A5C767F2E6973E0DACB11D93B7C06D.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06418_00.jpg",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -58454,12 +58564,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06418_00_00152378687F66194A957179F8D1FA81A759297BDC/70A10BD8B6A5C767F2E6973E0DACB11D93B7C06D.PNG"
     },
     {
       "npCommunicationId": "NPWR06071_00",
       "titleName": "Assassin's Creed® Крик свободы",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06071_00_006E1635FD20EC4AEE9E66952B4E502807D90C353B/A413D7ED643CBF2C1E3DA19637B773E5ECE5680F.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR06071_00.jpg",
       "platform": "PS4",
       "progress": 5,
       "platinumEarned": false,
@@ -58604,12 +58715,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR06071_00_006E1635FD20EC4AEE9E66952B4E502807D90C353B/A413D7ED643CBF2C1E3DA19637B773E5ECE5680F.PNG"
     },
     {
       "npCommunicationId": "NPWR20684_00",
       "titleName": "MARVEL Человек-Паук: Майлз Моралес",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20684_00/be95ae76-4512-4f05-a94a-9eb8df782688.png",
+      "titleIconUrl": "assets/psn/games/NPWR20684_00.jpg",
       "platform": "PS5",
       "progress": 100,
       "platinumEarned": true,
@@ -59172,12 +59284,13 @@
           "earned": true,
           "earnedDateTime": "2024-08-16T17:57:49Z"
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR20684_00/be95ae76-4512-4f05-a94a-9eb8df782688.png"
     },
     {
       "npCommunicationId": "NPWR21924_00",
       "titleName": "Kena: Bridge of Spirits",
-      "titleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21924_00/617bd3b6-459d-404a-962d-bda5e59f71f4.png",
+      "titleIconUrl": "assets/psn/games/NPWR21924_00.png",
       "platform": "PS5",
       "progress": 1,
       "platinumEarned": false,
@@ -59652,12 +59765,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://psnobj.prod.dl.playstation.net/psnobj/NPWR21924_00/617bd3b6-459d-404a-962d-bda5e59f71f4.png"
     },
     {
       "npCommunicationId": "NPWR05740_00",
       "titleName": "inFAMOUS™ Second Son",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05740_00_0017967C4188CE8097C9F90449BD2673428F2F5C4E/084BD02D892260735318CE1DE2BB2FB1D42F22BD.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR05740_00.png",
       "platform": "PS4",
       "progress": 1,
       "platinumEarned": false,
@@ -60198,12 +60312,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05740_00_0017967C4188CE8097C9F90449BD2673428F2F5C4E/084BD02D892260735318CE1DE2BB2FB1D42F22BD.PNG"
     },
     {
       "npCommunicationId": "NPWR19232_00",
       "titleName": "MARVEL Человек-Паук: Майлз Моралес",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR19232_00_009C88341624B0983231370CB7BB64811ED96AD2B3/1A3B4C3C43BA6A179ED67F4AA4E8EBD347196D9A.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR19232_00.jpg",
       "platform": "PS4",
       "progress": 5,
       "platinumEarned": false,
@@ -60766,12 +60881,13 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR19232_00_009C88341624B0983231370CB7BB64811ED96AD2B3/1A3B4C3C43BA6A179ED67F4AA4E8EBD347196D9A.PNG"
     },
     {
       "npCommunicationId": "NPWR05818_00",
       "titleName": "Bloodborne™",
-      "titleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05818_00_00347A646D41E9660F4153AD7A0274E2BC597C5A27/AE3477BA91121142BEB82AB2B7E2F8BAB9B3C17A.PNG",
+      "titleIconUrl": "assets/psn/games/NPWR05818_00.png",
       "platform": "PS4",
       "progress": 0,
       "platinumEarned": false,
@@ -61224,7 +61340,8 @@
           "earned": false,
           "earnedDateTime": null
         }
-      ]
+      ],
+      "remoteTitleIconUrl": "https://image.api.playstation.com/trophy/np/NPWR05818_00_00347A646D41E9660F4153AD7A0274E2BC597C5A27/AE3477BA91121142BEB82AB2B7E2F8BAB9B3C17A.PNG"
     },
     {
       "npCommunicationId": "NPWR10001_00",

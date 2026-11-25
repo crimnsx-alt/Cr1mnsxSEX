@@ -2575,12 +2575,62 @@ function closeTrophyCollectionModal() {
   SoundEngine.cancel();
 }
 
+const _preloadedTrophyIconUrls = new Set();
+const _trophyIconCache = [];
+let _trophyPreloadRunning = false;
+
+function preloadTrophyAssets(games = [], recentTrophies = [], avatarUrl = "") {
+  if (_trophyPreloadRunning) return;
+  const urls = [];
+  if (avatarUrl) urls.push(avatarUrl);
+  (recentTrophies || []).forEach((t) => {
+    if (t?.trophyIconUrl) urls.push(t.trophyIconUrl);
+  });
+  (games || []).forEach((g) => {
+    const thumb = g?.titleIconUrl || g?.trophyTitleIconUrl;
+    if (thumb) urls.push(thumb);
+  });
+
+  const queue = urls.filter((u) => u && !_preloadedTrophyIconUrls.has(u));
+  if (queue.length === 0) return;
+
+  _trophyPreloadRunning = true;
+  let idx = 0;
+  const concurrency = 16;
+
+  const worker = () => {
+    if (idx >= queue.length) return;
+    const url = queue[idx++];
+    _preloadedTrophyIconUrls.add(url);
+
+    const img = new Image();
+    img.referrerPolicy = "no-referrer";
+    img.decoding = "async";
+    img.src = url;
+    _trophyIconCache.push(img);
+
+    const next = () => worker();
+    if (img.decode) {
+      img.decode().then(next).catch(next);
+    } else {
+      img.onload = next;
+      img.onerror = next;
+    }
+  };
+
+  for (let i = 0; i < Math.min(concurrency, queue.length); i++) {
+    worker();
+  }
+  setTimeout(() => { _trophyPreloadRunning = false; }, 4000);
+}
+
 function renderTrophyCollectionModal() {
   const isRu = state.lang === "ru";
-  const { profile, summary, recentTrophies, games, syncSource } = psnService.getData();
+  const { profile, summary, recentTrophies, games } = psnService.getData();
   if (!profile) return;
 
   const stats = summary || psnService.getAggregatedSummary();
+  preloadTrophyAssets(games, recentTrophies, profile.avatarUrl);
 
   // Profile Identity
   const avatarEl = $("#tcProfileAvatar");
@@ -2588,27 +2638,13 @@ function renderTrophyCollectionModal() {
   const resolvedPsnId = stats.psnOnlineId || stats.onlineId || profile.onlineId || "Cr1mnsx";
   $("#tcProfileOnlineId").textContent = resolvedPsnId;
 
-  const tcLinkPsngg = $("#tcLinkPsngg");
-  const tcLinkPsnp = $("#tcLinkPsnp");
-  if (tcLinkPsngg) tcLinkPsngg.href = `https://psn.gg/profile/${encodeURIComponent(resolvedPsnId)}`;
-  if (tcLinkPsnp) tcLinkPsnp.href = `https://psnprofiles.com/${encodeURIComponent(resolvedPsnId)}`;
-
-  const pill = $("#tcSyncPill");
-  if (pill) {
-    if (stats.psnLinked && syncSource === "live-proxy") pill.textContent = isRu ? "● PSN Live Эфир" : "● PSN Live";
-    else if (stats.psnLinked && syncSource === "supabase") pill.textContent = isRu ? "● PSN Cloud DB" : "● PSN Cloud DB";
-    else if (stats.psnLinked) pill.textContent = isRu ? "● PSN Sync · Brawl Live" : "● PSN Sync · Brawl Live";
-    else if (syncSource === "custom") pill.textContent = isRu ? "● Локальный импорт" : "● Custom Import";
-    else pill.textContent = isRu ? "● Brawl Live · Ждёт PSN" : "● Brawl Live · PSN Pending";
-  }
-
   const tsEl = $("#tcSyncTimestamp");
   if (tsEl) {
     if (stats.lastSyncAt) {
       const syncDate = new Date(stats.lastSyncAt);
       tsEl.textContent = `${isRu ? "Обновлено:" : "Synced:"} ${syncDate.toLocaleDateString(isRu ? "ru-RU" : "en-US", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}`;
     } else {
-      tsEl.textContent = isRu ? "Авто-синк активен" : "Auto-sync active";
+      tsEl.textContent = isRu ? "Обновлено недавно" : "Recently updated";
     }
   }
 
@@ -2654,7 +2690,7 @@ function renderTrophyCollectionModal() {
         const iconSrc = t.trophyIconUrl || "assets/covers/gta_vc.jpg";
         return `
           <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}" role="button" tabindex="0">
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
             <div class="tc-recent-info">
               <span class="tc-recent-trophy-name">${escapeHtml(t.trophyName)}</span>
               <span class="tc-recent-game-title">${escapeHtml(t.gameTitle || 'PlayStation 5')}</span>
@@ -2711,7 +2747,7 @@ function renderTrophyGamesList() {
 
     return `
       <div class="tc-game-card" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0">
-        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="${idx < 20 ? 'eager' : 'lazy'}" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
         <div class="tc-game-details">
           <div class="tc-game-header-row">
             <span class="tc-game-title" title="${escapeHtml(g.titleName)}">${escapeHtml(g.titleName)}</span>
@@ -2950,13 +2986,7 @@ function openPsnSyncDetailsModal() {
             <input id="inputLiveBrawlProxy" type="url" value="${escapeHtml(liveCfg.brawlProxyUrl || '')}" placeholder="https://cr1mnsx-live.<your-subdomain>.workers.dev" style="width:100%; padding:8px 12px; border-radius:8px; background:rgba(0,0,0,0.35); border:1px solid rgba(255,255,255,0.16); color:#fff; font-size:13px;" />
           </label>
         </div>
-        <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-top:2px;">
-          <div style="display:flex; flex-wrap:wrap; gap:6px;">
-            <a id="linkTrackerPsngg" href="https://psn.gg/profile/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#93c5fd; font-size:12px; text-decoration:none; border:1px solid rgba(147,197,253,0.28);">PSN.gg ↗</a>
-            <a id="linkTrackerPsnp" href="https://psnprofiles.com/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#7dd3fc; font-size:12px; text-decoration:none; border:1px solid rgba(125,211,252,0.22);">PSNProfiles ↗</a>
-            <a id="linkTrackerExo" href="https://www.exophase.com/psn/user/${encodeURIComponent(psnLookupId)}/" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#c4b5fd; font-size:12px; text-decoration:none; border:1px solid rgba(196,181,253,0.22);">Exophase ↗</a>
-            <a id="linkTrackerTrue" href="https://www.truetrophies.com/gamer/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#86efac; font-size:12px; text-decoration:none; border:1px solid rgba(134,239,172,0.22);">TrueTrophies ↗</a>
-          </div>
+        <div style="display:flex; align-items:center; justify-content:flex-end; gap:8px; margin-top:2px;">
           <button type="button" id="btnSaveLiveSyncCfg" style="padding:7px 14px; border-radius:8px; background:#0070d1; color:#fff; border:none; font-size:12.5px; font-weight:700; cursor:pointer;">
             ${isRu ? "Сохранить настройки Live" : "Save Live Config"}
           </button>
@@ -2965,12 +2995,12 @@ function openPsnSyncDetailsModal() {
 
       <div style="padding:14px 16px; background:rgba(0,112,209,0.08); border:1px solid rgba(0,112,209,0.25); border-radius:14px;">
         <div style="font-weight:700; font-size:13px; color:#38bdf8; margin-bottom:5px;">
-          ${isRu ? "Как включить живую синхронизацию 24/7" : "How to enable 24/7 live synchronization"}
+          ${isRu ? "Автоматическое обновление профиля 24/7" : "Automatic 24/7 profile updates"}
         </div>
         <div style="font-size:12px; color:rgba(255,255,255,0.72); line-height:1.5;">
           ${isRu
-            ? "1. Откройте приватность PSN («Настройки → Пользователи → Конфиденциальность → История игр и призы: Все»), чтобы профиль видели PSNProfiles и Exophase.<br>2. В GitHub → Settings → Secrets → Actions добавьте <code>BRAWL_API_TOKEN</code> и <code>PSN_NPSSO</code> — автообновление сайта запускается каждые 10 минут.<br>3. Для мгновенных обновлений каждые 25 секунд задеплойте <code>scripts/cloudflare-live-proxy.js</code>."
-            : "1. Set PSN Trophy/Gaming History privacy to Everyone so PSNProfiles & Exophase can index your games.<br>2. Add <code>BRAWL_API_TOKEN</code> and <code>PSN_NPSSO</code> in GitHub Actions Secrets for 10-min auto sync.<br>3. Deploy <code>scripts/cloudflare-live-proxy.js</code> for 25-second live updates."
+            ? "1. В GitHub → Settings → Secrets → Actions добавьте <code>BRAWL_API_TOKEN</code> и <code>PSN_NPSSO</code> — автообновление сайта запускается каждые 10 минут.<br>2. Для мгновенных обновлений каждые 25 секунд задеплойте <code>scripts/cloudflare-live-proxy.js</code>."
+            : "1. Add <code>BRAWL_API_TOKEN</code> and <code>PSN_NPSSO</code> in GitHub Actions Secrets for 10-min auto sync.<br>2. Deploy <code>scripts/cloudflare-live-proxy.js</code> for 25-second live updates."
           }
         </div>
       </div>
@@ -2978,9 +3008,9 @@ function openPsnSyncDetailsModal() {
   `;
 
   openModal({
-    tag: "LIVE PROFILE SYNC",
-    title: isRu ? "Живая синхронизация Brawl & PSN" : "Brawl & PSN Live Sync",
-    subtitle: isRu ? "Статус эфира, внешние трекеры и автообновление" : "Live stream status, external trackers and auto-sync",
+    tag: "PLAYSTATION NETWORK",
+    title: isRu ? "Синхронизация профиля" : "Profile Sync",
+    subtitle: isRu ? "Статус подключения и автообновление" : "Connection status and auto-updates",
     content: html,
     isWide: true,
     actions: [
@@ -2994,19 +3024,6 @@ function openPsnSyncDetailsModal() {
     const idInput = $("#inputLivePsnId");
     const proxyInput = $("#inputLiveBrawlProxy");
     const saveBtn = $("#btnSaveLiveSyncCfg");
-    const lPsngg = $("#linkTrackerPsngg");
-    const lPsnp = $("#linkTrackerPsnp");
-    const lExo = $("#linkTrackerExo");
-    const lTrue = $("#linkTrackerTrue");
-
-    const refreshLinks = () => {
-      const val = encodeURIComponent((idInput?.value || "").trim() || onlineId);
-      if (lPsngg) lPsngg.href = `https://psn.gg/profile/${val}`;
-      if (lPsnp) lPsnp.href = `https://psnprofiles.com/${val}`;
-      if (lExo) lExo.href = `https://www.exophase.com/psn/user/${val}/`;
-      if (lTrue) lTrue.href = `https://www.truetrophies.com/gamer/${val}`;
-    };
-    idInput?.addEventListener("input", refreshLinks);
 
     saveBtn?.addEventListener("click", () => {
       const nextPsnId = (idInput?.value || "").trim();
@@ -5475,6 +5492,8 @@ function init() {
 
   // PSN & Live Brawl Service Reactive Updates
   const handleTelemetryRefresh = () => {
+    const snap = psnService.getData();
+    preloadTrophyAssets(snap.games, snap.recentTrophies, snap.profile?.avatarUrl);
     applyLanguageAndTelemetry();
     if ($("#modalTrophyCollection")?.classList.contains("active")) {
       renderTrophyCollectionModal();
@@ -5486,44 +5505,6 @@ function init() {
   // Trophy Collection Modal Event Listeners
   $("#btnTcClose")?.addEventListener("click", closeTrophyCollectionModal);
   $("#tcBackdrop")?.addEventListener("click", closeTrophyCollectionModal);
-  $("#btnTcLiveSetup")?.addEventListener("click", () => {
-    closeTrophyCollectionModal();
-    openPsnSyncDetailsModal();
-  });
-
-  $("#btnSyncTrophiesTop")?.addEventListener("click", () => {
-    const btn = $("#btnSyncTrophiesTop");
-    btn?.classList.add("is-loading");
-    SoundEngine.enter();
-    showToast(
-      state.lang === "ru" ? "Синхронизация профиля" : "Profile Sync",
-      state.lang === "ru" ? "Обновление Brawl Stars и PlayStation..." : "Refreshing Brawl Stars and PlayStation...",
-      PS5Icons.trophy
-    );
-    Promise.allSettled([brawlService.fetchLiveProfile(false), psnService.syncNow()]).then(([, psnRes]) => {
-      const data = psnRes.status === "fulfilled" ? psnRes.value : psnService.getData();
-      const totalAwards = data.summary?.totalTrophies ?? data.profile?.totalTrophies ?? 0;
-      btn?.classList.remove("is-loading");
-      SoundEngine.trophyToast();
-      showToast(
-        state.lang === "ru" ? "Данные обновлены" : "Awards Updated",
-        state.lang === "ru"
-          ? `✓ Актуализировано ${data.games?.length || 0} игр и ${totalAwards} наград`
-          : `✓ Updated ${data.games?.length || 0} games and ${totalAwards} awards`,
-        PS5Icons.trophy
-      );
-      applyLanguageAndTelemetry();
-      renderTrophyCollectionModal();
-    }).catch(() => {
-      btn?.classList.remove("is-loading");
-      SoundEngine.error();
-      showToast(
-        state.lang === "ru" ? "Ошибка синхронизации" : "Sync Error",
-        state.lang === "ru" ? "Не удалось связаться с сервером" : "Could not reach sync server",
-        PS5Icons.error
-      );
-    });
-  });
 
   $("#tcGamesSearchInput")?.addEventListener("input", (e) => {
     state.trophySearch = e.target.value;

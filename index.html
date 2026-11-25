@@ -18,13 +18,13 @@
   <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin />
   <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
   <link rel="preconnect" href="https://i3.ytimg.com" crossorigin />
-  <link rel="preconnect" href="https://cdn.brawlify.com" crossorigin />
+  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.twitch.tv" />
   <link rel="dns-prefetch" href="https://static-cdn.jtvnw.net" />
   <link rel="dns-prefetch" href="https://decapi.me" />
   <link rel="dns-prefetch" href="https://api.rss2json.com" />
-  <link rel="dns-prefetch" href="https://cdn.brawlify.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261125_real_psn" />
+  <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_fast_icons" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -1568,14 +1568,6 @@
           <h2 class="tc-brand-title" id="tcDialogTitle">Коллекция призов</h2>
         </div>
         <div class="tc-top-actions">
-          <button type="button" class="tc-btn-action" id="btnTcLiveSetup">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.77 1.02 1.51 1H21a2 2 0 1 1 0 4h-.09c-.74-.02-1.25.4-1.51 1z"/></svg>
-            <span id="lblTcLiveSetup">Настроить PSN / Live</span>
-          </button>
-          <button type="button" class="tc-btn-action" id="btnSyncTrophiesTop">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
-            <span id="lblSyncTrophiesTop">Синхронизировать</span>
-          </button>
           <button type="button" class="sber-tips-close-btn" id="btnTcClose" title="Закрыть (Esc)">✕</button>
         </div>
       </div>
@@ -1585,19 +1577,14 @@
         <div class="tc-hero-card">
           <div class="tc-profile-identity">
             <div class="tc-avatar-wrap">
-              <img id="tcProfileAvatar" src="assets/brawl/avatars/player_avatar.webp" alt="PSN Avatar" class="tc-avatar-img" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/brawl/avatars/player_avatar.webp';">
+              <img id="tcProfileAvatar" src="assets/psn/avatar.png" alt="PSN Avatar" class="tc-avatar-img" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/brawl/avatars/player_avatar.webp';">
               <span class="tc-psplus-badge" title="PlayStation Plus">★</span>
             </div>
             <div class="tc-id-info">
               <div class="tc-id-row">
                 <span class="tc-online-id" id="tcProfileOnlineId">Cr1mnsx</span>
-                <span class="tc-verified-pill" id="tcSyncPill">● Brawl Live · Ждёт PSN</span>
               </div>
               <div class="tc-sync-timestamp" id="tcSyncTimestamp">Синхронизировано недавно</div>
-              <div class="tc-profile-links" id="tcProfileLinks">
-                <a class="tc-profile-ext-link" id="tcLinkPsngg" href="https://psn.gg/profile/Cr1mnsx" target="_blank" rel="noopener noreferrer">PSN.gg ↗</a>
-                <a class="tc-profile-ext-link" id="tcLinkPsnp" href="https://psnprofiles.com/Cr1mnsx" target="_blank" rel="noopener noreferrer">PSNProfiles ↗</a>
-              </div>
             </div>
           </div>
 
@@ -1656,7 +1643,6 @@
         <div class="tc-section" id="tcRecentSection">
           <div class="tc-section-header">
             <h3 class="tc-section-title">Последние награды и навыки профиля</h3>
-            <span class="tc-section-hint">Brawl Stars · PlayStation · Браузерные игры</span>
           </div>
           <div class="tc-recent-scroll" id="tcRecentTrophiesList">
             <!-- Dynamically populated -->
@@ -2019,6 +2005,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261125_real_psn"></script>
+  <script type="module" src="js/app.js?v=20261125_fast_icons"></script>
 </body>
 </html>

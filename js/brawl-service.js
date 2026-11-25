@@ -138,7 +138,7 @@ export function getBrawlerModelUrl(brawler) {
   if (name === "shelly") return "assets/brawl/brawlers/shelly_model.webp";
 
   if (brawler.id) {
-    return `https://cdn.brawlify.com/brawlers/model/${brawler.id}.png`;
+    return `https://raw.githubusercontent.com/Brawlify/CDN/master/brawlers/model/${brawler.id}.png`;
   }
   return "assets/covers/brawl_stars.jpg";
 }
@@ -146,7 +146,7 @@ export function getBrawlerModelUrl(brawler) {
 export function getBrawlerAvatarUrl(brawler) {
   if (!brawler) return "assets/covers/brawl_stars.jpg";
   if (brawler.id) {
-    return `https://cdn.brawlify.com/brawlers/borderless/${brawler.id}.png`;
+    return `assets/brawl/portraits/${brawler.id}.png`;
   }
   return "assets/covers/brawl_stars.jpg";
 }
@@ -996,7 +996,7 @@ class BrawlStarsService {
                  ${priorityAttr}
                  referrerpolicy="no-referrer"
                  onload="this.classList.add('is-loaded')"
-                 onerror="this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded');" />
+                 onerror="if (!this.dataset.retGh && '${b.id || ''}') { this.dataset.retGh='1'; this.src='https://raw.githubusercontent.com/Brawlify/CDN/master/brawlers/borderless/${b.id}.png'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded'); }" />
             <span class="brawler-card-pwr ${power === 11 ? "is-max" : ""}">PWR ${power}</span>
             <span class="brawler-card-rank">R${rank}</span>
             ${winStreak > 0 ? `<span class="brawler-card-streak">🔥 ${winStreak}</span>` : ""}
@@ -1099,7 +1099,7 @@ class BrawlStarsService {
       const userBrawler = userEntry?.brawler || "leon";
       const userPwr = userEntry?.brawlerPower || 11;
       const resolvedUserId = userEntry?.id || brawlerIdByName.get(userBrawler.toLowerCase().trim()) || brawlerIdByName.get(getBrawlerSlug(userBrawler)) || "16000023";
-      const brawlerAvatar = `https://cdn.brawlify.com/brawlers/borderless/${resolvedUserId}.png`;
+      const brawlerAvatar = getBrawlerAvatarUrl({ id: resolvedUserId });
 
       return `
         <article class="brawl-battle-card ${isVictory ? "is-win" : "is-loss"}">
@@ -1132,7 +1132,7 @@ class BrawlStarsService {
                 ${team.map((m) => {
                   const mName = (m.brawler || "").toLowerCase().trim();
                   const mId = m.id || brawlerIdByName.get(mName) || brawlerIdByName.get(getBrawlerSlug(mName));
-                  const mSrc = mId ? `https://cdn.brawlify.com/brawlers/borderless/${mId}.png` : "assets/covers/brawl_stars.jpg";
+                  const mSrc = mId ? getBrawlerAvatarUrl({ id: mId }) : "assets/covers/brawl_stars.jpg";
                   return `
                     <span class="bbc-team-member ${m.tag === this.tag ? "is-self" : ""}" title="${escapeHtml(m.name)} (${escapeHtml(m.brawler)})">
                       <img src="${mSrc}" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/brawl_stars.jpg';" alt="${escapeHtml(m.brawler)}" />
