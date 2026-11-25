@@ -14,7 +14,7 @@ export const DEFAULT_LIVE_CONFIG = {
   // Optional deployed Cloudflare Worker URL (e.g. "https://cr1mnsx-live-sync.workers.dev")
   brawlProxyUrl: "",
   psnProxyUrl: "",
-  psnOnlineId: ""
+  psnOnlineId: "Cr1mnsx"
 };
 
 export function getLiveSyncSettings() {

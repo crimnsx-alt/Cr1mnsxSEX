@@ -1,9 +1,13 @@
 {
   "profile": {
     "onlineId": "Cr1mnsx",
-    "psnOnlineId": "",
+    "psnOnlineId": "Cr1mnsx",
     "psnLinked": false,
     "confirmedPsnPlatinums": 2,
+    "profileUrls": [
+      "https://psn.gg/profile/Cr1mnsx",
+      "https://psnprofiles.com/Cr1mnsx"
+    ],
     "avatarUrl": "assets/brawl/avatars/player_avatar.webp",
     "aboutMe": "PlayStation 2 платины · Brawl Stars #2RGUQJQ0R · Браузерные игры",
     "trophyLevel": null,

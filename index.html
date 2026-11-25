@@ -24,7 +24,7 @@
   <link rel="dns-prefetch" href="https://decapi.me" />
   <link rel="dns-prefetch" href="https://api.rss2json.com" />
   <link rel="dns-prefetch" href="https://cdn.brawlify.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261125_live_sync" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_psnprofiles" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -1591,9 +1591,13 @@
             <div class="tc-id-info">
               <div class="tc-id-row">
                 <span class="tc-online-id" id="tcProfileOnlineId">Cr1mnsx</span>
-                <span class="tc-verified-pill" id="tcSyncPill">● PSN Live</span>
+                <span class="tc-verified-pill" id="tcSyncPill">● Brawl Live · Ждёт PSN</span>
               </div>
               <div class="tc-sync-timestamp" id="tcSyncTimestamp">Синхронизировано недавно</div>
+              <div class="tc-profile-links" id="tcProfileLinks">
+                <a class="tc-profile-ext-link" id="tcLinkPsngg" href="https://psn.gg/profile/Cr1mnsx" target="_blank" rel="noopener noreferrer">PSN.gg ↗</a>
+                <a class="tc-profile-ext-link" id="tcLinkPsnp" href="https://psnprofiles.com/Cr1mnsx" target="_blank" rel="noopener noreferrer">PSNProfiles ↗</a>
+              </div>
             </div>
           </div>
 
@@ -2015,6 +2019,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261125_live_sync"></script>
+  <script type="module" src="js/app.js?v=20261125_psnprofiles"></script>
 </body>
 </html>

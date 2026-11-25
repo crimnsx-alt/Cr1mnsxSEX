@@ -2580,7 +2580,13 @@ function renderTrophyCollectionModal() {
   // Profile Identity
   const avatarEl = $("#tcProfileAvatar");
   if (avatarEl && profile.avatarUrl) avatarEl.src = profile.avatarUrl;
-  $("#tcProfileOnlineId").textContent = stats.onlineId || profile.onlineId || "Cr1mnsx";
+  const resolvedPsnId = stats.psnOnlineId || stats.onlineId || profile.onlineId || "Cr1mnsx";
+  $("#tcProfileOnlineId").textContent = resolvedPsnId;
+
+  const tcLinkPsngg = $("#tcLinkPsngg");
+  const tcLinkPsnp = $("#tcLinkPsnp");
+  if (tcLinkPsngg) tcLinkPsngg.href = `https://psn.gg/profile/${encodeURIComponent(resolvedPsnId)}`;
+  if (tcLinkPsnp) tcLinkPsnp.href = `https://psnprofiles.com/${encodeURIComponent(resolvedPsnId)}`;
 
   const pill = $("#tcSyncPill");
   if (pill) {
@@ -2900,8 +2906,8 @@ function openPsnSyncDetailsModal() {
             <div style="font-size:12.5px; color:rgba(255,255,255,0.5);">PlayStation Network & Brawl Stars (#2RGUQJQ0R)</div>
           </div>
         </div>
-        <span style="padding:4px 10px; border-radius:999px; background:${stats.psnLinked ? 'rgba(34,197,94,0.16)' : 'rgba(56,189,248,0.15)'}; color:${stats.psnLinked ? '#22c55e' : '#38bdf8'}; font-size:12px; font-weight:700;">
-          ${stats.psnLinked ? (isRu ? '● PSN Live Эфир' : '● PSN Live') : (isRu ? '● Ждёт PSN ID' : '● PSN Pending')}
+        <span style="padding:4px 10px; border-radius:999px; background:${stats.psnLinked ? 'rgba(34,197,94,0.16)' : 'rgba(56,189,248,0.15)'}; color:${stats.psnLinked ? '#22c55e' : '#38bdf8'}; font-size:12px; font-weight:700; white-space:nowrap;">
+          ${stats.psnLinked ? (isRu ? '● PSN Live Эфир' : '● PSN Live') : (isRu ? `● PSN ID: ${escapeHtml(psnLookupId)} · Нужен NPSSO` : `● PSN ID: ${escapeHtml(psnLookupId)} · Needs NPSSO`)}
         </span>
       </div>
 
@@ -2940,6 +2946,7 @@ function openPsnSyncDetailsModal() {
         </div>
         <div style="display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; margin-top:2px;">
           <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <a id="linkTrackerPsngg" href="https://psn.gg/profile/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#93c5fd; font-size:12px; text-decoration:none; border:1px solid rgba(147,197,253,0.28);">PSN.gg ↗</a>
             <a id="linkTrackerPsnp" href="https://psnprofiles.com/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#7dd3fc; font-size:12px; text-decoration:none; border:1px solid rgba(125,211,252,0.22);">PSNProfiles ↗</a>
             <a id="linkTrackerExo" href="https://www.exophase.com/psn/user/${encodeURIComponent(psnLookupId)}/" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#c4b5fd; font-size:12px; text-decoration:none; border:1px solid rgba(196,181,253,0.22);">Exophase ↗</a>
             <a id="linkTrackerTrue" href="https://www.truetrophies.com/gamer/${encodeURIComponent(psnLookupId)}" target="_blank" rel="noopener noreferrer" style="padding:5px 10px; border-radius:8px; background:rgba(255,255,255,0.07); color:#86efac; font-size:12px; text-decoration:none; border:1px solid rgba(134,239,172,0.22);">TrueTrophies ↗</a>
@@ -2981,12 +2988,14 @@ function openPsnSyncDetailsModal() {
     const idInput = $("#inputLivePsnId");
     const proxyInput = $("#inputLiveBrawlProxy");
     const saveBtn = $("#btnSaveLiveSyncCfg");
+    const lPsngg = $("#linkTrackerPsngg");
     const lPsnp = $("#linkTrackerPsnp");
     const lExo = $("#linkTrackerExo");
     const lTrue = $("#linkTrackerTrue");
 
     const refreshLinks = () => {
       const val = encodeURIComponent((idInput?.value || "").trim() || onlineId);
+      if (lPsngg) lPsngg.href = `https://psn.gg/profile/${val}`;
       if (lPsnp) lPsnp.href = `https://psnprofiles.com/${val}`;
       if (lExo) lExo.href = `https://www.exophase.com/psn/user/${val}/`;
       if (lTrue) lTrue.href = `https://www.truetrophies.com/gamer/${val}`;

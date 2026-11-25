@@ -369,9 +369,13 @@ function getBaseDataset() {
   return {
     profile: {
       onlineId: "Cr1mnsx",
-      psnOnlineId: "",
+      psnOnlineId: "Cr1mnsx",
       psnLinked: false,
       confirmedPsnPlatinums: 2,
+      profileUrls: [
+        "https://psn.gg/profile/Cr1mnsx",
+        "https://psnprofiles.com/Cr1mnsx"
+      ],
       avatarUrl: "assets/brawl/avatars/player_avatar.webp",
       aboutMe: "Brawl Stars (#2RGUQJQ0R) & PlayStation 5",
       trophyLevel: 0,
