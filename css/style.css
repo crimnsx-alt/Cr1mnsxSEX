@@ -113,11 +113,11 @@ button:active,
   background-size: cover;
   background-position: center 20%;
   opacity: 0;
-  transform: scale(1.03);
-  transition: opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-              filter 0.45s var(--ps5-ease),
-              transform 0.7s var(--ps5-ease);
-  will-change: opacity, transform, filter;
+  transform: scale(1.04);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.78s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
 }
 
 .ps5-bg-art.is-visible {
@@ -3725,9 +3725,9 @@ body.hub-active .stage-game-hub {
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at 75% 30%, rgba(0, 112, 209, 0.3) 0%, transparent 65%),
-                  linear-gradient(to right, rgba(4, 7, 16, 0.96) 0%, rgba(4, 7, 16, 0.75) 45%, transparent 100%),
-                  linear-gradient(to top, rgba(4, 7, 16, 0.96) 0%, transparent 70%);
+      background: radial-gradient(circle at 75% 30%, rgba(0, 112, 209, 0.22) 0%, transparent 65%),
+                  linear-gradient(to right, rgba(4, 7, 16, 0.92) 0%, rgba(4, 7, 16, 0.52) 45%, transparent 88%),
+                  linear-gradient(to top, rgba(4, 7, 16, 0.85) 0%, transparent 55%);
       pointer-events: none;
     }
 
@@ -3775,12 +3775,19 @@ body.hub-active .stage-game-hub {
       gap: 8px;
       margin-top: 4px;
       box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
-      transition: transform 0.2s, background 0.2s;
+      transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s ease, box-shadow 0.25s ease;
+      will-change: transform;
     }
 
-    .showcase-hero-play-btn:hover {
-      transform: scale(1.05);
+    .showcase-hero-play-btn:not(.is-magnet-active):hover {
+      transform: scale(1.04);
       background: #f0f6ff;
+      box-shadow: 0 10px 28px rgba(255, 255, 255, 0.38);
+    }
+
+    .showcase-hero-play-btn:active {
+      transform: scale(0.96);
+      transition-duration: 90ms;
     }
 
     .lib-showcase-ribbon {
@@ -7885,9 +7892,13 @@ button:active:not(:disabled),
   transform: scale(1.06);
 }
 
+.ps5-widget:not(.is-tilting):hover,
+.tc-game-card:not(.is-tilting):hover {
+  transform: translateY(-4px);
+}
+
 .ps5-widget:hover,
 .tc-game-card:hover {
-  transform: translateY(-4px) !important;
   border-color: rgba(56, 189, 248, 0.6) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 24px 50px -6px rgba(0, 0, 0, 0.8), 0 0 28px rgba(0, 112, 209, 0.35) !important;
 }
@@ -8335,9 +8346,13 @@ body.cc-open .viewport-stage {
   transition: transform 0.3s var(--spatial-ease-spring), box-shadow 0.3s ease, background 0.2s ease !important;
 }
 
+.ps5-btn-play:not(.is-magnet-active):hover,
+.btn-primary:not(.is-magnet-active):hover {
+  transform: scale(1.03);
+}
+
 .ps5-btn-play:hover,
 .btn-primary:hover {
-  transform: scale(1.03) !important;
   box-shadow: 0 12px 32px -6px rgba(255, 255, 255, 0.36) !important;
 }
 
@@ -8651,7 +8666,7 @@ body.cc-open .viewport-stage {
   pointer-events: none;
   animation: borderBeamRotate 5.5s linear infinite;
   z-index: 6;
-  contain: strict;
+  contain: layout paint;
 }
 
 /* Shimmer Sweep on Primary CTA Button */
@@ -8723,7 +8738,16 @@ body.cc-open .viewport-stage {
 
 .tilt-card {
   transform-style: preserve-3d;
-  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+
+.tilt-card.is-tilting {
+  transition: transform 55ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.is-magnet-active {
+  transition: transform 70ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease !important;
   will-change: transform;
 }
 
@@ -11921,11 +11945,39 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .series-season-filter-pills {
+  position: relative;
   display: flex;
+  align-items: center;
   gap: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.series-season-filter-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.series-filter-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), width 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, width;
 }
 
 .series-filter-pill {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+  flex-shrink: 0;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
@@ -11934,31 +11986,30 @@ body.view-youtube .ps5-bg-vignette {
   font-weight: 600;
   color: rgba(255, 255, 255, 0.65);
   cursor: pointer;
-  transition: transform 0.22s cubic-bezier(0.2, 0.9, 0.3, 1),
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
               background 0.2s ease,
               border-color 0.2s ease,
               color 0.2s ease,
-              box-shadow 0.22s cubic-bezier(0.2, 0.9, 0.3, 1);
+              box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1);
   outline: none;
 }
 
-.series-filter-pill:hover {
-  background: rgba(255, 255, 255, 0.14);
+.series-filter-pill:not(.is-magnet-active):hover {
+  background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
 }
 
 .series-filter-pill:active {
   transform: translateY(0) scale(0.95);
-  transition: transform 90ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  transition: transform 90ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .series-filter-pill.is-active {
-  background: rgba(255, 255, 255, 0.22);
+  background: transparent;
   color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  border-color: transparent;
+  box-shadow: none;
 }
 
 /* Episodes Grid */
@@ -12582,6 +12633,7 @@ body.view-youtube .ps5-bg-vignette {
 
 /* Mode Switcher Tabs */
 .brawl-mode-tabs {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -12589,6 +12641,22 @@ body.view-youtube .ps5-bg-vignette {
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.brawl-mode-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.32);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), width 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, width;
 }
 
 .brawl-mode-tab {
@@ -13116,12 +13184,39 @@ body.view-youtube .ps5-bg-vignette {
 }
 
 .brawl-filter-pills {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.brawl-filter-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.brawl-filter-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: none;
+  z-index: 1;
+  transition: transform 0.36s cubic-bezier(0.22, 1, 0.36, 1), width 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, width;
 }
 
 .brawl-filter-pill {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+  flex-shrink: 0;
   padding: 6px 12px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -13130,7 +13225,7 @@ body.view-youtube .ps5-bg-vignette {
   font-size: 11px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.2, 0.9, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
 .brawl-filter-pill:hover {
@@ -13138,11 +13233,16 @@ body.view-youtube .ps5-bg-vignette {
   color: #ffffff;
 }
 
+.brawl-filter-pill:active {
+  transform: scale(0.95);
+  transition-duration: 90ms;
+}
+
 .brawl-filter-pill.is-active {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: transparent;
+  border-color: transparent;
   color: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: none;
 }
 
 .brawl-search-wrap {
@@ -13924,5 +14024,484 @@ body.view-youtube .ps5-bg-vignette {
   .youtube-cb-channel-pill {
     padding: 4px 8px !important;
     font-size: 11px !important;
+  }
+}
+
+/* ==========================================================================
+   HYDROGEN POLISH LAYER — VISIBILITY, CONTROL BARS, GPU MOTION & MOBILE FIXES
+   ========================================================================== */
+
+/* 1. Prevent inactive modals/menus from participating in Tab order & hit tests */
+.ps5-context-menu {
+  visibility: hidden;
+  transition: opacity 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0.2s;
+}
+.ps5-context-menu.active {
+  visibility: visible;
+  transition: opacity 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0s;
+}
+
+.modal-game-library {
+  visibility: hidden;
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0.32s;
+}
+.modal-game-library.active {
+  visibility: visible;
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0s;
+}
+
+.in-game-window {
+  visibility: hidden;
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0.34s;
+}
+.in-game-window.active {
+  visibility: visible;
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0s;
+}
+
+.modal-sber-tips {
+  visibility: hidden;
+}
+.modal-sber-tips.active {
+  visibility: visible;
+}
+
+/* 2. GPU-only entrance keyframes (removes expensive filter: blur rasterization) */
+@keyframes heroContentFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.992);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes blurFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+/* 3. Tactile pointer-down microinteractions across UI controls */
+.ps5-tab,
+.yt-mode-tab,
+.brawl-mode-tab,
+.youtube-cb-btn,
+.brawl-cb-btn,
+.ps5-edit-widgets-btn,
+.ps5-btn-empty-add {
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              color 0.2s ease,
+              box-shadow 0.24s ease;
+}
+
+.ps5-tab:active,
+.yt-mode-tab:active,
+.brawl-mode-tab:active,
+.youtube-cb-btn:active,
+.brawl-cb-btn:active,
+.ps5-edit-widgets-btn:active,
+.ps5-btn-empty-add:active {
+  transform: scale(0.96) !important;
+  transition-duration: 85ms !important;
+}
+
+/* 4. Bottom Bar & Scroll Cue alignment — prevent multi-line squish at desktop */
+.ps5-bottom-bar {
+  gap: 16px;
+}
+
+.ps5-bottom-bar .ps5-controller-hints {
+  width: auto !important;
+  flex: 1 1 auto;
+  min-width: 0;
+  justify-content: flex-start !important;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.ps5-bottom-bar .ps5-scroll-cue {
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* 5. YouTube & Brawl Control Bars — zero clipping or vertical wrapping at desktop */
+.ps5-youtube-control-bar,
+.ps5-brawl-control-bar {
+  gap: 10px !important;
+  align-items: center;
+}
+
+.youtube-cb-left,
+.brawl-cb-left {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  display: flex;
+  align-items: center;
+  gap: 8px !important;
+  overflow: hidden;
+}
+
+.youtube-brand-badge,
+.youtube-cb-channel-pill,
+.brawl-brand-badge,
+.brawl-tag-pill {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.brawl-brand-badge {
+  padding: 5px 10px !important;
+  font-size: 10.5px !important;
+}
+
+.brawl-tag-pill {
+  padding: 5px 10px !important;
+  font-size: 11px !important;
+}
+
+.youtube-cb-telemetry,
+.brawl-cb-telemetry {
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.youtube-mode-tabs {
+  flex-shrink: 0;
+  overflow: visible;
+}
+
+.yt-mode-tab {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+.yt-series-chip {
+  white-space: nowrap;
+  flex-shrink: 0;
+  line-height: 1.3;
+}
+
+.brawl-mode-tab {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  padding: 6px 12px !important;
+  font-size: 12.5px !important;
+  gap: 6px !important;
+}
+
+#brawlModeTabs .brawl-mode-tab:not(.brawl-tab-starr).is-active {
+  background: transparent;
+  box-shadow: none;
+}
+
+.brawl-starr-beacon {
+  flex-shrink: 0;
+}
+
+.youtube-cb-right,
+.brawl-cb-right {
+  flex-shrink: 0 !important;
+}
+
+.youtube-cb-btn,
+.brawl-cb-btn {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.brawl-cb-btn {
+  padding: 6px 11px !important;
+  font-size: 12px !important;
+  gap: 6px !important;
+}
+
+@media (max-width: 2100px) {
+  .brawl-cb-telemetry {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1580px) {
+  .youtube-cb-telemetry {
+    display: none !important;
+  }
+}
+
+/* 6. Showcase Hero banner framing (16:9 wallpapers) */
+.lib-showcase-hero {
+  background-size: cover;
+  background-position: center 22%;
+}
+
+/* 7. Responsive & Mobile Overrides (Authoritative post-Spatial cascade) */
+@media (max-width: 1080px) {
+  .ps5-youtube-control-bar,
+  .ps5-brawl-control-bar {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+
+  .youtube-cb-left,
+  .brawl-cb-left {
+    flex: 1 1 100% !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 960px) {
+  .ps5-welcome-hero-banner {
+    width: calc(100% - 32px) !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    margin: 0 auto 12px !important;
+  }
+
+  .ps5-welcome-title-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ps5-welcome-pulse-badge {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ps5-welcome-hero-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .ps5-welcome-featured-game {
+    max-width: 100%;
+    min-width: 0;
+    flex: 1 1 240px;
+  }
+
+  .ps5-edit-widgets-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .ps5-welcome-hub {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding: 16px 0 8px !important;
+    flex-shrink: 0;
+  }
+
+  .ps5-bento-viewport {
+    flex: 0 0 auto !important;
+    width: calc(100% - 32px) !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .ps5-bento-track,
+  .ps5-bento-page {
+    height: auto !important;
+  }
+
+  .ps5-widget--friends,
+  .ps5-widget--store,
+  .ps5-widget--accessibility,
+  .ps5-widget--trophies,
+  .ps5-widget--battery,
+  .ps5-widget--wishlist,
+  .ps5-widget--activity,
+  .ps5-widget--network,
+  .ps5-widget--media-slot,
+  .ps5-widget--custom-slot {
+    flex: 0 0 auto !important;
+    height: auto !important;
+  }
+
+  .ps5-friends-body,
+  .ps5-friends-empty {
+    overflow: visible !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .ps5-friends-empty {
+    padding: 14px 12px;
+    gap: 6px;
+  }
+
+  .ps5-bottom-bar {
+    position: relative;
+    width: 100%;
+    padding: 14px 16px !important;
+    margin-top: 16px !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .ps5-bottom-bar .ps5-scroll-cue {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .ps5-topbar {
+    flex-wrap: wrap !important;
+    row-gap: 10px !important;
+    padding: 12px 14px 4px !important;
+    height: auto !important;
+    min-height: 48px;
+  }
+
+  .ps5-nav-tabs {
+    flex-shrink: 0;
+  }
+
+  .ps5-tab {
+    padding: 5px 14px !important;
+    font-size: 14px !important;
+  }
+
+  .ps5-status-cluster {
+    width: 100%;
+    justify-content: space-between;
+    gap: 4px !important;
+    flex-wrap: nowrap;
+  }
+
+  .ps5-top-tips-btn {
+    height: 30px !important;
+    padding: 0 10px !important;
+    font-size: 11.5px !important;
+    gap: 5px !important;
+  }
+
+  .ps5-top-lang {
+    height: 30px !important;
+    min-width: 32px !important;
+    font-size: 11px !important;
+  }
+
+  .ps5-icon-btn {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .ps5-cmd-trigger {
+    width: 30px !important;
+    padding: 0 !important;
+  }
+
+  .ps5-cmd-label,
+  .ps5-cmd-kbd,
+  .ps5-profile-name {
+    display: none !important;
+  }
+
+  .ps5-profile-pill {
+    height: 30px !important;
+    padding: 3px !important;
+  }
+
+  .ps5-clock {
+    min-width: auto !important;
+    font-size: 12px !important;
+    margin-left: 0 !important;
+  }
+
+  .brawl-tag-pill {
+    max-width: 100%;
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+    gap: 6px !important;
+    overflow: visible;
+    flex-shrink: 0;
+  }
+
+  .brawl-tag-copy-hint {
+    font-size: 10px !important;
+  }
+
+  .brawl-mode-tabs,
+  .youtube-mode-tabs {
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .brawl-mode-tabs::-webkit-scrollbar,
+  .youtube-mode-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .brawl-mode-tab,
+  .yt-mode-tab {
+    padding: 6px 10px !important;
+    font-size: 11.5px !important;
+  }
+
+  .ps5-welcome-featured-game {
+    padding: 8px 10px !important;
+    gap: 10px !important;
+  }
+
+  .ps5-wfg-title {
+    font-size: 13px !important;
+  }
+}
+
+/* 8. Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .series-filter-indicator,
+  .brawl-mode-indicator,
+  .brawl-filter-indicator,
+  .yt-mode-indicator,
+  .ps5-tab-indicator,
+  .tilt-card,
+  .is-magnet-active,
+  .ps5-bg-art {
+    transition-duration: 0.001ms !important;
+    animation: none !important;
+    transform: none !important;
   }
 }

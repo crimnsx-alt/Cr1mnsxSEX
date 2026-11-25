@@ -7,6 +7,7 @@
  */
 
 import { SoundEngine } from "./sound.js";
+import { escapeHtml } from "./friends-service.js";
 import {
   VLAD_SERIES_INFO,
   VLAD_SEASONS,
@@ -323,22 +324,25 @@ class YouTubeCinemaService {
     container.innerHTML = this.videos
       .map((v, idx) => {
         const isActive = v.id === this.activeVideoId;
+        const safeTitle = escapeHtml(v.title || "");
+        const safeMeta = escapeHtml(v.meta || "");
+        const safeBadge = escapeHtml(v.badge || "");
         return `
-          <div class="yt-in-card ${isActive ? "is-active" : ""}" data-video-id="${v.id}" role="button" tabindex="0" style="--stagger-index: ${idx};">
+          <div class="yt-in-card ${isActive ? "is-active" : ""}" data-video-id="${escapeHtml(v.id)}" role="button" tabindex="0" style="--stagger-index: ${idx};">
             <div class="yt-in-card-thumb-wrap">
-              <img src="${v.thumbHd}" alt="${v.title}" class="yt-in-card-thumb" loading="lazy" decoding="async" onerror="this.src='${v.thumb}'" />
-              ${v.duration ? `<span class="yt-in-card-duration">${v.duration}</span>` : ""}
+              <img src="${v.thumbHd}" alt="${safeTitle}" class="yt-in-card-thumb" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${v.thumb}'" />
+              ${v.duration ? `<span class="yt-in-card-duration">${escapeHtml(v.duration)}</span>` : ""}
               <div class="yt-in-play-overlay">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               </div>
             </div>
             <div class="yt-in-card-info">
               <div class="yt-in-card-badge-row">
-                ${v.badge ? `<span class="yt-in-card-badge ${v.isNew ? "badge-new" : ""}">${v.badge}</span>` : ""}
-                <span class="yt-in-card-meta">${v.meta}</span>
+                ${safeBadge ? `<span class="yt-in-card-badge ${v.isNew ? "badge-new" : ""}">${safeBadge}</span>` : ""}
+                <span class="yt-in-card-meta">${safeMeta}</span>
                 ${isActive ? `<span class="ps5-soundwave-bars is-mini" aria-hidden="true"><span></span><span></span><span></span></span>` : ""}
               </div>
-              <h4 class="yt-in-card-title">${v.title}</h4>
+              <h4 class="yt-in-card-title">${safeTitle}</h4>
             </div>
           </div>
         `;
@@ -346,10 +350,17 @@ class YouTubeCinemaService {
       .join("");
 
     container.querySelectorAll(".yt-in-card").forEach((card) => {
-      card.addEventListener("click", () => {
+      const activate = () => {
         const vid = card.dataset.videoId;
         SoundEngine.focusMove();
         this.selectVideo(vid);
+      };
+      card.addEventListener("click", activate);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          activate();
+        }
       });
     });
 
@@ -420,10 +431,12 @@ class YouTubeCinemaService {
       const iframe = holder.querySelector("iframe");
       const skeleton = holder.querySelector(".youtube-iframe-skeleton");
       if (iframe && skeleton) {
-        iframe.addEventListener("load", () => {
+        const dismissSkeleton = () => {
           skeleton.classList.add("is-hidden");
           setTimeout(() => skeleton?.remove(), 400);
-        }, { once: true });
+        };
+        iframe.addEventListener("load", dismissSkeleton, { once: true });
+        setTimeout(dismissSkeleton, 4500);
       }
     }
 
@@ -459,6 +472,17 @@ class YouTubeCinemaService {
       const width = activeBtn.offsetWidth;
       indicator.style.transform = `translateX(${left}px)`;
       indicator.style.width = `${width}px`;
+    });
+  }
+
+  updateSeriesFilterIndicator() {
+    requestAnimationFrame(() => {
+      const container = document.getElementById("seriesSeasonFilter");
+      const indicator = document.getElementById("seriesFilterIndicator");
+      const activeBtn = container?.querySelector(".series-filter-pill.is-active");
+      if (!container || !indicator || !activeBtn) return;
+      indicator.style.transform = `translateX(${activeBtn.offsetLeft}px)`;
+      indicator.style.width = `${activeBtn.offsetWidth}px`;
     });
   }
 
@@ -503,11 +527,17 @@ class YouTubeCinemaService {
       seriesBtn?.classList.remove("is-active");
       seriesBtn?.setAttribute("aria-selected", "false");
 
-      if (cinemaLayout) cinemaLayout.hidden = false;
+      if (cinemaLayout) {
+        cinemaLayout.hidden = false;
+        cinemaLayout.animate?.(
+          [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 320, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
+        );
+      }
       if (seriesLayout) seriesLayout.hidden = true;
 
       const tele = document.getElementById("ytTelemetryText");
-      if (tele) tele.textContent = `${this.videos.length} видео 4K UHD · + Сериал «Влад клёвые машины» (16 серий · 9.6★)`;
+      if (tele) tele.textContent = `${this.videos.length} видео · 4K UHD · Автообновление`;
     } else {
       seriesBtn?.classList.add("is-active");
       seriesBtn?.setAttribute("aria-selected", "true");
@@ -515,7 +545,13 @@ class YouTubeCinemaService {
       cinemaBtn?.setAttribute("aria-selected", "false");
 
       if (cinemaLayout) cinemaLayout.hidden = true;
-      if (seriesLayout) seriesLayout.hidden = false;
+      if (seriesLayout) {
+        seriesLayout.hidden = false;
+        seriesLayout.animate?.(
+          [{ opacity: 0, transform: "translateY(12px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 360, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
+        );
+      }
 
       const sc = document.getElementById("seriesScrollContainer");
       if (sc) sc.scrollTop = 0;
@@ -525,6 +561,7 @@ class YouTubeCinemaService {
 
       this.renderSeriesView();
       this.animateSeriesStats();
+      this.updateSeriesFilterIndicator();
     }
 
     this.updateModeIndicator();
@@ -639,9 +676,16 @@ class YouTubeCinemaService {
       .join("");
 
     row.querySelectorAll(".series-photo-card").forEach((card, idx) => {
-      card.addEventListener("click", () => {
+      const openPhoto = () => {
         SoundEngine.focusMove();
         window.open(VLAD_PHOTOS[idx], "_blank", "noopener");
+      };
+      card.addEventListener("click", openPhoto);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openPhoto();
+        }
       });
     });
   }
@@ -754,10 +798,12 @@ class YouTubeCinemaService {
     const iframe = wrap.querySelector("iframe");
     const skeleton = wrap.querySelector(".youtube-iframe-skeleton");
     if (iframe && skeleton) {
-      iframe.addEventListener("load", () => {
+      const dismissSkeleton = () => {
         skeleton.classList.add("is-hidden");
         setTimeout(() => skeleton?.remove(), 400);
-      }, { once: true });
+      };
+      iframe.addEventListener("load", dismissSkeleton, { once: true });
+      setTimeout(dismissSkeleton, 4500);
     }
 
     const titleEl = document.getElementById("youtubeHubTitle");
@@ -773,16 +819,19 @@ class YouTubeCinemaService {
     container.innerHTML = this.videos
       .map((v) => {
         const isActive = v.id === this.activeVideoId;
+        const safeTitle = escapeHtml(v.title || "");
+        const safeMeta = escapeHtml(v.meta || "");
+        const safeBadge = escapeHtml(v.badge || "4K");
         return `
-          <div class="yt-hub-card ${isActive ? "is-active" : ""}" data-video-id="${v.id}" role="button" tabindex="0">
+          <div class="yt-hub-card ${isActive ? "is-active" : ""}" data-video-id="${escapeHtml(v.id)}" role="button" tabindex="0">
             <div class="yt-hub-card-thumb">
-              <img src="${v.thumbHd}" alt="${v.title}" loading="lazy" decoding="async" onerror="this.src='${v.thumb}'" />
-              ${v.duration ? `<span class="yt-hub-card-duration">${v.duration}</span>` : ""}
+              <img src="${v.thumbHd}" alt="${safeTitle}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${v.thumb}'" />
+              ${v.duration ? `<span class="yt-hub-card-duration">${escapeHtml(v.duration)}</span>` : ""}
             </div>
             <div class="yt-hub-card-details">
-              <span class="yt-hub-card-badge">${v.badge || "4K"}</span>
-              <h5 class="yt-hub-card-title">${v.title}</h5>
-              <span class="yt-hub-card-meta">${v.meta}</span>
+              <span class="yt-hub-card-badge">${safeBadge}</span>
+              <h5 class="yt-hub-card-title">${safeTitle}</h5>
+              <span class="yt-hub-card-meta">${safeMeta}</span>
             </div>
           </div>
         `;
@@ -790,10 +839,17 @@ class YouTubeCinemaService {
       .join("");
 
     container.querySelectorAll(".yt-hub-card").forEach((card) => {
-      card.addEventListener("click", () => {
+      const activate = () => {
         const vid = card.dataset.videoId;
         SoundEngine.focusMove();
         this.selectVideo(vid);
+      };
+      card.addEventListener("click", activate);
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          activate();
+        }
       });
     });
   }
@@ -810,16 +866,28 @@ class YouTubeCinemaService {
       this.switchMode("series");
     });
     this.updateModeIndicator();
-    window.addEventListener("resize", () => this.updateModeIndicator(), { passive: true });
+    this.updateSeriesFilterIndicator();
+    window.addEventListener("resize", () => {
+      this.updateModeIndicator();
+      this.updateSeriesFilterIndicator();
+    }, { passive: true });
 
     // Direct Quick-Jump Triggers to "Влад клёвые машины" Series Hub
     const jumpToSeries = () => {
       SoundEngine.confirm();
       this.switchMode("series");
     };
-    document.getElementById("btnDrawerSeriesSpotlight")?.addEventListener("click", jumpToSeries);
+    const drawerSpotlight = document.getElementById("btnDrawerSeriesSpotlight");
+    if (drawerSpotlight) {
+      drawerSpotlight.addEventListener("click", jumpToSeries);
+      drawerSpotlight.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          jumpToSeries();
+        }
+      });
+    }
     document.getElementById("btnMetaGoSeries")?.addEventListener("click", jumpToSeries);
-    document.getElementById("btnPlayerSeriesCue")?.addEventListener("click", jumpToSeries);
 
     // Top bar actions
     document.getElementById("btnYoutubeSync")?.addEventListener("click", () => {
@@ -888,6 +956,7 @@ class YouTubeCinemaService {
         document.querySelectorAll("#seriesSeasonFilter .series-filter-pill").forEach((p) => {
           p.classList.toggle("is-active", p.dataset.season === season);
         });
+        this.updateSeriesFilterIndicator();
         this.renderSeriesEpisodes();
       });
     });

@@ -231,17 +231,17 @@ async function renderWelcomeFriends() {
 const AMBIENT_THEMES = {
   welcome: { primary: "#0070d1", secondary: "#38bdf8", ambientA: "rgba(0, 112, 209, 0.28)", ambientB: "rgba(56, 189, 248, 0.16)" },
   store: { primary: "#00439c", secondary: "#0070d1", ambientA: "rgba(0, 67, 156, 0.30)", ambientB: "rgba(0, 112, 209, 0.18)" },
-  gta_vc: { primary: "#f43f5e", secondary: "#06b6d4", ambientA: "rgba(244, 63, 94, 0.30)", ambientB: "rgba(6, 182, 212, 0.18)" },
-  gta_v: { primary: "#16a34a", secondary: "#f59e0b", ambientA: "rgba(22, 163, 74, 0.28)", ambientB: "rgba(245, 158, 11, 0.18)" },
-  nfs_u2: { primary: "#06b6d4", secondary: "#8b5cf6", ambientA: "rgba(6, 182, 212, 0.30)", ambientB: "rgba(139, 92, 246, 0.22)" },
+  "brawl-stars": { primary: "#eab308", secondary: "#38bdf8", ambientA: "rgba(234, 179, 8, 0.28)", ambientB: "rgba(249, 115, 22, 0.16)" },
+  "gta-vc": { primary: "#f43f5e", secondary: "#06b6d4", ambientA: "rgba(244, 63, 94, 0.30)", ambientB: "rgba(6, 182, 212, 0.18)" },
+  "gta-v": { primary: "#16a34a", secondary: "#f59e0b", ambientA: "rgba(22, 163, 74, 0.28)", ambientB: "rgba(245, 158, 11, 0.18)" },
+  "nfs-u2": { primary: "#06b6d4", secondary: "#8b5cf6", ambientA: "rgba(6, 182, 212, 0.30)", ambientB: "rgba(139, 92, 246, 0.22)" },
   simpsons: { primary: "#eab308", secondary: "#3b82f6", ambientA: "rgba(234, 179, 8, 0.28)", ambientB: "rgba(59, 130, 246, 0.18)" },
-  doom: { primary: "#dc2626", secondary: "#ea580c", ambientA: "rgba(220, 38, 38, 0.32)", ambientB: "rgba(234, 88, 12, 0.22)" },
-  astro: { primary: "#0284c7", secondary: "#38bdf8", ambientA: "rgba(2, 132, 199, 0.28)", ambientB: "rgba(56, 189, 248, 0.18)" },
-  spiderman2: { primary: "#ef4444", secondary: "#1e3a8a", ambientA: "rgba(239, 68, 68, 0.30)", ambientB: "rgba(30, 58, 138, 0.22)" },
-  quake3: { primary: "#d97706", secondary: "#b91c1c", ambientA: "rgba(217, 119, 6, 0.30)", ambientB: "rgba(185, 28, 28, 0.22)" },
-  gta_3: { primary: "#0284c7", secondary: "#64748b", ambientA: "rgba(2, 132, 199, 0.26)", ambientB: "rgba(100, 116, 139, 0.18)" },
-  minecraft: { primary: "#15803d", secondary: "#854d0e", ambientA: "rgba(21, 128, 61, 0.28)", ambientB: "rgba(133, 77, 14, 0.20)" },
-  library: { primary: "#6366f1", secondary: "#38bdf8", ambientA: "rgba(99, 102, 241, 0.28)", ambientB: "rgba(56, 189, 248, 0.18)" }
+  "doom-classic": { primary: "#dc2626", secondary: "#ea580c", ambientA: "rgba(220, 38, 38, 0.32)", ambientB: "rgba(234, 88, 12, 0.22)" },
+  library: { primary: "#6366f1", secondary: "#38bdf8", ambientA: "rgba(99, 102, 241, 0.28)", ambientB: "rgba(56, 189, 248, 0.18)" },
+  "ps5-media-audio": { primary: "#0ea5e9", secondary: "#34d399", ambientA: "rgba(14, 165, 233, 0.28)", ambientB: "rgba(52, 211, 153, 0.18)" },
+  "media-gallery": { primary: "#06b6d4", secondary: "#3b82f6", ambientA: "rgba(6, 182, 212, 0.28)", ambientB: "rgba(59, 130, 246, 0.18)" },
+  youtube: { primary: "#ff164a", secondary: "#f43f5e", ambientA: "rgba(255, 22, 74, 0.28)", ambientB: "rgba(244, 63, 94, 0.16)" },
+  twitch: { primary: "#9146ff", secondary: "#a855f7", ambientA: "rgba(145, 70, 255, 0.30)", ambientB: "rgba(168, 85, 247, 0.18)" }
 };
 
 function updateAmbientGlowTheme(tileId) {
@@ -253,15 +253,41 @@ function updateAmbientGlowTheme(tileId) {
   root.style.setProperty("--scene-ambient-b", theme.ambientB);
 }
 
+const _activeCrossfadeAnims = new WeakMap();
 function triggerContentCrossfade() {
-  const targets = [document.getElementById("ps5WelcomeView"), document.getElementById("ps5GameHeroView")].filter(Boolean);
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const targets = [
+    document.getElementById("ps5WelcomeView"),
+    document.getElementById("ps5ExploreView"),
+    document.getElementById("ps5GameHeroView"),
+    document.getElementById("ps5TwitchView"),
+    document.getElementById("ps5YoutubeView"),
+    document.getElementById("ps5BrawlStarsView")
+  ].filter((el) => el && !el.hidden);
+
   targets.forEach((el) => {
-    el.classList.remove("ps5-content-crossfade");
-  });
-  requestAnimationFrame(() => {
-    targets.forEach((el) => {
-      el.classList.add("ps5-content-crossfade");
-    });
+    const prevAnim = _activeCrossfadeAnims.get(el);
+    if (prevAnim) prevAnim.cancel();
+    if (typeof el.animate === "function") {
+      const anim = el.animate(
+        [
+          { opacity: 0.08, transform: "translate3d(0, 12px, 0) scale(0.994)" },
+          { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }
+        ],
+        {
+          duration: 360,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          fill: "both"
+        }
+      );
+      _activeCrossfadeAnims.set(el, anim);
+      anim.onfinish = () => {
+        if (_activeCrossfadeAnims.get(el) === anim) {
+          anim.cancel();
+          _activeCrossfadeAnims.delete(el);
+        }
+      };
+    }
   });
 }
 
@@ -399,76 +425,93 @@ function animateNumberFlow(element, targetValue, options = {}) {
 // ============================================================
 function initSpotlightAndTilt() {
   const isTouch = window.matchMedia("(pointer: coarse)").matches;
-  if (isTouch) return;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (isTouch || reducedMotion) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .starr-drop-box, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .yt-player-series-cue";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .starr-drop-box, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .lib-card-poster, .lib-card-list-item";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
       let rect = null;
+      let rafPending = false;
+      let lastX = 0;
+      let lastY = 0;
+
+      const isLargeCard = card.classList.contains("brawl-spotlight-inner") || card.classList.contains("series-hero-card") || card.classList.contains("starr-drop-box");
+      const maxTilt = isLargeCard ? 2.0 : 4.2;
 
       card.addEventListener("mouseenter", () => {
         rect = card.getBoundingClientRect();
+        card.classList.add("is-tilting");
       }, { passive: true });
 
       card.addEventListener("mousemove", (e) => {
-        if (card._tiltTicking) return;
-        card._tiltTicking = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (rafPending) return;
+        rafPending = true;
         requestAnimationFrame(() => {
-          if (!rect) rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
+          rafPending = false;
+          if (!rect || rect.width === 0) rect = card.getBoundingClientRect();
+          const x = lastX - rect.left;
+          const y = lastY - rect.top;
 
-          card.style.setProperty("--mouse-x", `${x}px`);
-          card.style.setProperty("--mouse-y", `${y}px`);
+          card.style.setProperty("--mouse-x", `${x.toFixed(1)}px`);
+          card.style.setProperty("--mouse-y", `${y.toFixed(1)}px`);
 
-          // Subtle 3D tilt (max 4.2deg)
-          const centerX = rect.width / 2;
-          const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -4.2;
-          const rotateY = ((x - centerX) / centerX) * 4.2;
+          const centerX = rect.width / 2 || 1;
+          const centerY = rect.height / 2 || 1;
+          const rotateX = (((y - centerY) / centerY) * -maxTilt);
+          const rotateY = (((x - centerX) / centerX) * maxTilt);
 
-          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.012, 1.012, 1.012)`;
-          card._tiltTicking = false;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translate3d(0, -4px, 0) scale3d(1.012, 1.012, 1.012)`;
         });
       }, { passive: true });
 
       card.addEventListener("mouseleave", () => {
-        card._tiltTicking = false;
+        rafPending = false;
         rect = null;
+        card.classList.remove("is-tilting");
         card.style.transform = "";
-      });
+      }, { passive: true });
     }
   });
 
   // Magnetic Pull on Main Action Buttons (3-5px attraction) with RAF and cached rect
-  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying, .series-action-btn, .yt-mode-tab, .series-filter-pill, .series-ep-btn, .twitch-cb-btn, .youtube-cb-btn, .yt-in-btn-series-spotlight");
+  const magneticButtons = document.querySelectorAll(".ps5-btn-play, .btn-primary, .ps5-top-tips-btn, #btnContinuePlaying, .series-action-btn, .yt-mode-tab, .series-filter-pill, .series-ep-btn, .twitch-cb-btn, .youtube-cb-btn, .yt-in-btn-series-spotlight, .showcase-hero-play-btn");
   magneticButtons.forEach((btn) => {
     if (!btn._hasMagnet) {
       btn._hasMagnet = true;
       let btnRect = null;
+      let rafPending = false;
+      let lastX = 0;
+      let lastY = 0;
 
       btn.addEventListener("mouseenter", () => {
         btnRect = btn.getBoundingClientRect();
+        btn.classList.add("is-magnet-active");
       }, { passive: true });
 
       btn.addEventListener("mousemove", (e) => {
-        if (btn._magnetTicking) return;
-        btn._magnetTicking = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        if (rafPending) return;
+        rafPending = true;
         requestAnimationFrame(() => {
-          if (!btnRect) btnRect = btn.getBoundingClientRect();
-          const x = e.clientX - (btnRect.left + btnRect.width / 2);
-          const y = e.clientY - (btnRect.top + btnRect.height / 2);
-          btn.style.transform = `translate(${(x * 0.16).toFixed(1)}px, ${(y * 0.16).toFixed(1)}px) scale(1.03)`;
-          btn._magnetTicking = false;
+          rafPending = false;
+          if (!btnRect || btnRect.width === 0) btnRect = btn.getBoundingClientRect();
+          const x = lastX - (btnRect.left + btnRect.width / 2);
+          const y = lastY - (btnRect.top + btnRect.height / 2);
+          btn.style.transform = `translate3d(${(x * 0.14).toFixed(1)}px, ${(y * 0.14).toFixed(1)}px, 0) scale(1.025)`;
         });
       }, { passive: true });
 
       btn.addEventListener("mouseleave", () => {
-        btn._magnetTicking = false;
+        rafPending = false;
         btnRect = null;
+        btn.classList.remove("is-magnet-active");
         btn.style.transform = "";
-      });
+      }, { passive: true });
     }
   });
 }
@@ -717,7 +760,16 @@ function applyLanguageAndTelemetry() {
     if (avatarBtn) {
       avatarBtn.title = state.lang === "ru" ? `Профиль ${onlineId}` : `Profile ${onlineId}`;
     }
-    $("#iconProfileAvatar").innerHTML = `<img src="${prof.avatarUrl}" alt="${onlineId}" class="ps5-topbar-avatar" onerror="this.onerror=null;this.parentElement.innerHTML=PS5Icons.avatarSvg" />`;
+    const avatarWrap = $("#iconProfileAvatar");
+    const img = document.createElement("img");
+    img.src = prof.avatarUrl;
+    img.alt = onlineId;
+    img.className = "ps5-topbar-avatar";
+    img.addEventListener("error", () => {
+      avatarWrap.innerHTML = PS5Icons.avatarSvg;
+    }, { once: true });
+    avatarWrap.innerHTML = "";
+    avatarWrap.appendChild(img);
   }
 
   renderControllerHints();
@@ -732,6 +784,13 @@ function applyLanguageAndTelemetry() {
 // ============================================================
 // Top-Aligned Game Ribbon Renderer (Optimized with zero-DOM re-render on tile switch)
 // ============================================================
+function centerRibbonTile(activeBtn) {
+  const wrap = document.querySelector(".ps5-ribbon-wrap");
+  if (!wrap || !activeBtn) return;
+  const targetLeft = activeBtn.offsetLeft - wrap.clientWidth / 2 + activeBtn.offsetWidth / 2;
+  wrap.scrollTo({ left: Math.max(0, targetLeft), behavior: "smooth" });
+}
+
 function renderRibbon(forceRebuild = false) {
   const ribbonEl = $("#ps5GamesRibbon");
   if (!ribbonEl) return;
@@ -747,7 +806,7 @@ function renderRibbon(forceRebuild = false) {
       });
       const activeBtn = ribbonEl.querySelector(`.ps5-tile[data-tile-id="${state.activeId}"]`);
       if (activeBtn) {
-        activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        centerRibbonTile(activeBtn);
         if (document.activeElement && document.activeElement.classList.contains("ps5-tile")) {
           activeBtn.focus({ preventScroll: true });
         }
@@ -770,19 +829,29 @@ function renderRibbon(forceRebuild = false) {
     btn.setAttribute("aria-label", t(item.title));
 
     const artClass = item.tileStyle ? `ps5-tile-art ps5-tile-art--${item.tileStyle}` : "ps5-tile-art";
-    let innerArt = "";
+    const artWrap = document.createElement("div");
+    artWrap.className = artClass;
+
     if (item.iconSvg) {
-      innerArt = item.iconSvg;
+      artWrap.innerHTML = item.iconSvg;
     } else {
       const safeThumb = item.thumb || PS5Icons.makeSceneArt("ps5-eco", t(item.title));
       const fb = item.fallbackBg || PS5Icons.makeSceneArt("ps5-eco", t(item.title));
-      innerArt = `<img src="${safeThumb}" alt="${t(item.title)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${fb}'" />`;
+      const img = document.createElement("img");
+      img.src = safeThumb;
+      img.alt = t(item.title);
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.addEventListener("error", () => { img.src = fb; }, { once: true });
+      artWrap.appendChild(img);
     }
 
-    btn.innerHTML = `
-      <div class="${artClass}">${innerArt}</div>
-      <span class="ps5-tile-active-label">${t(item.title)}</span>
-    `;
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "ps5-tile-active-label";
+    labelSpan.textContent = t(item.title);
+
+    btn.appendChild(artWrap);
+    btn.appendChild(labelSpan);
 
     btn.addEventListener("pointerenter", () => {
       if (state.activeId !== item.id) {
@@ -807,7 +876,7 @@ function renderRibbon(forceRebuild = false) {
 
   const activeBtn = ribbonEl.querySelector(".ps5-tile.is-active");
   if (activeBtn) {
-    activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    centerRibbonTile(activeBtn);
     if (document.activeElement && document.activeElement.classList.contains("ps5-tile")) {
       activeBtn.focus({ preventScroll: true });
     }
@@ -2545,8 +2614,8 @@ function renderTrophyCollectionModal() {
       recentListEl.innerHTML = recentTrophies.map(t => {
         const iconSrc = t.trophyIconUrl || "assets/covers/gta_vc.jpg";
         return `
-          <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}">
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" onerror="this.src='assets/covers/gta_vc.jpg'">
+          <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}" role="button" tabindex="0">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
             <div class="tc-recent-info">
               <span class="tc-recent-trophy-name">${escapeHtml(t.trophyName)}</span>
               <span class="tc-recent-game-title">${escapeHtml(t.gameTitle || 'PlayStation 5')}</span>
@@ -2557,9 +2626,16 @@ function renderTrophyCollectionModal() {
       }).join("");
 
       recentListEl.querySelectorAll(".tc-recent-card").forEach(card => {
-        card.addEventListener("click", () => {
+        const openDetail = () => {
           const cid = card.dataset.commId;
           if (cid) openGameTrophiesDetail(cid);
+        };
+        card.addEventListener("click", openDetail);
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openDetail();
+          }
         });
       });
     }
@@ -2577,7 +2653,7 @@ function renderTrophyGamesList() {
 
   const filteredGames = psnService.getGames(state.trophyFilter, state.trophySearch);
   if (countBadge) {
-    countBadge.textContent = isRu ? `${filteredGames.length} ${formatGamePlural(filteredGames.length, true)}` : `${filteredGames.length} games`;
+    countBadge.textContent = formatGamePlural(filteredGames.length, isRu);
   }
 
   if (filteredGames.length === 0) {
@@ -2595,8 +2671,8 @@ function renderTrophyGamesList() {
     const hasPlat = g.platinumEarned || counts.platinum > 0;
 
     return `
-      <div class="tc-game-card" data-comm-id="${g.npCommunicationId}">
-        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" onerror="this.src='assets/covers/gta_vc.jpg'">
+      <div class="tc-game-card" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0">
+        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
         <div class="tc-game-details">
           <div class="tc-game-header-row">
             <span class="tc-game-title" title="${escapeHtml(g.titleName)}">${escapeHtml(g.titleName)}</span>
@@ -2620,11 +2696,20 @@ function renderTrophyGamesList() {
   }).join("");
 
   gamesGrid.querySelectorAll(".tc-game-card").forEach(card => {
-    card.addEventListener("click", () => {
+    const openDetail = () => {
       const cid = card.dataset.commId;
       if (cid) openGameTrophiesDetail(cid);
+    };
+    card.addEventListener("click", openDetail);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openDetail();
+      }
     });
   });
+
+  initSpotlightAndTilt();
 }
 
 function openGameTrophiesDetail(commId) {
@@ -3256,6 +3341,7 @@ const playableGames = [
     badge: 'WASM PORT',
     badgeClass: 'wasm',
     art: 'assets/covers/gta_vc.jpg',
+    banner: 'assets/wallpapers/gta_vc_bg.jpg',
     url: 'https://joncodeofficial.github.io/gta-vice-city-wasm/',
     embedMode: 'direct'
   },
@@ -3268,6 +3354,7 @@ const playableGames = [
     badge: 'WASM / WEBGPU',
     badgeClass: 'webgpu',
     art: 'assets/covers/gta_v.jpg',
+    banner: 'assets/wallpapers/gta_v_bg.jpg',
     url: 'https://wasmarcade.com/gta-5',
     embedMode: 'hub'
   },
@@ -3280,6 +3367,7 @@ const playableGames = [
     badge: 'WASM RACING',
     badgeClass: 'racing',
     art: 'assets/covers/nfs_u2.jpg',
+    banner: 'assets/wallpapers/nfs_u2_bg.jpg',
     url: 'https://nfsu2.xyz',
     embedMode: 'hub'
   },
@@ -3292,6 +3380,7 @@ const playableGames = [
     badge: 'WASM PORT',
     badgeClass: 'wasm',
     art: 'assets/covers/gta_3.jpg',
+    banner: 'assets/covers/gta_3.jpg',
     url: 'https://wasmarcade.com/gta-3',
     embedMode: 'hub'
   },
@@ -3304,6 +3393,7 @@ const playableGames = [
     badge: 'WASM SANDBOX',
     badgeClass: 'wasm',
     art: 'assets/covers/simpsons.png',
+    banner: 'assets/wallpapers/simpsons_bg.jpg',
     url: 'https://wasmarcade.com/simpsons',
     embedMode: 'hub'
   },
@@ -3316,6 +3406,7 @@ const playableGames = [
     badge: 'CLASSIC FPS',
     badgeClass: 'wasm',
     art: 'assets/covers/doom.jpg',
+    banner: 'assets/wallpapers/doom_bg.jpg',
     url: 'https://archive.org/embed/doom_1993',
     embedMode: 'direct'
   },
@@ -3328,6 +3419,7 @@ const playableGames = [
     badge: 'WEBGL 120FPS',
     badgeClass: 'webgpu',
     art: 'assets/covers/quake3.jpg',
+    banner: 'assets/covers/quake3.jpg',
     url: 'http://www.quakejs.com/',
     embedMode: 'direct'
   },
@@ -3340,6 +3432,7 @@ const playableGames = [
     badge: 'VOXEL SANDBOX',
     badgeClass: 'wasm',
     art: 'assets/covers/minecraft.png',
+    banner: 'assets/covers/minecraft.png',
     url: 'https://classic.minecraft.net/',
     embedMode: 'direct'
   }
@@ -3359,7 +3452,14 @@ function updateShowcaseHero(game) {
   const showcaseHeroPlayBtn = document.getElementById('showcaseHeroPlayBtn');
   if (!game || !libShowcaseHero) return;
 
-  libShowcaseHero.style.backgroundImage = `radial-gradient(circle at 75% 30%, rgba(0, 112, 209, 0.45) 0%, transparent 65%), linear-gradient(to right, rgba(4, 7, 16, 0.96) 0%, rgba(4, 7, 16, 0.75) 45%, transparent 100%), url('${game.art}')`;
+  const heroBg = game.banner || game.art;
+  libShowcaseHero.style.backgroundImage = `url('${heroBg}')`;
+  if (libShowcaseHero.animate) {
+    libShowcaseHero.animate(
+      [{ opacity: 0.75, transform: 'scale(0.992)' }, { opacity: 1, transform: 'scale(1)' }],
+      { duration: 280, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+    );
+  }
   if (showcaseHeroBadgeRow) {
     showcaseHeroBadgeRow.innerHTML = `
       <span class="poster-badge ${game.badgeClass || 'wasm'}">${game.badge}</span>
@@ -3415,9 +3515,16 @@ function renderPlayableLibrary(searchQuery = '') {
             </div>
           </div>
         `;
-        card.addEventListener('click', () => {
+        const launch = () => {
           SoundEngine.confirm();
           launchPlayableGame(game.id);
+        };
+        card.addEventListener('click', launch);
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            launch();
+          }
         });
         libGrid.appendChild(card);
       });
@@ -3445,18 +3552,28 @@ function renderPlayableLibrary(searchQuery = '') {
         tile.title = `${game.title} (${game.badge})`;
         tile.tabIndex = 0;
 
-        tile.addEventListener('mouseenter', () => {
+        const previewGame = () => {
           currentShowcaseGameId = game.id;
           SoundEngine.navigate();
           updateShowcaseHero(game);
           document.querySelectorAll('.showcase-ribbon-tile').forEach(t => t.classList.remove('selected'));
           tile.classList.add('selected');
-        });
+        };
+        tile.addEventListener('mouseenter', previewGame);
+        tile.addEventListener('focus', previewGame);
 
         tile.addEventListener('click', () => {
           currentShowcaseGameId = game.id;
           SoundEngine.confirm();
           launchPlayableGame(game.id);
+        });
+        tile.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            currentShowcaseGameId = game.id;
+            SoundEngine.confirm();
+            launchPlayableGame(game.id);
+          }
         });
         libShowcaseRibbon.appendChild(tile);
       });
@@ -3491,14 +3608,23 @@ function renderPlayableLibrary(searchQuery = '') {
             </div>
           </div>
         `;
-        item.addEventListener('click', () => {
+        const launch = () => {
           SoundEngine.confirm();
           launchPlayableGame(game.id);
+        };
+        item.addEventListener('click', launch);
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            launch();
+          }
         });
         libListContainer.appendChild(item);
       });
     }
   }
+
+  initSpotlightAndTilt();
 }
 
 function openLibraryModal() {
@@ -3994,16 +4120,8 @@ function handleKeydown(e) {
       youtubeService.closeTrailer();
       return;
     }
-    if (tcDetailOpen) {
-      $("#modalGameTrophiesDetail")?.classList.remove("active");
-      $("#modalGameTrophiesDetail")?.setAttribute("aria-hidden", "true");
-      return;
-    }
-    if (tcOpen) {
-      $("#modalTrophyCollection")?.classList.remove("active");
-      $("#modalTrophyCollection")?.setAttribute("aria-hidden", "true");
-      return;
-    }
+    if (tcDetailOpen) return closeGameTrophiesDetail();
+    if (tcOpen) return closeTrophyCollectionModal();
     if (inGameOpen) return closeInGameWindow();
     if (libOpen) return closeLibraryModal();
     if (friendAddOpen) return closeAddFriendModal();
@@ -4017,7 +4135,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen || twitchOpen) return;
+  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen || twitchOpen || youtubeOpen || trailerOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -5348,15 +5466,6 @@ function init() {
   $("#searchInput").addEventListener("input", (e) => renderSearchResults(e.target.value));
   $("#settingsCloseBtn").addEventListener("click", closeSettings);
   $("#modalCloseBtn").addEventListener("click", closeModal);
-  $("#btnLibClose")?.addEventListener("click", closeLibraryModal);
-  $("#gwBtnClose")?.addEventListener("click", closeInGameWindow);
-
-  const modalGameLibrary = document.getElementById("modalGameLibrary");
-  if (modalGameLibrary) {
-    modalGameLibrary.addEventListener("click", (e) => {
-      if (e.target === modalGameLibrary) closeLibraryModal();
-    });
-  }
 
   ["#modalOverlay", "#searchOverlay", "#settingsOverlay"].forEach((sel) => {
     $(sel).addEventListener("click", (e) => {
@@ -5465,6 +5574,8 @@ function init() {
   window.toggleControlCenter = toggleControlCenter;
   window.openTrophyCollectionModal = openTrophyCollectionModal;
   window.closeTrophyCollectionModal = closeTrophyCollectionModal;
+  window.openLibraryModal = openLibraryModal;
+  window.closeLibraryModal = closeLibraryModal;
   window.openGameHub = openGameHub;
   window.closeGameHub = closeGameHub;
   window.youtubeService = youtubeService;

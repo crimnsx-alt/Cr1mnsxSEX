@@ -412,6 +412,27 @@ class BrawlStarsService {
     this.renderStarrDropMiniGame();
     this.renderStatsBar();
     this.initViewTabListeners();
+    this.updateBrawlIndicators();
+  }
+
+  updateBrawlIndicators() {
+    requestAnimationFrame(() => {
+      const modeTabs = document.getElementById("brawlModeTabs");
+      const modeInd = document.getElementById("brawlModeIndicator");
+      const activeMode = modeTabs?.querySelector(".brawl-mode-tab.is-active");
+      if (modeTabs && modeInd && activeMode) {
+        modeInd.style.transform = `translateX(${activeMode.offsetLeft}px)`;
+        modeInd.style.width = `${activeMode.offsetWidth}px`;
+      }
+
+      const filterPills = document.getElementById("brawlFilterPills");
+      const filterInd = document.getElementById("brawlFilterIndicator");
+      const activeFilter = filterPills?.querySelector(".brawl-filter-pill.is-active");
+      if (filterPills && filterInd && activeFilter) {
+        filterInd.style.transform = `translateX(${activeFilter.offsetLeft}px)`;
+        filterInd.style.width = `${activeFilter.offsetWidth}px`;
+      }
+    });
   }
 
   renderHeaderBar() {
@@ -604,6 +625,16 @@ class BrawlStarsService {
     if (animate) {
       const numEl = document.getElementById("brawlSpotlightTrophyVal");
       animateNumber(numEl, this.lastTrophiesShown, trophies, 350);
+      const heroImg = document.getElementById("brawlSpotlightHeroImg");
+      if (heroImg && heroImg.animate) {
+        heroImg.animate(
+          [
+            { opacity: 0.25, transform: "translate3d(0, 14px, 0) scale(0.90)" },
+            { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }
+          ],
+          { duration: 380, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
+        );
+      }
     }
     this.lastTrophiesShown = trophies;
 
@@ -614,6 +645,10 @@ class BrawlStarsService {
         this.selectBrawler(btn.dataset.brawler);
       });
     });
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   selectBrawler(brawlerName) {
@@ -746,6 +781,10 @@ class BrawlStarsService {
         }
       });
     });
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   renderBattleHistory() {
@@ -933,6 +972,10 @@ class BrawlStarsService {
         this.resetStarrDrop();
       });
     }
+
+    if (window.initSpotlightAndTilt) {
+      window.initSpotlightAndTilt();
+    }
   }
 
   handleStarrDropTap() {
@@ -1033,14 +1076,41 @@ class BrawlStarsService {
       this.activeTab = tab;
       try { SoundEngine.enter(); } catch (_) {}
 
-      if (btnRoster) btnRoster.classList.toggle("is-active", tab === "roster");
-      if (btnBattles) btnBattles.classList.toggle("is-active", tab === "battles");
-      if (btnStarrDrop) btnStarrDrop.classList.toggle("is-active", tab === "starr-drop");
+      if (btnRoster) {
+        btnRoster.classList.toggle("is-active", tab === "roster");
+        btnRoster.setAttribute("aria-selected", String(tab === "roster"));
+      }
+      if (btnBattles) {
+        btnBattles.classList.toggle("is-active", tab === "battles");
+        btnBattles.setAttribute("aria-selected", String(tab === "battles"));
+      }
+      if (btnStarrDrop) {
+        btnStarrDrop.classList.toggle("is-active", tab === "starr-drop");
+        btnStarrDrop.setAttribute("aria-selected", String(tab === "starr-drop"));
+      }
 
       if (stageRoster) stageRoster.hidden = tab !== "roster";
       if (stageBattles) stageBattles.hidden = tab !== "battles";
       if (stageStarrDrop) stageStarrDrop.hidden = tab !== "starr-drop";
+
+      const targetStage = tab === "roster" ? stageRoster : (tab === "battles" ? stageBattles : stageStarrDrop);
+      if (targetStage && targetStage.animate) {
+        targetStage.animate(
+          [{ opacity: 0, transform: "translate3d(0, 10px, 0)" }, { opacity: 1, transform: "translate3d(0, 0, 0)" }],
+          { duration: 300, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
+        );
+      }
+
+      this.updateBrawlIndicators();
+      if (window.initSpotlightAndTilt) {
+        window.initSpotlightAndTilt();
+      }
     };
+
+    if (!this._resizeBound) {
+      this._resizeBound = true;
+      window.addEventListener("resize", () => this.updateBrawlIndicators(), { passive: true });
+    }
 
     if (btnRoster) btnRoster.onclick = () => setTab("roster");
     if (btnBattles) btnBattles.onclick = () => setTab("battles");
@@ -1053,6 +1123,7 @@ class BrawlStarsService {
         document.querySelectorAll(".brawl-filter-pill").forEach((p) => p.classList.remove("is-active"));
         pill.classList.add("is-active");
         this.brawlerFilter = pill.dataset.filter || "all";
+        this.updateBrawlIndicators();
         this.renderBrawlersGrid();
       };
     });

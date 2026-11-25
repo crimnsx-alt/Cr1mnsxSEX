@@ -3,6 +3,9 @@
  * 100% pure vector SVGs (zero emojis).
  */
 
+let _svgUid = 0;
+const uid = (prefix) => `${prefix}_${++_svgUid}`;
+
 export const PS5Icons = {
   psLogo: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.5 4.2v14.1l3.1 1.1V8.4c0-1 .4-1.4 1.1-1.2.8.2 1.1.8 1.1 1.8v3.9c2.2 1.1 4 0 4-2.8 0-2.9-1.1-4.1-4.1-5.1-1.6-.5-3.6-1-5.2-.8zm-1.1 9.4-5.7 2c-1.5.5-2.1 1.4-1.7 2.4.4 1 1.8 1.3 3.4.8l4-1.4v-2l-2.6.9c-.7.2-1.2.1-1.4-.3-.1-.3.1-.7.7-.9l3.3-1.1v-.4zm12.8 1.6c-1.4-.5-3.2-.6-4.7-.1l-2.8 1v2l2.9-1c.8-.3 1.5-.2 1.8.2.2.4-.1.8-.9 1.1l-3.8 1.3v2l5.6-2c1.8-.6 2.7-1.6 2.4-2.8-.1-.8-.9-1.3-2.5-1.7z"/></svg>`,
 
@@ -82,7 +85,10 @@ export const PS5Icons = {
 
   gear: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
 
-  accessibilityEmblem: `<svg viewBox="0 0 64 64" width="52" height="52" fill="none" aria-hidden="true"><defs><linearGradient id="accGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><circle cx="32" cy="32" r="28" fill="url(#accGrad)" opacity="0.22"/><circle cx="32" cy="32" r="22" stroke="url(#accGrad)" stroke-width="2.2"/><circle cx="32" cy="21.5" r="3.4" fill="#ffffff"/><path d="M20 29.5h24M32 29.5v10.5M24.5 47l7.5-7 7.5 7" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  get accessibilityEmblem() {
+    const gid = uid("accGrad");
+    return `<svg viewBox="0 0 64 64" width="52" height="52" fill="none" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient></defs><circle cx="32" cy="32" r="28" fill="url(#${gid})" opacity="0.22"/><circle cx="32" cy="32" r="22" stroke="url(#${gid})" stroke-width="2.2"/><circle cx="32" cy="21.5" r="3.4" fill="#ffffff"/><path d="M20 29.5h24M32 29.5v10.5M24.5 47l7.5-7 7.5 7" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  },
 
   chevronLeft: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>`,
 
@@ -92,9 +98,15 @@ export const PS5Icons = {
 
   dots: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="5.5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="18.5" cy="12" r="1.8"/></svg>`,
 
-  psPlusCross: `<svg viewBox="0 0 36 36" width="26" height="26" aria-hidden="true"><defs><linearGradient id="plusGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#eab308"/></linearGradient></defs><path d="M15 6h6v9h9v6h-9v9h-6v-9H6v-6h9V6z" fill="url(#plusGold)"/></svg>`,
+  get psPlusCross() {
+    const gid = uid("plusGold");
+    return `<svg viewBox="0 0 36 36" width="26" height="26" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fde047"/><stop offset="100%" stop-color="#eab308"/></linearGradient></defs><path d="M15 6h6v9h9v6h-9v9h-6v-9H6v-6h9V6z" fill="url(#${gid})"/></svg>`;
+  },
 
-  psStoreBag: `<svg viewBox="0 0 48 48" width="38" height="38" fill="none" aria-hidden="true"><defs><linearGradient id="bagGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0055c4"/></linearGradient></defs><path d="M16 16v-2.5a8 8 0 0 1 16 0V16" stroke="#93c5fd" stroke-width="2.6" stroke-linecap="round"/><rect x="10" y="16" width="28" height="24" rx="5" fill="url(#bagGrad)"/><path d="M21 23.2v9.6l2 .7V26c0-.7.3-1 .8-.8.5.1.7.6.7 1.3v2.7c1.5.7 2.8 0 2.8-2 0-2-.8-2.8-2.8-3.5-1.1-.4-2.4-.7-3.5-.5zm-.7 6.3-3.9 1.4c-1 .3-1.4.9-1.1 1.6.3.7 1.2.9 2.3.5l2.7-1v-1.3l-1.8.6c-.5.1-.8 0-.9-.2-.1-.2.1-.5.5-.6l2.2-.8v-.2zm8.7 1.1c-1-.3-2.2-.4-3.2-.1l-1.9.7v1.3l2-.7c.5-.2 1-.1 1.2.1.1.3-.1.6-.6.8l-2.6.9v1.3l3.8-1.4c1.2-.4 1.8-1.1 1.6-1.9-.1-.5-.6-.9-1.7-1.1z" fill="#ffffff"/></svg>`,
+  get psStoreBag() {
+    const gid = uid("bagGrad");
+    return `<svg viewBox="0 0 48 48" width="38" height="38" fill="none" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0055c4"/></linearGradient></defs><path d="M16 16v-2.5a8 8 0 0 1 16 0V16" stroke="#93c5fd" stroke-width="2.6" stroke-linecap="round"/><rect x="10" y="16" width="28" height="24" rx="5" fill="url(#${gid})"/><path d="M21 23.2v9.6l2 .7V26c0-.7.3-1 .8-.8.5.1.7.6.7 1.3v2.7c1.5.7 2.8 0 2.8-2 0-2-.8-2.8-2.8-3.5-1.1-.4-2.4-.7-3.5-.5zm-.7 6.3-3.9 1.4c-1 .3-1.4.9-1.1 1.6.3.7 1.2.9 2.3.5l2.7-1v-1.3l-1.8.6c-.5.1-.8 0-.9-.2-.1-.2.1-.5.5-.6l2.2-.8v-.2zm8.7 1.1c-1-.3-2.2-.4-3.2-.1l-1.9.7v1.3l2-.7c.5-.2 1-.1 1.2.1.1.3-.1.6-.6.8l-2.6.9v1.3l3.8-1.4c1.2-.4 1.8-1.1 1.6-1.9-.1-.5-.6-.9-1.7-1.1z" fill="#ffffff"/></svg>`;
+  },
 
   welcomeGlyphs: `<svg viewBox="0 0 64 64" width="44" height="44" class="ps5-welcome-glyphs" aria-hidden="true"><rect x="10" y="10" width="16.5" height="16.5" rx="2" fill="none" stroke="#e5e7eb" stroke-width="4.2"/><polygon points="46,9.5 55.5,26.5 36.5,26.5" fill="none" stroke="#e5e7eb" stroke-width="4.2" stroke-linejoin="round"/><g stroke="#e5e7eb" stroke-width="4.2" stroke-linecap="round"><line x1="11" y1="38.5" x2="25.5" y2="53"/><line x1="25.5" y1="38.5" x2="11" y2="53"/></g><circle cx="46" cy="45.8" r="8.5" fill="none" stroke="#e5e7eb" stroke-width="4.2"/></svg>`,
 
@@ -108,7 +120,17 @@ export const PS5Icons = {
 
   twitchTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><path d="M9 7h26v17l-6 6h-6l-4 4v-4H9V7z" fill="#9146ff"/><rect x="23.5" y="14" width="3" height="7" fill="#ffffff"/><rect x="17.5" y="14" width="3" height="7" fill="#ffffff"/></svg>`,
 
-  brawlStarsTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><defs><linearGradient id="bsGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFDD00"/><stop offset="50%" stop-color="#FF9900"/><stop offset="100%" stop-color="#FF3300"/></linearGradient></defs><rect x="4" y="4" width="36" height="36" rx="10" fill="#181428"/><circle cx="22" cy="22" r="14" fill="url(#bsGrad)"/><path d="M22 10.5l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1z" fill="#FFFFFF"/><circle cx="18.5" cy="21.5" r="2" fill="#181428"/><circle cx="25.5" cy="21.5" r="2" fill="#181428"/><path d="M19 25.5h6v1.5h-6z" fill="#181428"/></svg>`,
+  get brawlStarsTile() {
+    const gid = uid("bsGrad");
+    return `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFDD00"/><stop offset="50%" stop-color="#FF9900"/><stop offset="100%" stop-color="#FF3300"/></linearGradient></defs><rect x="4" y="4" width="36" height="36" rx="10" fill="#181428"/><circle cx="22" cy="22" r="14" fill="url(#${gid})"/><path d="M22 10.5l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1z" fill="#FFFFFF"/><circle cx="18.5" cy="21.5" r="2" fill="#181428"/><circle cx="25.5" cy="21.5" r="2" fill="#181428"/><path d="M19 25.5h6v1.5h-6z" fill="#181428"/></svg>`;
+  },
+
+  avatarSvg: `<div class="ps5-topbar-avatar-circle" style="width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg, #0284c7, #1e3a8a); display:flex; align-items:center; justify-content:center; color:#ffffff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>`,
+
+  makeProfileAvatarUri(seedColor1 = "#0ea5e9", seedColor2 = "#1e3a8a") {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><defs><linearGradient id="av" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${seedColor1}"/><stop offset="100%" stop-color="${seedColor2}"/></linearGradient><radialGradient id="glow" cx="0.35" cy="0.3" r="0.7"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs><rect width="120" height="120" rx="60" fill="url(#av)"/><rect width="120" height="120" rx="60" fill="url(#glow)"/><circle cx="60" cy="46" r="19" fill="#f8fafc" opacity="0.92"/><path d="M26 104c0-18.8 15.2-34 34-34s34 15.2 34 34" fill="#f8fafc" opacity="0.92"/></svg>`;
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  },
 
   dualsenseSilhouette: `<svg viewBox="0 0 36 26" width="24" height="17" fill="#ffffff" aria-hidden="true"><path d="M10.5 4.5h15c3.2 0 5.6 2.5 6.3 5.7l1.4 7.2c.5 2.4-1.3 4.6-3.7 4.6-1.4 0-2.7-.7-3.5-1.9l-2.6-3.6H12.6L10 20.1c-.8 1.2-2.1 1.9-3.5 1.9-2.4 0-4.2-2.2-3.7-4.6l1.4-7.2C4.9 7 7.3 4.5 10.5 4.5z"/></svg>`,
 
@@ -133,7 +155,7 @@ export const PS5Icons = {
       bronze: { c1: "#fed7aa", c2: "#ea580c", c3: "#9a3412", base: "#431407" }
     };
     const p = palettes[tier] || palettes.platinum;
-    const gid = `cup_${tier}`;
+    const gid = uid(`cup_${tier}`);
     return `
       <svg viewBox="0 0 48 56" width="40" height="46" class="ps5-trophy-3d-svg" aria-hidden="true">
         <defs>
@@ -215,3 +237,7 @@ export const PS5Icons = {
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
   }
 };
+
+if (typeof window !== "undefined") {
+  window.PS5Icons = PS5Icons;
+}

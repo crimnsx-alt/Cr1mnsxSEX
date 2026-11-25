@@ -5,6 +5,7 @@
  */
 
 import { SoundEngine } from "./sound.js";
+import { escapeHtml } from "./friends-service.js";
 
 const STORAGE_KEY = "ps5_twitch_streamers_v2";
 const STATUS_CACHE_KEY = "ps5_twitch_status_cache_v2";
@@ -500,15 +501,18 @@ class TwitchBroadcastService {
         const avatarSrc = this.getAvatarSrc(s);
         const liveClass = s.isLive ? "is-live" : "is-offline";
 
+        const safeName = escapeHtml(s.name || "");
+        const safeCh = escapeHtml(s.channel || "");
+        const safeUptime = escapeHtml(s.uptime || "");
         return `
-          <div class="twitch-in-card ${liveClass} ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
+          <div class="twitch-in-card ${liveClass} ${isActive ? "is-active" : ""}" data-channel="${safeCh}" role="button" tabindex="0">
             <div class="twitch-in-avatar-wrap">
-              <img src="${avatarSrc}" alt="${s.name}" class="twitch-in-card-avatar" loading="lazy" decoding="async" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <img src="${avatarSrc}" alt="${safeName}" class="twitch-in-card-avatar" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
               <span class="twitch-in-card-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-in-card-info">
               <div class="twitch-in-card-name-row">
-                <span class="twitch-in-card-name">${s.name}</span>
+                <span class="twitch-in-card-name">${safeName}</span>
                 ${
                   s.isLive
                     ? `<span class="twitch-in-live-badge"><span class="twitch-badge-pulse"></span>В ЭФИРЕ</span>`
@@ -516,13 +520,13 @@ class TwitchBroadcastService {
                 }
               </div>
               <div class="twitch-in-card-sub-row">
-                <span class="twitch-in-card-handle">twitch.tv/${s.channel}</span>
-                ${s.isLive && s.uptime ? `<span class="twitch-in-card-uptime">${s.uptime}</span>` : ""}
+                <span class="twitch-in-card-handle">twitch.tv/${safeCh}</span>
+                ${s.isLive && safeUptime ? `<span class="twitch-in-card-uptime">${safeUptime}</span>` : ""}
               </div>
             </div>
             ${
               s.custom
-                ? `<button type="button" class="twitch-in-card-del" data-del-channel="${s.channel}" title="Удалить канал">×</button>`
+                ? `<button type="button" class="twitch-in-card-del" data-del-channel="${safeCh}" title="Удалить канал">×</button>`
                 : ""
             }
           </div>
@@ -531,12 +535,22 @@ class TwitchBroadcastService {
       .join("");
 
     container.querySelectorAll(".twitch-in-card").forEach((card) => {
-      card.addEventListener("click", (e) => {
-        if (e.target.closest(".twitch-in-card-del")) return;
+      const activate = () => {
         const ch = card.dataset.channel;
         this.userHasManuallySelected = true;
         SoundEngine.focusMove();
         this.selectStreamer(ch);
+      };
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".twitch-in-card-del")) return;
+        activate();
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          if (e.target.closest(".twitch-in-card-del")) return;
+          e.preventDefault();
+          activate();
+        }
       });
     });
 
@@ -601,7 +615,7 @@ class TwitchBroadcastService {
 
     const avatarEl = document.getElementById("twitchInlineAvatar");
     if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" loading="lazy" decoding="async" onerror="this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
+      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${escapeHtml(streamer.name || "")}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
     }
 
     // Update Player Iframe if channel changed or empty
@@ -622,16 +636,18 @@ class TwitchBroadcastService {
           loading="eager"
           fetchpriority="high"
           allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-          title="Twitch Player Inline - ${channel}">
+          title="Twitch Player Inline - ${escapeHtml(channel)}">
         </iframe>
       `;
       const pIframe = holder.querySelector("iframe");
       const pSkeleton = holder.querySelector(".twitch-iframe-skeleton");
       if (pIframe && pSkeleton) {
-        pIframe.addEventListener("load", () => {
+        const hideSkel = () => {
           pSkeleton.classList.add("is-hidden");
           setTimeout(() => pSkeleton?.remove(), 400);
-        }, { once: true });
+        };
+        pIframe.addEventListener("load", hideSkel, { once: true });
+        setTimeout(hideSkel, 4500);
       }
     }
 
@@ -682,10 +698,12 @@ class TwitchBroadcastService {
       iframe.setAttribute("loading", "lazy");
 
       const skeleton = holder.querySelector(".twitch-iframe-skeleton");
-      iframe.addEventListener("load", () => {
+      const hideChatSkel = () => {
         if (skeleton) skeleton.classList.add("is-hidden");
         setTimeout(() => skeleton?.remove(), 400);
-      }, { once: true });
+      };
+      iframe.addEventListener("load", hideChatSkel, { once: true });
+      setTimeout(hideChatSkel, 4500);
 
       holder.appendChild(iframe);
       this._chatMountTimeout = null;
@@ -735,26 +753,28 @@ class TwitchBroadcastService {
       .map((s) => {
         const isActive = s.channel.toLowerCase() === this.activeChannel.toLowerCase();
         const avatarSrc = this.getAvatarSrc(s);
+        const safeName = escapeHtml(s.name || "");
+        const safeCh = escapeHtml(s.channel || "");
         return `
-          <div class="twitch-streamer-card ${s.isLive ? "is-live" : "is-offline"} ${isActive ? "is-active" : ""}" data-channel="${s.channel}" role="button" tabindex="0">
+          <div class="twitch-streamer-card ${s.isLive ? "is-live" : "is-offline"} ${isActive ? "is-active" : ""}" data-channel="${safeCh}" role="button" tabindex="0">
             <div class="twitch-card-avatar-wrap">
-              <img src="${avatarSrc}" alt="${s.name}" class="twitch-card-avatar" onerror="this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <img src="${avatarSrc}" alt="${safeName}" class="twitch-card-avatar" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
               <span class="twitch-card-online-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-card-info">
               <div class="twitch-card-name-row">
-                <span class="twitch-card-name">${s.name}</span>
+                <span class="twitch-card-name">${safeName}</span>
                 ${
                   s.isLive
                     ? `<span class="twitch-card-active-pill">В ЭФИРЕ</span>`
                     : `<span class="twitch-card-offline-pill">Офлайн</span>`
                 }
               </div>
-              <span class="twitch-card-handle">twitch.tv/${s.channel}</span>
+              <span class="twitch-card-handle">twitch.tv/${safeCh}</span>
             </div>
             ${
               s.custom
-                ? `<button type="button" class="twitch-card-del-btn" data-del-channel="${s.channel}" title="Удалить канал">×</button>`
+                ? `<button type="button" class="twitch-card-del-btn" data-del-channel="${safeCh}" title="Удалить канал">×</button>`
                 : ""
             }
           </div>
@@ -763,12 +783,22 @@ class TwitchBroadcastService {
       .join("");
 
     container.querySelectorAll(".twitch-streamer-card").forEach((card) => {
-      card.addEventListener("click", (e) => {
-        if (e.target.closest(".twitch-card-del-btn")) return;
+      const activate = () => {
         const ch = card.dataset.channel;
         this.userHasManuallySelected = true;
         SoundEngine.focusMove();
         this.selectStreamer(ch);
+      };
+      card.addEventListener("click", (e) => {
+        if (e.target.closest(".twitch-card-del-btn")) return;
+        activate();
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          if (e.target.closest(".twitch-card-del-btn")) return;
+          e.preventDefault();
+          activate();
+        }
       });
     });
 
@@ -874,10 +904,12 @@ class TwitchBroadcastService {
     const pIframe = wrap.querySelector("iframe");
     const pSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
     if (pIframe && pSkeleton) {
-      pIframe.addEventListener("load", () => {
+      const hideSkel = () => {
         pSkeleton.classList.add("is-hidden");
         setTimeout(() => pSkeleton?.remove(), 400);
-      }, { once: true });
+      };
+      pIframe.addEventListener("load", hideSkel, { once: true });
+      setTimeout(hideSkel, 4500);
     }
   }
 
@@ -904,10 +936,12 @@ class TwitchBroadcastService {
     const cIframe = wrap.querySelector("iframe");
     const cSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
     if (cIframe && cSkeleton) {
-      cIframe.addEventListener("load", () => {
+      const hideSkel = () => {
         cSkeleton.classList.add("is-hidden");
         setTimeout(() => cSkeleton?.remove(), 400);
-      }, { once: true });
+      };
+      cIframe.addEventListener("load", hideSkel, { once: true });
+      setTimeout(hideSkel, 4500);
     }
   }
 
