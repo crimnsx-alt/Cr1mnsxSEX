@@ -10288,6 +10288,44 @@ button:active:not(:disabled),
   display: none !important;
 }
 
+/* Twitch Studio Background Framing & Liquid Glass Readability */
+body.view-twitch .ps5-bg-art {
+  background-position: center 42%;
+  filter: brightness(0.92) contrast(1.06) saturate(1.08);
+}
+
+body.view-twitch .ps5-bg-art.is-visible {
+  transform: scale(1.05);
+}
+
+body.view-twitch .ps5-bg-vignette {
+  background:
+    linear-gradient(to bottom, rgba(6, 7, 18, 0.58) 0%, rgba(6, 7, 18, 0.12) 24%, rgba(8, 7, 20, 0.2) 72%, rgba(5, 6, 15, 0.86) 100%),
+    radial-gradient(ellipse 92% 82% at 50% 48%, rgba(145, 70, 255, 0.03) 0%, rgba(5, 6, 16, 0.34) 94%);
+}
+
+body.view-twitch .ps5-twitch-control-bar,
+body.view-twitch .twitch-inline-sidebar,
+body.view-twitch .twitch-inline-chat-drawer,
+body.view-twitch .twitch-inline-meta-bar {
+  background: rgba(12, 13, 24, 0.44);
+  backdrop-filter: blur(18px) saturate(155%);
+  -webkit-backdrop-filter: blur(18px) saturate(155%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top-color: rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 12px 32px rgba(0, 0, 0, 0.42);
+}
+
+.modal-twitch-fullscreen.active .sber-tips-backdrop {
+  background: rgba(6, 7, 16, 0.52);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.modal-twitch-fullscreen .twitch-dialog-box {
+  background: rgba(11, 12, 22, 0.68);
+}
+
 body.view-youtube .ps5-youtube-view {
   display: flex;
 }
@@ -14605,5 +14643,1833 @@ body.view-youtube .ps5-bg-vignette {
 
   .brawl-invite-tags-grid {
     width: 100%;
+  }
+}
+
+/* ==========================================================================
+   DESIGN & MOTION OVERHAUL: BRAWL STARS STAGE & PSN TROPHY VAULT
+   GPU-composited animations (transform/opacity), zero emoji UI, PS5 glass
+   ========================================================================== */
+
+/* ---------- 1. BRAWL STARS HUB & 3D SPOTLIGHT STAGE ---------- */
+.brawl-profile-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(16, 23, 44, 0.88) 0%, rgba(10, 14, 26, 0.94) 100%);
+  border: 1px solid rgba(255, 204, 0, 0.24);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.brawl-profile-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(520px circle at 8% 15%, rgba(255, 204, 0, 0.1), transparent 62%),
+              radial-gradient(420px circle at 92% 85%, rgba(56, 189, 248, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.brawl-profile-online-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(34, 197, 94, 0.75);
+  animation: brawlBeaconPulse 2.4s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes brawlBeaconPulse {
+  0% { transform: scale(0.85); opacity: 0.85; }
+  75%, 100% { transform: scale(2.1); opacity: 0; }
+}
+
+.brawl-prof-btn.is-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.brawl-prof-btn.is-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.45) 50%, transparent 100%);
+  transform: translateX(-180%) skewX(-20deg);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.brawl-prof-btn.is-primary:hover::after {
+  transform: translateX(290%) skewX(-20deg);
+}
+
+/* Telemetry Bento Bar */
+.brawl-stats-overview-bar {
+  grid-template-columns: repeat(auto-fit, minmax(192px, 1fr));
+  gap: 12px;
+}
+
+.brawl-stat-chip {
+  position: relative;
+  overflow: hidden;
+  padding: 13px 16px 14px;
+  background: linear-gradient(160deg, rgba(20, 25, 42, 0.82) 0%, rgba(12, 15, 26, 0.88) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.36), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.28s ease;
+  animation: brawlCardRise 0.44s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--stagger-idx, 0) * 40ms);
+}
+
+.brawl-stat-chip::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.brawl-stat-chip.is-trophies::before {
+  background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.8), transparent);
+}
+.brawl-stat-chip.is-roster::before {
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.75), transparent);
+}
+.brawl-stat-chip.is-fame::before {
+  background: linear-gradient(90deg, transparent, rgba(192, 132, 252, 0.85), transparent);
+}
+.brawl-stat-chip.is-ranked::before {
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.85), transparent);
+}
+.brawl-stat-chip.is-club::before {
+  background: linear-gradient(90deg, transparent, rgba(251, 113, 133, 0.8), transparent);
+}
+.brawl-stat-chip.is-wins::before {
+  background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.8), transparent);
+}
+
+.brawl-stat-chip:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.26);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.52);
+}
+
+.brawl-sc-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px;
+}
+
+.brawl-sc-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.brawl-stat-chip.is-trophies .brawl-sc-icon { color: #ffcc00; background: rgba(255, 204, 0, 0.14); }
+.brawl-stat-chip.is-roster .brawl-sc-icon { color: #38bdf8; background: rgba(56, 189, 248, 0.14); }
+.brawl-stat-chip.is-fame .brawl-sc-icon { color: #c084fc; background: rgba(192, 132, 252, 0.16); }
+.brawl-stat-chip.is-ranked .brawl-sc-icon { color: #22d3ee; background: rgba(34, 211, 238, 0.15); }
+.brawl-stat-chip.is-club .brawl-sc-icon { color: #fb7185; background: rgba(251, 113, 133, 0.15); }
+.brawl-stat-chip.is-wins .brawl-sc-icon { color: #4ade80; background: rgba(74, 222, 128, 0.14); }
+
+.brawl-sc-icon svg {
+  width: 12px;
+  height: 12px;
+}
+
+.brawl-sc-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.52);
+}
+
+.brawl-sc-val {
+  font-size: 19px;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.brawl-sc-denom {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.brawl-sc-subpills {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.brawl-sc-subpill {
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.72);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 3D Character Spotlight Stage */
+.brawl-spotlight-card {
+  background: linear-gradient(155deg, rgba(16, 22, 40, 0.88) 0%, rgba(10, 13, 24, 0.94) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.brawl-spotlight-inner {
+  grid-template-columns: minmax(280px, 355px) 1fr;
+  min-height: 336px;
+  background: radial-gradient(620px circle at 20% 48%, var(--spotlight-glow, rgba(255, 204, 0, 0.18)), transparent 65%);
+}
+
+.brawl-spotlight-visual {
+  position: relative;
+  overflow: hidden;
+  padding: 18px 18px 26px;
+}
+
+.brawl-spotlight-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(54px, 6.2vw, 98px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.08);
+  user-select: none;
+  pointer-events: none;
+  transform: translate3d(0, -14px, 0);
+  white-space: nowrap;
+}
+
+.brawl-spotlight-aura {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, var(--spotlight-glow, rgba(255, 204, 0, 0.36)) 0%, rgba(255, 255, 255, 0.05) 42%, transparent 72%);
+  filter: none !important;
+  animation: brawlAuraPulseGpu 4.2s ease-in-out infinite;
+}
+
+@keyframes brawlAuraPulseGpu {
+  0%, 100% { transform: scale(0.96); opacity: 0.75; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+/* Holographic Arena Reticle Rings */
+.brawl-arena-ring {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brawl-arena-ring--outer {
+  width: 248px;
+  height: 248px;
+  margin-left: -124px;
+  margin-bottom: -98px;
+  border: 1.5px dashed color-mix(in srgb, var(--spotlight-color, #ffcc00) 52%, transparent);
+  transform: rotateX(72deg) rotateZ(0deg);
+  animation: brawlRingSpinOuter 28s linear infinite;
+  opacity: 0.75;
+}
+
+.brawl-arena-ring--inner {
+  width: 186px;
+  height: 186px;
+  margin-left: -93px;
+  margin-bottom: -68px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 0 18px var(--spotlight-glow, rgba(255, 204, 0, 0.25));
+  transform: rotateX(72deg) rotateZ(0deg);
+  animation: brawlRingSpinInner 20s linear infinite reverse;
+  opacity: 0.85;
+}
+
+@keyframes brawlRingSpinOuter {
+  from { transform: rotateX(72deg) rotateZ(0deg); }
+  to { transform: rotateX(72deg) rotateZ(360deg); }
+}
+
+@keyframes brawlRingSpinInner {
+  from { transform: rotateX(72deg) rotateZ(0deg); }
+  to { transform: rotateX(72deg) rotateZ(360deg); }
+}
+
+/* Stage Floating Light Sparks */
+.brawl-stage-sparks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brawl-stage-spark {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--spotlight-color, #ffcc00);
+  box-shadow: 0 0 8px var(--spotlight-color, #ffcc00);
+  opacity: 0;
+  animation: brawlSparkRise 4.6s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.brawl-stage-spark:nth-child(1) { left: 26%; bottom: 56px; animation-delay: 0s; }
+.brawl-stage-spark:nth-child(2) { left: 72%; bottom: 64px; animation-delay: 1.5s; }
+.brawl-stage-spark:nth-child(3) { left: 48%; bottom: 44px; animation-delay: 3.1s; }
+
+@keyframes brawlSparkRise {
+  0% { transform: translate3d(0, 0, 0) scale(0.6); opacity: 0; }
+  25% { opacity: 0.85; }
+  100% { transform: translate3d(0, -140px, 0) scale(1.1); opacity: 0; }
+}
+
+.brawl-spotlight-hero-img {
+  max-height: 282px;
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.78));
+  will-change: transform;
+  animation: brawlHeroFloatGpu 4.4s ease-in-out infinite;
+}
+
+@keyframes brawlHeroFloatGpu {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -8px, 0); }
+}
+
+@keyframes brawlHeroEntrance {
+  0% { transform: translate3d(0, 22px, 0) scale(0.86); opacity: 0; }
+  60% { transform: translate3d(0, -5px, 0) scale(1.035); opacity: 1; }
+  100% { transform: translate3d(0, 0, 0) scale(1); opacity: 1; }
+}
+
+.brawl-spotlight-pedestal {
+  bottom: 14px;
+  width: 236px;
+  height: 36px;
+  filter: none !important;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brawl-pedestal-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--spotlight-color, #ffcc00) 55%, rgba(255, 255, 255, 0.25));
+  background: radial-gradient(ellipse at center, var(--spotlight-glow, rgba(255, 204, 0, 0.34)) 0%, rgba(255, 255, 255, 0.06) 52%, transparent 74%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+}
+
+.brawl-pedestal-core {
+  width: 140px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.32), transparent 72%);
+  opacity: 0.7;
+}
+
+.brawl-spotlight-details {
+  padding: 20px 28px;
+  gap: 11px;
+}
+
+.brawl-spotlight-details.is-entering {
+  animation: brawlDetailsIn 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes brawlDetailsIn {
+  from { opacity: 0; transform: translate3d(10px, 0, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.brawl-spotlight-title {
+  font-size: clamp(32px, 3vw, 44px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.brawl-big-trophy-display,
+.brawl-pwr-badge,
+.brawl-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.brawl-btd-icon {
+  display: inline-flex;
+  color: #ffcc00;
+}
+
+.brawl-pwr-badge.is-pwr11 {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(216, 180, 254, 0.5);
+  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.38);
+}
+
+.brawl-pwr-badge.is-pwr11::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+  animation: btnShimmerSweep 5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  pointer-events: none;
+}
+
+.brawl-streak-icon {
+  display: inline-flex;
+  color: #ff6b4a;
+}
+
+/* Personal Record Progress Meter */
+.brawl-record-meter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 440px;
+}
+
+.brawl-record-track {
+  flex: 1;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.brawl-record-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f59e0b, #fde047);
+  transform-origin: left center;
+  transform: scaleX(var(--record-scale, 1));
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  animation: tcScaleBarIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.brawl-record-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Ability Loadout Modules (No 110px Truncation!) */
+.brawl-hero-loadout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .brawl-hero-loadout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.brawl-loadout-item {
+  padding: 10px 13px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-radius: 13px;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.22s ease, background 0.22s ease;
+}
+
+.brawl-loadout-item:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.24);
+}
+
+.brawl-loadout-item.is-hypercharge {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(250, 204, 21, 0.45);
+  background: linear-gradient(135deg, rgba(250, 204, 21, 0.14), rgba(168, 85, 247, 0.12));
+}
+
+.brawl-loadout-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+}
+
+.brawl-loadout-icon.is-gadget { color: #38bdf8; background: rgba(56, 189, 248, 0.14); }
+.brawl-loadout-icon.is-sp { color: #fbbf24; background: rgba(251, 191, 36, 0.15); }
+.brawl-loadout-icon.is-hc { color: #c084fc; background: rgba(192, 132, 252, 0.18); }
+.brawl-loadout-icon.is-gear { color: #94a3b8; background: rgba(148, 163, 184, 0.15); }
+
+.brawl-loadout-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.brawl-lt-sub {
+  max-width: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  font-size: 11.5px;
+  line-height: 1.28;
+}
+
+/* Top-7 Quick Switcher Pills with Portraits */
+.brawl-ts-btn {
+  padding: 5px 10px 5px 6px;
+  border-radius: 11px;
+  gap: 7px;
+}
+
+.brawl-ts-avatar {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: #141728;
+  flex-shrink: 0;
+}
+
+.brawl-ts-btn.is-active .brawl-ts-avatar {
+  border-color: #ffcc00;
+}
+
+/* Filter Pills Alignment */
+.brawl-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Roster Grid Card Polish */
+.brawler-grid-card {
+  position: relative;
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.22s ease,
+              box-shadow 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brawler-grid-card.is-stagger-enter {
+  animation: brawlCardRise 0.38s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--card-stagger, 0ms);
+}
+
+@keyframes brawlCardRise {
+  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(0.98); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+.brawler-card-rarity-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: var(--card-accent, #ffcc00);
+  opacity: 0.78;
+  z-index: 2;
+}
+
+.brawler-card-thumb-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 60%;
+  background: linear-gradient(105deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  transform: translateX(-180%) skewX(-18deg);
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.brawler-grid-card:hover .brawler-card-thumb-wrap::after {
+  transform: translateX(280%) skewX(-18deg);
+}
+
+.brawler-card-streak {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.brawler-card-streak svg,
+.brawler-card-trophies svg {
+  flex-shrink: 0;
+}
+
+.brawler-card-trophies svg {
+  color: #ffcc00;
+}
+
+/* Battle History Polish */
+.brawl-battle-card {
+  position: relative;
+  overflow: hidden;
+  grid-template-columns: 118px minmax(210px, 1fr) 160px auto;
+}
+
+.brawl-battle-card.is-stagger-enter {
+  animation: brawlCardRise 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--battle-stagger, 0ms);
+}
+
+.brawl-battle-card.is-win {
+  background: linear-gradient(90deg, rgba(22, 163, 74, 0.14) 0%, rgba(18, 20, 32, 0.78) 34%);
+}
+
+.brawl-battle-card.is-loss {
+  background: linear-gradient(90deg, rgba(220, 38, 38, 0.13) 0%, rgba(18, 20, 32, 0.78) 34%);
+}
+
+.bbc-rp-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.bbc-vs-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.45);
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 2. PSN TROPHY COLLECTION VAULT (.tc-*) ---------- */
+.modal-tc-fullscreen .tc-dialog-box {
+  background: linear-gradient(170deg, rgba(14, 20, 36, 0.98) 0%, rgba(7, 10, 19, 0.99) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 36px 96px rgba(0, 0, 0, 0.88), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transform: translate3d(0, 16px, 0) scale(0.982);
+  opacity: 0;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.28s ease;
+}
+
+.modal-tc-fullscreen.active .tc-dialog-box {
+  transform: translate3d(0, 0, 0) scale(1);
+  opacity: 1;
+}
+
+.modal-tc-fullscreen .tc-dialog-box::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: 18%;
+  right: 18%;
+  height: 240px;
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.18), transparent 72%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tc-top-bar,
+.tc-scrollable-body {
+  position: relative;
+  z-index: 1;
+}
+
+.tc-top-brand {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 14px !important;
+}
+
+.tc-brand-emblem {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(0, 112, 209, 0.22));
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #7dd3fc;
+  box-shadow: 0 8px 20px rgba(0, 112, 209, 0.25);
+  flex-shrink: 0;
+}
+
+.tc-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Trophy Vault Hero Card */
+.tc-hero-card {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.065) 0%, rgba(15, 23, 42, 0.5) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.tc-section {
+  flex-shrink: 0;
+}
+
+.tc-hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(460px circle at 10% 10%, rgba(56, 189, 248, 0.12), transparent 60%),
+              radial-gradient(420px circle at 88% 85%, rgba(245, 158, 11, 0.09), transparent 62%);
+  pointer-events: none;
+}
+
+.tc-avatar-img {
+  border: 2px solid rgba(125, 211, 252, 0.55);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1), 0 10px 24px rgba(0, 0, 0, 0.55);
+}
+
+.tc-level-cluster {
+  background: rgba(6, 10, 20, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.tc-level-val,
+.tc-cup-stat-val,
+.tc-progress-pct,
+.tc-game-progress-val {
+  font-variant-numeric: tabular-nums;
+}
+
+.tc-level-progress-bar {
+  position: relative;
+  background: linear-gradient(90deg, #d97706, #f59e0b, #fde047);
+  transform-origin: left center;
+  transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tc-level-progress-bar.is-animating {
+  animation: tcScaleBarIn 0.78s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tc-level-progress-bar::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 14px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85));
+  border-radius: 3px;
+}
+
+/* Tier Cup Tiles */
+.tc-cup-stat {
+  position: relative;
+  overflow: hidden;
+  padding: 12px 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background 0.25s ease;
+}
+
+.tc-cup-stat--total {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025));
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.tc-cup-stat--plat {
+  background: linear-gradient(155deg, rgba(56, 189, 248, 0.14), rgba(15, 23, 42, 0.5));
+  border-color: rgba(56, 189, 248, 0.32);
+}
+.tc-cup-stat--gold {
+  background: linear-gradient(155deg, rgba(245, 158, 11, 0.13), rgba(15, 23, 42, 0.5));
+  border-color: rgba(245, 158, 11, 0.28);
+}
+.tc-cup-stat--silver {
+  background: linear-gradient(155deg, rgba(203, 213, 225, 0.12), rgba(15, 23, 42, 0.5));
+  border-color: rgba(203, 213, 225, 0.24);
+}
+.tc-cup-stat--bronze {
+  background: linear-gradient(155deg, rgba(234, 88, 12, 0.13), rgba(15, 23, 42, 0.5));
+  border-color: rgba(234, 88, 12, 0.26);
+}
+
+.tc-cup-stat:hover {
+  transform: translateY(-3px);
+}
+
+.tc-cup-svg {
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tc-cup-stat:hover .tc-cup-svg {
+  transform: translateY(-2px) scale(1.08);
+}
+
+/* Recent Trophies Cards */
+.tc-recent-card {
+  position: relative;
+  overflow: hidden;
+  flex: 0 0 clamp(260px, 25vw, 315px);
+  padding: 13px 15px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-left-width: 3px;
+}
+
+.tc-recent-card.is-stagger-enter {
+  animation: tcCardRise 0.38s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--tc-stagger, 0ms);
+}
+
+@keyframes tcCardRise {
+  from { opacity: 0; transform: translate3d(0, 12px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+.tc-recent-card.is-grade-platinum { border-left-color: #38bdf8; }
+.tc-recent-card.is-grade-gold { border-left-color: #fbbf24; }
+.tc-recent-card.is-grade-silver { border-left-color: #cbd5e1; }
+.tc-recent-card.is-grade-bronze { border-left-color: #fb923c; }
+
+.tc-recent-icon-wrap {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.tc-recent-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.tc-recent-grade-dot {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
+  background: #0c1222;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.65);
+}
+
+.tc-recent-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.tc-recent-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.tc-recent-tier-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1.5px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.tc-recent-tier-tag.is-grade-platinum { color: #7dd3fc; background: rgba(56, 189, 248, 0.16); }
+.tc-recent-tier-tag.is-grade-gold { color: #fcd34d; background: rgba(245, 158, 11, 0.16); }
+.tc-recent-tier-tag.is-grade-silver { color: #e2e8f0; background: rgba(203, 213, 225, 0.14); }
+.tc-recent-tier-tag.is-grade-bronze { color: #fdba74; background: rgba(234, 88, 12, 0.16); }
+
+/* Games Grid & Cards */
+.tc-games-grid {
+  grid-template-columns: repeat(auto-fill, minmax(305px, 1fr));
+  gap: 14px;
+}
+
+.tc-game-card {
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(15, 21, 38, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+}
+
+.tc-game-card.is-stagger-enter {
+  animation: tcCardRise 0.36s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--tc-stagger, 0ms);
+}
+
+.tc-game-card-ambience {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.1;
+  transform: scale(1.18);
+  filter: blur(22px) saturate(1.25);
+  transition: opacity 0.32s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tc-game-card:hover .tc-game-card-ambience {
+  opacity: 0.2;
+}
+
+.tc-game-thumb-wrap,
+.tc-game-details {
+  position: relative;
+  z-index: 2;
+}
+
+.tc-game-thumb-wrap {
+  width: 68px;
+  height: 68px;
+  flex-shrink: 0;
+}
+
+.tc-game-thumb {
+  width: 68px;
+  height: 68px;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tc-game-card:hover .tc-game-thumb {
+  transform: scale(1.05);
+}
+
+.tc-game-plat-ribbon {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #0369a1);
+  border: 1.5px solid #e0f2fe;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(56, 189, 248, 0.45);
+}
+
+.tc-game-plat-ribbon svg path {
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.tc-game-card.is-platinum {
+  border-color: rgba(56, 189, 248, 0.4);
+  background: linear-gradient(145deg, rgba(14, 48, 86, 0.52), rgba(12, 18, 34, 0.84));
+}
+
+.tc-game-card.is-complete:not(.is-platinum) {
+  border-color: rgba(34, 197, 94, 0.35);
+}
+
+.tc-game-card.is-empty {
+  opacity: 0.78;
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.tc-game-card.is-empty:hover {
+  opacity: 1;
+}
+
+.tc-game-header-row {
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.tc-game-title {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.28;
+  font-size: 14px;
+}
+
+.tc-game-progress-fill {
+  transform-origin: left center;
+  animation: tcScaleBarIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes tcScaleBarIn {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.tc-game-cups-mini {
+  gap: 10px;
+}
+
+.tc-mini-cup {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Single Game Detail Hero & Items */
+.tc-game-hero-banner {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.tc-trophy-list {
+  flex-shrink: 0;
+}
+
+.tc-game-hero-ambience {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.16;
+  transform: scale(1.2);
+  filter: blur(28px) saturate(1.3);
+  pointer-events: none;
+}
+
+.tc-game-hero-thumb,
+.tc-game-hero-info {
+  position: relative;
+  z-index: 1;
+}
+
+.tc-game-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tc-game-hero-total {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.tc-trophy-item.is-stagger-enter {
+  animation: tcCardRise 0.32s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--tc-stagger, 0ms);
+}
+
+.tc-trophy-grade-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tc-earned-date,
+.tc-locked-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+@media (max-width: 640px) {
+  .tc-games-grid {
+    grid-template-columns: 1fr;
+  }
+  .tc-recent-card {
+    flex: 0 0 250px;
+  }
+  .brawl-spotlight-inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brawl-profile-online-dot::after,
+  .brawl-stat-chip,
+  .brawl-spotlight-aura,
+  .brawl-arena-ring,
+  .brawl-stage-spark,
+  .brawl-spotlight-hero-img,
+  .brawl-spotlight-details.is-entering,
+  .brawl-pwr-badge.is-pwr11::after,
+  .brawl-record-fill,
+  .brawler-grid-card.is-stagger-enter,
+  .brawl-battle-card.is-stagger-enter,
+  .tc-recent-card.is-stagger-enter,
+  .tc-game-card.is-stagger-enter,
+  .tc-game-progress-fill,
+  .tc-trophy-item.is-stagger-enter {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    transform: none !important;
+  }
+  .modal-tc-fullscreen .tc-dialog-box {
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ==========================================================================
+   APPLE LIQUID GLASS ICON SYSTEM (Universal Optical Lens & Specular Caustics)
+   ========================================================================== */
+:root {
+  --lg-bg: linear-gradient(155deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.07) 44%, rgba(255, 255, 255, 0.03) 100%);
+  --lg-bg-hover: linear-gradient(155deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.13) 48%, rgba(255, 255, 255, 0.05) 100%);
+  --lg-border: rgba(255, 255, 255, 0.28);
+  --lg-border-hover: rgba(255, 255, 255, 0.56);
+  --lg-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.54),
+               inset 1px 0 0 rgba(255, 255, 255, 0.22),
+               inset 0 -1.5px 2px rgba(255, 255, 255, 0.15),
+               0 8px 22px -6px rgba(0, 0, 0, 0.55);
+  --lg-shadow-hover: inset 0 1.5px 0 rgba(255, 255, 255, 0.78),
+                     inset 1px 0 0 rgba(255, 255, 255, 0.34),
+                     inset 0 -1.5px 2px rgba(255, 255, 255, 0.24),
+                     0 14px 30px -6px rgba(0, 0, 0, 0.68),
+                     0 0 18px rgba(56, 189, 248, 0.26);
+  --lg-meniscus: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.1) 36%, transparent 58%),
+                 radial-gradient(circle at 28% 18%, rgba(255, 255, 255, 0.34), transparent 54%);
+}
+
+/* Fix static positioning on top-bar close buttons so optical lens anchors locally */
+.tc-top-actions .sber-tips-close-btn,
+.tc-top-bar .sber-tips-close-btn,
+.youtube-hub-topbar .sber-tips-close-btn,
+.twitch-hub-topbar .sber-tips-close-btn {
+  position: relative !important;
+}
+
+/* 1. Topbar Icon Controls, Chevrons, Control Center Dock & Close Buttons */
+.ps5-icon-btn,
+.ps5-profile-pill,
+.ps5-top-lang,
+.ps5-top-tips-btn,
+.cc-item-btn,
+.sber-tips-close-btn,
+.ps5-btn-icon-copy,
+.ps5-btn-dots,
+.ps5-hub-chevron {
+  background: var(--lg-bg) !important;
+  border: 1px solid var(--lg-border) !important;
+  backdrop-filter: blur(22px) saturate(185%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(185%) !important;
+  box-shadow: var(--lg-shadow) !important;
+}
+
+.ps5-icon-btn,
+.ps5-profile-pill,
+.ps5-top-lang,
+.ps5-top-tips-btn,
+.cc-item-btn,
+.ps5-btn-icon-copy,
+.ps5-btn-dots {
+  position: relative;
+}
+
+.ps5-top-tips-btn {
+  background: linear-gradient(155deg, rgba(255, 168, 52, 0.32) 0%, rgba(255, 130, 0, 0.14) 55%, rgba(255, 110, 0, 0.08) 100%) !important;
+  border-color: rgba(255, 185, 80, 0.48) !important;
+}
+
+.ps5-icon-btn::before,
+.ps5-profile-pill::before,
+.ps5-top-lang::before,
+.ps5-top-tips-btn::before,
+.cc-item-btn::before,
+.sber-tips-close-btn::before,
+.ps5-btn-icon-copy::before,
+.ps5-btn-dots::before,
+.ps5-hub-chevron::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-meniscus);
+  opacity: 0.78;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.25s ease;
+}
+
+.ps5-icon-btn > *,
+.ps5-profile-pill > *,
+.ps5-top-lang > *,
+.ps5-top-tips-btn > *,
+.cc-item-btn > *,
+.sber-tips-close-btn > *,
+.ps5-btn-icon-copy > *,
+.ps5-btn-dots > *,
+.ps5-hub-chevron > * {
+  position: relative;
+  z-index: 2;
+}
+
+.ps5-icon-btn .ps5-notif-badge,
+.ps5-profile-pill .ps5-online-dot {
+  z-index: 4 !important;
+}
+
+.ps5-icon-btn:hover,
+.ps5-profile-pill:hover,
+.ps5-top-lang:hover,
+.cc-item-btn:hover,
+.cc-item-btn:focus-visible,
+.sber-tips-close-btn:hover,
+.ps5-btn-icon-copy:hover,
+.ps5-btn-dots:hover,
+.ps5-hub-chevron:hover {
+  background: var(--lg-bg-hover) !important;
+  border-color: var(--lg-border-hover) !important;
+  box-shadow: var(--lg-shadow-hover) !important;
+}
+
+.ps5-top-tips-btn:hover {
+  background: linear-gradient(155deg, rgba(255, 178, 66, 0.44) 0%, rgba(255, 140, 0, 0.22) 60%, rgba(255, 110, 0, 0.14) 100%) !important;
+  border-color: rgba(255, 205, 120, 0.78) !important;
+  box-shadow: var(--lg-shadow-hover), 0 0 22px rgba(255, 140, 0, 0.35) !important;
+}
+
+.ps5-icon-btn:hover::before,
+.ps5-profile-pill:hover::before,
+.ps5-top-lang:hover::before,
+.ps5-top-tips-btn:hover::before,
+.cc-item-btn:hover::before,
+.sber-tips-close-btn:hover::before,
+.ps5-hub-chevron:hover::before {
+  opacity: 1;
+}
+
+/* 2. Widget Icons, Emblems, Glyphs & Modal Icons */
+.ps5-widget-icon {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  justify-content: center;
+  background: linear-gradient(155deg, rgba(56, 189, 248, 0.28) 0%, rgba(255, 255, 255, 0.08) 55%, rgba(56, 189, 248, 0.04) 100%);
+  border: 1px solid rgba(125, 211, 252, 0.36);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.52),
+              inset 0 -1px 0 rgba(56, 189, 248, 0.2),
+              0 5px 14px -4px rgba(0, 0, 0, 0.55);
+  color: #e0f2fe;
+  flex-shrink: 0;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, box-shadow 0.28s ease;
+}
+
+.ps5-widget-icon::before,
+.ps5-fe-icon::before,
+.sber-brand-icon::before,
+.sber-feat-icon::before,
+.ps5-social-icon::before,
+.c-glyph::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-meniscus);
+  opacity: 0.78;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ps5-widget-icon svg,
+.ps5-fe-icon svg,
+.sber-brand-icon svg,
+.sber-feat-icon svg,
+.ps5-social-icon svg,
+.c-glyph svg {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.45));
+}
+
+.ps5-widget:hover .ps5-widget-icon {
+  transform: scale(1.07);
+  border-color: rgba(186, 230, 253, 0.65);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.72), 0 8px 18px -4px rgba(0, 112, 209, 0.45);
+}
+
+.ps5-fe-icon,
+.sber-brand-icon,
+.sber-feat-icon,
+.ps5-social-icon {
+  position: relative;
+  background: var(--lg-bg);
+  border: 1px solid var(--lg-border);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: var(--lg-shadow);
+}
+
+.c-glyph {
+  position: relative;
+  background: var(--lg-bg) !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 3px 8px rgba(0, 0, 0, 0.4) !important;
+}
+
+.ps5-store-mini-bag,
+.ps5-acc-emblem,
+.ps5-level-crest,
+.ps5-trophy-3d-svg,
+.tc-cup-svg svg {
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 10px rgba(255, 255, 255, 0.14));
+}
+
+/* 3. Ribbon Game & System Tiles Liquid Glass Lens */
+.ps5-tile-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.08) 26%, transparent 50%),
+              radial-gradient(circle at 22% 14%, rgba(255, 255, 255, 0.28), transparent 48%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.56),
+              inset 1px 0 0 rgba(255, 255, 255, 0.2),
+              inset 0 -1.5px 0 rgba(255, 255, 255, 0.18);
+  pointer-events: none;
+  z-index: 3;
+  transition: opacity 0.3s ease;
+}
+
+.ps5-tile:hover .ps5-tile-art::after,
+.ps5-tile.is-active .ps5-tile-art::after {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.1) 30%, transparent 54%),
+              radial-gradient(circle at 22% 14%, rgba(255, 255, 255, 0.36), transparent 50%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.72),
+              inset 1px 0 0 rgba(255, 255, 255, 0.28),
+              inset 0 -1.5px 0 rgba(255, 255, 255, 0.24);
+}
+
+/* 4. Brawl Stars Liquid Glass Icons & Portraits */
+.brawl-sc-icon,
+.brawl-loadout-icon,
+.brawl-btd-icon,
+.brawl-streak-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.26);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.52),
+              inset 0 -1px 0 rgba(255, 255, 255, 0.14),
+              0 6px 14px -4px rgba(0, 0, 0, 0.5);
+  transition: transform 0.26s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.24s ease, box-shadow 0.26s ease;
+}
+
+.brawl-sc-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+}
+
+.brawl-loadout-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+.brawl-btd-icon,
+.brawl-streak-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.brawl-sc-icon::before,
+.brawl-loadout-icon::before,
+.brawl-btd-icon::before,
+.brawl-streak-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-meniscus);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.brawl-sc-icon svg,
+.brawl-loadout-icon svg,
+.brawl-btd-icon svg,
+.brawl-streak-icon svg,
+.brawl-cb-btn svg,
+.brawl-prof-btn svg,
+.brawl-mode-tab svg,
+.brawl-filter-pill svg {
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.42));
+}
+
+.brawl-stat-chip:hover .brawl-sc-icon,
+.brawl-loadout-item:hover .brawl-loadout-icon {
+  transform: translateY(-1px) scale(1.08);
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.72), 0 8px 18px -4px rgba(0, 0, 0, 0.65);
+}
+
+.brawl-cb-btn,
+.brawl-prof-btn:not(.is-primary) {
+  position: relative;
+  background: var(--lg-bg);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.36), inset 0 -1px 0 rgba(255, 255, 255, 0.1), 0 6px 16px -4px rgba(0, 0, 0, 0.45);
+}
+
+.brawl-cb-btn:hover,
+.brawl-prof-btn:not(.is-primary):hover {
+  background: var(--lg-bg-hover);
+  border-color: rgba(255, 255, 255, 0.44);
+  box-shadow: var(--lg-shadow-hover);
+}
+
+/* Brawl Portraits & Thumbnails Liquid Glass Lens */
+.brawl-profile-avatar-wrap::after,
+.brawler-card-thumb-wrap::before,
+.bbc-team-member::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.04) 30%, transparent 52%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.46), inset 0 -1px 0 rgba(255, 255, 255, 0.14);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.brawl-profile-avatar-wrap {
+  border-radius: 16px;
+}
+
+.brawl-profile-game-badge {
+  z-index: 4;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55), 0 4px 10px rgba(0, 0, 0, 0.6);
+}
+
+.brawl-profile-online-dot {
+  z-index: 5;
+}
+
+.brawl-brand-logo,
+.brawl-ts-avatar,
+.bbc-brawler-thumb {
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.bbc-team-member {
+  position: relative;
+}
+
+/* 5. PSN Trophy Vault Liquid Glass Icons */
+.tc-brand-emblem,
+.tc-crest-icon,
+.tc-recent-grade-dot,
+.tc-game-plat-ribbon {
+  position: relative;
+  backdrop-filter: blur(18px) saturate(190%);
+  -webkit-backdrop-filter: blur(18px) saturate(190%);
+  box-shadow: var(--lg-shadow);
+}
+
+.tc-brand-emblem::before,
+.tc-crest-icon::before,
+.tc-cup-stat::before,
+.tc-recent-grade-dot::before,
+.tc-game-plat-ribbon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--lg-meniscus);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tc-brand-emblem svg,
+.tc-crest-icon svg,
+.tc-recent-grade-dot svg,
+.tc-game-plat-ribbon svg,
+.tc-cup-stat > * {
+  position: relative;
+  z-index: 2;
+}
+
+.tc-cup-stat {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.42),
+              inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+              0 10px 22px -6px rgba(0, 0, 0, 0.48);
+}
+
+.tc-recent-icon-wrap::after,
+.tc-game-thumb-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0.06) 28%, transparent 52%);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.55), inset 0 -1px 0 rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tc-recent-grade-dot,
+.tc-game-plat-ribbon {
+  z-index: 4 !important;
+}
+
+.tc-trophy-thumb,
+.tc-game-hero-thumb,
+.ps5-wfg-thumb,
+.hub-game-thumb {
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.55), 0 8px 20px rgba(0, 0, 0, 0.55);
+}
+
+.tc-mini-cup .ps5-mini-cup-svg,
+.tc-trophy-grade-badge .ps5-mini-cup-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.55));
+}
+
+/* ==========================================================================
+   LIQUID GLASS v2 & OPACITY/TRANSPARENCY CHOREOGRAPHY
+   Deep Apple Liquid Glass across panels, pills, cards, & GPU opacity motion
+   ========================================================================== */
+
+/* Richer convex meniscus & edge refraction tokens */
+:root {
+  --lg-bg: linear-gradient(155deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.09) 42%, rgba(255, 255, 255, 0.03) 100%);
+  --lg-bg-hover: linear-gradient(155deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.16) 46%, rgba(255, 255, 255, 0.06) 100%);
+  --lg-border: rgba(255, 255, 255, 0.32);
+  --lg-border-hover: rgba(255, 255, 255, 0.66);
+  --lg-meniscus: linear-gradient(180deg, rgba(255, 255, 255, 0.50) 0%, rgba(255, 255, 255, 0.14) 34%, transparent 56%),
+                 radial-gradient(ellipse at 28% 16%, rgba(255, 255, 255, 0.38), transparent 52%),
+                 radial-gradient(ellipse at 52% 106%, rgba(255, 255, 255, 0.22), transparent 52%);
+}
+
+/* 1. Deep Liquid Glass on Brawl & Trophy Surface Panels (keep off 100+ item grids for 60 FPS M1 efficiency) */
+.ps5-brawl-control-bar,
+.brawl-profile-card,
+.brawl-spotlight-card,
+.brawl-loadout-item,
+.brawl-stat-chip,
+.ps5-widget,
+.ps5-welcome-featured-game,
+.ps5-edit-widgets-btn,
+.tc-hero-card,
+.tc-game-hero-banner {
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+  -webkit-backdrop-filter: blur(24px) saturate(190%) brightness(1.05);
+}
+
+.brawl-battle-card,
+.brawler-grid-card,
+.tc-recent-card,
+.tc-game-card,
+.tc-trophy-item {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.ps5-brawl-control-bar,
+.brawl-profile-card,
+.brawl-spotlight-card,
+.tc-hero-card {
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.11) 0%, rgba(16, 23, 42, 0.56) 44%, rgba(9, 13, 24, 0.66) 100%);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.38),
+              inset 1px 0 0 rgba(255, 255, 255, 0.14),
+              inset 0 -1.5px 0 rgba(255, 255, 255, 0.08),
+              0 22px 52px -12px rgba(0, 0, 0, 0.62);
+}
+
+.brawl-loadout-item,
+.brawl-ts-btn,
+.brawl-tag-pill,
+.brawl-mode-tabs,
+.brawl-search-wrap,
+.tc-search-box,
+.tc-level-cluster {
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 55%, rgba(0, 0, 0, 0.22) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, 0.34), inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.brawl-loadout-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.brawl-loadout-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, transparent 45%);
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.brawl-loadout-item:hover::before {
+  opacity: 1;
+}
+
+/* 2. Liquid Glass Glint Sweep on Featured Panels & Platinum Cards */
+.brawl-profile-card::after,
+.brawl-spotlight-card::after,
+.tc-hero-card::after,
+.brawl-loadout-item.is-hypercharge::after,
+.tc-game-card.is-platinum::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -35%;
+  width: 34%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.14) 48%, rgba(255, 255, 255, 0.03) 72%, transparent 100%);
+  transform: translate3d(-120%, 0, 0) skewX(-18deg);
+  pointer-events: none;
+  z-index: 2;
+  animation: lgGlassSweep 7.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.tc-hero-card::after { animation-delay: 1.4s; }
+.brawl-spotlight-card::after { animation-delay: 2.8s; }
+.brawl-loadout-item.is-hypercharge::after { animation-duration: 4.8s; }
+.tc-game-card.is-platinum::after { animation-duration: 6.2s; }
+
+@keyframes lgGlassSweep {
+  0%, 62% { transform: translate3d(-120%, 0, 0) skewX(-18deg); opacity: 0; }
+  70% { opacity: 0.85; }
+  88% { opacity: 0.4; }
+  100% { transform: translate3d(420%, 0, 0) skewX(-18deg); opacity: 0; }
+}
+
+/* 3. Living Opacity Pulse on Selected / Active Liquid Glass Elements */
+.ps5-tile.is-active .ps5-tile-art::after,
+.brawl-sc-icon::before,
+.brawl-loadout-icon::before,
+.tc-brand-emblem::before,
+.tc-crest-icon::before {
+  animation: lgMeniscusBreath 4.2s ease-in-out infinite;
+}
+
+@keyframes lgMeniscusBreath {
+  0%, 100% { opacity: 0.68; }
+  50% { opacity: 0.98; }
+}
+
+.brawler-grid-card.is-selected .brawler-card-active-glow {
+  animation: lgSelectedOpacityBreath 2.8s ease-in-out infinite;
+}
+
+@keyframes lgSelectedOpacityBreath {
+  0%, 100% { opacity: 0.62; }
+  50% { opacity: 1; }
+}
+
+/* 4. Opacity Materialization Choreography on View & Modal Reveal */
+.ps5-brawl-view:not([hidden]) {
+  animation: lgViewMaterialize 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ps5-brawl-view:not([hidden]) .ps5-brawl-control-bar {
+  animation: lgGlassFadeUp 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.ps5-brawl-view:not([hidden]) .brawl-profile-card {
+  animation: lgGlassFadeUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) 45ms both;
+}
+
+.ps5-brawl-view:not([hidden]) .brawl-spotlight-card {
+  animation: lgGlassFadeUp 0.46s cubic-bezier(0.16, 1, 0.3, 1) 110ms both;
+}
+
+.ps5-brawl-view:not([hidden]) .brawl-roster-section {
+  animation: lgGlassFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) 160ms both;
+}
+
+@keyframes lgViewMaterialize {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lgGlassFadeUp {
+  0% { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.988); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Modal Backdrop & Dialog Opacity Choreography */
+.modal-tc-fullscreen .sber-tips-backdrop {
+  opacity: 0;
+  transition: opacity 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-tc-fullscreen.active .sber-tips-backdrop {
+  opacity: 1;
+}
+
+.modal-tc-fullscreen.active .tc-hero-card {
+  animation: lgGlassFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) 40ms both;
+}
+
+.modal-tc-fullscreen.active #tcRecentSection {
+  animation: lgGlassFadeUp 0.44s cubic-bezier(0.16, 1, 0.3, 1) 90ms both;
+}
+
+/* Smooth Opacity Hover Transitions on Secondary / Dimmed Items */
+.tc-trophy-item.is-locked {
+  transition: opacity 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.22s ease, border-color 0.22s ease;
+}
+
+.tc-trophy-item.is-locked:hover {
+  opacity: 0.78;
+}
+
+.ps5-icon-btn svg,
+.brawl-cb-btn,
+.brawl-prof-btn,
+.brawl-ts-btn,
+.tc-filter-pill,
+.cc-item-btn svg {
+  transition: opacity 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.24s ease,
+              border-color 0.24s ease,
+              box-shadow 0.28s ease;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ps5-icon-btn,
+  .ps5-profile-pill,
+  .ps5-top-lang,
+  .ps5-top-tips-btn,
+  .cc-item-btn,
+  .sber-tips-close-btn,
+  .ps5-hub-chevron,
+  .brawl-sc-icon,
+  .brawl-loadout-icon,
+  .tc-brand-emblem,
+  .tc-crest-icon,
+  .tc-cup-stat,
+  .ps5-brawl-control-bar,
+  .brawl-profile-card,
+  .brawl-spotlight-card,
+  .tc-hero-card,
+  .ps5-twitch-control-bar,
+  .twitch-inline-sidebar,
+  .twitch-inline-chat-drawer,
+  .twitch-inline-meta-bar {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: rgba(18, 24, 40, 0.94) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brawl-profile-online-dot::after,
+  .brawl-stat-chip,
+  .brawl-spotlight-aura,
+  .brawl-arena-ring,
+  .brawl-stage-spark,
+  .brawl-spotlight-hero-img,
+  .brawl-spotlight-details.is-entering,
+  .brawl-pwr-badge.is-pwr11::after,
+  .brawl-record-fill,
+  .brawler-grid-card.is-stagger-enter,
+  .brawl-battle-card.is-stagger-enter,
+  .tc-recent-card.is-stagger-enter,
+  .tc-game-card.is-stagger-enter,
+  .tc-game-progress-fill,
+  .tc-trophy-item.is-stagger-enter,
+  .brawl-profile-card::after,
+  .brawl-spotlight-card::after,
+  .tc-hero-card::after,
+  .brawl-loadout-item.is-hypercharge::after,
+  .tc-game-card.is-platinum::after,
+  .ps5-tile.is-active .ps5-tile-art::after,
+  .brawl-sc-icon::before,
+  .brawl-loadout-icon::before,
+  .tc-brand-emblem::before,
+  .tc-crest-icon::before,
+  .brawler-grid-card.is-selected .brawler-card-active-glow,
+  .ps5-brawl-view:not([hidden]),
+  .ps5-brawl-view:not([hidden]) .ps5-brawl-control-bar,
+  .ps5-brawl-view:not([hidden]) .brawl-profile-card,
+  .ps5-brawl-view:not([hidden]) .brawl-spotlight-card,
+  .ps5-brawl-view:not([hidden]) .brawl-roster-section,
+  .modal-tc-fullscreen.active .tc-hero-card,
+  .modal-tc-fullscreen.active #tcRecentSection {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+    transform: none !important;
+  }
+  .modal-tc-fullscreen .tc-dialog-box,
+  .modal-tc-fullscreen .sber-tips-backdrop {
+    transition-duration: 0.001ms !important;
   }
 }

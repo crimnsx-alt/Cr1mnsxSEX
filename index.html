@@ -24,7 +24,7 @@
   <link rel="dns-prefetch" href="https://decapi.me" />
   <link rel="dns-prefetch" href="https://api.rss2json.com" />
   <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261125_fast_icons" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_twitch_gta" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -844,7 +844,7 @@
               <span class="brawl-tag-val">2RGUQJQ0R</span>
               <span class="brawl-tag-copy-hint">Копировать</span>
             </button>
-            <span class="brawl-cb-telemetry" id="brawlTelemetryStatus">42 512 🏆 · 108 бойцов · В сети</span>
+            <span class="brawl-cb-telemetry" id="brawlTelemetryStatus">42 512 кубков · 108 бойцов · В сети</span>
           </div>
 
           <!-- Mode Switcher Tabs -->
@@ -939,10 +939,16 @@
                   <div class="brawl-filter-pills" id="brawlFilterPills" role="radiogroup" aria-label="Фильтр бойцов">
                     <span class="brawl-filter-indicator" id="brawlFilterIndicator" aria-hidden="true"></span>
                     <button type="button" class="brawl-filter-pill is-active" data-filter="all">Все (108)</button>
-                    <button type="button" class="brawl-filter-pill" data-filter="1000">1000+ 🏆</button>
+                    <button type="button" class="brawl-filter-pill" data-filter="1000">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#ffcc00" aria-hidden="true"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H8v2h8v-2h-3v-3.1c1.8-.3 3.32-1.5 3.61-3.06C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
+                      <span>1000+</span>
+                    </button>
                     <button type="button" class="brawl-filter-pill" data-filter="pwr11">Power 11</button>
                     <button type="button" class="brawl-filter-pill" data-filter="rank">Ранг 5+</button>
-                    <button type="button" class="brawl-filter-pill" data-filter="winstreak">Винстрики 🔥</button>
+                    <button type="button" class="brawl-filter-pill" data-filter="winstreak">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="#ff6b4a" aria-hidden="true"><path d="M13.5 2.5c.3 2.7-1.1 4.4-2.6 5.9-1.3 1.3-2.4 2.5-2.4 4.6a3.5 3.5 0 0 0 7 0c0-1.1-.4-2.1-1-2.9 2.3 1.1 4 3.5 4 6.2A6.5 6.5 0 0 1 12 22a6.5 6.5 0 0 1-6.5-6.5c0-4.2 3-7 5.5-9.5 1-.9 1.9-2 2.5-3.5z"/></svg>
+                      <span>Винстрики</span>
+                    </button>
                   </div>
                   <div class="brawl-search-wrap">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1564,8 +1570,13 @@
       <!-- Top Action Bar -->
       <div class="tc-top-bar">
         <div class="tc-top-brand">
-          <span class="tc-brand-tag">PLAYSTATION® NETWORK</span>
-          <h2 class="tc-brand-title" id="tcDialogTitle">Коллекция призов</h2>
+          <div class="tc-brand-emblem" aria-hidden="true">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </div>
+          <div class="tc-brand-copy">
+            <span class="tc-brand-tag">PLAYSTATION® NETWORK</span>
+            <h2 class="tc-brand-title" id="tcDialogTitle">Коллекция призов</h2>
+          </div>
         </div>
         <div class="tc-top-actions">
           <button type="button" class="sber-tips-close-btn" id="btnTcClose" title="Закрыть (Esc)">✕</button>
@@ -2005,6 +2016,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261125_fast_icons"></script>
+  <script type="module" src="js/app.js?v=20261125_twitch_gta"></script>
 </body>
 </html>

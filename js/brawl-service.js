@@ -8,6 +8,7 @@ import { SoundEngine } from "./sound.js";
 import { escapeHtml } from "./friends-service.js";
 import { psnService } from "./psn-service.js";
 import { getLiveSyncSettings } from "./live-sync-config.js";
+import { PS5Icons } from "./icons.js";
 
 export const BRAWL_TAG = "2RGUQJQ0R";
 export const BRAWL_TAG_DISPLAY = "#2RGUQJQ0R";
@@ -607,7 +608,7 @@ class BrawlStarsService {
       const clubTag = p.club?.tag || "80RYCLU9Q";
       const trophies = (p.trophies || 42512).toLocaleString("ru-RU");
       const count = Object.keys(p.brawlers || {}).length || 108;
-      bioEl.innerHTML = `Добавляйся ко мне в друзья по тегу <strong>#${escapeHtml(this.tag)}</strong> для совместных каток в 3v3 и Ранговом бою · ${trophies} 🏆 · ${count} бойцов · Клуб <strong>${escapeHtml(clubName)}</strong> (#${escapeHtml(clubTag)})`;
+      bioEl.innerHTML = `Добавляйся ко мне в друзья по тегу <strong>#${escapeHtml(this.tag)}</strong> для совместных каток в 3v3 и Ранговом бою · <strong>${trophies}</strong> кубков · <strong>${count}</strong> бойцов · Клуб <strong>${escapeHtml(clubName)}</strong> (#${escapeHtml(clubTag)})`;
     }
   }
 
@@ -680,7 +681,7 @@ class BrawlStarsService {
       const syncStr = this.lastSyncTime
         ? `Обновлено ${this.lastSyncTime.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`
         : "В сети";
-      statusEl.textContent = `${(p.trophies || 0).toLocaleString("ru-RU")} 🏆 · ${brawlerCount} бойцов · ${syncStr}`;
+      statusEl.textContent = `${(p.trophies || 0).toLocaleString("ru-RU")} кубков · ${brawlerCount} бойцов · ${syncStr}`;
     }
 
     const livePill = document.getElementById("brawlLiveStatusPill");
@@ -715,29 +716,57 @@ class BrawlStarsService {
     if (!container) return;
 
     container.innerHTML = `
-      <div class="brawl-stat-chip">
+      <div class="brawl-stat-chip is-trophies" style="--stagger-idx: 0">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.trophy}</span>
+          <span class="brawl-sc-kicker">КУБКИ</span>
+        </div>
         <span class="brawl-sc-val">${(p.trophies || 42512).toLocaleString("ru-RU")}</span>
-        <span class="brawl-sc-lbl">КУБКОВ 🏆 (МАКС: ${(p.highestTrophies || 42512).toLocaleString("ru-RU")})</span>
+        <span class="brawl-sc-lbl">МАКС: ${(p.highestTrophies || 42512).toLocaleString("ru-RU")}</span>
       </div>
-      <div class="brawl-stat-chip">
-        <span class="brawl-sc-val">${brawlerCount}</span>
-        <span class="brawl-sc-lbl">БОЙЦОВ ИЗ 108</span>
+      <div class="brawl-stat-chip is-roster" style="--stagger-idx: 1">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.users}</span>
+          <span class="brawl-sc-kicker">БОЙЦЫ</span>
+        </div>
+        <span class="brawl-sc-val">${brawlerCount}<span class="brawl-sc-denom"> / 108</span></span>
+        <span class="brawl-sc-lbl">КОЛЛЕКЦИЯ ОТКРЫТА</span>
       </div>
-      <div class="brawl-stat-chip is-fame">
-        <span class="brawl-sc-val">${p.fameTierName || "MARTIAN FAME II"}</span>
-        <span class="brawl-sc-lbl">СЛАВА (${(p.fame || 20865).toLocaleString("ru-RU")} ОЧКОВ)</span>
+      <div class="brawl-stat-chip is-fame" style="--stagger-idx: 2">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.star}</span>
+          <span class="brawl-sc-kicker">СЛАВА</span>
+        </div>
+        <span class="brawl-sc-val">${escapeHtml(p.fameTierName || "MARTIAN FAME II")}</span>
+        <span class="brawl-sc-lbl">${(p.fame || 20865).toLocaleString("ru-RU")} ОЧКОВ</span>
       </div>
-      <div class="brawl-stat-chip is-ranked">
-        <span class="brawl-sc-val">${p.rankedRankName || "DIAMOND I"}</span>
-        <span class="brawl-sc-lbl">РЕЙТИНГ (ELO: ${p.rankedElo || 4067})</span>
+      <div class="brawl-stat-chip is-ranked" style="--stagger-idx: 3">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.crown}</span>
+          <span class="brawl-sc-kicker">РЕЙТИНГ</span>
+        </div>
+        <span class="brawl-sc-val">${escapeHtml(p.rankedRankName || "DIAMOND I")}</span>
+        <span class="brawl-sc-lbl">ELO: ${p.rankedElo || 4067}</span>
       </div>
-      <div class="brawl-stat-chip is-club">
-        <span class="brawl-sc-val">${p.club?.name || "0.3.7|teams"}</span>
-        <span class="brawl-sc-lbl">КЛУБ (#${p.club?.tag || "80RYCLU9Q"})</span>
+      <div class="brawl-stat-chip is-club" style="--stagger-idx: 4">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.shield}</span>
+          <span class="brawl-sc-kicker">КЛУБ</span>
+        </div>
+        <span class="brawl-sc-val">${escapeHtml(p.club?.name || "0.3.7|teams")}</span>
+        <span class="brawl-sc-lbl">#${escapeHtml(p.club?.tag || "80RYCLU9Q")}</span>
       </div>
-      <div class="brawl-stat-chip">
+      <div class="brawl-stat-chip is-wins" style="--stagger-idx: 5">
+        <div class="brawl-sc-head">
+          <span class="brawl-sc-icon">${PS5Icons.brawl.swords}</span>
+          <span class="brawl-sc-kicker">ВСЕГО ПОБЕД</span>
+        </div>
         <span class="brawl-sc-val">${totalWins.toLocaleString("ru-RU")}</span>
-        <span class="brawl-sc-lbl">ВСЕГО ПОБЕД (3v3: ${wins3v3.toLocaleString("ru-RU")} · SOLO: ${winsSolo} · DUO: ${winsDuo})</span>
+        <div class="brawl-sc-subpills">
+          <span class="brawl-sc-subpill">3v3 ${wins3v3.toLocaleString("ru-RU")}</span>
+          <span class="brawl-sc-subpill">Solo ${winsSolo}</span>
+          <span class="brawl-sc-subpill">Duo ${winsDuo}</span>
+        </div>
       </div>
     `;
   }
@@ -781,11 +810,21 @@ class BrawlStarsService {
     const spotlightContainer = document.getElementById("brawlSpotlightCard");
     if (!spotlightContainer) return;
 
+    const recordPct = maxTrophies > 0 ? Math.min(100, Math.round((trophies / maxTrophies) * 100)) : 100;
+
     spotlightContainer.innerHTML = `
-      <div class="brawl-spotlight-inner" style="--spotlight-glow: ${rarity.glow}">
+      <div class="brawl-spotlight-inner" style="--spotlight-glow: ${rarity.glow}; --spotlight-color: ${rarity.color}">
         <!-- Left: 3D Character Stage -->
         <div class="brawl-spotlight-visual">
+          <div class="brawl-spotlight-watermark" aria-hidden="true">${escapeHtml(name)}</div>
           <div class="brawl-spotlight-aura"></div>
+          <div class="brawl-arena-ring brawl-arena-ring--outer" aria-hidden="true"></div>
+          <div class="brawl-arena-ring brawl-arena-ring--inner" aria-hidden="true"></div>
+          <div class="brawl-stage-sparks" aria-hidden="true">
+            <span class="brawl-stage-spark"></span>
+            <span class="brawl-stage-spark"></span>
+            <span class="brawl-stage-spark"></span>
+          </div>
           <img src="${modelUrl}" 
                alt="${escapeHtml(name)}" 
                class="brawl-spotlight-hero-img ${animate ? "brawl-hero-entrance" : ""}" 
@@ -794,13 +833,16 @@ class BrawlStarsService {
                decoding="async"
                referrerpolicy="no-referrer"
                onerror="if (!this.dataset.ret1) { this.dataset.ret1='1'; this.src='${avatarUrl}'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; }" />
-          <div class="brawl-spotlight-pedestal"></div>
+          <div class="brawl-spotlight-pedestal">
+            <span class="brawl-pedestal-ring"></span>
+            <span class="brawl-pedestal-core"></span>
+          </div>
         </div>
 
         <!-- Right: Character Telemetry & Gear Spec -->
-        <div class="brawl-spotlight-details">
+        <div class="brawl-spotlight-details ${animate ? "is-entering" : ""}">
           <div class="brawl-spotlight-top-badge">
-            <span class="brawl-pill-legendary" style="background: ${rarity.color}; color: #181428;">${rarity.name}</span>
+            <span class="brawl-pill-legendary" style="background: ${rarity.color}; color: #141221;">${rarity.name}</span>
             <span class="brawl-pill-rank">ПРЕСТИЖ РАНГ ${rank}</span>
             ${skinName ? `<span class="brawl-pill-skin">${escapeHtml(skinName)}</span>` : ""}
           </div>
@@ -809,7 +851,7 @@ class BrawlStarsService {
 
           <div class="brawl-spotlight-cups-row">
             <div class="brawl-big-trophy-display">
-              <span class="brawl-btd-icon">🏆</span>
+              <span class="brawl-btd-icon">${PS5Icons.brawl.trophy}</span>
               <span class="brawl-btd-val" id="brawlSpotlightTrophyVal">${trophies.toLocaleString("ru-RU")}</span>
               <span class="brawl-btd-max">РЕКОРД: ${maxTrophies.toLocaleString("ru-RU")}</span>
             </div>
@@ -818,37 +860,44 @@ class BrawlStarsService {
               <span class="brawl-pwr-val">${power}</span>
             </div>
             <div class="brawl-streak-badge ${winStreak > 0 ? "is-hot" : ""}">
-              <span class="brawl-streak-icon">🔥</span>
+              <span class="brawl-streak-icon">${PS5Icons.brawl.flame}</span>
               <span class="brawl-streak-val">${winStreak} ВИНСТРИК</span>
               <span class="brawl-streak-max">(МАКС: ${maxWinStreak})</span>
             </div>
           </div>
 
+          <div class="brawl-record-meter" aria-label="Прогресс до личного рекорда">
+            <div class="brawl-record-track">
+              <div class="brawl-record-fill" style="--record-scale: ${(recordPct / 100).toFixed(3)}"></div>
+            </div>
+            <span class="brawl-record-pct">${recordPct}% от рекорда</span>
+          </div>
+
           <!-- Hero Gear & Abilities Specs -->
           <div class="brawl-hero-loadout">
-            <div class="brawl-loadout-item" title="Гаджет">
-              <span class="brawl-loadout-icon">⚙️</span>
+            <div class="brawl-loadout-item" title="${escapeHtml(gadget)}">
+              <span class="brawl-loadout-icon is-gadget">${PS5Icons.brawl.gear}</span>
               <div class="brawl-loadout-text">
                 <span class="brawl-lt-title">ГАДЖЕТ</span>
                 <span class="brawl-lt-sub">${escapeHtml(gadget)}</span>
               </div>
             </div>
-            <div class="brawl-loadout-item" title="Звёздная сила">
-              <span class="brawl-loadout-icon">⭐</span>
+            <div class="brawl-loadout-item" title="${escapeHtml(starPower)}">
+              <span class="brawl-loadout-icon is-sp">${PS5Icons.brawl.star}</span>
               <div class="brawl-loadout-text">
                 <span class="brawl-lt-title">ЗВЁЗДНАЯ СИЛА</span>
                 <span class="brawl-lt-sub">${escapeHtml(starPower)}</span>
               </div>
             </div>
-            <div class="brawl-loadout-item ${hasHyper ? "is-hypercharge" : ""}" title="Гиперзаряд">
-              <span class="brawl-loadout-icon">⚡</span>
+            <div class="brawl-loadout-item ${hasHyper ? "is-hypercharge" : ""}" title="${escapeHtml(hyperTitle)}">
+              <span class="brawl-loadout-icon is-hc">${PS5Icons.brawl.bolt}</span>
               <div class="brawl-loadout-text">
                 <span class="brawl-lt-title">ГИПЕРЗАРЯД</span>
                 <span class="brawl-lt-sub">${escapeHtml(hyperTitle)}</span>
               </div>
             </div>
-            <div class="brawl-loadout-item" title="Снаряжение">
-              <span class="brawl-loadout-icon">🛡️</span>
+            <div class="brawl-loadout-item" title="${escapeHtml(gearsDesc)}">
+              <span class="brawl-loadout-icon is-gear">${PS5Icons.brawl.shield}</span>
               <div class="brawl-loadout-text">
                 <span class="brawl-lt-title">СНАРЯЖЕНИЕ</span>
                 <span class="brawl-lt-sub">${escapeHtml(gearsDesc)}</span>
@@ -860,12 +909,16 @@ class BrawlStarsService {
           <div class="brawl-top-switch-row">
             <span class="brawl-ts-label">Топ бойцы аккаунта:</span>
             <div class="brawl-ts-buttons">
-              ${brawlerList.slice(0, 7).map((b) => `
-                <button type="button" class="brawl-ts-btn ${b.name.toUpperCase() === name.toUpperCase() ? "is-active" : ""}" data-brawler="${escapeHtml(b.name)}">
-                  <span>${escapeHtml(b.name)}</span>
-                  <span class="brawl-ts-cups">${(b.trophies || 0).toLocaleString("ru-RU")} 🏆</span>
-                </button>
-              `).join("")}
+              ${brawlerList.slice(0, 7).map((b) => {
+                const miniPortrait = getBrawlerAvatarUrl(b);
+                return `
+                  <button type="button" class="brawl-ts-btn ${b.name.toUpperCase() === name.toUpperCase() ? "is-active" : ""}" data-brawler="${escapeHtml(b.name)}">
+                    <img src="${miniPortrait}" alt="" class="brawl-ts-avatar" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.style.display='none'" />
+                    <span class="brawl-ts-name">${escapeHtml(b.name)}</span>
+                    <span class="brawl-ts-cups">${(b.trophies || 0).toLocaleString("ru-RU")}</span>
+                  </button>
+                `;
+              }).join("")}
             </div>
           </div>
         </div>
@@ -980,13 +1033,14 @@ class BrawlStarsService {
 
       const avatarUrl = getBrawlerAvatarUrl(b);
       const priorityAttr = idx < 24 ? 'fetchpriority="high"' : "";
+      const staggerClass = idx < 20 ? "is-stagger-enter" : "";
 
       return `
-        <article class="brawler-grid-card ${b.trophies >= 1000 ? "is-legend" : ""} ${isSelected ? "is-selected" : ""}" 
+        <article class="brawler-grid-card ${b.trophies >= 1000 ? "is-legend" : ""} ${isSelected ? "is-selected" : ""} ${staggerClass}" 
                  data-brawler="${escapeHtml(name)}" 
                  tabindex="0" 
                  role="button"
-                 style="--card-accent: ${rarity.color}">
+                 style="--card-accent: ${rarity.color}; --card-stagger: ${Math.min(idx, 19) * 18}ms">
           <div class="brawler-card-thumb-wrap">
             <img src="${avatarUrl}" 
                  alt="${escapeHtml(name)}" 
@@ -997,15 +1051,16 @@ class BrawlStarsService {
                  referrerpolicy="no-referrer"
                  onload="this.classList.add('is-loaded')"
                  onerror="if (!this.dataset.retGh && '${b.id || ''}') { this.dataset.retGh='1'; this.src='https://raw.githubusercontent.com/Brawlify/CDN/master/brawlers/borderless/${b.id}.png'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded'); }" />
+            <span class="brawler-card-rarity-bar" aria-hidden="true"></span>
             <span class="brawler-card-pwr ${power === 11 ? "is-max" : ""}">PWR ${power}</span>
             <span class="brawler-card-rank">R${rank}</span>
-            ${winStreak > 0 ? `<span class="brawler-card-streak">🔥 ${winStreak}</span>` : ""}
+            ${winStreak > 0 ? `<span class="brawler-card-streak">${PS5Icons.brawl.flame}<span>${winStreak}</span></span>` : ""}
             <div class="brawler-card-active-glow"></div>
           </div>
           <div class="brawler-card-meta">
             <div class="brawler-card-title-row">
               <strong class="brawler-card-name">${escapeHtml(name)}</strong>
-              <span class="brawler-card-trophies"><svg width="12" height="12" viewBox="0 0 24 24" fill="#FFCC00"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H8v2h8v-2h-3v-3.1c1.8-.3 3.32-1.5 3.61-3.06C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg> ${trophies}</span>
+              <span class="brawler-card-trophies">${PS5Icons.brawl.trophy} ${trophies}</span>
             </div>
             ${skinName ? `<span class="brawler-card-skin">${escapeHtml(skinName)}</span>` : `<span class="brawler-card-max">Макс: ${(b.highestTrophies || b.trophies || 0).toLocaleString("ru-RU")}</span>`}
           </div>
@@ -1073,7 +1128,7 @@ class BrawlStarsService {
       if (br?.name) brawlerIdByName.set(String(br.name).toLowerCase().trim(), numericId);
     });
 
-    container.innerHTML = battles.map((b) => {
+    container.innerHTML = battles.map((b, bIdx) => {
       const mode = b.event?.mode || "3v3";
       const map = b.event?.map || "Арена боя";
       const isVictory = b.victory === true || (b.result && b.result.toLowerCase().includes("victory")) || (b.result && b.result.includes("Rank 1"));
@@ -1100,12 +1155,13 @@ class BrawlStarsService {
       const userPwr = userEntry?.brawlerPower || 11;
       const resolvedUserId = userEntry?.id || brawlerIdByName.get(userBrawler.toLowerCase().trim()) || brawlerIdByName.get(getBrawlerSlug(userBrawler)) || "16000023";
       const brawlerAvatar = getBrawlerAvatarUrl({ id: resolvedUserId });
+      const battleStagger = bIdx < 12 ? `style="--battle-stagger: ${bIdx * 26}ms"` : "";
 
       return `
-        <article class="brawl-battle-card ${isVictory ? "is-win" : "is-loss"}">
+        <article class="brawl-battle-card ${isVictory ? "is-win" : "is-loss"} ${bIdx < 12 ? "is-stagger-enter" : ""}" ${battleStagger}>
           <div class="bbc-result-pill ${isVictory ? "is-win" : "is-loss"}">
             <span class="bbc-rp-text">${resultText}</span>
-            ${trophyStr ? `<strong class="bbc-rp-delta">${trophyStr} 🏆</strong>` : ""}
+            ${trophyStr ? `<strong class="bbc-rp-delta">${trophyStr} ${PS5Icons.brawl.trophy}</strong>` : ""}
           </div>
 
           <div class="bbc-meta-col">
@@ -1128,6 +1184,7 @@ class BrawlStarsService {
           <!-- Teams Roster Preview -->
           <div class="bbc-teams-preview">
             ${(b.teams || []).map((team, tIdx) => `
+              ${tIdx === 1 && (b.teams || []).length === 2 ? `<span class="bbc-vs-pill" aria-hidden="true">VS</span>` : ""}
               <div class="bbc-team-group ${tIdx === 0 ? "team-blue" : "team-red"}">
                 ${team.map((m) => {
                   const mName = (m.brawler || "").toLowerCase().trim();
@@ -1186,8 +1243,11 @@ class BrawlStarsService {
       const targetStage = normalized === "battles" ? stageBattles : stageRoster;
       if (targetStage && targetStage.animate) {
         targetStage.animate(
-          [{ opacity: 0, transform: "translate3d(0, 10px, 0)" }, { opacity: 1, transform: "translate3d(0, 0, 0)" }],
-          { duration: 300, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
+          [
+            { opacity: 0, transform: "translate3d(0, 14px, 0) scale(0.986)" },
+            { opacity: 1, transform: "translate3d(0, 0, 0) scale(1)" }
+          ],
+          { duration: 360, easing: "cubic-bezier(0.22, 1, 0.36, 1)", fill: "both" }
         );
       }
 

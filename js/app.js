@@ -16,7 +16,7 @@ import {
   controlCenterItems,
   searchCatalog,
   defaultProfileTelemetry
-} from "./data.js";
+} from "./data.js?v=20261125_twitch_gta";
 import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
 import { psnService } from "./psn-service.js";
 import { SoundEngine } from "./sound.js";
@@ -429,7 +429,7 @@ function initSpotlightAndTilt() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (isTouch || reducedMotion) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .lib-card-poster, .lib-card-list-item";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .tc-recent-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .lib-card-poster, .lib-card-list-item";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
@@ -979,7 +979,7 @@ function renderActiveView() {
     if (brawlEl) brawlEl.hidden = true;
     brawlService.stopInlineStage();
     if (twitchEl) twitchEl.hidden = false;
-    setBackground(item.bg, item.fallbackBg);
+    setBackground("assets/bg_twitch_squad_gta.jpg", item.fallbackBg);
     twitchService.renderInlineStage();
     initSpotlightAndTilt();
   } else if (item.id === "youtube") {
@@ -2563,6 +2563,31 @@ function openTrophyCollectionModal() {
   modal.setAttribute("aria-hidden", "false");
   SoundEngine.openDialog();
 
+  const scrollBody = modal.querySelector(".tc-scrollable-body");
+  if (scrollBody && scrollBody.animate) {
+    scrollBody.animate(
+      [
+        { opacity: 0, transform: "translate3d(0, 10px, 0)" },
+        { opacity: 1, transform: "translate3d(0, 0, 0)" }
+      ],
+      { duration: 380, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" }
+    );
+  }
+
+  // Reset odometer counters and level bar so modal entrance animates values cleanly
+  ["#tcTotalCount", "#tcPlatCount", "#tcGoldCount", "#tcSilverCount", "#tcBronzeCount"].forEach((sel) => {
+    const el = $(sel);
+    if (el) el._numFlowVal = 0;
+  });
+  const bar = $("#tcLevelProgressBar");
+  if (bar) {
+    bar.classList.remove("is-animating");
+    void bar.offsetWidth;
+  }
+
+  if (!psnService.profile && !psnService.isLoading) {
+    psnService.loadData();
+  }
   renderTrophyCollectionModal();
   setTimeout(updateTrophyFilterIndicator, 60);
 }
@@ -2664,8 +2689,14 @@ function renderTrophyCollectionModal() {
       ? `${stats.brawlEarnedCount}/${stats.brawlTotalCount}`
       : "Live";
   }
-  $("#tcLevelProgressBar").style.width = `${stats.levelProgress || 0}%`;
-  $("#tcLevelProgressPct").textContent = `${stats.levelProgress || 0}%`;
+  const levelBar = $("#tcLevelProgressBar");
+  const targetPct = Math.max(0, Math.min(100, Number(stats.levelProgress) || 0));
+  if (levelBar) {
+    levelBar.style.transition = "";
+    levelBar.style.width = `${targetPct}%`;
+    levelBar.classList.add("is-animating");
+  }
+  $("#tcLevelProgressPct").textContent = `${targetPct}%`;
 
   // 3D Cup Icons
   $("#tcCupPlatSvg").innerHTML = PS5Icons.trophyCup3D("platinum");
@@ -2673,12 +2704,13 @@ function renderTrophyCollectionModal() {
   $("#tcCupSilverSvg").innerHTML = PS5Icons.trophyCup3D("silver");
   $("#tcCupBronzeSvg").innerHTML = PS5Icons.trophyCup3D("bronze");
 
-  // Honest Aggregated Counters
-  $("#tcTotalCount").textContent = Number(stats.totalTrophies || 0).toLocaleString();
-  $("#tcPlatCount").textContent = Number(stats.platinum || 0).toLocaleString();
-  $("#tcGoldCount").textContent = Number(stats.gold || 0).toLocaleString();
-  $("#tcSilverCount").textContent = Number(stats.silver || 0).toLocaleString();
-  $("#tcBronzeCount").textContent = Number(stats.bronze || 0).toLocaleString();
+  // Honest Aggregated Counters with NumberFlow Odometer
+  const fmtRu = (n) => Number(n || 0).toLocaleString("ru-RU");
+  animateNumberFlow($("#tcTotalCount"), Number(stats.totalTrophies || 0), { duration: 680, formatter: fmtRu });
+  animateNumberFlow($("#tcPlatCount"), Number(stats.platinum || 0), { duration: 520, formatter: fmtRu });
+  animateNumberFlow($("#tcGoldCount"), Number(stats.gold || 0), { duration: 600, formatter: fmtRu });
+  animateNumberFlow($("#tcSilverCount"), Number(stats.silver || 0), { duration: 640, formatter: fmtRu });
+  animateNumberFlow($("#tcBronzeCount"), Number(stats.bronze || 0), { duration: 700, formatter: fmtRu });
 
   // Section 1: Recent Trophies
   const recentListEl = $("#tcRecentTrophiesList");
@@ -2686,15 +2718,30 @@ function renderTrophyCollectionModal() {
     if (!recentTrophies || recentTrophies.length === 0) {
       recentListEl.innerHTML = `<div style="padding:14px; color:rgba(255,255,255,0.4); font-size:13px;">${isRu ? "Нет недавних призов" : "No recent trophies"}</div>`;
     } else {
-      recentListEl.innerHTML = recentTrophies.map(t => {
+      const gradeLabels = {
+        platinum: isRu ? "Платина" : "Platinum",
+        gold: isRu ? "Золото" : "Gold",
+        silver: isRu ? "Серебро" : "Silver",
+        bronze: isRu ? "Бронза" : "Bronze"
+      };
+      recentListEl.innerHTML = recentTrophies.map((t, idx) => {
         const iconSrc = t.trophyIconUrl || "assets/covers/gta_vc.jpg";
+        const grade = String(t.trophyType || "bronze").toLowerCase();
+        const gradeLabel = gradeLabels[grade] || grade;
+        const staggerAttr = idx < 10 ? `style="--tc-stagger: ${idx * 32}ms"` : "";
         return `
-          <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}" role="button" tabindex="0">
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+          <div class="tc-recent-card is-grade-${grade} ${idx < 10 ? "is-stagger-enter" : ""}" data-comm-id="${t.npCommunicationId || ''}" role="button" tabindex="0" ${staggerAttr}>
+            <div class="tc-recent-icon-wrap">
+              <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+              <span class="tc-recent-grade-dot is-grade-${grade}" title="${escapeHtml(gradeLabel)}">${PS5Icons.trophyMini(grade)}</span>
+            </div>
             <div class="tc-recent-info">
               <span class="tc-recent-trophy-name">${escapeHtml(t.trophyName)}</span>
               <span class="tc-recent-game-title">${escapeHtml(t.gameTitle || 'PlayStation 5')}</span>
-              <span class="tc-recent-date">${formatTrophyDate(t.earnedDateTime, isRu)}</span>
+              <div class="tc-recent-meta-row">
+                <span class="tc-recent-date">${formatTrophyDate(t.earnedDateTime, isRu)}</span>
+                <span class="tc-recent-tier-tag is-grade-${grade}">${escapeHtml(gradeLabel)}</span>
+              </div>
             </div>
           </div>
         `;
@@ -2744,26 +2791,40 @@ function renderTrophyGamesList() {
     const thumb = g.titleIconUrl || g.trophyTitleIconUrl || "assets/covers/gta_vc.jpg";
     const counts = g.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
     const hasPlat = g.platinumEarned || counts.platinum > 0;
+    const pct = Math.max(0, Math.min(100, Number(g.progress) || 0));
+    const isComplete = pct >= 100;
+    const isEmpty = pct === 0 && !hasPlat;
+    const stateClasses = [
+      hasPlat ? "is-platinum" : "",
+      isComplete ? "is-complete" : "",
+      isEmpty ? "is-empty" : "",
+      idx < 16 ? "is-stagger-enter" : ""
+    ].filter(Boolean).join(" ");
+    const staggerStyle = idx < 16 ? `style="--tc-stagger: ${idx * 22}ms"` : "";
 
     return `
-      <div class="tc-game-card" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0">
-        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+      <div class="tc-game-card ${stateClasses}" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0" ${staggerStyle}>
+        <div class="tc-game-card-ambience" style="background-image: url('${thumb}')" aria-hidden="true"></div>
+        <div class="tc-game-thumb-wrap">
+          <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+          ${hasPlat ? `<span class="tc-game-plat-ribbon" title="${isRu ? "Платина получена" : "Platinum Earned"}">${PS5Icons.trophyMini("platinum")}</span>` : ""}
+        </div>
         <div class="tc-game-details">
           <div class="tc-game-header-row">
             <span class="tc-game-title" title="${escapeHtml(g.titleName)}">${escapeHtml(g.titleName)}</span>
-            <span class="tc-platform-badge">${g.platform || 'PS5'}</span>
+            <span class="tc-platform-badge">${escapeHtml(g.platform || 'PS5')}</span>
           </div>
           <div class="tc-game-progress-row">
             <div class="tc-game-progress-track">
-              <div class="tc-game-progress-fill" style="width: ${g.progress}%;"></div>
+              <div class="tc-game-progress-fill" style="--fill-scale: ${(pct / 100).toFixed(3)}; width: ${pct}%;"></div>
             </div>
-            <span class="tc-game-progress-val">${g.progress}%</span>
+            <span class="tc-game-progress-val">${pct}%</span>
           </div>
           <div class="tc-game-cups-mini">
-            ${hasPlat ? `<span class="tc-mini-cup tc-mini-cup--plat">🏆 ${counts.platinum || 1}</span>` : ''}
-            <span class="tc-mini-cup tc-mini-cup--gold">🥇 ${counts.gold || 0}</span>
-            <span class="tc-mini-cup tc-mini-cup--silver">🥈 ${counts.silver || 0}</span>
-            <span class="tc-mini-cup tc-mini-cup--bronze">🥉 ${counts.bronze || 0}</span>
+            ${hasPlat ? `<span class="tc-mini-cup tc-mini-cup--plat">${PS5Icons.trophyMini("platinum")}<span>${counts.platinum || 1}</span></span>` : ''}
+            <span class="tc-mini-cup tc-mini-cup--gold">${PS5Icons.trophyMini("gold")}<span>${counts.gold || 0}</span></span>
+            <span class="tc-mini-cup tc-mini-cup--silver">${PS5Icons.trophyMini("silver")}<span>${counts.silver || 0}</span></span>
+            <span class="tc-mini-cup tc-mini-cup--bronze">${PS5Icons.trophyMini("bronze")}<span>${counts.bronze || 0}</span></span>
           </div>
         </div>
       </div>
@@ -2806,24 +2867,25 @@ function openGameTrophiesDetail(commId) {
   body.innerHTML = `
     <!-- Game Hero Banner -->
     <div class="tc-game-hero-banner">
+      <div class="tc-game-hero-ambience" style="background-image: url('${thumb}')" aria-hidden="true"></div>
       <img src="${thumb}" alt="${escapeHtml(game.titleName)}" class="tc-game-hero-thumb" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
       <div class="tc-game-hero-info">
         <h2 class="tc-game-hero-title">${escapeHtml(game.titleName)}</h2>
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
-          <span class="tc-platform-badge">${game.platform || 'PS5'}</span>
-          <span style="font-size:12.5px; color:rgba(255,255,255,0.6);">${isRu ? "Всего призов:" : "Total trophies:"} ${game.totalTrophiesCount || trophies.length}</span>
+        <div class="tc-game-hero-meta">
+          <span class="tc-platform-badge">${escapeHtml(game.platform || 'PS5')}</span>
+          <span class="tc-game-hero-total">${isRu ? "Всего призов:" : "Total trophies:"} ${game.totalTrophiesCount || trophies.length}</span>
         </div>
-        <div class="tc-game-progress-row" style="max-width:400px;">
+        <div class="tc-game-progress-row" style="max-width:420px;">
           <div class="tc-game-progress-track">
             <div class="tc-game-progress-fill" style="width:${game.progress}%;"></div>
           </div>
           <span class="tc-game-progress-val">${game.progress}%</span>
         </div>
-        <div class="tc-game-cups-mini" style="margin-top:8px;">
-          <span class="tc-mini-cup tc-mini-cup--plat">🏆 ${counts.platinum || 0}</span>
-          <span class="tc-mini-cup tc-mini-cup--gold">🥇 ${counts.gold || 0}</span>
-          <span class="tc-mini-cup tc-mini-cup--silver">🥈 ${counts.silver || 0}</span>
-          <span class="tc-mini-cup tc-mini-cup--bronze">🥉 ${counts.bronze || 0}</span>
+        <div class="tc-game-cups-mini" style="margin-top:10px;">
+          <span class="tc-mini-cup tc-mini-cup--plat">${PS5Icons.trophyMini("platinum")}<span>${counts.platinum || 0}</span></span>
+          <span class="tc-mini-cup tc-mini-cup--gold">${PS5Icons.trophyMini("gold")}<span>${counts.gold || 0}</span></span>
+          <span class="tc-mini-cup tc-mini-cup--silver">${PS5Icons.trophyMini("silver")}<span>${counts.silver || 0}</span></span>
+          <span class="tc-mini-cup tc-mini-cup--bronze">${PS5Icons.trophyMini("bronze")}<span>${counts.bronze || 0}</span></span>
         </div>
       </div>
     </div>
@@ -2834,25 +2896,27 @@ function openGameTrophiesDetail(commId) {
         <div style="padding:32px; text-align:center; color:rgba(255,255,255,0.4); font-size:14px;">
           ${isRu ? "Список индивидуальных призов игры подгружается..." : "Trophy list is loading..."}
         </div>
-      ` : trophies.map(t => {
+      ` : trophies.map((t, idx) => {
         const isEarned = !!t.earned;
         const iconSrc = t.trophyIconUrl || thumb;
-        const gradeClass = `tc-trophy-grade-badge--${t.trophyType || 'bronze'}`;
+        const tier = String(t.trophyType || 'bronze').toLowerCase();
+        const gradeClass = `tc-trophy-grade-badge--${tier}`;
+        const itemStagger = idx < 18 ? `style="--tc-stagger: ${idx * 18}ms"` : "";
 
         return `
-          <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'}">
+          <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'} ${idx < 18 ? 'is-stagger-enter' : ''}" ${itemStagger}>
             <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${thumb}'">
             <div class="tc-trophy-content">
               <div class="tc-trophy-name-row">
                 <span class="tc-trophy-name">${escapeHtml(t.trophyName)}</span>
-                <span class="tc-trophy-grade-badge ${gradeClass}">${(t.trophyType || 'bronze').toUpperCase()}</span>
+                <span class="tc-trophy-grade-badge ${gradeClass}">${PS5Icons.trophyMini(tier)}<span>${tier.toUpperCase()}</span></span>
               </div>
               <span class="tc-trophy-desc">${escapeHtml(t.trophyDetail || '')}</span>
             </div>
             <div class="tc-trophy-status-col">
               ${isEarned 
-                ? `<span class="tc-earned-date">✓ ${formatTrophyDate(t.earnedDateTime, isRu)}</span>`
-                : `<span class="tc-locked-text">🔒 ${isRu ? "Не получено" : "Locked"}</span>`
+                ? `<span class="tc-earned-date">${PS5Icons.checkMini}<span>${formatTrophyDate(t.earnedDateTime, isRu)}</span></span>`
+                : `<span class="tc-locked-text">${PS5Icons.lockMini}<span>${isRu ? "Не получено" : "Locked"}</span></span>`
               }
             </div>
           </div>
