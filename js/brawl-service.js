@@ -130,6 +130,14 @@ export function getBrawlerRarityInfo(name) {
   return { name: "БОЕЦ", color: "#FFCC00", glow: "rgba(255, 204, 0, 0.45)" };
 }
 
+const LOCAL_BRAWL_MODELS = new Set([
+  16000000, 16000001, 16000005, 16000009, 16000012,
+  16000013, 16000023, 16000038, 16000040, 16000041,
+  16000049, 16000070, 16000086, 16000094, 16000102
+]);
+
+const MISSING_CDN_MODELS = new Set([16000107]);
+
 export function getBrawlerModelUrl(brawler) {
   if (!brawler) return "assets/brawl/brawlers/leon_model.webp";
   const name = (brawler.name || "").toLowerCase().trim();
@@ -138,6 +146,13 @@ export function getBrawlerModelUrl(brawler) {
   if (name === "spike") return "assets/brawl/brawlers/spike_model.webp";
   if (name === "shelly") return "assets/brawl/brawlers/shelly_model.webp";
 
+  const numId = Number(brawler.id);
+  if (numId && LOCAL_BRAWL_MODELS.has(numId)) {
+    return `assets/brawl/models/${numId}.png`;
+  }
+  if (numId && MISSING_CDN_MODELS.has(numId)) {
+    return `assets/brawl/portraits/${numId}.png`;
+  }
   if (brawler.id) {
     return `https://raw.githubusercontent.com/Brawlify/CDN/master/brawlers/model/${brawler.id}.png`;
   }
@@ -305,9 +320,32 @@ class BrawlStarsService {
     this._imgCache = [];
     this._preloadQueueRunning = false;
     this._renderedGridSig = "";
+    this._lastPayloadSig = "";
+    this._trophiesBridgeExported = false;
     this._visibilityHooked = false;
 
     this.initBaselineData();
+  }
+
+  getPayloadSignature(p) {
+    if (!p) return "";
+    const bList = Object.values(p.brawlers || {});
+    const bSum = bList.reduce((acc, b) => acc + Number(b?.trophies || 0), 0);
+    const bCount = bList.length;
+    const latestTs = p.battles?.[0]?.timestamp || "";
+    const battlesLen = Array.isArray(p.battles) ? p.battles.length : 0;
+    return [
+      p.trophies || 0,
+      p.highestTrophies || 0,
+      p.rankedElo || 0,
+      p.expLevel || 0,
+      p.totalPrestigeLevel || 0,
+      p["3vs3Victories"] || 0,
+      bCount,
+      bSum,
+      latestTs,
+      battlesLen
+    ].join("|");
   }
 
   initBaselineData() {
@@ -320,7 +358,7 @@ class BrawlStarsService {
     } catch (_) {}
 
     if (!this.player) {
-      fetch(`assets/brawl/initial_player_data.json?t=${Date.now()}`, { cache: "no-store" })
+      fetch(`assets/brawl/initial_player_data.json`)
         .then((r) => r.json())
         .then((d) => {
           const normalized = normalizeBrawlPayload(d, null);
@@ -328,6 +366,8 @@ class BrawlStarsService {
             this.player = normalized;
             this.lastSyncTime = new Date();
             this.syncSource = "snapshot";
+            this._lastPayloadSig = this.getPayloadSignature(normalized);
+            this._trophiesBridgeExported = true;
             this.exportTrophiesBridge();
             if (typeof requestIdleCallback === "function") {
               requestIdleCallback(() => this.preloadRosterPortraits(), { timeout: 1400 });
@@ -429,8 +469,12 @@ class BrawlStarsService {
       } catch (_) {}
     }
 
+    const isStaticHost =
+      typeof window !== "undefined" &&
+      (window.location.hostname.endsWith(".github.io") || window.location.protocol === "file:");
+
     // Tier 2: Local dev/proxy server endpoint (/api/brawl/player)
-    if (!freshData) {
+    if (!freshData && !isStaticHost) {
       try {
         const res = await fetch(`/api/brawl/player?t=${Date.now()}`, { cache: "no-store" });
         if (res.ok) {
@@ -460,14 +504,25 @@ class BrawlStarsService {
     }
 
     if (freshData && freshData.tag) {
+      const prevSig = this._lastPayloadSig || this.getPayloadSignature(this.player);
+      const nextSig = this.getPayloadSignature(freshData);
+      const dataChanged = nextSig !== prevSig;
+
       this.player = freshData;
       this.syncSource = sourceUsed;
       this.lastSyncTime = new Date();
-      try {
-        localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(freshData));
-      } catch (_) {}
+      this._lastPayloadSig = nextSig;
 
-      this.exportTrophiesBridge();
+      if (dataChanged) {
+        try {
+          localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(freshData));
+        } catch (_) {}
+      }
+
+      if (dataChanged || !this._trophiesBridgeExported) {
+        this._trophiesBridgeExported = true;
+        this.exportTrophiesBridge();
+      }
 
       // Detect deltas & notify live
       if (prevTrophies !== undefined && prevTrophies !== freshData.trophies) {
@@ -504,7 +559,7 @@ class BrawlStarsService {
         );
       }
 
-      if (this.isViewActive()) {
+      if (dataChanged && this.isViewActive()) {
         this.renderAll();
       } else {
         this.renderHeaderBar();
@@ -799,6 +854,7 @@ class BrawlStarsService {
     const rarity = getBrawlerRarityInfo(name);
     const modelUrl = getBrawlerModelUrl(curBrawler);
     const avatarUrl = getBrawlerAvatarUrl(curBrawler);
+    const initialHeroSrc = modelUrl.startsWith("http") ? avatarUrl : modelUrl;
 
     // Abilities & Loadout
     const gadget = curBrawler.gadgets?.[0]?.name || (curBrawler.buffies?.gadget ? "Активирован" : "Не установлен");
@@ -825,14 +881,14 @@ class BrawlStarsService {
             <span class="brawl-stage-spark"></span>
             <span class="brawl-stage-spark"></span>
           </div>
-          <img src="${modelUrl}" 
+          <img src="${initialHeroSrc}" 
                alt="${escapeHtml(name)}" 
                class="brawl-spotlight-hero-img ${animate ? "brawl-hero-entrance" : ""}" 
                id="brawlSpotlightHeroImg"
                loading="eager"
                decoding="async"
                referrerpolicy="no-referrer"
-               onerror="if (!this.dataset.ret1) { this.dataset.ret1='1'; this.src='${avatarUrl}'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; }" />
+               onerror="this.onerror=null; this.src='assets/covers/brawl_stars.jpg';" />
           <div class="brawl-spotlight-pedestal">
             <span class="brawl-pedestal-ring"></span>
             <span class="brawl-pedestal-core"></span>
@@ -924,6 +980,20 @@ class BrawlStarsService {
         </div>
       </div>
     `;
+
+    // Seamlessly upgrade instant local portrait to remote 3D model when available
+    if (modelUrl.startsWith("http")) {
+      const heroImgEl = document.getElementById("brawlSpotlightHeroImg");
+      const targetName = name.toUpperCase();
+      const preloader = new Image();
+      preloader.referrerPolicy = "no-referrer";
+      preloader.onload = () => {
+        if (heroImgEl && heroImgEl.isConnected && this.selectedSpotlightBrawler.toUpperCase() === targetName) {
+          heroImgEl.src = modelUrl;
+        }
+      };
+      preloader.src = modelUrl;
+    }
 
     // Trophy count-up animation
     if (animate) {
@@ -1050,7 +1120,7 @@ class BrawlStarsService {
                  ${priorityAttr}
                  referrerpolicy="no-referrer"
                  onload="this.classList.add('is-loaded')"
-                 onerror="if (!this.dataset.retGh && '${b.id || ''}') { this.dataset.retGh='1'; this.src='https://raw.githubusercontent.com/Brawlify/CDN/master/brawlers/borderless/${b.id}.png'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded'); }" />
+                 onerror="this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded');" />
             <span class="brawler-card-rarity-bar" aria-hidden="true"></span>
             <span class="brawler-card-pwr ${power === 11 ? "is-max" : ""}">PWR ${power}</span>
             <span class="brawler-card-rank">R${rank}</span>
@@ -1119,6 +1189,12 @@ class BrawlStarsService {
       container.innerHTML = `<div class="brawl-empty-state">История боёв временно недоступна</div>`;
       return;
     }
+
+    const battleSig = `${battles.length}|${battles[0]?.timestamp || ""}|${battles[0]?.result || ""}`;
+    if (this._renderedBattlesSig === battleSig && container.querySelector(".brawl-battle-card")) {
+      return;
+    }
+    this._renderedBattlesSig = battleSig;
 
     const brawlerIdByName = new Map();
     Object.entries(p.brawlers || {}).forEach(([key, br]) => {

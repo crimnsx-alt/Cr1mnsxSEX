@@ -416,9 +416,32 @@ async function main() {
       console.warn(`Warning: Could not cache PSN icons locally: ${cacheErr.message}`);
     }
 
+    const detailsDir = path.join(DATA_DIR, 'psn-details');
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-    fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(payload, null, 2), 'utf8');
-    console.log(`✓ Saved to ${TROPHIES_JSON_PATH} (total ${payload.games.length} games including browser ports)`);
+    if (!fs.existsSync(detailsDir)) fs.mkdirSync(detailsDir, { recursive: true });
+
+    const slimGames = (payload.games || []).map((g) => {
+      const trophies = Array.isArray(g.trophies) ? g.trophies : [];
+      if (trophies.length > 0 && !g.isBrowserGame && g.npCommunicationId) {
+        fs.writeFileSync(
+          path.join(detailsDir, `${g.npCommunicationId}.json`),
+          JSON.stringify({ npCommunicationId: g.npCommunicationId, trophies }),
+          'utf8'
+        );
+        const { trophies: _omit, ...rest } = g;
+        return rest;
+      }
+      return g;
+    });
+
+    const slimPayload = {
+      profile: payload.profile,
+      recentTrophies: payload.recentTrophies,
+      games: slimGames
+    };
+
+    fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(slimPayload), 'utf8');
+    console.log(`✓ Saved slim index to ${TROPHIES_JSON_PATH} + per-game details to ${detailsDir} (total ${payload.games.length} games)`);
 
     await syncToSupabase(payload);
     console.log('=== Sync completed successfully! ===');

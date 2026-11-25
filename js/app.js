@@ -16,7 +16,7 @@ import {
   controlCenterItems,
   searchCatalog,
   defaultProfileTelemetry
-} from "./data.js?v=20261125_twitch_glass3";
+} from "./data.js?v=20261125_fast_v2";
 import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
 import { psnService } from "./psn-service.js";
 import { SoundEngine } from "./sound.js";
@@ -28,9 +28,9 @@ import {
 } from "./sound-catalog.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
-import { twitchService } from "./twitch-service.js?v=20261125_twitch_glass3";
-import { youtubeService } from "./youtube-service.js";
-import { brawlService } from "./brawl-service.js";
+import { twitchService } from "./twitch-service.js?v=20261125_fast_v2";
+import { youtubeService } from "./youtube-service.js?v=20261125_fast_v2";
+import { brawlService } from "./brawl-service.js?v=20261125_fast_v2";
 import { getLiveSyncSettings, saveLiveSyncSettings } from "./live-sync-config.js";
 
 // ============================================================
@@ -524,21 +524,27 @@ function initScrollReveal() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
         }
       });
     },
     {
-      threshold: 0.08,
-      rootMargin: "0px 0px -30px 0px"
+      threshold: 0.01,
+      rootMargin: "120px 260px 120px 260px"
     }
   );
 
-  const targets = document.querySelectorAll(".ps5-widget, .tc-game-card, .ps5-media-card, .ps5-hero-trophy-card, .ps5-scroll-reveal");
+  const targets = document.querySelectorAll(".ps5-widget, .ps5-media-card, .ps5-hero-trophy-card, .ps5-scroll-reveal");
   targets.forEach((el, idx) => {
     el.classList.add("ps5-scroll-reveal");
     el.style.setProperty("--reveal-index", idx % 6);
     observer.observe(el);
   });
+
+  // Safety guarantee: ensure horizontally-scrolled Bento widgets never remain invisible
+  setTimeout(() => {
+    targets.forEach((el) => el.classList.add("is-revealed"));
+  }, 450);
 }
 
 function initDynamicTopbar() {
@@ -2603,26 +2609,14 @@ function closeTrophyCollectionModal() {
 const _preloadedTrophyIconUrls = new Set();
 const _trophyIconCache = [];
 let _trophyPreloadRunning = false;
+let _lastTcRenderSig = "";
+let _lastTcGridSig = "";
 
-function preloadTrophyAssets(games = [], recentTrophies = [], avatarUrl = "") {
-  if (_trophyPreloadRunning) return;
-  const urls = [];
-  if (avatarUrl) urls.push(avatarUrl);
-  (recentTrophies || []).forEach((t) => {
-    if (t?.trophyIconUrl) urls.push(t.trophyIconUrl);
-  });
-  (games || []).forEach((g) => {
-    const thumb = g?.titleIconUrl || g?.trophyTitleIconUrl;
-    if (thumb) urls.push(thumb);
-  });
-
+function _preloadUrlsBatch(urls = [], concurrency = 16) {
   const queue = urls.filter((u) => u && !_preloadedTrophyIconUrls.has(u));
   if (queue.length === 0) return;
 
-  _trophyPreloadRunning = true;
   let idx = 0;
-  const concurrency = 16;
-
   const worker = () => {
     if (idx >= queue.length) return;
     const url = queue[idx++];
@@ -2646,10 +2640,33 @@ function preloadTrophyAssets(games = [], recentTrophies = [], avatarUrl = "") {
   for (let i = 0; i < Math.min(concurrency, queue.length); i++) {
     worker();
   }
+}
+
+function preloadTrophyAssets(games = [], recentTrophies = [], avatarUrl = "") {
+  if (_trophyPreloadRunning) return;
+  const urls = [];
+  if (avatarUrl) urls.push(avatarUrl);
+  (recentTrophies || []).forEach((t) => {
+    if (t?.trophyIconUrl) urls.push(t.trophyIconUrl);
+  });
+  (games || []).forEach((g) => {
+    const thumb = g?.titleIconUrl || g?.trophyTitleIconUrl;
+    if (thumb) urls.push(thumb);
+  });
+
+  if (urls.every((u) => !u || _preloadedTrophyIconUrls.has(u))) return;
+  _trophyPreloadRunning = true;
+  _preloadUrlsBatch(urls, 16);
   setTimeout(() => { _trophyPreloadRunning = false; }, 4000);
 }
 
-function renderTrophyCollectionModal() {
+function preloadGameTrophyIcons(game) {
+  if (!game || !Array.isArray(game.trophies)) return;
+  const urls = game.trophies.map((t) => t?.trophyIconUrl).filter(Boolean);
+  _preloadUrlsBatch(urls, 16);
+}
+
+function renderTrophyCollectionModal({ preserveScroll = false } = {}) {
   const isRu = state.lang === "ru";
   const { profile, summary, recentTrophies, games } = psnService.getData();
   if (!profile) return;
@@ -2657,12 +2674,23 @@ function renderTrophyCollectionModal() {
   const stats = summary || psnService.getAggregatedSummary();
   preloadTrophyAssets(games, recentTrophies, profile.avatarUrl);
 
-  // Profile Identity
-  const avatarEl = $("#tcProfileAvatar");
-  if (avatarEl && profile.avatarUrl) avatarEl.src = profile.avatarUrl;
   const resolvedPsnId = stats.psnOnlineId || stats.onlineId || profile.onlineId || "Cr1mnsx";
-  $("#tcProfileOnlineId").textContent = resolvedPsnId;
+  const nextSig = [
+    state.lang,
+    resolvedPsnId,
+    stats.psnLinked ? 1 : 0,
+    stats.trophyLevel || 0,
+    stats.levelProgress || 0,
+    stats.totalTrophies || 0,
+    stats.platinum || 0,
+    stats.gold || 0,
+    stats.silver || 0,
+    stats.bronze || 0,
+    games.length,
+    recentTrophies[0]?.earnedDateTime || ""
+  ].join("|");
 
+  // Always update identity timestamp in place without full DOM wipe when data unchanged
   const tsEl = $("#tcSyncTimestamp");
   if (tsEl) {
     if (stats.lastSyncAt) {
@@ -2672,6 +2700,19 @@ function renderTrophyCollectionModal() {
       tsEl.textContent = isRu ? "Обновлено недавно" : "Recently updated";
     }
   }
+
+  if (preserveScroll && _lastTcRenderSig === nextSig && $("#tcGamesGrid")?.querySelector(".tc-game-card")) {
+    return;
+  }
+  _lastTcRenderSig = nextSig;
+
+  // Profile Identity
+  const avatarEl = $("#tcProfileAvatar");
+  if (avatarEl && profile.avatarUrl && avatarEl.dataset.src !== profile.avatarUrl) {
+    avatarEl.dataset.src = profile.avatarUrl;
+    avatarEl.src = profile.avatarUrl;
+  }
+  $("#tcProfileOnlineId").textContent = resolvedPsnId;
 
   // Honest Level / Skills & Progress
   const levelLabelEl = $("#tcLevelLabel");
@@ -2779,6 +2820,7 @@ function renderTrophyGamesList() {
   }
 
   if (filteredGames.length === 0) {
+    _lastTcGridSig = "";
     gamesGrid.innerHTML = `
       <div style="grid-column: 1 / -1; padding: 36px 20px; text-align: center; color: rgba(255, 255, 255, 0.4); font-size: 14px;">
         ${isRu ? "Игры не найдены по текущему запросу" : "No games found matching your search"}
@@ -2786,6 +2828,12 @@ function renderTrophyGamesList() {
     `;
     return;
   }
+
+  const gridSig = `${isRu ? "ru" : "en"}|${state.trophyFilter}|${state.trophySearch}|${filteredGames.map((g) => `${g.npCommunicationId}:${g.progress}`).join(",")}`;
+  if (_lastTcGridSig === gridSig && gamesGrid.querySelector(".tc-game-card")) {
+    return;
+  }
+  _lastTcGridSig = gridSig;
 
   gamesGrid.innerHTML = filteredGames.map((g, idx) => {
     const thumb = g.titleIconUrl || g.trophyTitleIconUrl || "assets/covers/gta_vc.jpg";
@@ -2798,15 +2846,14 @@ function renderTrophyGamesList() {
       hasPlat ? "is-platinum" : "",
       isComplete ? "is-complete" : "",
       isEmpty ? "is-empty" : "",
-      idx < 16 ? "is-stagger-enter" : ""
+      idx < 12 ? "is-stagger-enter" : ""
     ].filter(Boolean).join(" ");
-    const staggerStyle = idx < 16 ? `style="--tc-stagger: ${idx * 22}ms"` : "";
+    const staggerStyle = idx < 12 ? `style="--tc-stagger: ${idx * 18}ms"` : "";
 
     return `
       <div class="tc-game-card ${stateClasses}" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0" ${staggerStyle}>
-        <div class="tc-game-card-ambience" style="background-image: url('${thumb}')" aria-hidden="true"></div>
         <div class="tc-game-thumb-wrap">
-          <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+          <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onload="if(this.naturalWidth>this.naturalHeight*1.2)this.classList.add('is-wide')" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
           ${hasPlat ? `<span class="tc-game-plat-ribbon" title="${isRu ? "Платина получена" : "Platinum Earned"}">${PS5Icons.trophyMini("platinum")}</span>` : ""}
         </div>
         <div class="tc-game-details">
@@ -2831,6 +2878,12 @@ function renderTrophyGamesList() {
     `;
   }).join("");
 
+  gamesGrid.querySelectorAll(".tc-game-thumb").forEach((imgEl) => {
+    if (imgEl.complete && imgEl.naturalWidth > imgEl.naturalHeight * 1.2) {
+      imgEl.classList.add("is-wide");
+    }
+  });
+
   gamesGrid.querySelectorAll(".tc-game-card").forEach(card => {
     const openDetail = () => {
       const cid = card.dataset.commId;
@@ -2848,12 +2901,49 @@ function renderTrophyGamesList() {
   initSpotlightAndTilt();
 }
 
+function renderGameDetailTrophiesRows(trophies, thumb, isRu) {
+  if (!Array.isArray(trophies) || trophies.length === 0) {
+    return `
+      <div style="padding:32px; text-align:center; color:rgba(255,255,255,0.45); font-size:14px;">
+        ${isRu ? "Загрузка списка призов..." : "Loading trophies..."}
+      </div>
+    `;
+  }
+  return trophies.map((t, idx) => {
+    const isEarned = !!t.earned;
+    const iconSrc = t.trophyIconUrl || thumb;
+    const tier = String(t.trophyType || 'bronze').toLowerCase();
+    const gradeClass = `tc-trophy-grade-badge--${tier}`;
+    const itemStagger = idx < 18 ? `style="--tc-stagger: ${idx * 16}ms"` : "";
+
+    return `
+      <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'} ${idx < 18 ? 'is-stagger-enter' : ''}" ${itemStagger}>
+        <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${thumb}'">
+        <div class="tc-trophy-content">
+          <div class="tc-trophy-name-row">
+            <span class="tc-trophy-name">${escapeHtml(t.trophyName)}</span>
+            <span class="tc-trophy-grade-badge ${gradeClass}">${PS5Icons.trophyMini(tier)}<span>${tier.toUpperCase()}</span></span>
+          </div>
+          <span class="tc-trophy-desc">${escapeHtml(t.trophyDetail || '')}</span>
+        </div>
+        <div class="tc-trophy-status-col">
+          ${isEarned
+            ? `<span class="tc-earned-date">${PS5Icons.checkMini}<span>${formatTrophyDate(t.earnedDateTime, isRu)}</span></span>`
+            : `<span class="tc-locked-text">${PS5Icons.lockMini}<span>${isRu ? "Не получено" : "Locked"}</span></span>`
+          }
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 function openGameTrophiesDetail(commId) {
   const isRu = state.lang === "ru";
   const game = psnService.getGame(commId);
   if (!game) return;
 
   state.activeGameDetailId = commId;
+  preloadGameTrophyIcons(game);
   const modal = $("#modalGameTrophiesDetail");
   const body = $("#gameDetailBody");
   if (!modal || !body) return;
@@ -2891,42 +2981,27 @@ function openGameTrophiesDetail(commId) {
     </div>
 
     <!-- Trophies List -->
-    <div class="tc-trophy-list">
-      ${trophies.length === 0 ? `
-        <div style="padding:32px; text-align:center; color:rgba(255,255,255,0.4); font-size:14px;">
-          ${isRu ? "Список индивидуальных призов игры подгружается..." : "Trophy list is loading..."}
-        </div>
-      ` : trophies.map((t, idx) => {
-        const isEarned = !!t.earned;
-        const iconSrc = t.trophyIconUrl || thumb;
-        const tier = String(t.trophyType || 'bronze').toLowerCase();
-        const gradeClass = `tc-trophy-grade-badge--${tier}`;
-        const itemStagger = idx < 18 ? `style="--tc-stagger: ${idx * 18}ms"` : "";
-
-        return `
-          <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'} ${idx < 18 ? 'is-stagger-enter' : ''}" ${itemStagger}>
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${thumb}'">
-            <div class="tc-trophy-content">
-              <div class="tc-trophy-name-row">
-                <span class="tc-trophy-name">${escapeHtml(t.trophyName)}</span>
-                <span class="tc-trophy-grade-badge ${gradeClass}">${PS5Icons.trophyMini(tier)}<span>${tier.toUpperCase()}</span></span>
-              </div>
-              <span class="tc-trophy-desc">${escapeHtml(t.trophyDetail || '')}</span>
-            </div>
-            <div class="tc-trophy-status-col">
-              ${isEarned 
-                ? `<span class="tc-earned-date">${PS5Icons.checkMini}<span>${formatTrophyDate(t.earnedDateTime, isRu)}</span></span>`
-                : `<span class="tc-locked-text">${PS5Icons.lockMini}<span>${isRu ? "Не получено" : "Locked"}</span></span>`
-              }
-            </div>
-          </div>
-        `;
-      }).join("")}
+    <div class="tc-trophy-list" id="tcGameDetailTrophiesList">
+      ${renderGameDetailTrophiesRows(trophies, thumb, isRu)}
     </div>
   `;
 
   modal.classList.add("active");
   modal.setAttribute("aria-hidden", "false");
+
+  if (trophies.length === 0 && typeof psnService.loadGameDetails === "function") {
+    psnService.loadGameDetails(commId).then((loadedGame) => {
+      if (!loadedGame || state.activeGameDetailId !== commId) return;
+      const listEl = $("#tcGameDetailTrophiesList");
+      if (listEl) {
+        const list = loadedGame.trophies || [];
+        listEl.innerHTML = list.length > 0
+          ? renderGameDetailTrophiesRows(list, thumb, isRu)
+          : `<div style="padding:32px; text-align:center; color:rgba(255,255,255,0.45); font-size:14px;">${isRu ? "Нет данных о призах для этой игры" : "No trophies available for this title"}</div>`;
+      }
+      preloadGameTrophyIcons(loadedGame);
+    });
+  }
 }
 
 function closeGameTrophiesDetail() {
@@ -3602,7 +3677,7 @@ const playableGames = [
     badgeClass: 'wasm',
     art: 'assets/covers/doom.jpg',
     banner: 'assets/wallpapers/doom_bg.jpg',
-    url: 'https://archive.org/embed/doom_1993',
+    url: 'https://archive.org/embed/msdos_DOOM_1993',
     embedMode: 'direct'
   },
   {
@@ -3615,7 +3690,7 @@ const playableGames = [
     badgeClass: 'webgpu',
     art: 'assets/covers/quake3.jpg',
     banner: 'assets/covers/quake3.jpg',
-    url: 'http://www.quakejs.com/',
+    url: 'https://lrusso.github.io/Quake3/Quake3.htm',
     embedMode: 'direct'
   },
   {
@@ -3863,7 +3938,7 @@ function launchPlayableGame(gameId) {
   if (gwHelperExternalLink) gwHelperExternalLink.href = targetUrl;
 
   if (game.embedMode === 'hub') {
-    // Show PS5 In-Game Hub Deck (avoids ERR_BLOCKED_BY_RESPONSE)
+    // Show PS5 In-Game Hub Deck (avoids ERR_BLOCKED_BY_RESPONSE / X-Frame-Options)
     if (genericGameFrame) {
       genericGameFrame.src = '';
       genericGameFrame.style.display = 'none';
@@ -3874,6 +3949,8 @@ function launchPlayableGame(gameId) {
       if (gwHubTitle) gwHubTitle.textContent = game.title;
       if (gwHubDesc) gwHubDesc.textContent = game.desc || game.sub;
       if (gwHubBtnPlayExternal) gwHubBtnPlayExternal.href = targetUrl;
+      const tryBtn = document.getElementById('gwHubBtnTryIframe');
+      if (tryBtn) tryBtn.style.display = game.allowIframeFallback ? '' : 'none';
     }
   } else {
     // Direct seamless iframe embed (Vice City, DOOM, Quake, Minecraft)
@@ -5560,7 +5637,7 @@ function init() {
     preloadTrophyAssets(snap.games, snap.recentTrophies, snap.profile?.avatarUrl);
     applyLanguageAndTelemetry();
     if ($("#modalTrophyCollection")?.classList.contains("active")) {
-      renderTrophyCollectionModal();
+      renderTrophyCollectionModal({ preserveScroll: true });
     }
   };
   psnService.onUpdate(handleTelemetryRefresh);
@@ -5677,16 +5754,41 @@ function init() {
   initSpotlightCards();
   initDynamicTopbar();
   initMobileTouchGestures();
+  initScrollReveal();
   updateNavTabIndicator();
   updateAmbientGlowTheme(state.activeId);
 
-  // Defer non-critical network background tasks to idle callback for ultra-fast First Paint
+  // Immediately hydrate PSN telemetry (0ms from cache + parallel slim 60KB network fetch)
+  psnService.init().then(() => {
+    applyLanguageAndTelemetry();
+    const snap = psnService.getData();
+    preloadTrophyAssets(snap.games, snap.recentTrophies, snap.profile?.avatarUrl);
+  });
+
+  // Register offline/media cache Service Worker & warm secondary tab assets right after first paint
   const scheduleIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 40));
   scheduleIdle(() => {
+    if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
+      navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
+    _preloadUrlsBatch([
+      "assets/twitch/sbomba3131.png",
+      "assets/twitch/mafanyaking.png",
+      "assets/twitch/kussia88.png",
+      "assets/twitch/5opka.png",
+      "assets/twitch/lenyapudge.png",
+      "assets/twitch/bugorpro.png",
+      "assets/youtube/nr5Hy2uwrc4.jpg",
+      "assets/youtube/Z9A2LxrRjuk.jpg",
+      "assets/youtube/lHYHXugAZF4.jpg",
+      "assets/youtube/R-ILS0pketc.jpg",
+      "assets/youtube/FGy7KWr7BrM.jpg",
+      "assets/bg_twitch_squad_gta.jpg",
+      "assets/bg_mafanya_vlad.webp",
+      "assets/series/vlad_poster.webp"
+    ], 6);
     initSberTips();
     initFriendsSystem();
-    initScrollReveal();
-    psnService.init().then(() => applyLanguageAndTelemetry());
     twitchService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));
     twitchService.init();
     youtubeService.setToastHandler((title, msg, icon) => showToast(title, msg, icon || PS5Icons.star));

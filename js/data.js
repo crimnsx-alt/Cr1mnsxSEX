@@ -466,7 +466,7 @@ export const ribbonCatalog = {
       iconSvg: PS5Icons.youtubeTile,
       bg: "assets/bg_mafanya_vlad.webp",
       fallbackBg: "assets/bg_mafanya_vlad.jpg",
-      thumb: "https://i.ytimg.com/vi/nr5Hy2uwrc4/maxresdefault.jpg",
+      thumb: "assets/youtube/nr5Hy2uwrc4.jpg",
       progressPct: 100,
       playTime: "Театр PS5",
       trophies: null,
@@ -484,7 +484,7 @@ export const ribbonCatalog = {
           type: "Спецвыпуск · 4K",
           progress: 100,
           timeEst: "38 мин",
-          thumb: "https://i.ytimg.com/vi/nr5Hy2uwrc4/hqdefault.jpg",
+          thumb: "assets/youtube/nr5Hy2uwrc4.jpg",
           action: "youtube-video:nr5Hy2uwrc4"
         },
         {
@@ -492,7 +492,7 @@ export const ribbonCatalog = {
           type: "Финал 3 части",
           progress: 100,
           timeEst: "46 мин",
-          thumb: "https://i.ytimg.com/vi/Z9A2LxrRjuk/hqdefault.jpg",
+          thumb: "assets/youtube/Z9A2LxrRjuk.jpg",
           action: "youtube-video:Z9A2LxrRjuk"
         },
         {
@@ -500,7 +500,7 @@ export const ribbonCatalog = {
           type: "Zoom пранк",
           progress: 100,
           timeEst: "17 мин",
-          thumb: "https://i.ytimg.com/vi/lHYHXugAZF4/hqdefault.jpg",
+          thumb: "assets/youtube/lHYHXugAZF4.jpg",
           action: "youtube-video:lHYHXugAZF4"
         },
         {
@@ -508,7 +508,7 @@ export const ribbonCatalog = {
           type: "2 часть лора",
           progress: 100,
           timeEst: "35 мин",
-          thumb: "https://i.ytimg.com/vi/R-ILS0pketc/hqdefault.jpg",
+          thumb: "assets/youtube/R-ILS0pketc.jpg",
           action: "youtube-video:R-ILS0pketc"
         },
         {
@@ -516,7 +516,7 @@ export const ribbonCatalog = {
           type: "Полный сериал",
           progress: 100,
           timeEst: "1 ч 01 мин",
-          thumb: "https://i.ytimg.com/vi/FGy7KWr7BrM/hqdefault.jpg",
+          thumb: "assets/youtube/FGy7KWr7BrM.jpg",
           action: "youtube-video:FGy7KWr7BrM"
         }
       ],

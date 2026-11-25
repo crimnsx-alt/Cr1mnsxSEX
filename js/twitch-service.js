@@ -20,7 +20,7 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Игры / Общение",
     desc: "Сбомба (sbomba3131) — позитивные стримы, прохождения и челленджи",
     url: "https://www.twitch.tv/sbomba3131",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/4d62128d-fb6e-45a5-8865-0302106997a5-profile_image-300x300.png",
+    avatar: "assets/twitch/sbomba3131.png",
     initial: "С",
     isLive: false,
     uptime: null
@@ -33,7 +33,7 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Just Chatting",
     desc: "Мафаня — общение, игры, стримы и IRL",
     url: "https://www.twitch.tv/mafanyaking",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/640e8965-1b32-4428-bd45-6fe892746bf4-profile_image-300x300.png",
+    avatar: "assets/twitch/mafanyaking.png",
     initial: "M",
     isLive: false,
     uptime: null
@@ -46,7 +46,7 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Just Chatting / Реакции",
     desc: "Каша — реакты, угарные нарезки и разговорные стримы",
     url: "https://www.twitch.tv/kussia88",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/0d44d834-a0f3-4c42-875c-61563c9ab20c-profile_image-300x300.png",
+    avatar: "assets/twitch/kussia88.png",
     initial: "К",
     isLive: false,
     uptime: null
@@ -59,7 +59,7 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Игры / Minecraft / Шоу",
     desc: "Кирилл Баранов (Пятёрка) — легендарные шоу, майнкрафт и стримы",
     url: "https://www.twitch.tv/5opka",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/e70b3a04-a290-43e5-854f-96a495a2a330-profile_image-300x300.png",
+    avatar: "assets/twitch/5opka.png",
     initial: "5",
     isLive: false,
     uptime: null
@@ -72,7 +72,7 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "Dota 2 / Pudge",
     desc: "Лёня Пудж — топовый геймплей на Pudge и угар в Доте",
     url: "https://www.twitch.tv/lenyapudge",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/88eac48e-2bad-4292-a4b8-1d8518ef199e-profile_image-300x300.png",
+    avatar: "assets/twitch/lenyapudge.png",
     initial: "Л",
     isLive: false,
     uptime: null
@@ -85,12 +85,16 @@ export const DEFAULT_TWITCH_STREAMERS = [
     category: "CS2 / Шутеры / Игры",
     desc: "Бугор (bugorpro) — киберспорт, матчи CS2 и хардкорный гейминг",
     url: "https://www.twitch.tv/bugorpro",
-    avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/58b00871-db29-4b86-a4bf-cfde10544560-profile_image-300x300.png",
+    avatar: "assets/twitch/bugorpro.png",
     initial: "Б",
     isLive: false,
     uptime: null
   }
 ];
+
+const LOCAL_TWITCH_AVATARS = new Map(
+  DEFAULT_TWITCH_STREAMERS.map((s) => [s.channel.toLowerCase(), s.avatar])
+);
 
 class TwitchBroadcastService {
   constructor() {
@@ -180,15 +184,21 @@ class TwitchBroadcastService {
     const cacheAge = cache ? (Date.now() - cache.timestamp) : Infinity;
     if (cache && cache.channels && cacheAge < 600000) {
       list.forEach((s) => {
+        const localAv = LOCAL_TWITCH_AVATARS.get((s.channel || "").toLowerCase());
         const c = cache.channels[s.channel.toLowerCase()];
         if (c) {
           s.isLive = !!c.isLive;
           s.uptime = c.uptime || null;
-          if (c.avatar && c.avatar.startsWith("http")) s.avatar = c.avatar;
+          if (localAv) s.avatar = localAv;
+          else if (c.avatar && (c.avatar.startsWith("assets/") || c.avatar.startsWith("http"))) s.avatar = c.avatar;
+        } else if (localAv) {
+          s.avatar = localAv;
         }
       });
     } else {
       list.forEach((s) => {
+        const localAv = LOCAL_TWITCH_AVATARS.get((s.channel || "").toLowerCase());
+        if (localAv) s.avatar = localAv;
         s.isLive = false;
         s.uptime = null;
       });
@@ -331,12 +341,71 @@ class TwitchBroadcastService {
   }
 
   getAvatarSrc(streamer) {
-    if (streamer.avatar && streamer.avatar.startsWith("http")) {
+    const ch = (streamer.channel || "").toLowerCase();
+    const localAv = LOCAL_TWITCH_AVATARS.get(ch);
+    if (localAv) return localAv;
+    if (streamer.avatar && (streamer.avatar.startsWith("assets/") || streamer.avatar.startsWith("http"))) {
       return streamer.avatar;
     }
     const initial = streamer.initial || streamer.name.charAt(0).toUpperCase();
     const color = streamer.color || "#9146FF";
     return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='${encodeURIComponent(color)}'/%3E%3Cstop offset='100%25' stop-color='%23121318'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='50' fill='url(%23g)'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='${encodeURIComponent(color)}' stroke-width='2' stroke-opacity='0.4'/%3E%3Ctext x='50' y='63' font-family='-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif' font-size='42' font-weight='800' fill='%23ffffff' text-anchor='middle'%3E${encodeURIComponent(initial)}%3C/text%3E%3C/svg%3E`;
+  }
+
+  _mountIframeWithSkeleton(holder, { src, title, iframeId = "", skeletonId = "", label = "Загрузка", externalUrl = "", isChat = false } = {}) {
+    if (!holder) return;
+    const idAttr = iframeId ? `id="${iframeId}"` : "";
+    const skelAttr = skeletonId ? `id="${skeletonId}"` : "";
+    const safeUrl = escapeHtml(externalUrl || "https://www.twitch.tv");
+
+    holder.innerHTML = `
+      <div class="twitch-iframe-skeleton" ${skelAttr}>
+        <div class="twitch-skeleton-shimmer"></div>
+        <div class="twitch-skeleton-spinner"></div>
+        <span class="twitch-skeleton-label">${label}</span>
+        ${!isChat ? `<a href="${safeUrl}" target="_blank" rel="noopener" class="twitch-fallback-open-btn" hidden>Открыть на Twitch.tv ↗</a>` : ""}
+      </div>
+      <iframe
+        ${idAttr}
+        src="${src}"
+        frameborder="0"
+        ${!isChat ? 'allowfullscreen="true"' : ""}
+        scrolling="no"
+        loading="eager"
+        fetchpriority="${isChat ? "auto" : "high"}"
+        ${!isChat ? 'allow="autoplay; fullscreen; encrypted-media; picture-in-picture"' : ""}
+        title="${escapeHtml(title)}">
+      </iframe>
+    `;
+
+    const iframe = holder.querySelector("iframe");
+    const skeleton = holder.querySelector(".twitch-iframe-skeleton");
+    const extBtn = holder.querySelector(".twitch-fallback-open-btn");
+    if (iframe && skeleton) {
+      let loaded = false;
+      const hideSkel = () => {
+        if (!skeleton.isConnected) return;
+        skeleton.classList.add("is-hidden");
+        setTimeout(() => skeleton?.remove(), 350);
+      };
+      iframe.addEventListener("load", () => {
+        loaded = true;
+        hideSkel();
+      }, { once: true });
+      setTimeout(() => {
+        if (loaded || !skeleton.isConnected) return;
+        if (isChat) {
+          hideSkel();
+          return;
+        }
+        const sp = skeleton.querySelector(".twitch-skeleton-spinner");
+        const lbl = skeleton.querySelector(".twitch-skeleton-label");
+        if (sp) sp.style.display = "none";
+        if (lbl) lbl.textContent = "Плеер Twitch не отвечает в сети";
+        if (extBtn) extBtn.hidden = false;
+        skeleton.classList.add("is-fallback-mode");
+      }, 4800);
+    }
   }
 
   formatUptime(raw) {
@@ -410,6 +479,7 @@ class TwitchBroadcastService {
       this.saveStreamers();
 
       // Auto-select the live streamer so stream starts playing right away
+      const prevActive = this.activeChannel;
       if (autoSelect && !this.userHasManuallySelected) {
         const liveStreamer = this.streamers.find((s) => s.isLive);
         if (liveStreamer && liveStreamer.channel !== this.activeChannel) {
@@ -425,7 +495,12 @@ class TwitchBroadcastService {
         }
         if (this.isHubActive) {
           this.renderSidebarList();
-          this.selectStreamer(this.activeChannel);
+          if (this.activeChannel !== prevActive) {
+            this.selectStreamer(this.activeChannel);
+          } else {
+            const st = this.getActiveStreamer();
+            this.syncStreamVisualState(st);
+          }
         }
       }
     } finally {
@@ -505,6 +580,15 @@ class TwitchBroadcastService {
     const countEl = document.getElementById("twitchInlineChannelsCount");
     if (countEl) countEl.textContent = this.streamers.length;
 
+    const sig = this.streamers.map((s) => `${s.channel}:${s.isLive ? 1 : 0}:${s.uptime || ""}:${s.custom ? 1 : 0}`).join("|");
+    if (this._inlineSidebarSig === sig && container.querySelector(".twitch-in-card")) {
+      container.querySelectorAll(".twitch-in-card").forEach((card) => {
+        card.classList.toggle("is-active", card.dataset.channel.toLowerCase() === this.activeChannel.toLowerCase());
+      });
+      return;
+    }
+    this._inlineSidebarSig = sig;
+
     container.innerHTML = this.streamers
       .map((s) => {
         const isActive = s.channel.toLowerCase() === this.activeChannel.toLowerCase();
@@ -517,7 +601,7 @@ class TwitchBroadcastService {
         return `
           <div class="twitch-in-card ${liveClass} ${isActive ? "is-active" : ""}" data-channel="${safeCh}" role="button" tabindex="0">
             <div class="twitch-in-avatar-wrap">
-              <img src="${avatarSrc}" alt="${safeName}" class="twitch-in-card-avatar" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <img src="${avatarSrc}" alt="${safeName}" class="twitch-in-card-avatar" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '', channel: '' })}'" />
               <span class="twitch-in-card-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-in-card-info">
@@ -647,40 +731,25 @@ class TwitchBroadcastService {
 
     const avatarEl = document.getElementById("twitchInlineAvatar");
     if (avatarEl) {
-      avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${escapeHtml(streamer.name || "")}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...streamer, avatar: '' })}'" />`;
+      const avSrc = this.getAvatarSrc(streamer);
+      if (avatarEl.dataset.ch !== streamer.channel || avatarEl.dataset.src !== avSrc) {
+        avatarEl.dataset.ch = streamer.channel;
+        avatarEl.dataset.src = avSrc;
+        avatarEl.innerHTML = `<img src="${avSrc}" alt="${escapeHtml(streamer.name || "")}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...streamer, avatar: '', channel: '' })}'" />`;
+      }
     }
 
     // Update Player Iframe if channel changed or empty
     const holder = document.getElementById("twitchInlineIframeHolder");
     if (holder && this.currentRenderedChannel !== channel) {
       this.currentRenderedChannel = channel;
-      holder.innerHTML = `
-        <div class="twitch-iframe-skeleton" id="twitchInlinePlayerSkeleton">
-          <div class="twitch-skeleton-shimmer"></div>
-          <div class="twitch-skeleton-spinner"></div>
-          <span class="twitch-skeleton-label">Загрузка трансляции</span>
-        </div>
-        <iframe
-          src="${this.getPlayerUrl(channel)}"
-          frameborder="0"
-          allowfullscreen="true"
-          scrolling="no"
-          loading="eager"
-          fetchpriority="high"
-          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-          title="Twitch Player Inline - ${escapeHtml(channel)}">
-        </iframe>
-      `;
-      const pIframe = holder.querySelector("iframe");
-      const pSkeleton = holder.querySelector(".twitch-iframe-skeleton");
-      if (pIframe && pSkeleton) {
-        const hideSkel = () => {
-          pSkeleton.classList.add("is-hidden");
-          setTimeout(() => pSkeleton?.remove(), 400);
-        };
-        pIframe.addEventListener("load", hideSkel, { once: true });
-        setTimeout(hideSkel, 4500);
-      }
+      this._mountIframeWithSkeleton(holder, {
+        src: this.getPlayerUrl(channel),
+        title: `Twitch Player Inline - ${channel}`,
+        skeletonId: "twitchInlinePlayerSkeleton",
+        label: "Загрузка трансляции",
+        externalUrl: streamer.url
+      });
     }
 
     // Update Chat Iframe if open (with intelligent de-duplication)
@@ -711,35 +780,14 @@ class TwitchBroadcastService {
       this._chatMountTimeout = null;
     }
 
-    // Immediate PS5 Skeleton Shimmer
-    holder.innerHTML = `
-      <div class="twitch-iframe-skeleton" id="twitchInlineChatSkeleton">
-        <div class="twitch-skeleton-shimmer"></div>
-        <div class="twitch-skeleton-spinner"></div>
-        <span class="twitch-skeleton-label">Чат трансляции</span>
-      </div>
-    `;
-
-    // Micro-defer mounting of chat iframe by 150ms so player gets 100% bandwidth
-    this._chatMountTimeout = setTimeout(() => {
-      const iframe = document.createElement("iframe");
-      iframe.src = this.getChatUrl(targetChannel);
-      iframe.frameBorder = "0";
-      iframe.scrolling = "no";
-      iframe.title = `Twitch Chat Inline - ${targetChannel}`;
-      iframe.setAttribute("loading", "lazy");
-
-      const skeleton = holder.querySelector(".twitch-iframe-skeleton");
-      const hideChatSkel = () => {
-        if (skeleton) skeleton.classList.add("is-hidden");
-        setTimeout(() => skeleton?.remove(), 400);
-      };
-      iframe.addEventListener("load", hideChatSkel, { once: true });
-      setTimeout(hideChatSkel, 4500);
-
-      holder.appendChild(iframe);
-      this._chatMountTimeout = null;
-    }, 150);
+    // Mount immediately without extra blank flash
+    this._mountIframeWithSkeleton(holder, {
+      src: this.getChatUrl(targetChannel),
+      title: `Twitch Chat Inline - ${targetChannel}`,
+      skeletonId: "twitchInlineChatSkeleton",
+      label: "Чат трансляции",
+      isChat: true
+    });
   }
   toggleInlineChat() {
     this.isInlineChatOpen = !this.isInlineChatOpen;
@@ -790,7 +838,7 @@ class TwitchBroadcastService {
         return `
           <div class="twitch-streamer-card ${s.isLive ? "is-live" : "is-offline"} ${isActive ? "is-active" : ""}" data-channel="${safeCh}" role="button" tabindex="0">
             <div class="twitch-card-avatar-wrap">
-              <img src="${avatarSrc}" alt="${safeName}" class="twitch-card-avatar" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '' })}'" />
+              <img src="${avatarSrc}" alt="${safeName}" class="twitch-card-avatar" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...s, avatar: '', channel: '' })}'" />
               <span class="twitch-card-online-dot ${s.isLive ? "dot-online" : "dot-offline"}"></span>
             </div>
             <div class="twitch-card-info">
@@ -873,7 +921,12 @@ class TwitchBroadcastService {
 
       const avatarEl = document.getElementById("twitchMetaAvatar");
       if (avatarEl) {
-        avatarEl.innerHTML = `<img src="${this.getAvatarSrc(streamer)}" alt="${streamer.name}" />`;
+        const avSrc = this.getAvatarSrc(streamer);
+        if (avatarEl.dataset.ch !== streamer.channel || avatarEl.dataset.src !== avSrc) {
+          avatarEl.dataset.ch = streamer.channel;
+          avatarEl.dataset.src = avSrc;
+          avatarEl.innerHTML = `<img src="${avSrc}" alt="${escapeHtml(streamer.name || "")}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${this.getAvatarSrc({ ...streamer, avatar: '', channel: '' })}'" />`;
+        }
       }
 
       this.renderPlayerIframe();
@@ -914,68 +967,28 @@ class TwitchBroadcastService {
   renderPlayerIframe() {
     const wrap = document.getElementById("twitchIframeWrap");
     if (!wrap) return;
-
-    const url = this.getPlayerUrl(this.activeChannel);
-    wrap.innerHTML = `
-      <div class="twitch-iframe-skeleton" id="twitchModalPlayerSkeleton">
-        <div class="twitch-skeleton-shimmer"></div>
-        <div class="twitch-skeleton-spinner"></div>
-        <span class="twitch-skeleton-label">Загрузка плеера</span>
-      </div>
-      <iframe
-        id="twitchPlayerIframe"
-        src="${url}"
-        frameborder="0"
-        allowfullscreen="true"
-        scrolling="no"
-        loading="eager"
-        fetchpriority="high"
-        allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-        title="Twitch Player - ${this.activeChannel}">
-      </iframe>
-    `;
-    const pIframe = wrap.querySelector("iframe");
-    const pSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
-    if (pIframe && pSkeleton) {
-      const hideSkel = () => {
-        pSkeleton.classList.add("is-hidden");
-        setTimeout(() => pSkeleton?.remove(), 400);
-      };
-      pIframe.addEventListener("load", hideSkel, { once: true });
-      setTimeout(hideSkel, 4500);
-    }
+    const streamer = this.getActiveStreamer();
+    this._mountIframeWithSkeleton(wrap, {
+      src: this.getPlayerUrl(this.activeChannel),
+      title: `Twitch Player - ${this.activeChannel}`,
+      iframeId: "twitchPlayerIframe",
+      skeletonId: "twitchModalPlayerSkeleton",
+      label: "Загрузка плеера",
+      externalUrl: streamer?.url
+    });
   }
 
   renderChatIframe() {
     const wrap = document.getElementById("twitchChatIframeWrap");
     if (!wrap) return;
-
-    const url = this.getChatUrl(this.activeChannel);
-    wrap.innerHTML = `
-      <div class="twitch-iframe-skeleton" id="twitchModalChatSkeleton">
-        <div class="twitch-skeleton-shimmer"></div>
-        <div class="twitch-skeleton-spinner"></div>
-        <span class="twitch-skeleton-label">Подключение чата</span>
-      </div>
-      <iframe
-        id="twitchChatIframe"
-        src="${url}"
-        frameborder="0"
-        scrolling="no"
-        loading="lazy"
-        title="Twitch Chat - ${this.activeChannel}">
-      </iframe>
-    `;
-    const cIframe = wrap.querySelector("iframe");
-    const cSkeleton = wrap.querySelector(".twitch-iframe-skeleton");
-    if (cIframe && cSkeleton) {
-      const hideSkel = () => {
-        cSkeleton.classList.add("is-hidden");
-        setTimeout(() => cSkeleton?.remove(), 400);
-      };
-      cIframe.addEventListener("load", hideSkel, { once: true });
-      setTimeout(hideSkel, 4500);
-    }
+    this._mountIframeWithSkeleton(wrap, {
+      src: this.getChatUrl(this.activeChannel),
+      title: `Twitch Chat - ${this.activeChannel}`,
+      iframeId: "twitchChatIframe",
+      skeletonId: "twitchModalChatSkeleton",
+      label: "Подключение чата",
+      isChat: true
+    });
   }
 
   toggleChat() {

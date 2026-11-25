@@ -6730,7 +6730,10 @@ body.hub-active .stage-game-hub {
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
   cursor: pointer;
 }
 
@@ -6859,9 +6862,13 @@ body.hub-active .stage-game-hub {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease;
   position: relative;
   overflow: hidden;
+  contain: layout style paint;
 }
 
 .tc-game-card:hover {
@@ -8547,9 +8554,8 @@ body.cc-open .viewport-stage {
 }
 
 .blur-fade-stagger {
-  animation: blurFadeIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: calc(var(--stagger-index, 0) * 55ms);
-  will-change: opacity, transform, filter;
+  animation: blurFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--stagger-index, 0) * 45ms);
 }
 
 /* --------------------------------------------------------------------------
@@ -8740,12 +8746,11 @@ body.cc-open .viewport-stage {
 }
 
 .tilt-card {
-  transform-style: preserve-3d;
-  transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
-  will-change: transform;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.32s ease;
 }
 
 .tilt-card.is-tilting {
+  will-change: transform;
   transition: transform 55ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
 }
 
@@ -10187,6 +10192,37 @@ button:active:not(:disabled),
   pointer-events: none;
 }
 
+.twitch-iframe-skeleton.is-fallback-mode {
+  background: radial-gradient(circle at center, rgba(16, 20, 34, 0.68) 0%, rgba(6, 8, 14, 0.84) 100%);
+  pointer-events: none;
+}
+
+.twitch-fallback-open-btn,
+.youtube-fallback-open-btn {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.55);
+  transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
+}
+
+.twitch-fallback-open-btn:hover,
+.youtube-fallback-open-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.24);
+}
+
 .twitch-skeleton-shimmer {
   position: absolute;
   inset: 0;
@@ -10341,45 +10377,29 @@ body.view-twitch.twitch-stream-offline .ps5-bg-vignette {
 
 .ps5-twitch-view.is-stream-offline .twitch-inline-player-box,
 .modal-twitch-fullscreen.is-stream-offline .twitch-player-container {
-  background: rgba(12, 13, 24, 0.14);
-  backdrop-filter: blur(5px) saturate(130%);
-  -webkit-backdrop-filter: blur(5px) saturate(130%);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 12px 34px rgba(0, 0, 0, 0.28);
-  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  background: rgba(12, 13, 24, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 12px 34px rgba(0, 0, 0, 0.34);
+  transition: border-color 0.28s ease, box-shadow 0.28s ease;
 }
 
 .ps5-twitch-view.is-stream-offline .twitch-inline-ambient-aura,
 .modal-twitch-fullscreen.is-stream-offline .twitch-player-ambient-glow {
-  opacity: 0.06;
+  opacity: 0.12;
 }
 
 .ps5-twitch-view.is-stream-offline .twitch-iframe-skeleton,
 .modal-twitch-fullscreen.is-stream-offline .twitch-iframe-skeleton {
-  background: rgba(12, 13, 24, 0.24);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(12, 13, 24, 0.48);
 }
 
 .ps5-twitch-view.is-stream-offline .twitch-inline-iframe-holder iframe,
 .modal-twitch-fullscreen.is-stream-offline .twitch-iframe-wrap iframe {
-  opacity: 0.16;
-  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-              filter 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.ps5-twitch-view.is-stream-offline .twitch-inline-player-box:hover .twitch-inline-iframe-holder iframe,
-.modal-twitch-fullscreen.is-stream-offline .twitch-player-container:hover .twitch-iframe-wrap iframe {
-  opacity: 0.92;
+  opacity: 1;
 }
 
 .ps5-twitch-view.is-stream-offline .twitch-in-chat-iframe-holder iframe {
-  opacity: 0.42;
-  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.ps5-twitch-view.is-stream-offline .twitch-inline-chat-drawer:hover .twitch-in-chat-iframe-holder iframe {
-  opacity: 0.96;
+  opacity: 0.94;
 }
 
 /* Live Stream: Theater Focus & Brighter, Vivid Player Stage */
@@ -10655,6 +10675,22 @@ body.view-youtube .ps5-bg-vignette {
   display: block;
 }
 
+.youtube-poster-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.45) saturate(1.1);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.youtube-inline-iframe-holder iframe,
+.youtube-hub-player-wrap iframe {
+  position: relative;
+  z-index: 1;
+}
+
 /* Preloader Skeleton */
 .youtube-iframe-skeleton {
   position: absolute;
@@ -10664,10 +10700,14 @@ body.view-youtube .ps5-bg-vignette {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: radial-gradient(circle at center, rgba(22, 14, 18, 0.96) 0%, rgba(8, 6, 10, 0.99) 100%);
+  background: radial-gradient(circle at center, rgba(22, 14, 18, 0.56) 0%, rgba(8, 6, 10, 0.82) 100%);
   z-index: 5;
   pointer-events: none;
   transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.youtube-iframe-skeleton.is-fallback-mode {
+  background: radial-gradient(circle at center, rgba(16, 10, 14, 0.62) 0%, rgba(6, 5, 10, 0.84) 100%);
 }
 
 .youtube-iframe-skeleton.is-hidden {
@@ -15686,8 +15726,15 @@ body.view-youtube .ps5-bg-vignette {
   width: 68px;
   height: 68px;
   border-radius: 12px;
+  background: #0b101d;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tc-game-thumb.is-wide {
+  object-fit: contain;
+  padding: 3px;
+  background: radial-gradient(circle at 50% 45%, rgba(28, 38, 66, 0.9), rgba(7, 10, 18, 0.98));
 }
 
 .tc-game-card:hover .tc-game-thumb {
@@ -16381,12 +16428,11 @@ body.view-youtube .ps5-bg-vignette {
   opacity: 1;
 }
 
-/* 2. Liquid Glass Glint Sweep on Featured Panels & Platinum Cards */
+/* 2. Liquid Glass Glint Sweep on Static Featured Panels */
 .brawl-profile-card::after,
 .brawl-spotlight-card::after,
 .tc-hero-card::after,
-.brawl-loadout-item.is-hypercharge::after,
-.tc-game-card.is-platinum::after {
+.brawl-loadout-item.is-hypercharge::after {
   content: "";
   position: absolute;
   top: -20%;

@@ -9,22 +9,21 @@
   <title>PlayStation®5 — Welcome Hub &amp; System Shell</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
-  <!-- Preconnect & DNS-Prefetch for instantaneous Twitch & YouTube media loading -->
-  <link rel="preconnect" href="https://player.twitch.tv" crossorigin />
-  <link rel="preconnect" href="https://static.twitchcdn.net" crossorigin />
-  <link rel="preconnect" href="https://embed.twitch.tv" crossorigin />
-  <link rel="preconnect" href="https://static-cdn.jtvnw.net" crossorigin />
-  <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin />
-  <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
-  <link rel="preconnect" href="https://i3.ytimg.com" crossorigin />
-  <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" /></noscript>
+  <link rel="preload" as="image" href="assets/bg_monica.jpg" fetchpriority="high" />
+  <link rel="preload" as="fetch" href="data/psn-trophies.json" crossorigin />
+  <link rel="modulepreload" href="js/data.js?v=20261125_fast_v2" />
+  <link rel="modulepreload" href="js/icons.js" />
+  <link rel="modulepreload" href="js/psn-service.js" />
+  <link rel="modulepreload" href="js/brawl-service.js?v=20261125_fast_v2" />
+  <link rel="modulepreload" href="js/youtube-service.js?v=20261125_fast_v2" />
+  <link rel="modulepreload" href="js/twitch-service.js?v=20261125_fast_v2" />
+  <link rel="modulepreload" href="js/sound.js" />
   <link rel="dns-prefetch" href="https://www.twitch.tv" />
-  <link rel="dns-prefetch" href="https://static-cdn.jtvnw.net" />
+  <link rel="dns-prefetch" href="https://player.twitch.tv" />
   <link rel="dns-prefetch" href="https://decapi.me" />
-  <link rel="dns-prefetch" href="https://api.rss2json.com" />
-  <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261125_twitch_logo" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_fast_v2" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -473,7 +472,7 @@
       </main>
 
       <!-- VIEW 4: PS5 TWITCH INLINE BROADCAST THEATER -->
-      <main class="ps5-twitch-view blur-fade-stagger" id="ps5TwitchView" hidden>
+      <main class="ps5-twitch-view" id="ps5TwitchView" hidden>
         <!-- Studio Top Control Bar -->
         <div class="ps5-twitch-control-bar">
           <div class="twitch-cb-left">
@@ -597,7 +596,7 @@
       </main>
 
       <!-- VIEW 5: PS5 YOUTUBE INLINE VIDEO THEATER -->
-      <main class="ps5-youtube-view blur-fade-stagger" id="ps5YoutubeView" hidden>
+      <main class="ps5-youtube-view" id="ps5YoutubeView" hidden>
         <!-- Studio Top Control Bar -->
         <div class="ps5-youtube-control-bar">
           <div class="youtube-cb-left">
@@ -660,7 +659,7 @@
             <div class="youtube-inline-meta-bar" id="youtubeInlineMetaBar">
               <div class="yt-in-meta-left">
                 <div class="yt-in-avatar">
-                  <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/640e8965-1b32-4428-bd45-6fe892746bf4-profile_image-300x300.png" alt="Мафаня Кинг" loading="lazy" decoding="async" />
+                  <img src="assets/twitch/mafanyaking.png" alt="Мафаня Кинг" loading="eager" decoding="async" />
                 </div>
                 <div class="yt-in-details">
                   <h3 class="yt-in-name" id="youtubeInlineVideoTitle">РЕЖИССЕРСКАЯ ВЕРСИЯ ЛОРА С Г*ЕМ</h3>
@@ -831,7 +830,7 @@
       </main>
 
       <!-- VIEW 6: PS5 BRAWL STARS LIVE PROFILE & NINJA HUB -->
-      <main class="ps5-brawl-view blur-fade-stagger" id="ps5BrawlStarsView" hidden>
+      <main class="ps5-brawl-view" id="ps5BrawlStarsView" hidden>
         <!-- Top Control Bar -->
         <div class="ps5-brawl-control-bar">
           <div class="brawl-cb-left">
@@ -2016,6 +2015,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261125_twitch_logo"></script>
+  <script type="module" src="js/app.js?v=20261125_fast_v2"></script>
 </body>
 </html>

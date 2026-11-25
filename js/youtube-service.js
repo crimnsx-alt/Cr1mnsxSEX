@@ -29,8 +29,8 @@ export const DEFAULT_YOUTUBE_VIDEOS = [
     duration: "38:24",
     meta: "360 тыс. · 6 дн. назад",
     badge: "НОВОЕ · 4K",
-    thumb: "https://i.ytimg.com/vi/nr5Hy2uwrc4/hqdefault.jpg",
-    thumbHd: "https://i.ytimg.com/vi/nr5Hy2uwrc4/maxresdefault.jpg",
+    thumb: "assets/youtube/nr5Hy2uwrc4.jpg",
+    thumbHd: "assets/youtube/nr5Hy2uwrc4.jpg",
     url: "https://www.youtube.com/watch?v=nr5Hy2uwrc4",
     pubDate: "2026-11-17 15:47:46",
     isNew: true
@@ -41,8 +41,8 @@ export const DEFAULT_YOUTUBE_VIDEOS = [
     duration: "46:15",
     meta: "1,5 млн · 1 мес. назад",
     badge: "ФИНАЛ ЛОРА",
-    thumb: "https://i.ytimg.com/vi/Z9A2LxrRjuk/hqdefault.jpg",
-    thumbHd: "https://i.ytimg.com/vi/Z9A2LxrRjuk/maxresdefault.jpg",
+    thumb: "assets/youtube/Z9A2LxrRjuk.jpg",
+    thumbHd: "assets/youtube/Z9A2LxrRjuk.jpg",
     url: "https://www.youtube.com/watch?v=Z9A2LxrRjuk",
     pubDate: "2026-10-20 18:00:00",
     isNew: false
@@ -53,8 +53,8 @@ export const DEFAULT_YOUTUBE_VIDEOS = [
     duration: "17:42",
     meta: "94 тыс. · 3 мес. назад",
     badge: "ZOOM ПРАНК",
-    thumb: "https://i.ytimg.com/vi/lHYHXugAZF4/hqdefault.jpg",
-    thumbHd: "https://i.ytimg.com/vi/lHYHXugAZF4/maxresdefault.jpg",
+    thumb: "assets/youtube/lHYHXugAZF4.jpg",
+    thumbHd: "assets/youtube/lHYHXugAZF4.jpg",
     url: "https://www.youtube.com/watch?v=lHYHXugAZF4",
     pubDate: "2026-08-15 14:30:00",
     isNew: false
@@ -65,8 +65,8 @@ export const DEFAULT_YOUTUBE_VIDEOS = [
     duration: "35:10",
     meta: "448 тыс. · 3 мес. назад",
     badge: "2 ЧАСТЬ ЛОРА",
-    thumb: "https://i.ytimg.com/vi/R-ILS0pketc/hqdefault.jpg",
-    thumbHd: "https://i.ytimg.com/vi/R-ILS0pketc/maxresdefault.jpg",
+    thumb: "assets/youtube/R-ILS0pketc.jpg",
+    thumbHd: "assets/youtube/R-ILS0pketc.jpg",
     url: "https://www.youtube.com/watch?v=R-ILS0pketc",
     pubDate: "2026-08-01 17:00:00",
     isNew: false
@@ -77,13 +77,15 @@ export const DEFAULT_YOUTUBE_VIDEOS = [
     duration: "1:01:09",
     meta: "571 тыс. · 4 мес. назад",
     badge: "ПОЛНЫЙ ЛОР",
-    thumb: "https://i.ytimg.com/vi/FGy7KWr7BrM/hqdefault.jpg",
-    thumbHd: "https://i.ytimg.com/vi/FGy7KWr7BrM/maxresdefault.jpg",
+    thumb: "assets/youtube/FGy7KWr7BrM.jpg",
+    thumbHd: "assets/youtube/FGy7KWr7BrM.jpg",
     url: "https://www.youtube.com/watch?v=FGy7KWr7BrM",
     pubDate: "2026-07-10 19:00:00",
     isNew: false
   }
 ];
+
+const LOCAL_YOUTUBE_THUMBS = new Set(DEFAULT_YOUTUBE_VIDEOS.map((v) => v.id));
 
 class YouTubeCinemaService {
   constructor() {
@@ -116,7 +118,13 @@ class YouTubeCinemaService {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.map((v) => {
+            if (v && LOCAL_YOUTUBE_THUMBS.has(v.id)) {
+              const localThumb = `assets/youtube/${v.id}.jpg`;
+              return { ...v, thumb: localThumb, thumbHd: localThumb };
+            }
+            return v;
+          });
         }
       }
     } catch (e) {
@@ -314,6 +322,63 @@ class YouTubeCinemaService {
     this.currentRenderedVideoId = null;
   }
 
+  _mountPlayerFrame(holder, video, { iframeId = "", skeletonId = "", label = "Загрузка видео" } = {}) {
+    if (!holder || !video) return;
+    const posterSrc = escapeHtml(video.thumbHd || video.thumb || "assets/bg_mafanya_vlad.webp");
+    const safeTitle = escapeHtml(video.title || "YouTube Video");
+    const extUrl = escapeHtml(video.url || MAFANYA_CHANNEL_URL);
+    const idAttr = iframeId ? `id="${iframeId}"` : "";
+    const skelIdAttr = skeletonId ? `id="${skeletonId}"` : "";
+
+    holder.innerHTML = `
+      <div class="youtube-poster-backdrop" style="background-image: url('${posterSrc}')" aria-hidden="true"></div>
+      <div class="youtube-iframe-skeleton" ${skelIdAttr}>
+        <div class="youtube-skeleton-shimmer"></div>
+        <div class="youtube-skeleton-spinner"></div>
+        <span class="youtube-skeleton-label">${label}</span>
+        <a href="${extUrl}" target="_blank" rel="noopener" class="youtube-fallback-open-btn" hidden>
+          <span>▶ Смотреть на YouTube ↗</span>
+        </a>
+      </div>
+      <iframe
+        ${idAttr}
+        src="${this.getEmbedUrl(video.id, 1)}"
+        frameborder="0"
+        allowfullscreen="true"
+        loading="eager"
+        fetchpriority="high"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        title="${safeTitle}">
+      </iframe>
+    `;
+
+    const iframe = holder.querySelector("iframe");
+    const skeleton = holder.querySelector(".youtube-iframe-skeleton");
+    const extBtn = holder.querySelector(".youtube-fallback-open-btn");
+    if (iframe && skeleton) {
+      let loaded = false;
+      const dismissSkeleton = () => {
+        if (!skeleton.isConnected) return;
+        skeleton.classList.add("is-hidden");
+        setTimeout(() => skeleton?.remove(), 350);
+      };
+      iframe.addEventListener("load", () => {
+        loaded = true;
+        dismissSkeleton();
+      }, { once: true });
+      setTimeout(() => {
+        if (loaded || !skeleton.isConnected) return;
+        const lbl = skeleton.querySelector(".youtube-skeleton-label");
+        const sp = skeleton.querySelector(".youtube-skeleton-spinner");
+        if (sp) sp.style.display = "none";
+        if (lbl) lbl.textContent = "Плеер YouTube не отвечает в сети";
+        if (extBtn) extBtn.hidden = false;
+        skeleton.classList.add("is-fallback-mode");
+      }, 4800);
+    }
+  }
+
   renderInlinePlaylist() {
     const container = document.getElementById("youtubeInlinePlaylist");
     if (!container) return;
@@ -321,16 +386,26 @@ class YouTubeCinemaService {
     const countEl = document.getElementById("youtubeVideosCount");
     if (countEl) countEl.textContent = `${this.videos.length} ВИДЕО`;
 
+    const sig = this.videos.map((v) => v.id).join(",");
+    if (this._inlineListSig === sig && container.querySelector(".yt-in-card")) {
+      container.querySelectorAll(".yt-in-card").forEach((card) => {
+        card.classList.toggle("is-active", card.dataset.videoId === this.activeVideoId);
+      });
+      return;
+    }
+    this._inlineListSig = sig;
+
     container.innerHTML = this.videos
       .map((v, idx) => {
         const isActive = v.id === this.activeVideoId;
         const safeTitle = escapeHtml(v.title || "");
         const safeMeta = escapeHtml(v.meta || "");
         const safeBadge = escapeHtml(v.badge || "");
+        const cardThumb = v.thumbHd || v.thumb || "assets/bg_mafanya_vlad.webp";
         return `
           <div class="yt-in-card ${isActive ? "is-active" : ""}" data-video-id="${escapeHtml(v.id)}" role="button" tabindex="0" style="--stagger-index: ${idx};">
             <div class="yt-in-card-thumb-wrap">
-              <img src="${v.thumbHd}" alt="${safeTitle}" class="yt-in-card-thumb" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${v.thumb}'" />
+              <img src="${cardThumb}" alt="${safeTitle}" class="yt-in-card-thumb" loading="eager" decoding="async" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${v.thumb}';}else{this.onerror=null;this.src='assets/bg_mafanya_vlad.webp';}" />
               ${v.duration ? `<span class="yt-in-card-duration">${escapeHtml(v.duration)}</span>` : ""}
               <div class="yt-in-play-overlay">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -406,38 +481,14 @@ class YouTubeCinemaService {
       };
     }
 
-    // Mount or update video player iframe with PS5 skeleton
+    // Mount or update video player iframe with poster fallback
     const holder = document.getElementById("youtubeInlineIframeHolder");
     if (holder && this.currentRenderedVideoId !== videoId) {
       this.currentRenderedVideoId = videoId;
-      holder.innerHTML = `
-        <div class="youtube-iframe-skeleton" id="youtubeInlineSkeleton">
-          <div class="youtube-skeleton-shimmer"></div>
-          <div class="youtube-skeleton-spinner"></div>
-          <span class="youtube-skeleton-label">Загрузка видео</span>
-        </div>
-        <iframe
-          src="${this.getEmbedUrl(videoId, 1)}"
-          frameborder="0"
-          allowfullscreen="true"
-          loading="eager"
-          fetchpriority="high"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin"
-          title="${video.title}">
-        </iframe>
-      `;
-
-      const iframe = holder.querySelector("iframe");
-      const skeleton = holder.querySelector(".youtube-iframe-skeleton");
-      if (iframe && skeleton) {
-        const dismissSkeleton = () => {
-          skeleton.classList.add("is-hidden");
-          setTimeout(() => skeleton?.remove(), 400);
-        };
-        iframe.addEventListener("load", dismissSkeleton, { once: true });
-        setTimeout(dismissSkeleton, 4500);
-      }
+      this._mountPlayerFrame(holder, video, {
+        skeletonId: "youtubeInlineSkeleton",
+        label: "Загрузка видео"
+      });
     }
 
     // Highlight active card
@@ -653,7 +704,7 @@ class YouTubeCinemaService {
         return `
           <${tag} ${linkAttr} class="series-cast-card" title="${c.name} — ${c.role}" style="--stagger-index: ${idx};">
             <div class="series-cast-thumb-wrap">
-              <img src="${c.photo}" alt="${c.name}" loading="lazy" decoding="async" />
+              <img src="${c.photo}" alt="${c.name}" loading="eager" decoding="async" />
             </div>
             <h5 class="series-cast-name">${c.name}</h5>
             <span class="series-cast-role">${c.role}</span>
@@ -670,7 +721,7 @@ class YouTubeCinemaService {
     row.innerHTML = VLAD_PHOTOS
       .map((p, idx) => `
         <div class="series-photo-card" role="button" tabindex="0" title="Кадр со съемок #${idx + 1}" style="--stagger-index: ${idx};">
-          <img src="${p}" alt="Кадр со съемок #${idx + 1}" loading="lazy" decoding="async" />
+          <img src="${p}" alt="Кадр со съемок #${idx + 1}" loading="eager" decoding="async" />
         </div>
       `)
       .join("");
@@ -776,35 +827,10 @@ class YouTubeCinemaService {
     if (!wrap) return;
 
     const video = this.getActiveVideo();
-    wrap.innerHTML = `
-      <div class="youtube-iframe-skeleton">
-        <div class="youtube-skeleton-shimmer"></div>
-        <div class="youtube-skeleton-spinner"></div>
-        <span class="youtube-skeleton-label">Загрузка плеера</span>
-      </div>
-      <iframe
-        id="youtubeModalIframe"
-        src="${this.getEmbedUrl(this.activeVideoId, 1)}"
-        frameborder="0"
-        allowfullscreen="true"
-        loading="eager"
-        fetchpriority="high"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        title="${video.title}">
-      </iframe>
-    `;
-
-    const iframe = wrap.querySelector("iframe");
-    const skeleton = wrap.querySelector(".youtube-iframe-skeleton");
-    if (iframe && skeleton) {
-      const dismissSkeleton = () => {
-        skeleton.classList.add("is-hidden");
-        setTimeout(() => skeleton?.remove(), 400);
-      };
-      iframe.addEventListener("load", dismissSkeleton, { once: true });
-      setTimeout(dismissSkeleton, 4500);
-    }
+    this._mountPlayerFrame(wrap, video, {
+      iframeId: "youtubeModalIframe",
+      label: "Загрузка плеера"
+    });
 
     const titleEl = document.getElementById("youtubeHubTitle");
     if (titleEl) titleEl.textContent = video.title;
@@ -822,10 +848,11 @@ class YouTubeCinemaService {
         const safeTitle = escapeHtml(v.title || "");
         const safeMeta = escapeHtml(v.meta || "");
         const safeBadge = escapeHtml(v.badge || "4K");
+        const cardThumb = v.thumbHd || v.thumb || "assets/bg_mafanya_vlad.webp";
         return `
           <div class="yt-hub-card ${isActive ? "is-active" : ""}" data-video-id="${escapeHtml(v.id)}" role="button" tabindex="0">
             <div class="yt-hub-card-thumb">
-              <img src="${v.thumbHd}" alt="${safeTitle}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${v.thumb}'" />
+              <img src="${cardThumb}" alt="${safeTitle}" loading="eager" decoding="async" onerror="if(!this.dataset.fb){this.dataset.fb='1';this.src='${v.thumb}';}else{this.onerror=null;this.src='assets/bg_mafanya_vlad.webp';}" />
               ${v.duration ? `<span class="yt-hub-card-duration">${escapeHtml(v.duration)}</span>` : ""}
             </div>
             <div class="yt-hub-card-details">
