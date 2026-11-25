@@ -199,6 +199,9 @@ async function fetchPsnData(accessToken) {
   return {
     profile: {
       onlineId,
+      psnOnlineId: onlineId,
+      psnLinked: true,
+      confirmedPsnPlatinums: counts.platinum,
       avatarUrl,
       aboutMe,
       trophyLevel,
@@ -360,117 +363,75 @@ async function main() {
 }
 
 /**
- * High-fidelity default profile template (used when NPSSO is not yet configured)
+ * Honest base dataset (awaiting PSN link; keeps browser games and confirmed 2 PS platinums)
  */
 function getBaseDataset() {
   return {
     profile: {
       onlineId: "Cr1mnsx",
-      avatarUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&h=200&fit=crop",
-      aboutMe: "PlayStation 5 Enthusiast · Welcome Hub Creator",
-      trophyLevel: 284,
-      levelProgress: 42,
-      levelTier: 3,
-      totalTrophies: 1842,
-      platinum: 24,
-      gold: 148,
-      silver: 462,
-      bronze: 1208,
+      psnOnlineId: "",
+      psnLinked: false,
+      confirmedPsnPlatinums: 2,
+      avatarUrl: "assets/brawl/avatars/player_avatar.webp",
+      aboutMe: "Brawl Stars (#2RGUQJQ0R) & PlayStation 5",
+      trophyLevel: 0,
+      levelProgress: 0,
+      levelTier: 1,
+      totalTrophies: 2,
+      platinum: 2,
+      gold: 0,
+      silver: 0,
+      bronze: 0,
       lastSyncAt: new Date().toISOString()
     },
-    recentTrophies: [
-      {
-        trophyId: 1,
-        trophyType: "platinum",
-        trophyName: "Born in the '80s",
-        trophyDetail: "Получите все призы в Grand Theft Auto: Vice City – The Definitive Edition.",
-        trophyIconUrl: "assets/covers/gta_vc.jpg",
-        earned: true,
-        earnedDateTime: new Date(Date.now() - 3600000 * 4).toISOString(),
-        gameTitle: "Grand Theft Auto: Vice City",
-        npCommunicationId: "NPWR10001_00"
-      },
-      {
-        trophyId: 12,
-        trophyType: "gold",
-        trophyName: "Take the Cannoli",
-        trophyDetail: "Достигните криминального рейтинга «Крёстный отец».",
-        trophyIconUrl: "assets/covers/gta_vc.jpg",
-        earned: true,
-        earnedDateTime: new Date(Date.now() - 3600000 * 24).toISOString(),
-        gameTitle: "Grand Theft Auto: Vice City",
-        npCommunicationId: "NPWR10001_00"
-      },
-      {
-        trophyId: 15,
-        trophyType: "silver",
-        trophyName: "Los Santos Legend",
-        trophyDetail: "Завершите сюжетную кампанию GTA V на 100%.",
-        trophyIconUrl: "assets/covers/gta_v.jpg",
-        earned: true,
-        earnedDateTime: new Date(Date.now() - 3600000 * 72).toISOString(),
-        gameTitle: "Grand Theft Auto V",
-        npCommunicationId: "NPWR10002_00"
-      },
-      {
-        trophyId: 18,
-        trophyType: "gold",
-        trophyName: "Thy Flesh Consumed",
-        trophyDetail: "Пройдите все уровни DOOM на максимальной сложности Nightmare.",
-        trophyIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
-        earned: true,
-        earnedDateTime: new Date(Date.now() - 3600000 * 120).toISOString(),
-        gameTitle: "DOOM",
-        npCommunicationId: "NPWR10003_00"
-      }
-    ],
+    recentTrophies: [],
     games: [
       {
         npCommunicationId: "NPWR10001_00",
-        titleName: "Grand Theft Auto: Vice City – The Definitive Edition",
+        titleName: "Grand Theft Auto: Vice City",
         titleIconUrl: "assets/covers/gta_vc.jpg",
-        platform: "PS5",
-        progress: 100,
-        platinumEarned: true,
-        totalTrophiesCount: 34,
-        earnedTrophies: { bronze: 19, silver: 9, gold: 5, platinum: 1 },
-        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 4).toISOString(),
+        platform: "Браузер · PS5 Hub",
+        progress: 0,
+        platinumEarned: false,
+        totalTrophiesCount: 4,
+        earnedTrophies: { bronze: 0, silver: 0, gold: 0, platinum: 0 },
+        lastUpdatedDateTime: null,
         trophies: [
           {
             trophyId: 1,
-            trophyType: "platinum",
-            trophyName: "Born in the '80s",
-            trophyDetail: "Получите все призы в Grand Theft Auto: Vice City.",
+            trophyType: "gold",
+            trophyName: "Take the Cannoli",
+            trophyDetail: "Запуск и прохождение браузерной версии Grand Theft Auto: Vice City.",
             trophyIconUrl: "assets/covers/gta_vc.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 4).toISOString()
+            earned: false,
+            earnedDateTime: null
           },
           {
             trophyId: 2,
-            trophyType: "gold",
-            trophyName: "Take the Cannoli",
-            trophyDetail: "Достигните криминального рейтинга «Крёстный отец».",
+            trophyType: "silver",
+            trophyName: "Mischief Managed",
+            trophyDetail: "Выполнить сюжетную миссию «Keep Your Friends Close...».",
             trophyIconUrl: "assets/covers/gta_vc.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 24).toISOString()
+            earned: false,
+            earnedDateTime: null
           },
           {
             trophyId: 3,
-            trophyType: "silver",
-            trophyName: "Mischief Managed",
-            trophyDetail: "Выполните миссию «Keep Your Friends Close...».",
+            trophyType: "bronze",
+            trophyName: "Safe Counsel",
+            trophyDetail: "Открыть особняк на Starfish Island в браузерной сессии.",
             trophyIconUrl: "assets/covers/gta_vc.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 48).toISOString()
+            earned: false,
+            earnedDateTime: null
           },
           {
             trophyId: 4,
             trophyType: "bronze",
-            trophyName: "Safe Counsel",
-            trophyDetail: "Завершите миссию «The Party».",
+            trophyName: "Welcome to Vice City",
+            trophyDetail: "Завершить миссию «The Party».",
             trophyIconUrl: "assets/covers/gta_vc.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 96).toISOString()
+            earned: false,
+            earnedDateTime: null
           }
         ]
       },
@@ -478,87 +439,72 @@ function getBaseDataset() {
         npCommunicationId: "NPWR10002_00",
         titleName: "Grand Theft Auto V",
         titleIconUrl: "assets/covers/gta_v.jpg",
-        platform: "PS5",
-        progress: 88,
+        platform: "Браузер · PS5 Hub",
+        progress: 0,
         platinumEarned: false,
-        totalTrophiesCount: 50,
-        earnedTrophies: { bronze: 32, silver: 10, gold: 3, platinum: 0 },
-        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 72).toISOString(),
+        totalTrophiesCount: 3,
+        earnedTrophies: { bronze: 0, silver: 0, gold: 0, platinum: 0 },
+        lastUpdatedDateTime: null,
         trophies: [
           {
             trophyId: 1,
-            trophyType: "platinum",
-            trophyName: "Los Santos Legend",
-            trophyDetail: "Поздравляем! Вы главная звезда Вайнвуда!",
+            trophyType: "gold",
+            trophyName: "Career Criminal",
+            trophyDetail: "Достигнуть максимального прогресса в открытом мире Лос-Сантоса.",
             trophyIconUrl: "assets/covers/gta_v.jpg",
             earned: false,
             earnedDateTime: null
           },
           {
             trophyId: 2,
-            trophyType: "gold",
-            trophyName: "Career Criminal",
-            trophyDetail: "Завершите игру на 100%.",
+            trophyType: "silver",
+            trophyName: "San Andreas Sightseer",
+            trophyDetail: "Исследовать весь Лос-Сантос и округ Блейн.",
             trophyIconUrl: "assets/covers/gta_v.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 72).toISOString()
+            earned: false,
+            earnedDateTime: null
           },
           {
             trophyId: 3,
-            trophyType: "silver",
-            trophyName: "San Andreas Sightseer",
-            trophyDetail: "Исследуйте весь Лос-Сантос и округ Блейн.",
+            trophyType: "bronze",
+            trophyName: "Welcome to Los Santos",
+            trophyDetail: "Пройти пролог в браузерной сессии GTA V.",
             trophyIconUrl: "assets/covers/gta_v.jpg",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 140).toISOString()
+            earned: false,
+            earnedDateTime: null
           }
         ]
       },
       {
         npCommunicationId: "NPWR10003_00",
-        titleName: "DOOM",
-        titleIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
-        platform: "PS4",
-        progress: 100,
-        platinumEarned: true,
-        totalTrophiesCount: 34,
-        earnedTrophies: { bronze: 18, silver: 11, gold: 4, platinum: 1 },
-        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 120).toISOString(),
+        titleName: "DOOM (1993)",
+        titleIconUrl: "assets/covers/doom.jpg",
+        platform: "Браузер · DOSBox",
+        progress: 0,
+        platinumEarned: false,
+        totalTrophiesCount: 2,
+        earnedTrophies: { bronze: 0, silver: 0, gold: 0, platinum: 0 },
+        lastUpdatedDateTime: null,
         trophies: [
           {
             trophyId: 1,
-            trophyType: "platinum",
+            trophyType: "gold",
             trophyName: "Thy Flesh Consumed",
-            trophyDetail: "Получите все призы в DOOM.",
-            trophyIconUrl: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=200&h=200&fit=crop",
-            earned: true,
-            earnedDateTime: new Date(Date.now() - 3600000 * 120).toISOString()
+            trophyDetail: "Пройти классические эпизоды DOOM в встроенном DOSBox.",
+            trophyIconUrl: "assets/covers/doom.jpg",
+            earned: false,
+            earnedDateTime: null
+          },
+          {
+            trophyId: 2,
+            trophyType: "bronze",
+            trophyName: "Knee-Deep in the Dead",
+            trophyDetail: "Завершить первый эпизод на станции Phobos.",
+            trophyIconUrl: "assets/covers/doom.jpg",
+            earned: false,
+            earnedDateTime: null
           }
         ]
-      },
-      {
-        npCommunicationId: "NPWR10004_00",
-        titleName: "Celeste",
-        titleIconUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200&h=200&fit=crop",
-        platform: "PS4",
-        progress: 92,
-        platinumEarned: false,
-        totalTrophiesCount: 31,
-        earnedTrophies: { bronze: 16, silver: 9, gold: 3, platinum: 0 },
-        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 200).toISOString(),
-        trophies: []
-      },
-      {
-        npCommunicationId: "NPWR10005_00",
-        titleName: "Hollow Knight: Voidheart Edition",
-        titleIconUrl: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200&h=200&fit=crop",
-        platform: "PS4",
-        progress: 74,
-        platinumEarned: false,
-        totalTrophiesCount: 35,
-        earnedTrophies: { bronze: 18, silver: 6, gold: 2, platinum: 0 },
-        lastUpdatedDateTime: new Date(Date.now() - 3600000 * 300).toISOString(),
-        trophies: []
       }
     ]
   };

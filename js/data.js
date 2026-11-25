@@ -135,10 +135,12 @@ export const welcomeHubFriends = [];
 
 export const defaultProfileTelemetry = {
   accountName: "Cr1mnsx",
-  level: 284,
-  progressPct: 42,
-  trophies: { platinum: 24, gold: 148, silver: 462, bronze: 1208 },
-  totalTrophies: 1842
+  psnLinked: false,
+  confirmedPsnPlatinums: 2,
+  level: 0,
+  progressPct: 0,
+  trophies: { platinum: 2, gold: 0, silver: 0, bronze: 0 },
+  totalTrophies: 2
 };
 
 export const ribbonCatalog = {

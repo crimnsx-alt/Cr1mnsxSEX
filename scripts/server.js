@@ -44,43 +44,95 @@ const server = http.createServer((req, res) => {
 
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
 
-  // Dedicated Brawl Stars profile endpoint (serves optional official Supercell API if configured, otherwise local verified snapshot)
+  // Dedicated Brawl Stars profile endpoint (official Supercell API + battlelog merge or configured proxy, with local verified fallback)
   if (reqPath === '/api/brawl/player') {
-    const token = process.env.BRAWL_API_TOKEN;
+    const reqUrl = new URL(req.url, `http://127.0.0.1:${PORT}`);
+    const tag = (reqUrl.searchParams.get('tag') || '2RGUQJQ0R').replace(/^#/, '').toUpperCase();
+    const token = process.env.BRAWL_API_TOKEN?.trim();
+    const proxyUrl = process.env.BRAWL_PROXY_URL?.trim();
     const fallbackPath = path.join(ROOT_DIR, 'assets', 'brawl', 'initial_player_data.json');
+
+    const serveFallback = () => {
+      if (fs.existsSync(fallbackPath)) {
+        const content = fs.readFileSync(fallbackPath, 'utf8');
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(content);
+      } else {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Profile snapshot not found' }));
+      }
+    };
+
+    if (proxyUrl) {
+      fetch(`${proxyUrl.replace(/\/+$/, '')}/api/brawl/player?tag=${tag}&t=${Date.now()}`)
+        .then(async (pRes) => {
+          if (!pRes.ok) throw new Error(`Proxy responded with ${pRes.status}`);
+          const data = await pRes.json();
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify(data));
+        })
+        .catch(serveFallback);
+      return;
+    }
+
     if (token) {
-      fetch('https://api.brawlstars.com/v1/players/%232RGUQJQ0R', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      })
-        .then(async (apiRes) => {
-          if (!apiRes.ok) throw new Error(`Official API responded with ${apiRes.status}`);
-          const data = await apiRes.json();
+      const encodedTag = encodeURIComponent(`#${tag}`);
+      const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
+      Promise.all([
+        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}`, { headers }),
+        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}/battlelog`, { headers }).catch(() => null)
+      ])
+        .then(async ([pRes, bRes]) => {
+          if (!pRes.ok) throw new Error(`Official API responded with ${pRes.status}`);
+          const player = await pRes.json();
+          const battlelog = bRes && bRes.ok ? await bRes.json() : null;
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify({ player, battlelog, _liveSource: 'supercell-official' }));
+        })
+        .catch(serveFallback);
+      return;
+    }
+
+    serveFallback();
+    return;
+  }
+
+  // Dedicated PSN profile endpoint (serves live proxy or synced PSN dataset when psnLinked is active)
+  if (reqPath === '/api/psn/profile') {
+    const reqUrl = new URL(req.url, `http://127.0.0.1:${PORT}`);
+    const onlineId = reqUrl.searchParams.get('onlineId') || '';
+    const psnProxyUrl = process.env.PSN_PROXY_URL?.trim();
+    const psnJsonPath = path.join(ROOT_DIR, 'data', 'psn-trophies.json');
+
+    if (psnProxyUrl) {
+      const qs = onlineId ? `?onlineId=${encodeURIComponent(onlineId)}` : '';
+      fetch(`${psnProxyUrl.replace(/\/+$/, '')}/psn/profile${qs}`)
+        .then(async (pRes) => {
+          if (!pRes.ok) throw new Error(`PSN proxy responded with ${pRes.status}`);
+          const data = await pRes.json();
           res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
           res.end(JSON.stringify(data));
         })
         .catch(() => {
-          if (fs.existsSync(fallbackPath)) {
-            const content = fs.readFileSync(fallbackPath, 'utf8');
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(content);
-          } else {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ error: 'Profile snapshot not found' }));
-          }
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify({ unlinked: true }));
         });
       return;
     }
-    if (fs.existsSync(fallbackPath)) {
-      const content = fs.readFileSync(fallbackPath, 'utf8');
-      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-      res.end(content);
-    } else {
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Profile snapshot not found' }));
+
+    if (fs.existsSync(psnJsonPath)) {
+      try {
+        const parsed = JSON.parse(fs.readFileSync(psnJsonPath, 'utf8'));
+        if (parsed?.profile?.psnLinked) {
+          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+          res.end(JSON.stringify(parsed));
+          return;
+        }
+      } catch (_) {}
     }
+
+    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+    res.end(JSON.stringify({ unlinked: true, onlineId }));
     return;
   }
 

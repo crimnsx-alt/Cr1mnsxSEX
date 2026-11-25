@@ -1,17 +1,18 @@
-name: PSN Trophy Sync
+name: Live Brawl Stars & PSN Profile Sync
 
 on:
   schedule:
-    # Synchronize trophies automatically every 45 minutes
-    - cron: '*/45 * * * *'
-  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+    # Automatically refresh profile telemetry every 10 minutes
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  sync-trophies:
+  sync-profile:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -19,19 +20,30 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
-      - name: Run PSN Trophy Synchronizer
+      - name: Sync Brawl Stars Live Profile (#2RGUQJQ0R)
+        env:
+          BRAWL_API_TOKEN: ${{ secrets.BRAWL_API_TOKEN }}
+          BRAWL_PROXY_URL: ${{ secrets.BRAWL_PROXY_URL }}
+          BRAWL_TAG: '2RGUQJQ0R'
+        run: node scripts/sync-brawl-profile.mjs
+
+      - name: Sync PlayStation Network Trophies
         env:
           PSN_NPSSO: ${{ secrets.PSN_NPSSO }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-        run: |
-          node scripts/sync-psn-trophies.mjs
+        run: node scripts/sync-psn-trophies.mjs
 
-      - name: Commit and push updated trophy data
+      - name: Commit updated live profile telemetry
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/psn-trophies.json
-          git diff --staged --quiet || (git commit -m "chore(psn): Auto-sync latest trophies from PlayStation Network" && git push)
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add assets/brawl/initial_player_data.json data/psn-trophies.json
+          if git diff --staged --quiet; then
+            echo "No live profile changes detected."
+          else
+            git commit -m "chore(live-sync): update Brawl Stars & PSN profile data [skip ci]"
+            git push
+          fi

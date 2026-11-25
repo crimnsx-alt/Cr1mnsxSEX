@@ -24,7 +24,7 @@
   <link rel="dns-prefetch" href="https://decapi.me" />
   <link rel="dns-prefetch" href="https://api.rss2json.com" />
   <link rel="dns-prefetch" href="https://cdn.brawlify.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261125_brawl_profile" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_live_sync" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -237,27 +237,27 @@
               <header class="ps5-widget-header">
                 <div class="ps5-widget-title-group">
                   <span id="iconTrophyHeader" class="ps5-widget-icon"></span>
-                  <span id="lblTrophies">Призы</span>
+                  <span id="lblTrophies">Награды и призы</span>
                 </div>
-                <span class="ps5-trophies-total" id="ps5TrophiesTotal">Всего: 1,842</span>
+                <span class="ps5-trophies-total" id="ps5TrophiesTotal">Всего: 2+</span>
               </header>
 
               <div class="ps5-trophies-cups-row">
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupPlat"></div>
-                  <span class="ps5-trophy-num" id="ps5CountPlat">24</span>
+                  <span class="ps5-trophy-num" id="ps5CountPlat">2</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupGold"></div>
-                  <span class="ps5-trophy-num" id="ps5CountGold">148</span>
+                  <span class="ps5-trophy-num" id="ps5CountGold">0</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupSilver"></div>
-                  <span class="ps5-trophy-num" id="ps5CountSilver">462</span>
+                  <span class="ps5-trophy-num" id="ps5CountSilver">0</span>
                 </div>
                 <div class="ps5-trophy-col">
                   <div class="ps5-trophy-cup" id="cupBronze"></div>
-                  <span class="ps5-trophy-num" id="ps5CountBronze">1,208</span>
+                  <span class="ps5-trophy-num" id="ps5CountBronze">0</span>
                 </div>
               </div>
 
@@ -265,12 +265,12 @@
                 <div class="ps5-trophy-level-row">
                   <div class="ps5-level-left">
                     <span class="ps5-level-crest" id="iconLevelCrest"></span>
-                    <span class="ps5-level-text" id="ps5TrophyLevel">Уровень 284</span>
+                    <span class="ps5-level-text" id="ps5TrophyLevel">Brawl + PSN</span>
                   </div>
-                  <span class="ps5-level-pct" id="ps5TrophyPct">42%</span>
+                  <span class="ps5-level-pct" id="ps5TrophyPct">0%</span>
                 </div>
                 <div class="ps5-level-bar-track">
-                  <div class="ps5-level-bar-fill" id="ps5TrophyBarFill" style="width: 42%;"></div>
+                  <div class="ps5-level-bar-fill" id="ps5TrophyBarFill" style="width: 0%;"></div>
                 </div>
               </footer>
             </article>
@@ -861,15 +861,15 @@
           </div>
 
           <div class="brawl-cb-right">
-            <button type="button" class="brawl-cb-btn brawl-cb-btn--friend" id="btnBrawlAddFriend" title="Добавить Cr1mnsx в друзья в Brawl Stars или на PS5">
+            <button type="button" class="brawl-cb-btn brawl-cb-btn--friend" id="btnBrawlAddFriend">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
               <span>Добавить в друзья</span>
             </button>
-            <button type="button" class="brawl-cb-btn" id="btnBrawlSync" title="Обновить данные профиля Supercell">
+            <button type="button" class="brawl-cb-btn" id="btnBrawlSync">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
               <span>Обновить</span>
             </button>
-            <button type="button" class="brawl-cb-btn" id="btnBrawlTrophiesView" title="Открыть призы и достижения PS5">
+            <button type="button" class="brawl-cb-btn" id="btnBrawlTrophiesView">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFCC00"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H8v2h8v-2h-3v-3.1c1.8-.3 3.32-1.5 3.61-3.06C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
               <span>Призы PS5</span>
             </button>
@@ -883,13 +883,13 @@
               <div class="brawl-profile-avatar-wrap">
                 <img src="assets/brawl/avatars/player_avatar.webp" alt="Cr1mnsx" class="brawl-profile-avatar" />
                 <img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" class="brawl-profile-game-badge" />
-                <span class="brawl-profile-online-dot" title="В сети"></span>
+                <span class="brawl-profile-online-dot"></span>
               </div>
               <div class="brawl-profile-info">
                 <div class="brawl-profile-name-row">
                   <h2 class="brawl-profile-name">Cr1mnsx</h2>
                   <span class="brawl-profile-pill">SUPERCELL ID · МОЙ ПРОФИЛЬ</span>
-                  <span class="brawl-profile-status-pill"><span class="brawl-status-dot"></span> В сети · Готов к игре</span>
+                  <span class="brawl-profile-status-pill" id="brawlLiveStatusPill"><span class="brawl-status-dot"></span> Прямой эфир · Live</span>
                 </div>
                 <p class="brawl-profile-bio">
                   Добавляйся ко мне в друзья по тегу <strong>#2RGUQJQ0R</strong> для совместных каток в 3v3, Рангового боя и Дуо · Клуб <strong>0.3.7|teams</strong> (#80RYCLU9Q)
@@ -909,7 +909,7 @@
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                 <span>Заявка на PS5</span>
               </button>
-              <button type="button" class="brawl-prof-btn" id="btnBrawlProfileQr" title="Открыть QR-код для добавления в друзья">
+              <button type="button" class="brawl-prof-btn" id="btnBrawlProfileQr">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zm4 4h3v3h-3zm-4 3h2m4-7v2"/></svg>
                 <span>QR-код</span>
               </button>
@@ -1568,7 +1568,11 @@
           <h2 class="tc-brand-title" id="tcDialogTitle">Коллекция призов</h2>
         </div>
         <div class="tc-top-actions">
-          <button type="button" class="tc-btn-action" id="btnSyncTrophiesTop" title="Синхронизировать с PSN">
+          <button type="button" class="tc-btn-action" id="btnTcLiveSetup">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.77 1.02 1.51 1H21a2 2 0 1 1 0 4h-.09c-.74-.02-1.25.4-1.51 1z"/></svg>
+            <span id="lblTcLiveSetup">Настроить PSN / Live</span>
+          </button>
+          <button type="button" class="tc-btn-action" id="btnSyncTrophiesTop">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
             <span id="lblSyncTrophiesTop">Синхронизировать</span>
           </button>
@@ -1600,17 +1604,17 @@
                 <svg viewBox="0 0 24 24" width="22" height="22" fill="#f59e0b"><path d="M12 2l2.4 7.2h7.6l-6.1 4.5 2.3 7.3-6.2-4.6-6.2 4.6 2.3-7.3-6.1-4.5h7.6z"/></svg>
               </div>
               <div class="tc-level-number-box">
-                <span class="tc-level-label">LEVEL</span>
-                <span class="tc-level-val" id="tcTrophyLevel">284</span>
+                <span class="tc-level-label" id="tcLevelLabel">УРОВЕНЬ</span>
+                <span class="tc-level-val" id="tcTrophyLevel">—</span>
               </div>
             </div>
             <div class="tc-level-progress-col">
               <div class="tc-level-progress-track">
-                <div class="tc-level-progress-bar" id="tcLevelProgressBar" style="width: 42%;"></div>
+                <div class="tc-level-progress-bar" id="tcLevelProgressBar" style="width: 0%;"></div>
               </div>
               <div class="tc-level-progress-labels">
-                <span class="tc-progress-hint">До следующего уровня</span>
-                <span class="tc-progress-pct" id="tcLevelProgressPct">42%</span>
+                <span class="tc-progress-hint" id="tcProgressHint">Выполнено наград</span>
+                <span class="tc-progress-pct" id="tcLevelProgressPct">0%</span>
               </div>
             </div>
           </div>
@@ -1619,27 +1623,27 @@
           <div class="tc-cups-grid">
             <div class="tc-cup-stat tc-cup-stat--total">
               <span class="tc-cup-stat-label">Всего</span>
-              <span class="tc-cup-stat-val" id="tcTotalCount">1 842</span>
+              <span class="tc-cup-stat-val" id="tcTotalCount">0</span>
             </div>
             <div class="tc-cup-stat tc-cup-stat--plat">
               <div class="tc-cup-svg" id="tcCupPlatSvg"></div>
-              <span class="tc-cup-stat-val" id="tcPlatCount">24</span>
-              <span class="tc-cup-tier-name">Platinum</span>
+              <span class="tc-cup-stat-val" id="tcPlatCount">2</span>
+              <span class="tc-cup-tier-name">Платина (PSN)</span>
             </div>
             <div class="tc-cup-stat tc-cup-stat--gold">
               <div class="tc-cup-svg" id="tcCupGoldSvg"></div>
-              <span class="tc-cup-stat-val" id="tcGoldCount">148</span>
-              <span class="tc-cup-tier-name">Gold</span>
+              <span class="tc-cup-stat-val" id="tcGoldCount">0</span>
+              <span class="tc-cup-tier-name">Золотые</span>
             </div>
             <div class="tc-cup-stat tc-cup-stat--silver">
               <div class="tc-cup-svg" id="tcCupSilverSvg"></div>
-              <span class="tc-cup-stat-val" id="tcSilverCount">462</span>
-              <span class="tc-cup-tier-name">Silver</span>
+              <span class="tc-cup-stat-val" id="tcSilverCount">0</span>
+              <span class="tc-cup-tier-name">Серебряные</span>
             </div>
             <div class="tc-cup-stat tc-cup-stat--bronze">
               <div class="tc-cup-svg" id="tcCupBronzeSvg"></div>
-              <span class="tc-cup-stat-val" id="tcBronzeCount">1 208</span>
-              <span class="tc-cup-tier-name">Bronze</span>
+              <span class="tc-cup-stat-val" id="tcBronzeCount">0</span>
+              <span class="tc-cup-tier-name">Бронзовые</span>
             </div>
           </div>
         </div>
@@ -1647,8 +1651,8 @@
         <!-- Section 1: Recent Trophies -->
         <div class="tc-section" id="tcRecentSection">
           <div class="tc-section-header">
-            <h3 class="tc-section-title">Последние полученные призы</h3>
-            <span class="tc-section-hint">Недавние достижения на PlayStation</span>
+            <h3 class="tc-section-title">Последние награды и навыки профиля</h3>
+            <span class="tc-section-hint">Brawl Stars · PlayStation · Браузерные игры</span>
           </div>
           <div class="tc-recent-scroll" id="tcRecentTrophiesList">
             <!-- Dynamically populated -->
@@ -1659,8 +1663,8 @@
         <div class="tc-section">
           <div class="tc-section-header">
             <div class="tc-section-title-wrap">
-              <h3 class="tc-section-title">Мои игры</h3>
-              <span class="tc-games-counter-badge" id="tcGamesCount">5 игр</span>
+              <h3 class="tc-section-title">Мои игры и достижения</h3>
+              <span class="tc-games-counter-badge" id="tcGamesCount">0 игр</span>
             </div>
 
             <!-- Filters & Search -->
@@ -2011,6 +2015,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261125_brawl_profile"></script>
+  <script type="module" src="js/app.js?v=20261125_live_sync"></script>
 </body>
 </html>

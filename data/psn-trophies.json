@@ -1,116 +1,75 @@
 {
   "profile": {
     "onlineId": "Cr1mnsx",
-    "avatarUrl": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2338bdf8%22%2F%3E%3Cstop%20offset%3D%2255%25%22%20stop-color%3D%22%230284c7%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%230f172a%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23a)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2245%22%20r%3D%2218%22%20fill%3D%22%23f8fafc%22%20opacity%3D%220.94%22%2F%3E%3Cpath%20d%3D%22M26%20104c0-18.8%2015.2-34%2034-34s34%2015.2%2034%2034%22%20fill%3D%22%23f8fafc%22%20opacity%3D%220.94%22%2F%3E%3C%2Fsvg%3E",
-    "aboutMe": "PlayStation 5 Enthusiast · Welcome Hub Creator",
-    "trophyLevel": 284,
-    "levelProgress": 42,
-    "levelTier": 3,
-    "totalTrophies": 1842,
-    "platinum": 24,
-    "gold": 148,
-    "silver": 462,
-    "bronze": 1208,
-    "lastSyncAt": "2026-11-20T15:18:44.352Z"
+    "psnOnlineId": "",
+    "psnLinked": false,
+    "confirmedPsnPlatinums": 2,
+    "avatarUrl": "assets/brawl/avatars/player_avatar.webp",
+    "aboutMe": "PlayStation 2 платины · Brawl Stars #2RGUQJQ0R · Браузерные игры",
+    "trophyLevel": null,
+    "levelProgress": 0,
+    "levelTier": 1,
+    "totalTrophies": 2,
+    "platinum": 2,
+    "gold": 0,
+    "silver": 0,
+    "bronze": 0,
+    "lastSyncAt": "2026-11-25T08:15:00.000Z"
   },
-  "recentTrophies": [
-    {
-      "trophyId": 1,
-      "trophyType": "platinum",
-      "trophyName": "Born in the '80s",
-      "trophyDetail": "Получите все призы в Grand Theft Auto: Vice City – The Definitive Edition.",
-      "trophyIconUrl": "assets/covers/gta_vc.jpg",
-      "earned": true,
-      "earnedDateTime": "2026-11-20T11:18:44.358Z",
-      "gameTitle": "Grand Theft Auto: Vice City",
-      "npCommunicationId": "NPWR10001_00"
-    },
-    {
-      "trophyId": 12,
-      "trophyType": "gold",
-      "trophyName": "Take the Cannoli",
-      "trophyDetail": "Достигните криминального рейтинга «Крёстный отец».",
-      "trophyIconUrl": "assets/covers/gta_vc.jpg",
-      "earned": true,
-      "earnedDateTime": "2026-11-19T15:18:44.358Z",
-      "gameTitle": "Grand Theft Auto: Vice City",
-      "npCommunicationId": "NPWR10001_00"
-    },
-    {
-      "trophyId": 15,
-      "trophyType": "silver",
-      "trophyName": "Los Santos Legend",
-      "trophyDetail": "Завершите сюжетную кампанию GTA V на 100%.",
-      "trophyIconUrl": "assets/covers/gta_v.jpg",
-      "earned": true,
-      "earnedDateTime": "2026-11-17T15:18:44.358Z",
-      "gameTitle": "Grand Theft Auto V",
-      "npCommunicationId": "NPWR10002_00"
-    },
-    {
-      "trophyId": 18,
-      "trophyType": "gold",
-      "trophyName": "Thy Flesh Consumed",
-      "trophyDetail": "Пройдите все уровни DOOM на максимальной сложности Nightmare.",
-      "trophyIconUrl": "assets/covers/doom.jpg",
-      "earned": true,
-      "earnedDateTime": "2026-11-15T15:18:44.358Z",
-      "gameTitle": "DOOM",
-      "npCommunicationId": "NPWR10003_00"
-    }
-  ],
+  "recentTrophies": [],
   "games": [
     {
       "npCommunicationId": "NPWR10001_00",
-      "titleName": "Grand Theft Auto: Vice City – The Definitive Edition",
+      "titleName": "Grand Theft Auto: Vice City",
       "titleIconUrl": "assets/covers/gta_vc.jpg",
-      "platform": "PS5",
-      "progress": 100,
-      "platinumEarned": true,
-      "totalTrophiesCount": 34,
+      "platform": "Браузер · PS5 Hub",
+      "isBrowserGame": true,
+      "progress": 0,
+      "platinumEarned": false,
+      "totalTrophiesCount": 4,
       "earnedTrophies": {
-        "bronze": 19,
-        "silver": 9,
-        "gold": 5,
-        "platinum": 1
+        "bronze": 0,
+        "silver": 0,
+        "gold": 0,
+        "platinum": 0
       },
-      "lastUpdatedDateTime": "2026-11-20T11:18:44.358Z",
+      "lastUpdatedDateTime": null,
       "trophies": [
         {
           "trophyId": 1,
-          "trophyType": "platinum",
-          "trophyName": "Born in the '80s",
-          "trophyDetail": "Получите все призы в Grand Theft Auto: Vice City.",
+          "trophyType": "gold",
+          "trophyName": "Take the Cannoli",
+          "trophyDetail": "Запуск и прохождение браузерной версии Grand Theft Auto: Vice City.",
           "trophyIconUrl": "assets/covers/gta_vc.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-20T11:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         },
         {
           "trophyId": 2,
-          "trophyType": "gold",
-          "trophyName": "Take the Cannoli",
-          "trophyDetail": "Достигните криминального рейтинга «Крёстный отец».",
+          "trophyType": "silver",
+          "trophyName": "Mischief Managed",
+          "trophyDetail": "Выполнить сюжетную миссию «Keep Your Friends Close...».",
           "trophyIconUrl": "assets/covers/gta_vc.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-19T15:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         },
         {
           "trophyId": 3,
-          "trophyType": "silver",
-          "trophyName": "Mischief Managed",
-          "trophyDetail": "Выполните миссию «Keep Your Friends Close...».",
+          "trophyType": "bronze",
+          "trophyName": "Safe Counsel",
+          "trophyDetail": "Открыть особняк на Starfish Island в браузерной сессии.",
           "trophyIconUrl": "assets/covers/gta_vc.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-18T15:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         },
         {
           "trophyId": 4,
           "trophyType": "bronze",
-          "trophyName": "Safe Counsel",
-          "trophyDetail": "Завершите миссию «The Party».",
+          "trophyName": "Welcome to Vice City",
+          "trophyDetail": "Завершить стартовую миссию «The Party».",
           "trophyIconUrl": "assets/covers/gta_vc.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-16T15:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         }
       ]
     },
@@ -118,107 +77,84 @@
       "npCommunicationId": "NPWR10002_00",
       "titleName": "Grand Theft Auto V",
       "titleIconUrl": "assets/covers/gta_v.jpg",
-      "platform": "PS5",
-      "progress": 88,
+      "platform": "Браузер · PS5 Hub",
+      "isBrowserGame": true,
+      "progress": 0,
       "platinumEarned": false,
-      "totalTrophiesCount": 50,
+      "totalTrophiesCount": 3,
       "earnedTrophies": {
-        "bronze": 32,
-        "silver": 10,
-        "gold": 3,
+        "bronze": 0,
+        "silver": 0,
+        "gold": 0,
         "platinum": 0
       },
-      "lastUpdatedDateTime": "2026-11-17T15:18:44.358Z",
+      "lastUpdatedDateTime": null,
       "trophies": [
         {
           "trophyId": 1,
-          "trophyType": "platinum",
-          "trophyName": "Los Santos Legend",
-          "trophyDetail": "Поздравляем! Вы главная звезда Вайнвуда!",
+          "trophyType": "gold",
+          "trophyName": "Career Criminal",
+          "trophyDetail": "Достигнуть максимального прогресса в открытом мире Лос-Сантоса.",
           "trophyIconUrl": "assets/covers/gta_v.jpg",
           "earned": false,
           "earnedDateTime": null
         },
         {
           "trophyId": 2,
-          "trophyType": "gold",
-          "trophyName": "Career Criminal",
-          "trophyDetail": "Завершите игру на 100%.",
+          "trophyType": "silver",
+          "trophyName": "San Andreas Sightseer",
+          "trophyDetail": "Исследовать весь Лос-Сантос и округ Блейн.",
           "trophyIconUrl": "assets/covers/gta_v.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-17T15:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         },
         {
           "trophyId": 3,
-          "trophyType": "silver",
-          "trophyName": "San Andreas Sightseer",
-          "trophyDetail": "Исследуйте весь Лос-Сантос и округ Блейн.",
+          "trophyType": "bronze",
+          "trophyName": "Welcome to Los Santos",
+          "trophyDetail": "Пройти пролог в браузерной сессии GTA V.",
           "trophyIconUrl": "assets/covers/gta_v.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-14T19:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
         }
       ]
     },
     {
       "npCommunicationId": "NPWR10003_00",
-      "titleName": "DOOM",
+      "titleName": "DOOM (1993)",
       "titleIconUrl": "assets/covers/doom.jpg",
-      "platform": "PS4",
-      "progress": 100,
-      "platinumEarned": true,
-      "totalTrophiesCount": 34,
+      "platform": "Браузер · DOSBox",
+      "isBrowserGame": true,
+      "progress": 0,
+      "platinumEarned": false,
+      "totalTrophiesCount": 2,
       "earnedTrophies": {
-        "bronze": 18,
-        "silver": 11,
-        "gold": 4,
-        "platinum": 1
+        "bronze": 0,
+        "silver": 0,
+        "gold": 0,
+        "platinum": 0
       },
-      "lastUpdatedDateTime": "2026-11-15T15:18:44.358Z",
+      "lastUpdatedDateTime": null,
       "trophies": [
         {
           "trophyId": 1,
-          "trophyType": "platinum",
+          "trophyType": "gold",
           "trophyName": "Thy Flesh Consumed",
-          "trophyDetail": "Получите все призы в DOOM.",
+          "trophyDetail": "Пройти классические эпизоды DOOM в встроенном DOSBox.",
           "trophyIconUrl": "assets/covers/doom.jpg",
-          "earned": true,
-          "earnedDateTime": "2026-11-15T15:18:44.358Z"
+          "earned": false,
+          "earnedDateTime": null
+        },
+        {
+          "trophyId": 2,
+          "trophyType": "bronze",
+          "trophyName": "Knee-Deep in the Dead",
+          "trophyDetail": "Завершить первый эпизод на станции Phobos.",
+          "trophyIconUrl": "assets/covers/doom.jpg",
+          "earned": false,
+          "earnedDateTime": null
         }
       ]
-    },
-    {
-      "npCommunicationId": "NPWR10004_00",
-      "titleName": "Celeste",
-      "titleIconUrl": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22c%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231e1b4b%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23be123c%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2220%22%20fill%3D%22url(%23c)%22%2F%3E%3Cpath%20d%3D%22M14%2098%20L48%2042%20L68%2070%20L84%2048%20L108%2098%20Z%22%20fill%3D%22%23e2e8f0%22%20opacity%3D%220.9%22%2F%3E%3Cpath%20d%3D%22M48%2042%20L58%2056%20L46%2058%20L38%2064%20Z%22%20fill%3D%22%2338bdf8%22%2F%3E%3Ccircle%20cx%3D%2288%22%20cy%3D%2228%22%20r%3D%228%22%20fill%3D%22%23fda4af%22%2F%3E%3C%2Fsvg%3E",
-      "platform": "PS4",
-      "progress": 92,
-      "platinumEarned": false,
-      "totalTrophiesCount": 31,
-      "earnedTrophies": {
-        "bronze": 16,
-        "silver": 9,
-        "gold": 3,
-        "platinum": 0
-      },
-      "lastUpdatedDateTime": "2026-11-12T07:18:44.358Z",
-      "trophies": []
-    },
-    {
-      "npCommunicationId": "NPWR10005_00",
-      "titleName": "Hollow Knight: Voidheart Edition",
-      "titleIconUrl": "data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22hk%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23090d16%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%231e293b%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2220%22%20fill%3D%22url(%23hk)%22%2F%3E%3Cpath%20d%3D%22M38%2030%20C32%2044%2032%2076%2042%2088%20L78%2088%20C88%2076%2088%2044%2082%2030%20L72%2044%20L48%2044%20Z%22%20fill%3D%22%23f8fafc%22%2F%3E%3Cellipse%20cx%3D%2249%22%20cy%3D%2266%22%20rx%3D%226.5%22%20ry%3D%229%22%20fill%3D%22%23090d16%22%2F%3E%3Cellipse%20cx%3D%2271%22%20cy%3D%2266%22%20rx%3D%226.5%22%20ry%3D%229%22%20fill%3D%22%23090d16%22%2F%3E%3C%2Fsvg%3E",
-      "platform": "PS4",
-      "progress": 74,
-      "platinumEarned": false,
-      "totalTrophiesCount": 35,
-      "earnedTrophies": {
-        "bronze": 18,
-        "silver": 6,
-        "gold": 2,
-        "platinum": 0
-      },
-      "lastUpdatedDateTime": "2026-11-08T03:18:44.358Z",
-      "trophies": []
     }
   ]
 }

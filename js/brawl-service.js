@@ -6,6 +6,8 @@
 
 import { SoundEngine } from "./sound.js";
 import { escapeHtml } from "./friends-service.js";
+import { psnService } from "./psn-service.js";
+import { getLiveSyncSettings } from "./live-sync-config.js";
 
 export const BRAWL_TAG = "2RGUQJQ0R";
 export const BRAWL_TAG_DISPLAY = "#2RGUQJQ0R";
@@ -149,6 +151,121 @@ export function getBrawlerAvatarUrl(brawler) {
   return "assets/covers/brawl_stars.jpg";
 }
 
+/**
+ * Parses Supercell ISO-compact timestamp ("20261124T193000.000Z") into standard ISO string.
+ */
+export function parseSupercellBattleTime(rawTime) {
+  if (!rawTime) return new Date().toISOString();
+  if (/^\d{4}-\d{2}-\d{2}T/.test(rawTime)) return rawTime;
+  const m = String(rawTime).match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})(?:\.(\d+))?Z$/i);
+  if (!m) return rawTime;
+  return `${m[1]}-${m[2]}-${m[3]}T${m[4]}:${m[5]}:${m[6]}.${m[7] || "000"}Z`;
+}
+
+/**
+ * Normalizes either our curated JSON snapshot OR official Supercell `/players` + `/battlelog`
+ * responses into the unified format used across the UI, preserving any richer local metadata
+ * (fame, rankedElo, hyperCharges, winStreaks, skins) that the public Supercell endpoint omits.
+ */
+export function normalizeBrawlPayload(raw, prevPlayer = null, rawBattlelog = null) {
+  const unwrapped = raw?.result?.data?.json || raw?.player || raw;
+  if (!unwrapped || !unwrapped.tag) return null;
+
+  const cleanTag = (t) => String(t || "").replace(/^#/, "").toUpperCase();
+  const prevBrawlersMap = prevPlayer?.brawlers && !Array.isArray(prevPlayer.brawlers) ? prevPlayer.brawlers : {};
+  const prevById = new Map();
+  Object.entries(prevBrawlersMap).forEach(([slug, b]) => {
+    if (b?.id) prevById.set(Number(b.id), { slug, ...b });
+    prevById.set(String(b?.name || slug).toUpperCase(), { slug, ...b });
+  });
+
+  let brawlersMap = unwrapped.brawlers;
+  if (Array.isArray(unwrapped.brawlers)) {
+    brawlersMap = {};
+    unwrapped.brawlers.forEach((b) => {
+      const slug = getBrawlerSlug(b.name);
+      const prevMatch = prevById.get(Number(b.id)) || prevById.get(String(b.name || "").toUpperCase()) || {};
+      brawlersMap[slug] = {
+        ...prevMatch,
+        ...b,
+        trophies: b.trophies ?? prevMatch.trophies ?? 0,
+        highestTrophies: Math.max(b.highestTrophies ?? 0, prevMatch.highestTrophies ?? 0),
+        power: b.power ?? prevMatch.power ?? 1,
+        rank: b.rank ?? prevMatch.rank ?? 1,
+        gadgets: b.gadgets ?? prevMatch.gadgets ?? [],
+        starPowers: b.starPowers ?? prevMatch.starPowers ?? [],
+        gears: b.gears ?? prevMatch.gears ?? [],
+        hyperCharges: b.hyperCharges ?? prevMatch.hyperCharges ?? []
+      };
+    });
+  } else if (brawlersMap && typeof brawlersMap === "object" && Object.keys(prevBrawlersMap).length > 0) {
+    const merged = {};
+    Object.entries(brawlersMap).forEach(([k, b]) => {
+      const prevMatch = prevBrawlersMap[k] || prevById.get(Number(b?.id)) || {};
+      merged[k] = { ...prevMatch, ...b };
+    });
+    brawlersMap = merged;
+  }
+
+  // Normalize battlelog from either unwrapped.battles or Supercell { items: [...] }
+  let battles = unwrapped.battles;
+  const battleItems = rawBattlelog?.items || raw?.battlelog?.items || (Array.isArray(rawBattlelog) ? rawBattlelog : null);
+  if (Array.isArray(battleItems)) {
+    battles = battleItems.slice(0, 25).map((item) => {
+      const bInfo = item.battle || {};
+      const isShowdown = Array.isArray(bInfo.players);
+      const resultStr = bInfo.result || (bInfo.rank ? `Rank ${bInfo.rank}` : "match");
+      const isWin = bInfo.result === "victory" || bInfo.rank === 1 || (isShowdown && bInfo.trophyChange > 0);
+      let teams = [];
+      if (Array.isArray(bInfo.teams)) {
+        teams = bInfo.teams.map((team) =>
+          team.map((pl) => ({
+            tag: cleanTag(pl.tag),
+            name: pl.name || "Player",
+            brawler: (pl.brawler?.name || pl.brawler || "leon").toLowerCase(),
+            id: pl.brawler?.id || null,
+            brawlerTrophies: pl.brawler?.trophies ?? null,
+            brawlerPower: pl.brawler?.power ?? 11
+          }))
+        );
+      } else if (Array.isArray(bInfo.players)) {
+        teams = [
+          bInfo.players.map((pl) => ({
+            tag: cleanTag(pl.tag),
+            name: pl.name || "Player",
+            brawler: (pl.brawler?.name || pl.brawler || "leon").toLowerCase(),
+            id: pl.brawler?.id || null,
+            brawlerTrophies: pl.brawler?.trophies ?? null,
+            brawlerPower: pl.brawler?.power ?? 11
+          }))
+        ];
+      }
+      return {
+        timestamp: parseSupercellBattleTime(item.battleTime),
+        event: {
+          mode: item.event?.mode || bInfo.mode || "3v3",
+          map: item.event?.map || "Арена"
+        },
+        victory: Boolean(isWin),
+        result: resultStr,
+        trophyChange: bInfo.trophyChange ?? null,
+        teams
+      };
+    });
+  }
+
+  return {
+    ...(prevPlayer || {}),
+    ...unwrapped,
+    tag: cleanTag(unwrapped.tag),
+    club: unwrapped.club?.name
+      ? { tag: cleanTag(unwrapped.club.tag), name: unwrapped.club.name }
+      : (prevPlayer?.club || null),
+    brawlers: brawlersMap || prevBrawlersMap,
+    battles: battles || prevPlayer?.battles || []
+  };
+}
+
 function animateNumber(element, start, end, duration = 400) {
   if (!element) return;
   if (start === end) {
@@ -177,6 +294,7 @@ class BrawlStarsService {
     this.pollTimer = null;
     this.isPolling = false;
     this.lastSyncTime = null;
+    this.syncSource = "snapshot"; // "live-proxy" | "local-api" | "snapshot"
     this.activeTab = "roster"; // "roster" | "battles"
     this.brawlerFilter = "all"; // "all" | "1000" | "pwr11" | "rank" | "winstreak"
     this.searchQuery = "";
@@ -186,6 +304,7 @@ class BrawlStarsService {
     this._imgCache = [];
     this._preloadQueueRunning = false;
     this._renderedGridSig = "";
+    this._visibilityHooked = false;
 
     this.initBaselineData();
   }
@@ -200,12 +319,14 @@ class BrawlStarsService {
     } catch (_) {}
 
     if (!this.player) {
-      fetch("assets/brawl/initial_player_data.json")
+      fetch(`assets/brawl/initial_player_data.json?t=${Date.now()}`, { cache: "no-store" })
         .then((r) => r.json())
         .then((d) => {
-          if (!this.player) {
-            this.player = d.result?.data?.json || d;
+          const normalized = normalizeBrawlPayload(d, null);
+          if (!this.player && normalized) {
+            this.player = normalized;
             this.lastSyncTime = new Date();
+            this.syncSource = "snapshot";
             this.exportTrophiesBridge();
             if (typeof requestIdleCallback === "function") {
               requestIdleCallback(() => this.preloadRosterPortraits(), { timeout: 1400 });
@@ -222,6 +343,9 @@ class BrawlStarsService {
         requestIdleCallback(() => this.preloadRosterPortraits(), { timeout: 1400 });
       }
     }
+
+    // Start background live polling immediately so Home & Trophies stay up to date even before opening Brawl view
+    setTimeout(() => this.startPolling(), 450);
   }
 
   preloadRosterPortraits(priorityList = null) {
@@ -279,31 +403,64 @@ class BrawlStarsService {
   async fetchLiveProfile(force = false) {
     const prevTrophies = this.player?.trophies;
     const prevBattleTime = this.player?.battles?.[0]?.timestamp;
+    const prevRankedElo = this.player?.rankedElo;
 
     let freshData = null;
+    let sourceUsed = "snapshot";
 
-    // Tier 1: Local server profile endpoint
-    try {
-      const res = await fetch(`/api/brawl/player?t=${Date.now()}`, { cache: "no-store" });
-      if (res.ok) {
-        const json = await res.json();
-        freshData = json.result?.data?.json || json;
-      }
-    } catch (_) {}
-
-    // Tier 2: Verified offline snapshot fallback
-    if (!freshData) {
+    // Tier 1: Direct user/Cloudflare Live Proxy (works on GitHub Pages in real time!)
+    const liveCfg = getLiveSyncSettings();
+    const proxyBase = (liveCfg.brawlProxyUrl || "").trim().replace(/\/+$/, "");
+    if (proxyBase) {
       try {
-        const res = await fetch("assets/brawl/initial_player_data.json");
+        const directUrl = proxyBase.includes("?")
+          ? `${proxyBase}&tag=${this.tag}&t=${Date.now()}`
+          : `${proxyBase}/api/brawl/player?tag=${this.tag}&t=${Date.now()}`;
+        const res = await fetch(directUrl, { cache: "no-store" });
         if (res.ok) {
           const json = await res.json();
-          freshData = json.result?.data?.json || json;
+          const parsed = normalizeBrawlPayload(json, this.player, json.battlelog);
+          if (parsed) {
+            freshData = parsed;
+            sourceUsed = "live-proxy";
+          }
+        }
+      } catch (_) {}
+    }
+
+    // Tier 2: Local dev/proxy server endpoint (/api/brawl/player)
+    if (!freshData) {
+      try {
+        const res = await fetch(`/api/brawl/player?t=${Date.now()}`, { cache: "no-store" });
+        if (res.ok) {
+          const json = await res.json();
+          const parsed = normalizeBrawlPayload(json, this.player, json.battlelog);
+          if (parsed) {
+            freshData = parsed;
+            sourceUsed = "local-api";
+          }
+        }
+      } catch (_) {}
+    }
+
+    // Tier 3: Static snapshot updated by GitHub Actions (cache-busted for live GH Pages reload)
+    if (!freshData) {
+      try {
+        const res = await fetch(`assets/brawl/initial_player_data.json?t=${Date.now()}`, { cache: "no-store" });
+        if (res.ok) {
+          const json = await res.json();
+          const parsed = normalizeBrawlPayload(json, this.player, json.battlelog);
+          if (parsed) {
+            freshData = parsed;
+            sourceUsed = json._liveSource || "snapshot";
+          }
         }
       } catch (_) {}
     }
 
     if (freshData && freshData.tag) {
       this.player = freshData;
+      this.syncSource = sourceUsed;
       this.lastSyncTime = new Date();
       try {
         localStorage.setItem(STORAGE_KEY_DATA, JSON.stringify(freshData));
@@ -311,14 +468,21 @@ class BrawlStarsService {
 
       this.exportTrophiesBridge();
 
-      // Detect deltas & toast
+      // Detect deltas & notify live
       if (prevTrophies !== undefined && prevTrophies !== freshData.trophies) {
         const diff = freshData.trophies - prevTrophies;
         const sign = diff > 0 ? `+${diff}` : `${diff}`;
         this.notifyChange(
-          `Brawl Stars: Изменение кубков!`,
-          `Новый счёт: ${freshData.trophies.toLocaleString("ru-RU")} 🏆 (${sign})`,
+          "Brawl Stars: Обновление кубков!",
+          `Счёт: ${freshData.trophies.toLocaleString("ru-RU")} 🏆 (${sign})`,
           diff > 0 ? "success" : "info"
+        );
+      } else if (prevRankedElo !== undefined && freshData.rankedElo && prevRankedElo !== freshData.rankedElo) {
+        const eloDiff = freshData.rankedElo - prevRankedElo;
+        this.notifyChange(
+          "Brawl Stars: Изменение рейтинга!",
+          `Ранг: ${freshData.rankedRankName || "Ranked"} · ELO ${freshData.rankedElo} (${eloDiff > 0 ? "+" : ""}${eloDiff})`,
+          eloDiff > 0 ? "success" : "info"
         );
       } else if (prevBattleTime && freshData.battles?.[0]?.timestamp !== prevBattleTime) {
         const latestBattle = freshData.battles[0];
@@ -326,20 +490,23 @@ class BrawlStarsService {
         const trophyChange = latestBattle.trophyChange;
         const deltaText = trophyChange ? ` (${trophyChange > 0 ? "+" : ""}${trophyChange} 🏆)` : "";
         this.notifyChange(
-          `Brawl Stars: Завершён новый бой!`,
+          "Brawl Stars: Завершён новый бой!",
           `${isVictory ? "Победа!" : "Поражение"} ${latestBattle.event?.mode || "Режим"} · ${latestBattle.event?.map || "Карта"}${deltaText}`,
           isVictory ? "success" : "info"
         );
       } else if (force) {
+        const bCount = Object.keys(freshData.brawlers || {}).length || 108;
         this.notifyChange(
           "Brawl Stars",
-          `Данные синхронизированы: ${freshData.trophies.toLocaleString("ru-RU")} 🏆 · 108 бойцов`,
+          `Аккаунт #${freshData.tag} синхронизирован: ${(freshData.trophies || 0).toLocaleString("ru-RU")} 🏆 · ${bCount} бойцов`,
           "info"
         );
       }
 
       if (this.isViewActive()) {
         this.renderAll();
+      } else {
+        this.renderHeaderBar();
       }
       return freshData;
     }
@@ -372,6 +539,15 @@ class BrawlStarsService {
   }
 
   startPolling() {
+    if (!this._visibilityHooked && typeof document !== "undefined") {
+      this._visibilityHooked = true;
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) this.fetchLiveProfile();
+      });
+      window.addEventListener("focus", () => {
+        this.fetchLiveProfile();
+      });
+    }
     if (this.isPolling) return;
     this.isPolling = true;
     this.fetchLiveProfile();
@@ -379,7 +555,7 @@ class BrawlStarsService {
       if (!document.hidden) {
         this.fetchLiveProfile();
       }
-    }, 45000);
+    }, 25000);
   }
 
   stopPolling() {
@@ -496,13 +672,32 @@ class BrawlStarsService {
     if (!p) return;
 
     const trophiesEl = document.getElementById("brawlTrophiesCount");
-    if (trophiesEl) trophiesEl.textContent = (p.trophies || 42512).toLocaleString("ru-RU");
+    if (trophiesEl) trophiesEl.textContent = (p.trophies || 0).toLocaleString("ru-RU");
 
     const statusEl = document.getElementById("brawlTelemetryStatus");
     if (statusEl) {
-      const brawlerCount = Object.keys(p.brawlers || {}).length || 108;
-      const syncStr = this.lastSyncTime ? `Обновлено ${this.lastSyncTime.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}` : "В сети";
-      statusEl.textContent = `${p.trophies?.toLocaleString("ru-RU") || "42 512"} 🏆 · ${brawlerCount} бойцов · ${syncStr}`;
+      const brawlerCount = Object.keys(p.brawlers || {}).length || 0;
+      const syncStr = this.lastSyncTime
+        ? `Обновлено ${this.lastSyncTime.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`
+        : "В сети";
+      statusEl.textContent = `${(p.trophies || 0).toLocaleString("ru-RU")} 🏆 · ${brawlerCount} бойцов · ${syncStr}`;
+    }
+
+    const livePill = document.getElementById("brawlLiveStatusPill");
+    if (livePill) {
+      const isDirect = this.syncSource === "live-proxy" || this.syncSource === "local-api";
+      const timeTag = this.lastSyncTime
+        ? this.lastSyncTime.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit", second: "2-digit" })
+        : "";
+      livePill.innerHTML = isDirect
+        ? `<span class="brawl-status-dot"></span> Прямой эфир · Live (${timeTag})`
+        : `<span class="brawl-status-dot"></span> Авто-синк · ${timeTag || "Снимок"}`;
+    }
+
+    const battlesBtnSpan = document.querySelector("#btnBrawlTabBattles span");
+    if (battlesBtnSpan) {
+      const len = Array.isArray(p.battles) ? p.battles.length : 0;
+      battlesBtnSpan.textContent = `История боёв (${len})`;
     }
   }
 
@@ -1111,292 +1306,315 @@ class BrawlStarsService {
   }
 
   /* ============================================================
-   * PS5 TROPHIES BRIDGE (45 ACHIEVEMENTS)
+   * LIVE BRAWL STARS SKILLS & ACHIEVEMENTS BRIDGE -> PS5 PROFILE
+   * Computed strictly from real account data (#2RGUQJQ0R)
    * ============================================================ */
   exportTrophiesBridge() {
     const p = this.player;
-    if (!p) return;
+    if (!p) return null;
 
     const brawlers = p.brawlers || {};
     const brawlerList = Object.values(brawlers);
     const brawlerCount = brawlerList.length;
-    const trophies = p.trophies || 42512;
-    const wins3v3 = p["3vs3Victories"] || 2840;
-    const winsSolo = p.soloVictories || 633;
-    const winsDuo = p.duoVictories || 918;
-    const leonTrophies = brawlerList.find((b) => (b.name || "").toUpperCase() === "LEON")?.trophies || 2136;
-    const pwr11Count = brawlerList.filter((b) => b.power === 11).length;
-    const maxWinStreak = Math.max(...brawlerList.map((b) => b.maxWinStreak || 0), 22);
+    const trophies = Number(p.trophies || 0);
+    const highestTrophies = Number(p.highestTrophies || trophies);
+    const wins3v3 = Number(p["3vs3Victories"] || 0);
+    const winsSolo = Number(p.soloVictories || 0);
+    const winsDuo = Number(p.duoVictories || 0);
+    const totalWins = wins3v3 + winsSolo + winsDuo;
 
-    const trophiesList = [
-      // PLATINUM (1)
+    const findBrawler = (upperName) =>
+      brawlerList.find((b) => String(b.name || "").toUpperCase() === upperName);
+    const bTrophies = (upperName) => Number(findBrawler(upperName)?.trophies || 0);
+
+    const leonTrophies = bTrophies("LEON");
+    const crowTrophies = bTrophies("CROW");
+    const spikeTrophies = bTrophies("SPIKE");
+    const cordeliusTrophies = bTrophies("CORDELIUS");
+    const kazeTrophies = bTrophies("KAZE");
+
+    const max1000Count = brawlerList.filter((b) => Number(b.trophies || 0) >= 1000).length;
+    const pwr11Count = brawlerList.filter((b) => Number(b.power || 0) >= 11).length;
+    const hyperChargeCount = brawlerList.reduce((acc, b) => acc + (b.hyperCharges?.length || 0), 0);
+    const starPowersCount = brawlerList.reduce((acc, b) => acc + (b.starPowers?.length || 0), 0);
+    const gadgetsCount = brawlerList.reduce((acc, b) => acc + (b.gadgets?.length || 0), 0);
+    const gearsCount = brawlerList.reduce((acc, b) => acc + (b.gears?.length || 0), 0);
+    const skinsCount = brawlerList.filter((b) => Boolean(b.skin?.name)).length;
+    const maxWinStreak = brawlerList.reduce((acc, b) => Math.max(acc, Number(b.maxWinStreak || 0)), 0);
+    const curRankedElo = Number(p.rankedElo || 0);
+    const peakRankedElo = Math.max(curRankedElo, Number(p.highestAllTimeRankedElo || 0));
+    const latestBattleTs = p.battles?.[0]?.timestamp || p.lastUpdated || new Date().toISOString();
+    const recentWins = (p.battles || []).filter((b) => b.victory === true).length;
+
+    const skillsList = [
+      // NEXT PLATINUM GOAL (locked until 50K trophies & 15+ brawlers 1000+ — preserves honest 2 PSN Platinums)
       {
         trophyId: 1,
         trophyType: "platinum",
-        trophyName: "Легенда Brawl Stars",
-        trophyDetail: "Собрать все боевые трофеи и достижения Brawl Stars на аккаунте #2RGUQJQ0R.",
+        trophyName: "Абсолют Brawl Stars (50 000 🏆 + 15×1000)",
+        trophyDetail: `Следующая цель аккаунта #2RGUQJQ0R: ${highestTrophies.toLocaleString("ru-RU")} / 50 000 кубков · 1000+ бойцов: ${max1000Count} / 15.`,
         trophyIconUrl: "assets/covers/brawl_stars.jpg",
-        earned: trophies >= 40000 && brawlerCount >= 100,
-        earnedDateTime: "2026-11-20T18:00:00.000Z"
+        earned: highestTrophies >= 50000 && max1000Count >= 15,
+        earnedDateTime: latestBattleTs
       },
-      // GOLD (8)
+      // GOLD SKILLS (High-tier skills verified from API metrics)
       {
         trophyId: 2,
         trophyType: "gold",
-        trophyName: "Повелитель Арены 40K+",
-        trophyDetail: `Преодолеть планку в 40,000 кубков (Текущий счёт: ${trophies.toLocaleString("ru-RU")} 🏆).`,
+        trophyName: "Повелитель Арены 40 000+",
+        trophyDetail: `Текущий счёт аккаунта: ${trophies.toLocaleString("ru-RU")} 🏆 (макс: ${highestTrophies.toLocaleString("ru-RU")}).`,
         trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
-        earned: trophies >= 40000,
-        earnedDateTime: "2026-11-15T12:00:00.000Z"
+        earned: highestTrophies >= 40000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 3,
         trophyType: "gold",
-        trophyName: "Невидимка-Снайпер (Леон 2000+)",
-        trophyDetail: `Набрать 2,000+ кубков на легендарном бойце Леон (Счёт: ${leonTrophies.toLocaleString("ru-RU")} 🏆).`,
+        trophyName: "Мастер скрытности: Леон 2000+",
+        trophyDetail: `Набрать 2 000+ кубков на бойце LEON (сейчас: ${leonTrophies.toLocaleString("ru-RU")} 🏆).`,
         trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
         earned: leonTrophies >= 2000,
-        earnedDateTime: "2026-11-10T14:30:00.000Z"
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 4,
         trophyType: "gold",
-        trophyName: "Властелин Галактики (Martian Fame II)",
-        trophyDetail: "Достичь космической славы Martian Fame II (20,865 очков славы).",
+        trophyName: `Космическая слава (${p.fameTierName || "MARTIAN FAME II"})`,
+        trophyDetail: `Накопить 20 000+ очков славы на аккаунте (сейчас: ${Number(p.fame || 0).toLocaleString("ru-RU")} очков).`,
         trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: (p.fame || 0) >= 20000,
-        earnedDateTime: "2026-11-05T16:20:00.000Z"
+        earned: Number(p.fame || 0) >= 20000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 5,
         trophyType: "gold",
-        trophyName: "Абсолютная Армия (100+ Бойцов)",
-        trophyDetail: `Разблокировать 100+ бойцов в ростере Арены (Текущий ростер: ${brawlerCount} бойцов).`,
+        trophyName: "Полный боевой ростер (100+ бойцов)",
+        trophyDetail: `Разблокировать 100+ бойцов (в аккаунте открыто: ${brawlerCount}).`,
         trophyIconUrl: "assets/brawl/brawlers/crow_model.webp",
         earned: brawlerCount >= 100,
-        earnedDateTime: "2026-10-30T10:00:00.000Z"
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 6,
         trophyType: "gold",
-        trophyName: "Командный Триумфатор (2500+ Побед 3v3)",
-        trophyDetail: `Одержать 2,500+ триумфальных побед в командных режимах 3v3 (Счёт: ${wins3v3.toLocaleString("ru-RU")}).`,
+        trophyName: "Командный стратег (2500+ побед 3v3)",
+        trophyDetail: `Одержать 2 500+ побед в режимах 3v3 (сейчас: ${wins3v3.toLocaleString("ru-RU")}).`,
         trophyIconUrl: "assets/brawl/brawlers/spike_model.webp",
         earned: wins3v3 >= 2500,
-        earnedDateTime: "2026-10-25T19:40:00.000Z"
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 7,
         trophyType: "gold",
-        trophyName: "Неудержимый Винстрик 20+",
-        trophyDetail: `Одержать серию из 20 побед подряд без единого поражения (Рекорд: ${maxWinStreak} побед).`,
-        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
-        earned: maxWinStreak >= 20,
-        earnedDateTime: "2026-10-18T21:15:00.000Z"
+        trophyName: "Ранговая лига Diamond+ (3000+ ELO)",
+        trophyDetail: `Текущий ранг: ${p.rankedRankName || "DIAMOND I"} (${curRankedElo} ELO · пик: ${p.highestAllTimeRankedRankName || "DIAMOND III"}, ${peakRankedElo} ELO).`,
+        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
+        earned: peakRankedElo >= 3000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 8,
         trophyType: "gold",
-        trophyName: "Алмазная Элита (Ranked Diamond)",
-        trophyDetail: `Достичь ранга Diamond в рейтинговом сезоне Brawl Stars (Ранг: ${p.rankedRankName || "Diamond I"}).`,
+        trophyName: "Лига Mythic (Цель: 4500+ ELO)",
+        trophyDetail: `Повысить рейтинг до 4 500+ ELO в ранговых матчах (текущий пик: ${peakRankedElo} / 4 500 ELO).`,
         trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: (p.rankedElo || 0) >= 3000,
-        earnedDateTime: "2026-10-12T17:00:00.000Z"
+        earned: peakRankedElo >= 4500,
+        earnedDateTime: latestBattleTs
       },
+      // SILVER SKILLS (Roster & mechanics mastery)
       {
         trophyId: 9,
-        trophyType: "gold",
-        trophyName: "Клубный Альянс (0.3.7|teams)",
-        trophyDetail: "Состоять в престижном клубе 0.3.7|teams (#80RYCLU9Q).",
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: !!p.club?.name,
-        earnedDateTime: "2026-10-01T12:00:00.000Z"
+        trophyType: "silver",
+        trophyName: "Элитная семёрка (7+ бойцов 1000+)",
+        trophyDetail: `Довести минимум 7 бойцов до 1 000+ 🏆 (сейчас таких бойцов: ${max1000Count}).`,
+        trophyIconUrl: "assets/brawl/brawlers/crow_model.webp",
+        earned: max1000Count >= 7,
+        earnedDateTime: latestBattleTs
       },
-      // SILVER (14)
       {
         trophyId: 10,
         trophyType: "silver",
-        trophyName: "Ядовитый Ворон (Crow 1000+)",
-        trophyDetail: "Преодолеть рубеж в 1,000 кубков на бойце Crow.",
-        trophyIconUrl: "assets/brawl/brawlers/crow_model.webp",
-        earned: true,
-        earnedDateTime: "2026-09-20T14:00:00.000Z"
+        trophyName: "Непобедимый винстрик 15+",
+        trophyDetail: `Максимальная серия побед на бойце: ${maxWinStreak} подряд.`,
+        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
+        earned: maxWinStreak >= 15,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 11,
         trophyType: "silver",
-        trophyName: "Колючий Кактус (Spike 1000+)",
-        trophyDetail: "Преодолеть рубеж в 1,000 кубков на бойце Spike.",
-        trophyIconUrl: "assets/brawl/brawlers/spike_model.webp",
-        earned: true,
-        earnedDateTime: "2026-09-15T16:00:00.000Z"
+        trophyName: "Мастерство Crow (1000+ 🏆)",
+        trophyDetail: `Набрать 1 000+ кубков на Crow (сейчас: ${crowTrophies.toLocaleString("ru-RU")} 🏆).`,
+        trophyIconUrl: "assets/brawl/brawlers/crow_model.webp",
+        earned: crowTrophies >= 1000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 12,
         trophyType: "silver",
-        trophyName: "Царство Грибов (Cordelius 1000+)",
-        trophyDetail: "Преодолеть рубеж в 1,000 кубков на бойце Cordelius.",
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: true,
-        earnedDateTime: "2026-09-10T11:00:00.000Z"
+        trophyName: "Мастерство Spike (1000+ 🏆)",
+        trophyDetail: `Набрать 1 000+ кубков на Spike (сейчас: ${spikeTrophies.toLocaleString("ru-RU")} 🏆).`,
+        trophyIconUrl: "assets/brawl/brawlers/spike_model.webp",
+        earned: spikeTrophies >= 1000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 13,
         trophyType: "silver",
-        trophyName: "Штормовой Порыв (Kaze 1000+)",
-        trophyDetail: "Преодолеть рубеж в 1,000 кубков на бойце Kaze.",
+        trophyName: "Мастерство Cordelius (1000+ 🏆)",
+        trophyDetail: `Набрать 1 000+ кубков на Cordelius (сейчас: ${cordeliusTrophies.toLocaleString("ru-RU")} 🏆).`,
         trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: true,
-        earnedDateTime: "2026-09-05T18:00:00.000Z"
+        earned: cordeliusTrophies >= 1000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 14,
         trophyType: "silver",
-        trophyName: "Одинокий Охотник (600+ Solo)",
-        trophyDetail: `Одержать 600+ побед в одиночном столкновении (Счёт: ${winsSolo}).`,
-        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
-        earned: winsSolo >= 600,
-        earnedDateTime: "2026-08-25T13:00:00.000Z"
+        trophyName: "Мастерство Kaze (1000+ 🏆)",
+        trophyDetail: `Набрать 1 000+ кубков на Kaze (сейчас: ${kazeTrophies.toLocaleString("ru-RU")} 🏆).`,
+        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
+        earned: kazeTrophies >= 1000,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 15,
         trophyType: "silver",
-        trophyName: "Смертоносный Дуэт (900+ Duo)",
-        trophyDetail: `Одержать 900+ побед в парном столкновении (Счёт: ${winsDuo}).`,
-        trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
-        earned: winsDuo >= 900,
-        earnedDateTime: "2026-08-20T15:00:00.000Z"
+        trophyName: "Максимальная сила 11 (25+ бойцов)",
+        trophyDetail: `Прокачать 25+ бойцов до 11 уровня силы (сейчас Power 11: ${pwr11Count} бойцов).`,
+        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
+        earned: pwr11Count >= 25,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 16,
         trophyType: "silver",
-        trophyName: "Кузница Силы (40+ Power 11)",
-        trophyDetail: `Прокачать 40+ бойцов до максимального 11 уровня (Прокачано: ${pwr11Count} бойцов).`,
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: pwr11Count >= 40,
-        earnedDateTime: "2026-08-15T17:00:00.000Z"
+        trophyName: "Полная база Power 11 (50+ бойцов)",
+        trophyDetail: `Прогресс прокачки аккаунта до фулла: ${pwr11Count} / 50 бойцов 11 уровня.`,
+        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
+        earned: pwr11Count >= 50,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 17,
         trophyType: "silver",
-        trophyName: "Золотой Престиж (Уровень 10+)",
-        trophyDetail: "Набрать 10+ уровней суммарного престижа аккаунта.",
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: (p.totalPrestigeLevel || 0) >= 10,
-        earnedDateTime: "2026-08-10T19:00:00.000Z"
+        trophyName: "Арсенал Гиперзарядов (25+)",
+        trophyDetail: `Открыть 25+ гиперзарядов по всему ростеру (активно сейчас: ${hyperChargeCount}).`,
+        trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
+        earned: hyperChargeCount >= 25,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 18,
         trophyType: "silver",
-        trophyName: "Ветеран 100 Уровня Опыта",
-        trophyDetail: `Достичь 100+ уровня аккаунта (Текущий уровень: ${p.expLevel || 123}).`,
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: (p.expLevel || 0) >= 100,
-        earnedDateTime: "2026-08-01T20:00:00.000Z"
+        trophyName: "Звёздные силы (100+)",
+        trophyDetail: `Открыть 100+ пассивок у бойцов (открыто сейчас: ${starPowersCount}).`,
+        trophyIconUrl: "assets/covers/brawl_stars.jpg",
+        earned: starPowersCount >= 100,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 19,
         trophyType: "silver",
-        trophyName: "Гиперзарядная Буря",
-        trophyDetail: "Активировать гиперзаряд на 10 бойцах ростера.",
-        trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
-        earned: true,
-        earnedDateTime: "2026-07-20T12:00:00.000Z"
+        trophyName: "Ветеран 120+ уровня опыта",
+        trophyDetail: `Уровень профиля опыта Brawl Stars: ${Number(p.expLevel || 0)}.`,
+        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
+        earned: Number(p.expLevel || 0) >= 120,
+        earnedDateTime: latestBattleTs
       },
+      // BRONZE SKILLS (Activity & Mode Milestones)
       {
         trophyId: 20,
-        trophyType: "silver",
-        trophyName: "Арсенал Снаряжений",
-        trophyDetail: "Экипировать 50+ мифических и эпических снаряжений.",
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: true,
-        earnedDateTime: "2026-07-15T14:00:00.000Z"
+        trophyType: "bronze",
+        trophyName: "Одиночное столкновение (600+ побед)",
+        trophyDetail: `Победы в Solo Showdown: ${winsSolo.toLocaleString("ru-RU")}.`,
+        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
+        earned: winsSolo >= 600,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 21,
-        trophyType: "silver",
-        trophyName: "Коллекционер Скинов",
-        trophyDetail: "Собрать эксклюзивные скины: Toon Spike, Tiger Leon II, Dragon Crow VI.",
-        trophyIconUrl: "assets/brawl/brawlers/spike_model.webp",
-        earned: true,
-        earnedDateTime: "2026-07-10T16:00:00.000Z"
+        trophyType: "bronze",
+        trophyName: "Парное столкновение (900+ побед)",
+        trophyDetail: `Победы в Duo Showdown: ${winsDuo.toLocaleString("ru-RU")}.`,
+        trophyIconUrl: "assets/brawl/brawlers/leon_model.webp",
+        earned: winsDuo >= 900,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 22,
-        trophyType: "silver",
-        trophyName: "4,000 Побед на Арене",
-        trophyDetail: `Суммарно победить в более чем 4,000 матчах (Суммарно: ${(wins3v3 + winsSolo + winsDuo).toLocaleString("ru-RU")}).`,
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
-        earned: (wins3v3 + winsSolo + winsDuo) >= 4000,
-        earnedDateTime: "2026-07-01T18:00:00.000Z"
+        trophyType: "bronze",
+        trophyName: "Престиж 10+ и арсенал гаджетов",
+        trophyDetail: `Престиж аккаунта: ${Number(p.totalPrestigeLevel || 0)} · Гаджеты: ${gadgetsCount} · Снаряжения: ${gearsCount}.`,
+        trophyIconUrl: "assets/covers/brawl_stars.jpg",
+        earned: Number(p.totalPrestigeLevel || 0) >= 10 && gadgetsCount >= 100,
+        earnedDateTime: latestBattleTs
       },
       {
         trophyId: 23,
-        trophyType: "silver",
-        trophyName: "Мастер Выживания Showdown",
-        trophyDetail: "Занять топ-1 ранг в столкновении 50 раз подряд.",
-        trophyIconUrl: "assets/brawl/brawlers/shelly_model.webp",
-        earned: true,
-        earnedDateTime: "2026-06-20T11:00:00.000Z"
-      },
-      // BRONZE (22)
-      ...Array.from({ length: 22 }).map((_, idx) => ({
-        trophyId: 24 + idx,
         trophyType: "bronze",
-        trophyName: [
-          "Первые шаги на Арене", "Футбольный Триумф в Броулбол", "Снайпер в Нокауте",
-          "Хранитель Кристаллов", "Взломщик Сейфа", "Король Горячей Зоны",
-          "Охотник за Головами", "Дуэлянт 1 на 1", "Роборубка: Эксперт",
-          "Охота на Босса", "Звездный Игрок Матча", "Первый Гаджет в Бою",
-          "Звездная Сила Разблокирована", "Редкая Награда Сезона", "Коллекция Значков",
-          "Кредиты Бойцов", "Очки Силы Накоплены", "Сверкающие Блинги",
-          "Дружеский Батл", "Мастер Режимов", "Винстрик 5 побед", "Мастер Ростера"
-        ][idx] || `Боевой приз #${idx + 1}`,
-        trophyDetail: `Достижение игрока Cr1mnsx в боевой системе Brawl Stars (#2RGUQJQ0R).`,
+        trophyName: "Коллекционер скинов и 4000+ побед",
+        trophyDetail: `Суммарно побед: ${totalWins.toLocaleString("ru-RU")} · Активные скины: ${skinsCount}.`,
+        trophyIconUrl: "assets/brawl/brawlers/spike_model.webp",
+        earned: totalWins >= 4000,
+        earnedDateTime: latestBattleTs
+      },
+      {
+        trophyId: 24,
+        trophyType: "bronze",
+        trophyName: "Свежая серия в прямом эфире",
+        trophyDetail: `Последних матчей в истории: ${(p.battles || []).length} (побед среди них: ${recentWins}) · Клуб: ${p.club?.name || "—"}.`,
         trophyIconUrl: "assets/covers/brawl_stars.jpg",
-        earned: true,
-        earnedDateTime: "2026-05-15T10:00:00.000Z"
-      }))
+        earned: recentWins >= 1 && Boolean(p.club?.name),
+        earnedDateTime: latestBattleTs
+      },
+      {
+        trophyId: 25,
+        trophyType: "bronze",
+        trophyName: "Рубеж 5 000 суммарных побед",
+        trophyDetail: `Прогресс к цели: ${totalWins.toLocaleString("ru-RU")} / 5 000 побед во всех режимах.`,
+        trophyIconUrl: "assets/covers/brawl_stars.jpg",
+        earned: totalWins >= 5000,
+        earnedDateTime: latestBattleTs
+      }
     ];
 
-    const earnedCount = trophiesList.filter((t) => t.earned).length;
-    const progressPct = Math.round((earnedCount / trophiesList.length) * 100);
+    const earnedCount = skillsList.filter((t) => t.earned).length;
+    const progressPct = Math.round((earnedCount / skillsList.length) * 100);
 
     const gameEntry = {
       titleName: "Brawl Stars",
       npCommunicationId: "NPWR_BRAWL_STARS_2RGUQJQ0R",
+      titleIconUrl: "assets/covers/brawl_stars.jpg",
       trophyTitleIconUrl: "assets/covers/brawl_stars.jpg",
+      platform: "LIVE · SUPERCELL",
       progress: progressPct,
       earnedTrophies: {
-        bronze: trophiesList.filter((t) => t.trophyType === "bronze" && t.earned).length,
-        silver: trophiesList.filter((t) => t.trophyType === "silver" && t.earned).length,
-        gold: trophiesList.filter((t) => t.trophyType === "gold" && t.earned).length,
-        platinum: trophiesList.filter((t) => t.trophyType === "platinum" && t.earned).length
+        bronze: skillsList.filter((t) => t.trophyType === "bronze" && t.earned).length,
+        silver: skillsList.filter((t) => t.trophyType === "silver" && t.earned).length,
+        gold: skillsList.filter((t) => t.trophyType === "gold" && t.earned).length,
+        platinum: skillsList.filter((t) => t.trophyType === "platinum" && t.earned).length
       },
       definedTrophies: {
-        bronze: 22,
-        silver: 14,
-        gold: 8,
-        platinum: 1
+        bronze: skillsList.filter((t) => t.trophyType === "bronze").length,
+        silver: skillsList.filter((t) => t.trophyType === "silver").length,
+        gold: skillsList.filter((t) => t.trophyType === "gold").length,
+        platinum: skillsList.filter((t) => t.trophyType === "platinum").length
       },
-      totalTrophiesCount: trophiesList.length,
-      lastUpdatedDateTime: new Date().toISOString(),
-      trophies: trophiesList
+      totalTrophiesCount: skillsList.length,
+      lastUpdatedDateTime: latestBattleTs,
+      trophies: skillsList
     };
 
     try {
       localStorage.setItem(STORAGE_KEY_TROPHIES, JSON.stringify(gameEntry));
     } catch (_) {}
 
-    if (window.psnService && Array.isArray(window.psnService.games)) {
-      const existingIdx = window.psnService.games.findIndex(
-        (g) => g.npCommunicationId === gameEntry.npCommunicationId || g.titleName === "Brawl Stars"
-      );
-      if (existingIdx >= 0) {
-        window.psnService.games[existingIdx] = gameEntry;
-      } else {
-        window.psnService.games.unshift(gameEntry);
-      }
+    psnService.mergeExternalGame(gameEntry);
+
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("brawl:updated", {
+        detail: { player: p, gameEntry, source: this.syncSource }
+      }));
     }
 
     return gameEntry;

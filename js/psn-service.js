@@ -1,26 +1,59 @@
 /**
- * PlayStation Network (PSN) Trophy Service
- * TASK 10: Automatic Synchronization & Client-Side Trophy Engine
+ * PlayStation Network (PSN) & Unified Profile Achievements Service
+ * Real-time sync across:
+ * 1) Custom Live Proxy (Cloudflare Worker / /api/psn/profile)
+ * 2) User custom JSON import / localStorage
+ * 3) Supabase Cloud DB
+ * 4) Static data/psn-trophies.json (auto-synced by GitHub Actions)
+ * Dynamically merges verified Brawl Stars live skills & achievements.
  */
 
 import { SUPABASE_CONFIG } from "./supabase-config.js";
+import { getLiveSyncSettings } from "./live-sync-config.js";
 
 const STORAGE_CUSTOM_KEY = "psn_custom_trophy_data";
-const STORAGE_SYNC_STATE_KEY = "psn_sync_state";
+const STORAGE_BRAWL_BRIDGE_KEY = "ps5_brawl_trophies_bridge_v2";
+const REMOVED_GAME_IDS = new Set(["NPWR10004_00", "NPWR10005_00"]);
+const REMOVED_GAME_TITLES = ["celeste", "hollow knight"];
+
+function isRemovedGame(game) {
+  if (!game) return true;
+  if (REMOVED_GAME_IDS.has(game.npCommunicationId)) return true;
+  const name = String(game.titleName || "").toLowerCase();
+  return REMOVED_GAME_TITLES.some((t) => name.includes(t));
+}
 
 class PsnTrophyService {
   constructor() {
     this.profile = null;
     this.recentTrophies = [];
+    this.baseGames = [];
+    this.externalGames = new Map();
     this.games = [];
     this.listeners = new Set();
     this.isLoading = false;
     this.lastError = null;
-    this.syncSource = "json"; // 'supabase' | 'json' | 'custom'
+    this.syncSource = "json"; // 'live-proxy' | 'supabase' | 'json' | 'custom'
+    this._pollTimer = null;
   }
 
   async init() {
-    return this.loadData();
+    this._loadCachedExternalBridges();
+    const res = await this.loadData();
+    this.startLivePolling();
+    return res;
+  }
+
+  _loadCachedExternalBridges() {
+    try {
+      const raw = localStorage.getItem(STORAGE_BRAWL_BRIDGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.npCommunicationId) {
+          this.externalGames.set(parsed.npCommunicationId, parsed);
+        }
+      }
+    } catch (_) {}
   }
 
   onUpdate(callback) {
@@ -29,45 +62,202 @@ class PsnTrophyService {
   }
 
   _notify() {
+    const data = this.getData();
     for (const cb of this.listeners) {
       try {
-        cb(this.getData());
+        cb(data);
       } catch (err) {
         console.error("PSN Service listener error:", err);
       }
     }
   }
 
+  _rebuildMergedGames() {
+    const cleanBase = (this.baseGames || []).filter((g) => !isRemovedGame(g) && !this.externalGames.has(g.npCommunicationId));
+    const merged = [...Array.from(this.externalGames.values()), ...cleanBase];
+    this.games = merged;
+  }
+
+  mergeExternalGame(gameEntry) {
+    if (!gameEntry || !gameEntry.npCommunicationId) return;
+    this.externalGames.set(gameEntry.npCommunicationId, gameEntry);
+    try {
+      localStorage.setItem(STORAGE_BRAWL_BRIDGE_KEY, JSON.stringify(gameEntry));
+    } catch (_) {}
+    this._rebuildMergedGames();
+    this._notify();
+  }
+
+  /**
+   * Computes honest aggregated trophy/skill metrics without fabricated numbers:
+   * - If live PSN account is linked (psnLinked === true): uses real synced PSN counts (+ Brawl earned).
+   * - If PSN is awaiting link (psnLinked === false): uses user-confirmed PlayStation platinums (2)
+   *   plus actual earned Brawl Stars skills & Browser game awards from this.games.
+   */
+  getAggregatedSummary() {
+    const prof = this.profile || {};
+    const liveSettings = getLiveSyncSettings();
+    const psnLinked = Boolean(prof.psnLinked || this.syncSource === "live-proxy" || this.syncSource === "supabase");
+    const confirmedPsnPlats = Number.isFinite(prof.confirmedPsnPlatinums) ? prof.confirmedPsnPlatinums : 2;
+
+    let earnedGold = 0;
+    let earnedSilver = 0;
+    let earnedBronze = 0;
+    let earnedPlatInGames = 0;
+    let totalDefinedAwards = 0;
+    let totalEarnedAwards = 0;
+
+    (this.games || []).forEach((g) => {
+      const e = g.earnedTrophies || {};
+      const br = Number(e.bronze || 0);
+      const sv = Number(e.silver || 0);
+      const gd = Number(e.gold || 0);
+      const pl = Number(e.platinum || 0);
+      earnedBronze += br;
+      earnedSilver += sv;
+      earnedGold += gd;
+      earnedPlatInGames += pl;
+      totalDefinedAwards += Number(g.totalTrophiesCount || (Array.isArray(g.trophies) ? g.trophies.length : 0));
+      totalEarnedAwards += br + sv + gd + pl;
+    });
+
+    let plat = confirmedPsnPlats;
+    let gold = earnedGold;
+    let silver = earnedSilver;
+    let bronze = earnedBronze;
+
+    if (psnLinked && this.syncSource !== "json") {
+      // Real synced PSN totals include all PSN trophies + external Brawl Stars bridge
+      const brawl = this.externalGames.get("NPWR_BRAWL_STARS_2RGUQJQ0R")?.earnedTrophies || {};
+      plat = Number(prof.platinum || 0) + Number(brawl.platinum || 0);
+      gold = Number(prof.gold || 0) + Number(brawl.gold || 0);
+      silver = Number(prof.silver || 0) + Number(brawl.silver || 0);
+      bronze = Number(prof.bronze || 0) + Number(brawl.bronze || 0);
+    } else {
+      plat = confirmedPsnPlats + earnedPlatInGames;
+    }
+
+    const totalTrophies = plat + gold + silver + bronze;
+    const masteryPct = totalDefinedAwards > 0
+      ? Math.min(100, Math.round((totalEarnedAwards / totalDefinedAwards) * 100))
+      : 0;
+
+    const brawlGame = this.externalGames.get("NPWR_BRAWL_STARS_2RGUQJQ0R");
+
+    return {
+      onlineId: liveSettings.psnOnlineId || prof.psnOnlineId || prof.onlineId || "Cr1mnsx",
+      psnOnlineId: liveSettings.psnOnlineId || prof.psnOnlineId || "",
+      psnLinked,
+      confirmedPsnPlatinums: confirmedPsnPlats,
+      trophyLevel: psnLinked && prof.trophyLevel ? prof.trophyLevel : null,
+      levelProgress: psnLinked && prof.trophyLevel ? (prof.levelProgress || 0) : masteryPct,
+      platinum: plat,
+      gold,
+      silver,
+      bronze,
+      totalTrophies,
+      brawlEarnedCount: brawlGame
+        ? (brawlGame.earnedTrophies.platinum + brawlGame.earnedTrophies.gold + brawlGame.earnedTrophies.silver + brawlGame.earnedTrophies.bronze)
+        : 0,
+      brawlTotalCount: brawlGame ? brawlGame.totalTrophiesCount : 0,
+      syncSource: this.syncSource,
+      lastSyncAt: prof.lastSyncAt || brawlGame?.lastUpdatedDateTime || null
+    };
+  }
+
   getData() {
+    this._rebuildMergedGames();
+
+    const brawlGame = this.externalGames.get("NPWR_BRAWL_STARS_2RGUQJQ0R");
+    const brawlRecent = brawlGame && Array.isArray(brawlGame.trophies)
+      ? brawlGame.trophies
+          .filter((t) => t.earned)
+          .slice(0, 6)
+          .map((t) => ({
+            ...t,
+            gameTitle: "Brawl Stars (#2RGUQJQ0R)",
+            npCommunicationId: brawlGame.npCommunicationId
+          }))
+      : [];
+
+    const filteredBaseRecent = (this.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle, npCommunicationId: t.npCommunicationId }));
+    const mergedRecent = [...brawlRecent, ...filteredBaseRecent].slice(0, 12);
+
     return {
       profile: this.profile,
-      recentTrophies: this.recentTrophies,
+      summary: this.getAggregatedSummary(),
+      recentTrophies: mergedRecent,
       games: this.games,
       syncSource: this.syncSource,
       lastError: this.lastError
     };
   }
 
-  /**
-   * Load data with intelligent multi-tier fallback:
-   * 1. Custom user import from localStorage (if exists)
-   * 2. Supabase Cloud DB (if configured and populated)
-   * 3. Static cached data/psn-trophies.json (auto-synced by GitHub Actions)
-   */
-  async loadData() {
-    this.isLoading = true;
-    this.lastError = null;
+  startLivePolling() {
+    if (this._pollTimer) return;
+    this._pollTimer = setInterval(() => {
+      if (!document.hidden) {
+        this.loadData({ silent: true });
+      }
+    }, 45000);
 
-    // Tier 1: User custom import
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        this.loadData({ silent: true });
+      }
+    });
+  }
+
+  async loadData({ silent = false } = {}) {
+    if (!silent) this.isLoading = true;
+    this.lastError = null;
+    const settings = getLiveSyncSettings();
+
+    // Tier 1: Real-Time Serverless Proxy or Local Server PSN Endpoint
+    const psnEndpoints = [];
+    if (settings.psnProxyUrl) {
+      const qs = settings.psnOnlineId ? `?onlineId=${encodeURIComponent(settings.psnOnlineId)}` : "";
+      psnEndpoints.push(`${settings.psnProxyUrl}/psn/profile${qs}`);
+    }
+    if (settings.psnOnlineId) {
+      psnEndpoints.push(`/api/psn/profile?onlineId=${encodeURIComponent(settings.psnOnlineId)}&t=${Date.now()}`);
+    } else {
+      psnEndpoints.push(`/api/psn/profile?t=${Date.now()}`);
+    }
+
+    for (const url of psnEndpoints) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (res.ok) {
+          const ct = res.headers.get("content-type") || "";
+          if (ct.includes("application/json")) {
+            const live = await res.json();
+            if (live?.profile && Array.isArray(live.games)) {
+              this.profile = { ...live.profile, psnLinked: true };
+              this.recentTrophies = live.recentTrophies || [];
+              this.baseGames = live.games.filter((g) => !isRemovedGame(g));
+              this.syncSource = "live-proxy";
+              this._rebuildMergedGames();
+              this.isLoading = false;
+              this._notify();
+              return this.getData();
+            }
+          }
+        }
+      } catch (_) {}
+    }
+
+    // Tier 2: Custom user JSON import in localStorage
     try {
       const customRaw = localStorage.getItem(STORAGE_CUSTOM_KEY);
       if (customRaw) {
         const parsed = JSON.parse(customRaw);
         if (parsed?.profile && parsed?.games) {
           this.profile = parsed.profile;
-          this.recentTrophies = parsed.recentTrophies || [];
-          this.games = parsed.games || [];
+          this.recentTrophies = (parsed.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle, npCommunicationId: t.npCommunicationId }));
+          this.baseGames = parsed.games.filter((g) => !isRemovedGame(g));
           this.syncSource = "custom";
+          this._rebuildMergedGames();
           this.isLoading = false;
           this._notify();
           return this.getData();
@@ -75,15 +265,16 @@ class PsnTrophyService {
       }
     } catch (_) {}
 
-    // Tier 2: Supabase Live Database
+    // Tier 3: Supabase Live Database
     if (SUPABASE_CONFIG?.url && SUPABASE_CONFIG?.anonKey) {
       try {
         const sbData = await this._loadFromSupabase();
         if (sbData && sbData.profile) {
-          this.profile = sbData.profile;
-          this.recentTrophies = sbData.recentTrophies || [];
-          this.games = sbData.games || [];
+          this.profile = { ...sbData.profile, psnLinked: true };
+          this.recentTrophies = (sbData.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle }));
+          this.baseGames = (sbData.games || []).filter((g) => !isRemovedGame(g));
           this.syncSource = "supabase";
+          this._rebuildMergedGames();
           this.isLoading = false;
           this._notify();
           return this.getData();
@@ -93,25 +284,27 @@ class PsnTrophyService {
       }
     }
 
-    // Tier 3: data/psn-trophies.json
+    // Tier 4: Static snapshot data/psn-trophies.json (auto-updated by GitHub Actions)
     try {
-      const res = await fetch(`data/psn-trophies.json?t=${Date.now()}`);
+      const res = await fetch(`data/psn-trophies.json?t=${Date.now()}`, { cache: "no-store" });
       if (res.ok) {
         const data = await res.json();
         this.profile = data.profile;
-        this.recentTrophies = data.recentTrophies || [];
-        this.games = data.games || [];
+        this.recentTrophies = (data.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle, npCommunicationId: t.npCommunicationId }));
+        this.baseGames = (data.games || []).filter((g) => !isRemovedGame(g));
         this.syncSource = "json";
+        this._rebuildMergedGames();
         this.isLoading = false;
         this._notify();
         return this.getData();
       }
     } catch (err) {
-      this.lastError = "Не удалось загрузить данные трофеев PSN";
+      this.lastError = "Не удалось загрузить данные наград";
       console.error("PSN JSON fetch failed:", err);
     }
 
     this.isLoading = false;
+    this._rebuildMergedGames();
     this._notify();
     return this.getData();
   }
@@ -123,7 +316,6 @@ class PsnTrophyService {
       Authorization: `Bearer ${anonKey}`
     };
 
-    // 1. Profile
     const profRes = await fetch(`${url}/rest/v1/psn_profiles?select=*&order=last_sync_at.desc&limit=1`, { headers });
     if (!profRes.ok) return null;
     const profs = await profRes.json();
@@ -132,6 +324,7 @@ class PsnTrophyService {
 
     const profile = {
       onlineId: rawProf.online_id,
+      psnLinked: true,
       avatarUrl: rawProf.avatar_url,
       aboutMe: rawProf.about_me,
       trophyLevel: rawProf.trophy_level,
@@ -145,11 +338,9 @@ class PsnTrophyService {
       lastSyncAt: rawProf.last_sync_at
     };
 
-    // 2. Games
     const gamesRes = await fetch(`${url}/rest/v1/psn_games?online_id=eq.${encodeURIComponent(profile.onlineId)}&order=last_played_at.desc`, { headers });
     const rawGames = gamesRes.ok ? await gamesRes.json() : [];
 
-    // 3. Trophies
     const troRes = await fetch(`${url}/rest/v1/psn_trophies?online_id=eq.${encodeURIComponent(profile.onlineId)}&order=earned_at.desc`, { headers });
     const rawTrophies = troRes.ok ? await troRes.json() : [];
 
@@ -199,15 +390,12 @@ class PsnTrophyService {
         trophyIconUrl: t.trophy_icon_url,
         earned: true,
         earnedDateTime: t.earned_at,
-        gameTitle: games.find((g) => g.npCommunicationId === t.np_communication_id)?.titleName || 'PlayStation Game'
+        gameTitle: games.find((g) => g.npCommunicationId === t.np_communication_id)?.titleName || "PlayStation"
       }));
 
     return { profile, games, recentTrophies };
   }
 
-  /**
-   * Import custom JSON data provided by user
-   */
   importFromJSON(jsonString) {
     try {
       const parsed = JSON.parse(jsonString);
@@ -218,25 +406,25 @@ class PsnTrophyService {
         throw new Error("Неверный формат: поле games должно быть массивом.");
       }
 
+      const cleanGames = parsed.games.filter((g) => !isRemovedGame(g));
       parsed.profile.lastSyncAt = new Date().toISOString();
-      localStorage.setItem(STORAGE_CUSTOM_KEY, JSON.stringify(parsed));
+      parsed.profile.psnLinked = true;
+      localStorage.setItem(STORAGE_CUSTOM_KEY, JSON.stringify({ ...parsed, games: cleanGames }));
 
       this.profile = parsed.profile;
       this.recentTrophies = parsed.recentTrophies || [];
-      this.games = parsed.games;
+      this.baseGames = cleanGames;
       this.syncSource = "custom";
       this.lastError = null;
 
+      this._rebuildMergedGames();
       this._notify();
-      return { success: true, count: parsed.games.length };
+      return { success: true, count: cleanGames.length };
     } catch (err) {
       return { success: false, error: err.message };
     }
   }
 
-  /**
-   * Disconnect profile (clears custom import, reloads base sync)
-   */
   disconnect() {
     try {
       localStorage.removeItem(STORAGE_CUSTOM_KEY);
@@ -244,17 +432,12 @@ class PsnTrophyService {
     return this.loadData();
   }
 
-  /**
-   * Trigger Manual Sync (re-fetch live data)
-   */
   async syncNow() {
     return this.loadData();
   }
 
-  /**
-   * Filter and search games
-   */
   getGames(filter = "all", searchQuery = "") {
+    this._rebuildMergedGames();
     let list = this.games || [];
 
     if (searchQuery.trim()) {
@@ -263,7 +446,7 @@ class PsnTrophyService {
     }
 
     if (filter === "platinum") {
-      list = list.filter((g) => g.platinumEarned || g.earnedTrophies?.platinum > 0);
+      list = list.filter((g) => g.platinumEarned || (g.earnedTrophies?.platinum > 0));
     } else if (filter === "completed") {
       list = list.filter((g) => g.progress >= 100);
     } else if (filter === "in_progress") {
@@ -276,8 +459,12 @@ class PsnTrophyService {
   }
 
   getGame(commId) {
+    this._rebuildMergedGames();
     return this.games.find((g) => g.npCommunicationId === commId);
   }
 }
 
 export const psnService = new PsnTrophyService();
+if (typeof window !== "undefined") {
+  window.psnService = psnService;
+}
