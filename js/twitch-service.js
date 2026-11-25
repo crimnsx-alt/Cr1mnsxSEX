@@ -22,8 +22,8 @@ export const DEFAULT_TWITCH_STREAMERS = [
     url: "https://www.twitch.tv/sbomba3131",
     avatar: "https://static-cdn.jtvnw.net/jtv_user_pictures/4d62128d-fb6e-45a5-8865-0302106997a5-profile_image-300x300.png",
     initial: "С",
-    isLive: true,
-    uptime: "2ч+"
+    isLive: false,
+    uptime: null
   },
   {
     id: "mafanyaking",
@@ -175,9 +175,10 @@ class TwitchBroadcastService {
       list = JSON.parse(JSON.stringify(DEFAULT_TWITCH_STREAMERS));
     }
 
-    // Hydrate with persistent status cache immediately for 0ms rendering
+    // Hydrate only if cache is reasonably recent (<10m); otherwise start honest offline until verified
     const cache = this.loadStatusCache();
-    if (cache && cache.channels) {
+    const cacheAge = cache ? (Date.now() - cache.timestamp) : Infinity;
+    if (cache && cache.channels && cacheAge < 600000) {
       list.forEach((s) => {
         const c = cache.channels[s.channel.toLowerCase()];
         if (c) {
@@ -185,6 +186,11 @@ class TwitchBroadcastService {
           s.uptime = c.uptime || null;
           if (c.avatar && c.avatar.startsWith("http")) s.avatar = c.avatar;
         }
+      });
+    } else {
+      list.forEach((s) => {
+        s.isLive = false;
+        s.uptime = null;
       });
     }
 
@@ -467,7 +473,11 @@ class TwitchBroadcastService {
   stopInlineStage() {
     this.isInlineActive = false;
     const twitchView = document.getElementById("ps5TwitchView");
-    if (twitchView) twitchView.hidden = true;
+    if (twitchView) {
+      twitchView.hidden = true;
+      twitchView.classList.remove("is-stream-live", "is-stream-offline");
+    }
+    document.body.classList.remove("twitch-stream-live", "twitch-stream-offline");
 
     if (this.checkTimer) {
       clearInterval(this.checkTimer);
@@ -564,8 +574,30 @@ class TwitchBroadcastService {
     });
   }
 
+  syncStreamVisualState(streamer) {
+    const isLive = Boolean(streamer?.isLive);
+    const liveCls = isLive ? "is-stream-live" : "is-stream-offline";
+    const clearCls = isLive ? "is-stream-offline" : "is-stream-live";
+
+    for (const el of [
+      document.getElementById("ps5TwitchView"),
+      document.getElementById("twitchInlinePlayerBox"),
+      document.getElementById("modalTwitchHub")
+    ]) {
+      if (!el) continue;
+      el.classList.remove(clearCls);
+      el.classList.add(liveCls);
+    }
+
+    if (this.isInlineActive || this.isHubActive) {
+      document.body.classList.toggle("twitch-stream-live", isLive);
+      document.body.classList.toggle("twitch-stream-offline", !isLive);
+    }
+  }
+
   updateInlineStreamer(channel) {
     const streamer = this.getActiveStreamer();
+    this.syncStreamVisualState(streamer);
 
     // Top Status Strip Pill
     const statusPill = document.querySelector(".twitch-cb-live-pill");
@@ -818,6 +850,7 @@ class TwitchBroadcastService {
 
     // Update Modal
     if (this.isHubActive) {
+      this.syncStreamVisualState(streamer);
       const glowEl = document.getElementById("twitchAmbientGlow");
       if (glowEl) {
         glowEl.style.setProperty("--streamer-color", streamer.color || "#9146FF");
@@ -988,8 +1021,11 @@ class TwitchBroadcastService {
     const modal = document.getElementById("modalTwitchHub");
     if (!modal) return;
 
-    modal.classList.remove("active");
+    modal.classList.remove("active", "is-stream-live", "is-stream-offline");
     modal.setAttribute("aria-hidden", "true");
+    if (!this.isInlineActive) {
+      document.body.classList.remove("twitch-stream-live", "twitch-stream-offline");
+    }
     SoundEngine.modalClose();
 
     const pWrap = document.getElementById("twitchIframeWrap");

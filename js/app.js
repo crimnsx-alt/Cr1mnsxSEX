@@ -16,7 +16,7 @@ import {
   controlCenterItems,
   searchCatalog,
   defaultProfileTelemetry
-} from "./data.js?v=20261125_twitch_gta";
+} from "./data.js?v=20261125_twitch_glass3";
 import { FriendsService, PRESET_AVATARS, escapeHtml } from "./friends-service.js";
 import { psnService } from "./psn-service.js";
 import { SoundEngine } from "./sound.js";
@@ -28,7 +28,7 @@ import {
 } from "./sound-catalog.js";
 import { PS5Icons } from "./icons.js";
 import { PS5ParticleEngine } from "./particles.js";
-import { twitchService } from "./twitch-service.js";
+import { twitchService } from "./twitch-service.js?v=20261125_twitch_glass3";
 import { youtubeService } from "./youtube-service.js";
 import { brawlService } from "./brawl-service.js";
 import { getLiveSyncSettings, saveLiveSyncSettings } from "./live-sync-config.js";

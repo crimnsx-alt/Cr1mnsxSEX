@@ -10314,6 +10314,109 @@ body.view-twitch .twitch-inline-meta-bar {
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-top-color: rgba(255, 255, 255, 0.26);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 12px 32px rgba(0, 0, 0, 0.42);
+  transition: background 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              backdrop-filter 0.35s ease,
+              border-color 0.35s ease;
+}
+
+/* Offline Stream: Sheer Liquid Glass reveals the center studio photo cleanly */
+body.view-twitch.twitch-stream-offline .ps5-bg-art {
+  filter: brightness(1.0) contrast(1.05) saturate(1.08);
+}
+
+body.view-twitch.twitch-stream-offline .ps5-bg-vignette {
+  background:
+    linear-gradient(to bottom, rgba(6, 7, 18, 0.54) 0%, rgba(6, 7, 18, 0.06) 24%, rgba(8, 7, 20, 0.1) 72%, rgba(5, 6, 15, 0.82) 100%),
+    radial-gradient(ellipse 94% 84% at 50% 48%, rgba(145, 70, 255, 0.02) 0%, rgba(5, 6, 16, 0.24) 94%);
+}
+
+.ps5-twitch-view.is-stream-offline .ps5-twitch-control-bar,
+.ps5-twitch-view.is-stream-offline .twitch-inline-sidebar,
+.ps5-twitch-view.is-stream-offline .twitch-inline-chat-drawer,
+.ps5-twitch-view.is-stream-offline .twitch-inline-meta-bar {
+  background: rgba(12, 13, 24, 0.3);
+  backdrop-filter: blur(11px) saturate(145%);
+  -webkit-backdrop-filter: blur(11px) saturate(145%);
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-inline-player-box,
+.modal-twitch-fullscreen.is-stream-offline .twitch-player-container {
+  background: rgba(12, 13, 24, 0.14);
+  backdrop-filter: blur(5px) saturate(130%);
+  -webkit-backdrop-filter: blur(5px) saturate(130%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24), 0 12px 34px rgba(0, 0, 0, 0.28);
+  transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-inline-ambient-aura,
+.modal-twitch-fullscreen.is-stream-offline .twitch-player-ambient-glow {
+  opacity: 0.06;
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-iframe-skeleton,
+.modal-twitch-fullscreen.is-stream-offline .twitch-iframe-skeleton {
+  background: rgba(12, 13, 24, 0.24);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-inline-iframe-holder iframe,
+.modal-twitch-fullscreen.is-stream-offline .twitch-iframe-wrap iframe {
+  opacity: 0.16;
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-inline-player-box:hover .twitch-inline-iframe-holder iframe,
+.modal-twitch-fullscreen.is-stream-offline .twitch-player-container:hover .twitch-iframe-wrap iframe {
+  opacity: 0.92;
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-in-chat-iframe-holder iframe {
+  opacity: 0.42;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps5-twitch-view.is-stream-offline .twitch-inline-chat-drawer:hover .twitch-in-chat-iframe-holder iframe {
+  opacity: 0.96;
+}
+
+/* Live Stream: Theater Focus & Brighter, Vivid Player Stage */
+body.view-twitch.twitch-stream-live .ps5-bg-art {
+  filter: brightness(0.56) contrast(1.06) saturate(1.06);
+}
+
+body.view-twitch.twitch-stream-live .ps5-bg-vignette {
+  background:
+    linear-gradient(to bottom, rgba(5, 6, 16, 0.72) 0%, rgba(5, 6, 16, 0.28) 26%, rgba(6, 7, 18, 0.38) 70%, rgba(4, 5, 12, 0.9) 100%),
+    radial-gradient(ellipse 92% 82% at 50% 48%, rgba(145, 70, 255, 0.05) 0%, rgba(4, 5, 14, 0.54) 94%);
+}
+
+.ps5-twitch-view.is-stream-live .twitch-inline-player-box,
+.modal-twitch-fullscreen.is-stream-live .twitch-player-container {
+  background: #04050a;
+  border: 1.5px solid rgba(168, 85, 247, 0.65);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.16),
+              0 18px 54px rgba(0, 0, 0, 0.88),
+              0 0 44px rgba(145, 70, 255, 0.34);
+}
+
+.ps5-twitch-view.is-stream-live .twitch-inline-ambient-aura,
+.modal-twitch-fullscreen.is-stream-live .twitch-player-ambient-glow {
+  opacity: 0.36;
+}
+
+.ps5-twitch-view.is-stream-live .twitch-inline-iframe-holder iframe,
+.modal-twitch-fullscreen.is-stream-live .twitch-iframe-wrap iframe {
+  opacity: 1;
+  filter: brightness(1.1) contrast(1.06) saturate(1.1);
+  transition: opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ps5-twitch-view.is-stream-live .twitch-in-chat-iframe-holder iframe {
+  opacity: 1;
 }
 
 .modal-twitch-fullscreen.active .sber-tips-backdrop {
@@ -16423,7 +16526,9 @@ body.view-youtube .ps5-bg-vignette {
   .ps5-twitch-control-bar,
   .twitch-inline-sidebar,
   .twitch-inline-chat-drawer,
-  .twitch-inline-meta-bar {
+  .twitch-inline-meta-bar,
+  .twitch-inline-player-box,
+  .twitch-player-container {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background: rgba(18, 24, 40, 0.94) !important;
