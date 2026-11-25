@@ -16,10 +16,10 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const TROPHIES_JSON_PATH = path.join(DATA_DIR, 'psn-trophies.json');
 
-// Official Sony Client ID & Secret for PS App OAuth
-const CLIENT_ID = '09515139-db77-4948-8042-e370db3597d1';
-const CLIENT_SECRET_BASIC = 'MDk1MTUxMzktZGI3Ny00OTQ4LTgwNDItZTM3MGRiMzU5N2QxOnExSUIxfldLTVNDUGEyWW0=';
-const REDIRECT_URI = 'com.scee.psxandroid.scee.medialink://community/auth/signin';
+// Official Sony Client ID & Secret for PlayStation App OAuth
+const CLIENT_ID = '09515159-7237-4370-9b40-3806e67c0891';
+const CLIENT_SECRET_BASIC = 'MDk1MTUxNTktNzIzNy00MzcwLTliNDAtMzgwNmU2N2MwODkxOnVjUGprYTV0bnRCMktxc1A=';
+const REDIRECT_URI = 'com.scee.psxandroid.scecompcall://redirect';
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -31,20 +31,21 @@ async function exchangeNpssoForCode(npsso) {
   url.searchParams.set('access_type', 'offline');
   url.searchParams.set('client_id', CLIENT_ID);
   url.searchParams.set('response_type', 'code');
-  url.searchParams.set('scope', 'psn:mobile.core');
+  url.searchParams.set('scope', 'psn:mobile.v2.core psn:clientapp');
   url.searchParams.set('redirect_uri', REDIRECT_URI);
 
   const res = await fetch(url.toString(), {
     headers: {
       Cookie: `npsso=${npsso}`,
-      'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15'
+      'User-Agent': 'PlayStation/23.11.0 CFNetwork/1408.0.4 Darwin/22.5.0'
     },
     redirect: 'manual'
   });
 
   const location = res.headers.get('location');
   if (!location) {
-    throw new Error('NPSSO authorization failed. Please verify that your NPSSO token is valid and not expired.');
+    const body = await res.text().catch(() => '');
+    throw new Error(`NPSSO authorization failed (HTTP ${res.status}): ${body.slice(0, 180)}`);
   }
 
   const redirectUrl = new URL(location);
@@ -62,9 +63,8 @@ async function exchangeNpssoForCode(npsso) {
 async function exchangeCodeForTokens(code) {
   const params = new URLSearchParams({
     code,
-    client_id: CLIENT_ID,
-    grant_type: 'authorization_code',
     redirect_uri: REDIRECT_URI,
+    grant_type: 'authorization_code',
     token_format: 'jwt'
   });
 
@@ -96,15 +96,35 @@ async function fetchPsnData(accessToken) {
     'User-Agent': 'PlayStation/23.11.0 CFNetwork/1408.0.4 Darwin/22.5.0'
   };
 
-  // 1. User Profile
-  console.log('Fetching user profile...');
-  const profRes = await fetch('https://m.np.playstation.com/api/userProfile/v1/internal/users/me/profiles', { headers });
-  if (!profRes.ok) throw new Error(`Failed to fetch profile: ${profRes.status}`);
-  const profileData = await profRes.json();
-  const onlineId = profileData.onlineId || 'Player';
-  const avatarUrl = profileData.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl || 
-                    profileData.avatarUrls?.[0]?.avatarUrl || '';
-  const aboutMe = profileData.aboutMe || '';
+  // 1. User Profile (decode account_id from JWT since userProfile expects numeric accountId)
+  let accountId = 'me';
+  try {
+    const jwtPayload = JSON.parse(Buffer.from(accessToken.split('.')[1], 'base64url').toString('utf8'));
+    accountId = jwtPayload?.account_id || jwtPayload?.sub || 'me';
+  } catch (_) {}
+
+  console.log(`Fetching user profile (accountId: ${accountId})...`);
+  let onlineId = process.env.PSN_ONLINE_ID?.trim() || 'Cr1mnsx';
+  let avatarUrl = 'assets/brawl/avatars/player_avatar.webp';
+  let aboutMe = '';
+  try {
+    const profRes = await fetch(`https://m.np.playstation.com/api/userProfile/v1/internal/users/${accountId}/profiles`, { headers });
+    if (profRes.ok) {
+      const profileData = await profRes.json();
+      onlineId = profileData.onlineId || onlineId;
+      avatarUrl = (
+        profileData.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl ||
+        profileData.avatars?.[0]?.url ||
+        profileData.avatarUrls?.[0]?.avatarUrl ||
+        avatarUrl
+      ).replace(/^http:\/\//i, 'https://');
+      aboutMe = profileData.aboutMe || '';
+    } else {
+      console.warn(`Profile metadata returned HTTP ${profRes.status}, continuing with trophySummary for ${onlineId}`);
+    }
+  } catch (err) {
+    console.warn(`Profile metadata fetch skipped: ${err.message}`);
+  }
 
   // 2. Trophy Summary (Level, Total, Platinum, Gold, Silver, Bronze)
   console.log(`Fetching trophy summary for ${onlineId}...`);
@@ -120,7 +140,7 @@ async function fetchPsnData(accessToken) {
 
   // 3. User Titles / Games
   console.log('Fetching game titles...');
-  const titlesRes = await fetch('https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles?limit=100', { headers });
+  const titlesRes = await fetch('https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles?limit=150', { headers });
   if (!titlesRes.ok) throw new Error(`Failed to fetch titles: ${titlesRes.status}`);
   const titlesData = await titlesRes.json();
   const rawTitles = titlesData.trophyTitles || [];
@@ -130,46 +150,60 @@ async function fetchPsnData(accessToken) {
   const games = [];
   const allRecentTrophies = [];
 
-  // 4. Fetch detailed trophy list for each title (rate limited with sleep)
-  for (let i = 0; i < Math.min(rawTitles.length, 30); i++) {
+  // 4. Fetch metadata + earned status for all titles (PS4/PS3/Vita require npServiceName=trophy)
+  const limitCount = Math.min(rawTitles.length, 150);
+  for (let i = 0; i < limitCount; i++) {
     const title = rawTitles[i];
     const commId = title.npCommunicationId;
     const titleName = title.trophyTitleName;
     const titleIcon = title.trophyTitleIconUrl;
     const platform = title.trophyTitlePlatform || 'PS5';
+    const serviceParam = (title.npServiceName === 'trophy' || !String(platform).includes('PS5'))
+      ? '?npServiceName=trophy'
+      : '';
     const progress = title.progress || 0;
     const earnedCounts = title.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
+    const definedCounts = title.definedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
     const hasPlat = earnedCounts.platinum > 0;
 
-    console.log(`[${i + 1}/${Math.min(rawTitles.length, 30)}] Fetching trophies for "${titleName}"...`);
-    await sleep(200);
+    console.log(`[${i + 1}/${limitCount}] Fetching trophies for "${titleName}" (${platform})...`);
+    await sleep(140);
 
     let trophies = [];
     try {
-      const troRes = await fetch(
-        `https://m.np.playstation.com/api/trophy/v1/users/me/titles/${commId}/trophyGroups/all/trophies`,
-        { headers }
-      );
-      if (troRes.ok) {
-        const troData = await troRes.json();
-        trophies = (troData.trophies || []).map((t) => {
+      const [metaRes, userRes] = await Promise.all([
+        fetch(`https://m.np.playstation.com/api/trophy/v1/npCommunicationIds/${commId}/trophyGroups/all/trophies${serviceParam}`, { headers }),
+        fetch(`https://m.np.playstation.com/api/trophy/v1/users/me/npCommunicationIds/${commId}/trophyGroups/all/trophies${serviceParam}`, { headers })
+      ]);
+      const metaMap = new Map();
+      if (metaRes.ok) {
+        const metaData = await metaRes.json();
+        for (const m of metaData.trophies || []) {
+          metaMap.set(m.trophyId, m);
+        }
+      }
+      if (userRes.ok) {
+        const userData = await userRes.json();
+        trophies = (userData.trophies || []).map((t) => {
+          const meta = metaMap.get(t.trophyId) || {};
           const item = {
             trophyId: t.trophyId,
-            trophyHidden: !!t.trophyHidden,
-            trophyType: t.trophyType || 'bronze',
-            trophyName: t.trophyName || 'Секретный приз',
-            trophyDetail: t.trophyDetail || '',
-            trophyIconUrl: t.trophyIconUrl || '',
+            trophyHidden: !!(meta.trophyHidden ?? t.trophyHidden),
+            trophyType: t.trophyType || meta.trophyType || 'bronze',
+            trophyName: meta.trophyName || t.trophyName || (t.trophyHidden ? 'Секретный приз' : `Приз #${t.trophyId}`),
+            trophyDetail: meta.trophyDetail || t.trophyDetail || '',
+            trophyIconUrl: meta.trophyIconUrl || t.trophyIconUrl || titleIcon || '',
             trophyRare: t.trophyRare ?? 0,
             earned: !!t.earned,
-            earnedDateTime: t.earnedDateTime || null,
-            gameTitle: titleName,
-            gameIcon: titleIcon,
-            npCommunicationId: commId
+            earnedDateTime: t.earnedDateTime || null
           };
 
           if (item.earned && item.earnedDateTime) {
-            allRecentTrophies.push(item);
+            allRecentTrophies.push({
+              ...item,
+              gameTitle: titleName,
+              npCommunicationId: commId
+            });
           }
           return item;
         });
@@ -177,6 +211,12 @@ async function fetchPsnData(accessToken) {
     } catch (err) {
       console.warn(`Warning: Could not fetch trophies for ${titleName}: ${err.message}`);
     }
+
+    const totalDefined =
+      (definedCounts.bronze || 0) +
+      (definedCounts.silver || 0) +
+      (definedCounts.gold || 0) +
+      (definedCounts.platinum || 0);
 
     games.push({
       npCommunicationId: commId,
@@ -186,7 +226,7 @@ async function fetchPsnData(accessToken) {
       progress,
       platinumEarned: hasPlat,
       earnedTrophies: earnedCounts,
-      totalTrophiesCount: trophies.length || (earnedCounts.bronze + earnedCounts.silver + earnedCounts.gold + earnedCounts.platinum),
+      totalTrophiesCount: totalDefined || trophies.length || (earnedCounts.bronze + earnedCounts.silver + earnedCounts.gold + earnedCounts.platinum),
       lastUpdatedDateTime: title.lastUpdatedDateTime || null,
       trophies
     });
@@ -202,6 +242,10 @@ async function fetchPsnData(accessToken) {
       psnOnlineId: onlineId,
       psnLinked: true,
       confirmedPsnPlatinums: counts.platinum,
+      profileUrls: [
+        `https://psn.gg/profile/${onlineId}`,
+        `https://psnprofiles.com/${onlineId}`
+      ],
       avatarUrl,
       aboutMe,
       trophyLevel,
@@ -348,11 +392,29 @@ async function main() {
 
     const payload = await fetchPsnData(accessToken);
     const durationSec = ((Date.now() - startTime) / 1000).toFixed(1);
-    console.log(`✓ Retrieved PSN data in ${durationSec}s: Level ${payload.profile.trophyLevel}, ${payload.profile.totalTrophies} trophies across ${payload.games.length} games.`);
+    console.log(`✓ Retrieved PSN data in ${durationSec}s: Level ${payload.profile.trophyLevel}, ${payload.profile.totalTrophies} trophies across ${payload.games.length} PlayStation games.`);
+
+    // Preserve kept browser-playable entries alongside synced PlayStation games
+    let browserGames = [];
+    if (fs.existsSync(TROPHIES_JSON_PATH)) {
+      try {
+        const prev = JSON.parse(fs.readFileSync(TROPHIES_JSON_PATH, 'utf8'));
+        browserGames = (prev.games || []).filter((g) => g && g.isBrowserGame === true);
+      } catch (_) {}
+    }
+    if (browserGames.length === 0) {
+      browserGames = getBaseDataset().games.filter((g) => g.isBrowserGame === true);
+    }
+    const existingIds = new Set(payload.games.map((g) => g.npCommunicationId));
+    for (const bg of browserGames) {
+      if (!existingIds.has(bg.npCommunicationId)) {
+        payload.games.push(bg);
+      }
+    }
 
     if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
     fs.writeFileSync(TROPHIES_JSON_PATH, JSON.stringify(payload, null, 2), 'utf8');
-    console.log(`✓ Saved to ${TROPHIES_JSON_PATH}`);
+    console.log(`✓ Saved to ${TROPHIES_JSON_PATH} (total ${payload.games.length} games including browser ports)`);
 
     await syncToSupabase(payload);
     console.log('=== Sync completed successfully! ===');

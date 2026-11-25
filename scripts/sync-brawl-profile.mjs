@@ -180,17 +180,28 @@ async function main() {
       Authorization: `Bearer ${token}`,
       Accept: "application/json"
     };
-    const pRes = await fetch(`https://api.brawlstars.com/v1/players/${encoded}`, { headers });
-    if (!pRes.ok) {
-      throw new Error(`Supercell API /players failed (${pRes.status}): ${await pRes.text()}`);
-    }
-    rawPlayer = await pRes.json();
+    const bases = process.env.BRAWL_API_BASE?.trim()
+      ? [process.env.BRAWL_API_BASE.trim().replace(/\/+$/, "")]
+      : ["https://api.brawlstars.com/v1", "https://bsproxy.royaleapi.dev/v1"];
 
-    const bRes = await fetch(`https://api.brawlstars.com/v1/players/${encoded}/battlelog`, { headers });
-    if (bRes.ok) {
-      rawBattlelog = await bRes.json();
-    } else {
-      console.warn(`[WARN] Supercell API /battlelog responded ${bRes.status}`);
+    let lastErr = null;
+    for (const base of bases) {
+      const pRes = await fetch(`${base}/players/${encoded}`, { headers });
+      if (pRes.ok) {
+        rawPlayer = await pRes.json();
+        const bRes = await fetch(`${base}/players/${encoded}/battlelog`, { headers });
+        if (bRes.ok) {
+          rawBattlelog = await bRes.json();
+        } else {
+          console.warn(`[WARN] Brawl API /battlelog (${base}) responded ${bRes.status}`);
+        }
+        break;
+      }
+      lastErr = `Supercell API /players (${base}) failed (${pRes.status}): ${await pRes.text()}`;
+      if (pRes.status !== 403) break;
+    }
+    if (!rawPlayer) {
+      throw new Error(lastErr || "Failed to fetch Brawl Stars profile");
     }
   }
 

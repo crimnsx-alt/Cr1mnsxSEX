@@ -28,6 +28,7 @@ class PsnTrophyService {
     this.profile = null;
     this.recentTrophies = [];
     this.baseGames = [];
+    this.browserGames = [];
     this.externalGames = new Map();
     this.games = [];
     this.listeners = new Set();
@@ -73,9 +74,19 @@ class PsnTrophyService {
   }
 
   _rebuildMergedGames() {
-    const cleanBase = (this.baseGames || []).filter((g) => !isRemovedGame(g) && !this.externalGames.has(g.npCommunicationId));
-    const merged = [...Array.from(this.externalGames.values()), ...cleanBase];
-    this.games = merged;
+    const seen = new Set();
+    const result = [];
+    const pushUnique = (g) => {
+      if (!g || isRemovedGame(g)) return;
+      if (g.npCommunicationId && seen.has(g.npCommunicationId)) return;
+      if (g.npCommunicationId) seen.add(g.npCommunicationId);
+      result.push(g);
+    };
+
+    Array.from(this.externalGames.values()).forEach(pushUnique);
+    (this.baseGames || []).forEach(pushUnique);
+    (this.browserGames || []).forEach(pushUnique);
+    this.games = result;
   }
 
   mergeExternalGame(gameEntry) {
@@ -126,7 +137,7 @@ class PsnTrophyService {
     let silver = earnedSilver;
     let bronze = earnedBronze;
 
-    if (psnLinked && this.syncSource !== "json") {
+    if (psnLinked) {
       // Real synced PSN totals include all PSN trophies + external Brawl Stars bridge
       const brawl = this.externalGames.get("NPWR_BRAWL_STARS_2RGUQJQ0R")?.earnedTrophies || {};
       plat = Number(prof.platinum || 0) + Number(brawl.platinum || 0);
@@ -172,7 +183,7 @@ class PsnTrophyService {
     const brawlRecent = brawlGame && Array.isArray(brawlGame.trophies)
       ? brawlGame.trophies
           .filter((t) => t.earned)
-          .slice(0, 6)
+          .slice(0, 3)
           .map((t) => ({
             ...t,
             gameTitle: "Brawl Stars (#2RGUQJQ0R)",
@@ -181,7 +192,7 @@ class PsnTrophyService {
       : [];
 
     const filteredBaseRecent = (this.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle, npCommunicationId: t.npCommunicationId }));
-    const mergedRecent = [...brawlRecent, ...filteredBaseRecent].slice(0, 12);
+    const mergedRecent = [...filteredBaseRecent.slice(0, 8), ...brawlRecent].slice(0, 12);
 
     return {
       profile: this.profile,
@@ -206,6 +217,19 @@ class PsnTrophyService {
         this.loadData({ silent: true });
       }
     });
+  }
+
+  async _ensureBrowserGamesLoaded() {
+    if (this.browserGames.length > 0) return;
+    try {
+      const res = await fetch(`data/psn-trophies.json?t=${Date.now()}`, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        this.browserGames = (data.games || []).filter((g) => g && g.isBrowserGame === true && !isRemovedGame(g));
+        this._rebuildMergedGames();
+        this._notify();
+      }
+    } catch (_) {}
   }
 
   async loadData({ silent = false } = {}) {
@@ -235,7 +259,11 @@ class PsnTrophyService {
             if (live?.profile && Array.isArray(live.games)) {
               this.profile = { ...live.profile, psnLinked: true };
               this.recentTrophies = live.recentTrophies || [];
-              this.baseGames = live.games.filter((g) => !isRemovedGame(g));
+              const filteredLive = live.games.filter((g) => !isRemovedGame(g));
+              this.baseGames = filteredLive;
+              const includedBrowser = filteredLive.filter((g) => g.isBrowserGame === true);
+              if (includedBrowser.length > 0) this.browserGames = includedBrowser;
+              else this._ensureBrowserGamesLoaded();
               this.syncSource = "live-proxy";
               this._rebuildMergedGames();
               this.isLoading = false;
@@ -291,7 +319,9 @@ class PsnTrophyService {
         const data = await res.json();
         this.profile = data.profile;
         this.recentTrophies = (data.recentTrophies || []).filter((t) => !isRemovedGame({ titleName: t.gameTitle, npCommunicationId: t.npCommunicationId }));
-        this.baseGames = (data.games || []).filter((g) => !isRemovedGame(g));
+        const filteredJson = (data.games || []).filter((g) => !isRemovedGame(g));
+        this.baseGames = filteredJson;
+        this.browserGames = filteredJson.filter((g) => g.isBrowserGame === true);
         this.syncSource = "json";
         this._rebuildMergedGames();
         this.isLoading = false;

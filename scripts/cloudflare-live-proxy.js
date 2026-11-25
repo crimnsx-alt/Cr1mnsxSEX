@@ -21,7 +21,7 @@ async function exchangePsnToken(npsso) {
   const authUrl = new URL("https://ca.account.sony.com/api/authz/v3/oauth/authorize");
   authUrl.searchParams.set("access_type", "offline");
   authUrl.searchParams.set("client_id", "09515159-7237-4370-9b40-3806e67c0891");
-  authUrl.searchParams.set("redirect_uri", "com.scee.psxandroid.sceplink://redirect");
+  authUrl.searchParams.set("redirect_uri", "com.scee.psxandroid.scecompcall://redirect");
   authUrl.searchParams.set("response_type", "code");
   authUrl.searchParams.set("scope", "psn:mobile.v2.core psn:clientapp");
 
@@ -37,7 +37,7 @@ async function exchangePsnToken(npsso) {
 
   const tokenParams = new URLSearchParams({
     code,
-    redirect_uri: "com.scee.psxandroid.sceplink://redirect",
+    redirect_uri: "com.scee.psxandroid.scecompcall://redirect",
     grant_type: "authorization_code",
     token_format: "jwt"
   });
@@ -80,16 +80,25 @@ export default {
         Authorization: `Bearer ${env.BRAWL_API_TOKEN.trim()}`,
         Accept: "application/json"
       };
+      const bases = env.BRAWL_API_BASE
+        ? [env.BRAWL_API_BASE.trim().replace(/\/+$/, "")]
+        : ["https://api.brawlstars.com/v1", "https://bsproxy.royaleapi.dev/v1"];
 
-      const [playerRes, battleRes] = await Promise.all([
-        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}`, { headers }),
-        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}/battlelog`, { headers })
-      ]);
+      let playerRes = null;
+      let battleRes = null;
+      for (const base of bases) {
+        playerRes = await fetch(`${base}/players/${encodedTag}`, { headers });
+        if (playerRes.ok) {
+          battleRes = await fetch(`${base}/players/${encodedTag}/battlelog`, { headers });
+          break;
+        }
+        if (playerRes.status !== 403) break;
+      }
 
-      if (!playerRes.ok) {
+      if (!playerRes || !playerRes.ok) {
         return Response.json(
-          { error: `Supercell API error ${playerRes.status}`, detail: await playerRes.text() },
-          { status: playerRes.status, headers: corsHeaders }
+          { error: `Supercell API error ${playerRes?.status || 500}`, detail: playerRes ? await playerRes.text() : "Fetch failed" },
+          { status: playerRes?.status || 500, headers: corsHeaders }
         );
       }
 
@@ -113,10 +122,17 @@ export default {
           "Accept-Language": "ru-RU, ru;q=0.9, en-US;q=0.8",
           "User-Agent": "PlayStation/23.11.0 CFNetwork/1408.0.4 Darwin/22.5.0"
         };
+        let accountId = "me";
+        try {
+          const b64 = accessToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+          const payload = JSON.parse(atob(b64));
+          accountId = payload?.account_id || payload?.sub || "me";
+        } catch (_) {}
+
         const [profRes, sumRes, titlesRes] = await Promise.all([
-          fetch("https://m.np.playstation.com/api/userProfile/v1/internal/users/me/profiles", { headers: psnHeaders }),
+          fetch(`https://m.np.playstation.com/api/userProfile/v1/internal/users/${accountId}/profiles`, { headers: psnHeaders }),
           fetch("https://m.np.playstation.com/api/trophy/v1/users/me/trophySummary", { headers: psnHeaders }),
-          fetch("https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles?limit=50", { headers: psnHeaders })
+          fetch("https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles?limit=150", { headers: psnHeaders })
         ]);
         const prof = profRes.ok ? await profRes.json() : {};
         const sum = sumRes.ok ? await sumRes.json() : {};
@@ -144,10 +160,19 @@ export default {
           {
             profile: {
               onlineId: prof.onlineId || url.searchParams.get("onlineId") || "Cr1mnsx",
-              psnOnlineId: prof.onlineId || "",
+              psnOnlineId: prof.onlineId || url.searchParams.get("onlineId") || "Cr1mnsx",
               psnLinked: true,
               confirmedPsnPlatinums: counts.platinum,
-              avatarUrl: prof.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl || prof.avatarUrls?.[0]?.avatarUrl || "",
+              profileUrls: [
+                `https://psn.gg/profile/${prof.onlineId || "Cr1mnsx"}`,
+                `https://psnprofiles.com/${prof.onlineId || "Cr1mnsx"}`
+              ],
+              avatarUrl: (
+                prof.personalDetail?.profilePictureUrls?.[0]?.profilePictureUrl ||
+                prof.avatars?.[0]?.url ||
+                prof.avatarUrls?.[0]?.avatarUrl ||
+                "assets/brawl/avatars/player_avatar.webp"
+              ).replace(/^http:\/\//i, "https://"),
               trophyLevel: sum.trophyLevel || 1,
               levelProgress: sum.progress || 0,
               levelTier: sum.tier || 1,

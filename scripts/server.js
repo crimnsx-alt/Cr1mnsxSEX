@@ -78,18 +78,25 @@ const server = http.createServer((req, res) => {
     if (token) {
       const encodedTag = encodeURIComponent(`#${tag}`);
       const headers = { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' };
-      Promise.all([
-        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}`, { headers }),
-        fetch(`https://api.brawlstars.com/v1/players/${encodedTag}/battlelog`, { headers }).catch(() => null)
-      ])
-        .then(async ([pRes, bRes]) => {
-          if (!pRes.ok) throw new Error(`Official API responded with ${pRes.status}`);
-          const player = await pRes.json();
-          const battlelog = bRes && bRes.ok ? await bRes.json() : null;
-          res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-          res.end(JSON.stringify({ player, battlelog, _liveSource: 'supercell-official' }));
-        })
-        .catch(serveFallback);
+      const bases = process.env.BRAWL_API_BASE?.trim()
+        ? [process.env.BRAWL_API_BASE.trim().replace(/\/+$/, '')]
+        : ['https://api.brawlstars.com/v1', 'https://bsproxy.royaleapi.dev/v1'];
+
+      (async () => {
+        for (const base of bases) {
+          const pRes = await fetch(`${base}/players/${encodedTag}`, { headers });
+          if (pRes.ok) {
+            const bRes = await fetch(`${base}/players/${encodedTag}/battlelog`, { headers }).catch(() => null);
+            const player = await pRes.json();
+            const battlelog = bRes && bRes.ok ? await bRes.json() : null;
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ player, battlelog, _liveSource: 'supercell-official' }));
+            return;
+          }
+          if (pRes.status !== 403) throw new Error(`Official API responded with ${pRes.status}`);
+        }
+        throw new Error('Official Brawl API returned 403');
+      })().catch(serveFallback);
       return;
     }
 

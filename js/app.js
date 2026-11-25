@@ -771,15 +771,20 @@ function applyLanguageAndTelemetry() {
       avatarBtn.title = state.lang === "ru" ? `Профиль ${onlineId}` : `Profile ${onlineId}`;
     }
     const avatarWrap = $("#iconProfileAvatar");
-    const img = document.createElement("img");
-    img.src = prof.avatarUrl;
-    img.alt = onlineId;
-    img.className = "ps5-topbar-avatar";
-    img.addEventListener("error", () => {
-      avatarWrap.innerHTML = PS5Icons.avatarSvg;
-    }, { once: true });
-    avatarWrap.innerHTML = "";
-    avatarWrap.appendChild(img);
+    const existingAvatarImg = avatarWrap.querySelector("img");
+    if (!existingAvatarImg || existingAvatarImg.dataset.avatarSrc !== prof.avatarUrl) {
+      const img = document.createElement("img");
+      img.src = prof.avatarUrl;
+      img.dataset.avatarSrc = prof.avatarUrl;
+      img.alt = onlineId;
+      img.referrerPolicy = "no-referrer";
+      img.className = "ps5-topbar-avatar";
+      img.addEventListener("error", () => {
+        avatarWrap.innerHTML = PS5Icons.avatarSvg;
+      }, { once: true });
+      avatarWrap.innerHTML = "";
+      avatarWrap.appendChild(img);
+    }
   }
 
   renderControllerHints();
@@ -2592,6 +2597,7 @@ function renderTrophyCollectionModal() {
   if (pill) {
     if (stats.psnLinked && syncSource === "live-proxy") pill.textContent = isRu ? "● PSN Live Эфир" : "● PSN Live";
     else if (stats.psnLinked && syncSource === "supabase") pill.textContent = isRu ? "● PSN Cloud DB" : "● PSN Cloud DB";
+    else if (stats.psnLinked) pill.textContent = isRu ? "● PSN Sync · Brawl Live" : "● PSN Sync · Brawl Live";
     else if (syncSource === "custom") pill.textContent = isRu ? "● Локальный импорт" : "● Custom Import";
     else pill.textContent = isRu ? "● Brawl Live · Ждёт PSN" : "● Brawl Live · PSN Pending";
   }
@@ -2648,7 +2654,7 @@ function renderTrophyCollectionModal() {
         const iconSrc = t.trophyIconUrl || "assets/covers/gta_vc.jpg";
         return `
           <div class="tc-recent-card" data-comm-id="${t.npCommunicationId || ''}" role="button" tabindex="0">
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-recent-icon" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
             <div class="tc-recent-info">
               <span class="tc-recent-trophy-name">${escapeHtml(t.trophyName)}</span>
               <span class="tc-recent-game-title">${escapeHtml(t.gameTitle || 'PlayStation 5')}</span>
@@ -2698,14 +2704,14 @@ function renderTrophyGamesList() {
     return;
   }
 
-  gamesGrid.innerHTML = filteredGames.map(g => {
+  gamesGrid.innerHTML = filteredGames.map((g, idx) => {
     const thumb = g.titleIconUrl || g.trophyTitleIconUrl || "assets/covers/gta_vc.jpg";
     const counts = g.earnedTrophies || { bronze: 0, silver: 0, gold: 0, platinum: 0 };
     const hasPlat = g.platinumEarned || counts.platinum > 0;
 
     return `
       <div class="tc-game-card" data-comm-id="${g.npCommunicationId}" role="button" tabindex="0">
-        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
+        <img src="${thumb}" alt="${escapeHtml(g.titleName)}" class="tc-game-thumb" loading="${idx < 20 ? 'eager' : 'lazy'}" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
         <div class="tc-game-details">
           <div class="tc-game-header-row">
             <span class="tc-game-title" title="${escapeHtml(g.titleName)}">${escapeHtml(g.titleName)}</span>
@@ -2764,7 +2770,7 @@ function openGameTrophiesDetail(commId) {
   body.innerHTML = `
     <!-- Game Hero Banner -->
     <div class="tc-game-hero-banner">
-      <img src="${thumb}" alt="${escapeHtml(game.titleName)}" class="tc-game-hero-thumb" onerror="this.src='assets/covers/gta_vc.jpg'">
+      <img src="${thumb}" alt="${escapeHtml(game.titleName)}" class="tc-game-hero-thumb" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/gta_vc.jpg'">
       <div class="tc-game-hero-info">
         <h2 class="tc-game-hero-title">${escapeHtml(game.titleName)}</h2>
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
@@ -2799,7 +2805,7 @@ function openGameTrophiesDetail(commId) {
 
         return `
           <div class="tc-trophy-item ${isEarned ? 'is-earned' : 'is-locked'}">
-            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" onerror="this.src='${thumb}'">
+            <img src="${iconSrc}" alt="${escapeHtml(t.trophyName)}" class="tc-trophy-thumb" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${thumb}'">
             <div class="tc-trophy-content">
               <div class="tc-trophy-name-row">
                 <span class="tc-trophy-name">${escapeHtml(t.trophyName)}</span>
