@@ -550,7 +550,7 @@ export const ribbonCatalog = {
       iconSvg: PS5Icons.twitchTile,
       bg: "assets/bg_twitch_squad_gta.jpg",
       fallbackBg: PS5Icons.makeSceneArt("slot-2", "TWITCH LIVE"),
-      thumb: PS5Icons.makeSceneArt("slot-2", "TWITCH"),
+      thumb: "assets/covers/twitch.png",
       progressPct: 100,
       playTime: "Студия PS5",
       trophies: null,

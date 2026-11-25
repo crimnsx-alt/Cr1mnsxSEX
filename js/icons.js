@@ -118,7 +118,9 @@ export const PS5Icons = {
 
   youtubeTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><rect x="6" y="11" width="32" height="22" rx="6" fill="#ff0000"/><polygon points="18,16 29,22 18,28" fill="#ffffff"/></svg>`,
 
-  twitchTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><path d="M9 7h26v17l-6 6h-6l-4 4v-4H9V7z" fill="#9146ff"/><rect x="23.5" y="14" width="3" height="7" fill="#ffffff"/><rect x="17.5" y="14" width="3" height="7" fill="#ffffff"/></svg>`,
+  get twitchTile() {
+    return `<img src="assets/covers/twitch.png" alt="Twitch" style="width:100%; height:100%; object-fit:cover; display:block;" loading="eager" decoding="async" />`;
+  },
 
   get brawlStarsTile() {
     return `<img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" style="width:100%; height:100%; object-fit:cover; display:block;" loading="eager" decoding="async" />`;
