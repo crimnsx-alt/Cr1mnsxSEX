@@ -191,24 +191,22 @@ export const ribbonCatalog = {
     {
       id: "brawl-stars",
       viewType: "brawl-stars",
-      tileStyle: "dark",
-      iconSvg: PS5Icons.brawlStarsTile,
       title: { ru: "Brawl Stars", en: "Brawl Stars" },
-      publisher: "Supercell • Live Profile & Ninja Sync",
-      kicker: { ru: "Brawl Stars Live Network · #2RGUQJQ0R", en: "Brawl Stars Live Network · #2RGUQJQ0R" },
+      publisher: "Supercell • Профиль Cr1mnsx",
+      kicker: { ru: "Мой профиль Brawl Stars · #2RGUQJQ0R", en: "My Brawl Stars Profile · #2RGUQJQ0R" },
       desc: {
-        ru: "Живой профиль бойца Cr1mnsx: 42,512 кубков, 108 бойцов, топ Леон (2136 🏆), ранг Diamond I, история боев и автосинхронизация призов PS5.",
-        en: "Live profile for fighter Cr1mnsx: 42,512 trophies, 108 brawlers, top Leon (2,136 🏆), Diamond I rank, match log, and PS5 trophy sync."
+        ru: "Личный профиль игрока Cr1mnsx (#2RGUQJQ0R): 42,512 кубков, 108 бойцов, топ Леон (2136 🏆), клуб 0.3.7|teams — добавляйся в друзья для совместной игры.",
+        en: "Personal player profile for Cr1mnsx (#2RGUQJQ0R): 42,512 trophies, 108 brawlers, top Leon (2,136 🏆), club 0.3.7|teams — add as friend to play together."
       },
-      ctaText: { ru: "Открыть профиль", en: "Open Profile" },
+      ctaText: { ru: "Открыть мой профиль", en: "Open My Profile" },
       btnAction: "open:brawl-stars",
-      secText: { ru: "Синхронизировать", en: "Sync Data" },
-      secAction: "brawl:sync",
+      secText: { ru: "Добавить в друзья", en: "Add Friend" },
+      secAction: "brawl:add-friend",
       bg: "assets/brawl/brawl_bg.jpg",
-      thumb: "assets/brawl/avatars/player_avatar.webp",
-      fallbackBg: PS5Icons.makeSceneArt("slot-1", "BRAWL STARS"),
+      thumb: "assets/covers/brawl_stars.jpg",
+      fallbackBg: "assets/brawl/avatars/player_avatar.webp",
       progressPct: 88,
-      playTime: "42,512 🏆 • 108 бойцов",
+      playTime: "42,512 🏆 • #2RGUQJQ0R",
       trophies: { platinum: 1, gold: 8, silver: 14, bronze: 22 },
       activities: [
         { title: "Рекорд бойца: Леон (Ранг 6)", type: "Легендарный боец", progress: 100, timeEst: "2,136 🏆", thumb: "assets/brawl/brawlers/leon_model.webp", action: "open:brawl-stars" },
@@ -216,7 +214,7 @@ export const ribbonCatalog = {
         { title: "Рейтинговый бой: Diamond I", type: "Рейтинг сезона", progress: 60, timeEst: "4,067 ELO", thumb: "assets/brawl/brawlers/crow_model.webp", action: "open:brawl-stars" }
       ],
       news: [
-        { date: "Brawl Ninja", title: "Автообновление данных боев", desc: "Синхронизация профиля в реальном времени и автоматический перенос боевых достижений в призы PS5." }
+        { date: "Профиль Cr1mnsx", title: "Добавить меня в друзья · #2RGUQJQ0R", desc: "Скопируй тег #2RGUQJQ0R, открой приглашение Supercell или оставь заявку на сайте." }
       ]
     },
     {
@@ -664,8 +662,8 @@ export const controlCenterItems = [
 ];
 
 export const searchCatalog = [
-  { title: "Brawl Stars (Профиль #2RGUQJQ0R)", category: "Игры", desc: "42 512 🏆 · Леон 2136 🏆 · Diamond I · Cr1mnsx", action: "open:brawl-stars" },
-  { title: "Starr Drop (Мини-игра Brawl Stars)", category: "Игры", desc: "Интерактивное открытие Starr Drop и награды", action: "brawl:starr-drop" },
+  { title: "Brawl Stars (Профиль Cr1mnsx · #2RGUQJQ0R)", category: "Профиль", desc: "42 512 🏆 · Леон 2136 🏆 · Клуб 0.3.7|teams · Добавить в друзья", action: "open:brawl-stars" },
+  { title: "Добавить Cr1mnsx в друзья (Brawl Stars / PS5)", category: "Друзья", desc: "Тег #2RGUQJQ0R · Прямое приглашение и заявка в друзья", action: "brawl:add-friend" },
   { title: "Центр приветствия (Welcome Hub)", category: "Система", desc: "Горизонтальная лента виджетов PS5", action: "home_reset" },
   { title: "Трансляции Twitch (Плеер и каналы)", category: "Медиа", desc: "Мафаня, Каша, Пятёрка, Лёня Пудж, Сбомба, Бугор", action: "modal:twitch-hub" },
   { title: "Стрим: Мафаня (mafanyaking)", category: "Twitch", desc: "Прямой эфир Мафани на Twitch", action: "stream:mafanyaking" },

@@ -18,11 +18,13 @@
   <link rel="preconnect" href="https://www.youtube-nocookie.com" crossorigin />
   <link rel="preconnect" href="https://i.ytimg.com" crossorigin />
   <link rel="preconnect" href="https://i3.ytimg.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.brawlify.com" crossorigin />
   <link rel="dns-prefetch" href="https://www.twitch.tv" />
   <link rel="dns-prefetch" href="https://static-cdn.jtvnw.net" />
   <link rel="dns-prefetch" href="https://decapi.me" />
   <link rel="dns-prefetch" href="https://api.rss2json.com" />
-  <link rel="stylesheet" href="css/style.css?v=20261124_hydrogen_polish" />
+  <link rel="dns-prefetch" href="https://cdn.brawlify.com" />
+  <link rel="stylesheet" href="css/style.css?v=20261125_brawl_profile" />
   <script>
     window.requestIdleCallback = window.requestIdleCallback || function(cb) {
       return setTimeout(function() {
@@ -834,8 +836,8 @@
         <div class="ps5-brawl-control-bar">
           <div class="brawl-cb-left">
             <span class="brawl-brand-badge">
-              <svg viewBox="0 0 44 44" width="16" height="16" aria-hidden="true"><defs><linearGradient id="bsHdrGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFDD00"/><stop offset="50%" stop-color="#FF9900"/><stop offset="100%" stop-color="#FF3300"/></linearGradient></defs><circle cx="22" cy="22" r="18" fill="url(#bsHdrGrad)"/><path d="M22 8l4.2 8.5 9.3 1.3-6.7 6.6 1.6 9.3-8.4-4.4-8.4 4.4 1.6-9.3-6.7-6.6 9.3-1.3z" fill="#FFFFFF"/><circle cx="17.5" cy="22" r="2.5" fill="#181428"/><circle cx="26.5" cy="22" r="2.5" fill="#181428"/><path d="M18 27.5h8v2h-8z" fill="#181428"/></svg>
-              <span>BRAWL STARS LIVE NETWORK</span>
+              <img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" class="brawl-brand-logo" width="20" height="20" />
+              <span>МОЙ ПРОФИЛЬ · CR1MNSX</span>
             </span>
             <button type="button" class="brawl-tag-pill" id="brawlTagCopyBtn" title="Нажмите, чтобы скопировать тег игрока">
               <span class="brawl-tag-hash">#</span>
@@ -846,25 +848,24 @@
           </div>
 
           <!-- Mode Switcher Tabs -->
-          <div class="brawl-mode-tabs" id="brawlModeTabs" role="tablist" aria-label="Разделы Brawl Stars">
+          <div class="brawl-mode-tabs" id="brawlModeTabs" role="tablist" aria-label="Разделы профиля Brawl Stars">
             <span class="brawl-mode-indicator" id="brawlModeIndicator" aria-hidden="true"></span>
             <button type="button" class="brawl-mode-tab is-active" id="btnBrawlTabRoster" role="tab" aria-selected="true">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <span>Бойцы и профиль</span>
+              <span>Профиль и бойцы</span>
             </button>
             <button type="button" class="brawl-mode-tab" id="btnBrawlTabBattles" role="tab" aria-selected="false">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               <span>История боёв (25)</span>
             </button>
-            <button type="button" class="brawl-mode-tab brawl-tab-starr" id="btnBrawlTabStarrDrop" role="tab" aria-selected="false">
-              <span class="brawl-starr-beacon" aria-hidden="true"></span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFCC00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <span>Starr Drop мини-игра</span>
-            </button>
           </div>
 
           <div class="brawl-cb-right">
-            <button type="button" class="brawl-cb-btn" id="btnBrawlSync" title="Синхронизировать данные профиля с серверами Supercell">
+            <button type="button" class="brawl-cb-btn brawl-cb-btn--friend" id="btnBrawlAddFriend" title="Добавить Cr1mnsx в друзья в Brawl Stars или на PS5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+              <span>Добавить в друзья</span>
+            </button>
+            <button type="button" class="brawl-cb-btn" id="btnBrawlSync" title="Обновить данные профиля Supercell">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
               <span>Обновить</span>
             </button>
@@ -872,14 +873,49 @@
               <svg width="14" height="14" viewBox="0 0 24 24" fill="#FFCC00"><path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H8v2h8v-2h-3v-3.1c1.8-.3 3.32-1.5 3.61-3.06C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2z"/></svg>
               <span>Призы PS5</span>
             </button>
-            <button type="button" class="brawl-cb-btn" id="btnBrawlNinjaExternal" title="Открыть профиль на Brawl Time Ninja">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              <span>Brawl Ninja</span>
-            </button>
           </div>
         </div>
 
         <div class="brawl-stage-body-wrap" id="brawlStageBodyWrap">
+          <!-- Personal Profile & Add Friend Card -->
+          <section class="brawl-profile-card" id="brawlProfileBanner" aria-label="Профиль игрока Brawl Stars">
+            <div class="brawl-profile-identity">
+              <div class="brawl-profile-avatar-wrap">
+                <img src="assets/brawl/avatars/player_avatar.webp" alt="Cr1mnsx" class="brawl-profile-avatar" />
+                <img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" class="brawl-profile-game-badge" />
+                <span class="brawl-profile-online-dot" title="В сети"></span>
+              </div>
+              <div class="brawl-profile-info">
+                <div class="brawl-profile-name-row">
+                  <h2 class="brawl-profile-name">Cr1mnsx</h2>
+                  <span class="brawl-profile-pill">SUPERCELL ID · МОЙ ПРОФИЛЬ</span>
+                  <span class="brawl-profile-status-pill"><span class="brawl-status-dot"></span> В сети · Готов к игре</span>
+                </div>
+                <p class="brawl-profile-bio">
+                  Добавляйся ко мне в друзья по тегу <strong>#2RGUQJQ0R</strong> для совместных каток в 3v3, Рангового боя и Дуо · Клуб <strong>0.3.7|teams</strong> (#80RYCLU9Q)
+                </p>
+              </div>
+            </div>
+            <div class="brawl-profile-actions">
+              <button type="button" class="brawl-prof-btn is-primary" id="btnBrawlProfileInviteLink">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                <span>Добавить в Brawl Stars</span>
+              </button>
+              <button type="button" class="brawl-prof-btn" id="btnBrawlProfileCopyTag">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span>ID #2RGUQJQ0R</span>
+              </button>
+              <button type="button" class="brawl-prof-btn" id="btnBrawlProfilePs5Friend">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                <span>Заявка на PS5</span>
+              </button>
+              <button type="button" class="brawl-prof-btn" id="btnBrawlProfileQr" title="Открыть QR-код для добавления в друзья">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zm4 4h3v3h-3zm-4 3h2m4-7v2"/></svg>
+                <span>QR-код</span>
+              </button>
+            </div>
+          </section>
+
           <!-- Overview Stats Bar -->
           <div class="brawl-stats-overview-bar" id="brawlStatsOverviewBar">
             <!-- Populated dynamically -->
@@ -930,13 +966,6 @@
             </div>
             <div class="brawl-battles-list" id="brawlBattlesList">
               <!-- Dynamically populated battles -->
-            </div>
-          </div>
-
-          <!-- TAB 3: Starr Drop Mini-Game -->
-          <div class="brawl-stage-tab-content" id="brawlStageStarrDrop" hidden>
-            <div class="brawl-starr-drop-arena" id="brawlStarrDropArena">
-              <!-- Populated dynamically with interactive Starr Drop -->
             </div>
           </div>
         </div>
@@ -1907,6 +1936,48 @@
     </div>
   </div>
 
+  <!-- BRAWL STARS PERSONAL INVITE / ADD FRIEND MODAL -->
+  <div class="modal-sber-tips modal-brawl-invite" id="modalBrawlInvite" aria-hidden="true">
+    <div class="sber-tips-backdrop" id="backdropBrawlInvite"></div>
+    <div class="sber-tips-dialog brawl-invite-dialog" role="dialog" aria-modal="true" aria-labelledby="brawlInviteTitle">
+      <button type="button" class="sber-tips-close-btn" id="btnCloseBrawlInvite" title="Закрыть (Esc)">✕</button>
+
+      <div class="brawl-invite-header">
+        <img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" class="brawl-invite-logo" />
+        <div>
+          <span class="brawl-invite-kicker">SUPERCELL ID · ДОБАВИТЬ В ДРУЗЬЯ</span>
+          <h2 class="brawl-invite-title" id="brawlInviteTitle">Cr1mnsx (#2RGUQJQ0R)</h2>
+          <p class="brawl-invite-sub">Отсканируй QR-код камерой телефона или скопируй тег, чтобы добавить меня в друзья в Brawl Stars.</p>
+        </div>
+      </div>
+
+      <div class="brawl-invite-qr-section">
+        <div class="brawl-invite-qr-frame" id="brawlInviteQrBox" aria-label="QR код приглашения Brawl Stars"></div>
+        <div class="brawl-invite-tags-grid">
+          <div class="brawl-invite-tag-card">
+            <span class="bitc-lbl">ТЕГ ИГРОКА (SUPERCELL)</span>
+            <strong class="bitc-val">#2RGUQJQ0R</strong>
+            <button type="button" class="brawl-prof-btn is-compact" id="btnModalCopyPlayerTag">Скопировать тег</button>
+          </div>
+          <div class="brawl-invite-tag-card">
+            <span class="bitc-lbl">КЛУБ · 0.3.7|TEAMS</span>
+            <strong class="bitc-val">#80RYCLU9Q</strong>
+            <button type="button" class="brawl-prof-btn is-compact" id="btnModalCopyClubTag">Скопировать тег клуба</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="brawl-invite-footer">
+        <a href="https://link.brawlstars.com/invite/friend/ru?tag=2RGUQJQ0R" target="_blank" rel="noopener noreferrer" class="brawl-prof-btn is-primary" id="btnModalOpenBrawlInvite">
+          <span>Открыть приглашение в Brawl Stars</span>
+        </a>
+        <button type="button" class="brawl-prof-btn" id="btnModalOpenPs5Friend">
+          <span>Добавить в друзья на PS5 (сайт)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- FLOATING PICTURE-IN-PICTURE (PiP) WIDGET -->
   <div class="ps5-twitch-pip" id="ps5TwitchPip" hidden>
     <div class="twitch-pip-header" id="twitchPipHeader">
@@ -1940,6 +2011,6 @@
       document.getElementById('btnOpenFriendRequests')?.addEventListener('click', (e) => { e.stopPropagation(); openReq(); });
     });
   </script>
-  <script type="module" src="js/app.js?v=20261124_hydrogen_polish"></script>
+  <script type="module" src="js/app.js?v=20261125_brawl_profile"></script>
 </body>
 </html>

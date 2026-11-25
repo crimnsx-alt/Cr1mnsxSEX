@@ -1,8 +1,7 @@
 /**
- * PlayStation®5 Brawl Stars Live Profile, Dynamic Character Showcase & Starr Drop Simulator
- * Connects Supercell Account #2RGUQJQ0R (Cr1mnsx) with real-time trophy tracking,
- * auto-polling, dynamic 3D brawler character switcher with real models for ALL 108 brawlers,
- * 25-match live history, Starr Drop mini-game, and PS5 Trophies Bridge (45 achievements).
+ * PlayStation®5 Brawl Stars Personal Player Profile, Brawler Showcase & Friends Hub
+ * Supercell Account #2RGUQJQ0R (Cr1mnsx): instant eager brawler portraits,
+ * 25-match history, direct friend invite / QR sharing, and PS5 Trophies Bridge.
  */
 
 import { SoundEngine } from "./sound.js";
@@ -109,51 +108,6 @@ export const BRAWLER_RARITIES = {
   shelly: { name: "НАЧАЛЬНЫЙ", color: "#EC4899", glow: "rgba(236, 72, 153, 0.45)" }
 };
 
-export const STARR_DROP_RARITIES = [
-  { id: "rare", name: "РЕДКИЙ", color: "#2563EB", glow: "rgba(37, 99, 235, 0.6)", upgradeChance: 0.65 },
-  { id: "super_rare", name: "СВЕРХРЕДКИЙ", color: "#16A34A", glow: "rgba(22, 163, 74, 0.6)", upgradeChance: 0.45 },
-  { id: "epic", name: "ЭПИЧЕСКИЙ", color: "#9333EA", glow: "rgba(147, 51, 234, 0.6)", upgradeChance: 0.30 },
-  { id: "mythic", name: "МИФИЧЕСКИЙ", color: "#E11D48", glow: "rgba(225, 29, 72, 0.7)", upgradeChance: 0.18 },
-  { id: "legendary", name: "ЛЕГЕНДАРНЫЙ", color: "#EAB308", glow: "rgba(234, 179, 8, 0.8)", upgradeChance: 0.0 }
-];
-
-export const STARR_DROP_REWARDS = {
-  rare: [
-    { title: "50 Монет", type: "currency", icon: "🪙" },
-    { title: "25 Очков силы", type: "power", icon: "⚡" },
-    { title: "10 Блингов", type: "bling", icon: "💎" },
-    { title: "20 Кредитов", type: "credits", icon: "🎟️" }
-  ],
-  super_rare: [
-    { title: "100 Монет", type: "currency", icon: "🪙" },
-    { title: "50 Очков силы", type: "power", icon: "⚡" },
-    { title: "30 Блингов", type: "bling", icon: "💎" },
-    { title: "50 Кредитов", type: "credits", icon: "🎟️" },
-    { title: "Редкий значок (Смайлик)", type: "pin", icon: "🎭" }
-  ],
-  epic: [
-    { title: "200 Монет", type: "currency", icon: "🪙" },
-    { title: "100 Очков силы", type: "power", icon: "⚡" },
-    { title: "100 Блингов", type: "bling", icon: "💎" },
-    { title: "Эпический значок бойца", type: "pin", icon: "🔥" },
-    { title: "Случайный гаджет", type: "gadget", icon: "⚙️" }
-  ],
-  mythic: [
-    { title: "500 Монет", type: "currency", icon: "🪙" },
-    { title: "200 Очков силы", type: "power", icon: "⚡" },
-    { title: "Случайная Звёздная сила", type: "star_power", icon: "⭐" },
-    { title: "Редкий скин бойца", type: "skin", icon: "🎨" },
-    { title: "200 Кредитов Starr", type: "credits", icon: "🎟️" }
-  ],
-  legendary: [
-    { title: "1000 Монет", type: "currency", icon: "🪙" },
-    { title: "Случайный Гиперзаряд (Hypercharge)", type: "hypercharge", icon: "⚡🔥" },
-    { title: "Сверхредкий / Эпический Скин", type: "skin", icon: "👑" },
-    { title: "500 Кредитов Starr", type: "credits", icon: "🎟️" },
-    { title: "Эксклюзивная иконка профиля", type: "avatar", icon: "🌟" }
-  ]
-};
-
 export function getBrawlerSlug(rawName) {
   if (!rawName) return "leon";
   let s = String(rawName).toLowerCase().trim();
@@ -181,22 +135,18 @@ export function getBrawlerModelUrl(brawler) {
   if (name === "spike") return "assets/brawl/brawlers/spike_model.webp";
   if (name === "shelly") return "assets/brawl/brawlers/shelly_model.webp";
 
-  // Tier 1: Brawlify high-res model PNG by ID
   if (brawler.id) {
     return `https://cdn.brawlify.com/brawlers/model/${brawler.id}.png`;
   }
-  // Tier 2: Ninja model
-  const slug = getBrawlerSlug(name);
-  return `https://brawltime.ninja/media/brawlers/${slug}/model.webp`;
+  return "assets/covers/brawl_stars.jpg";
 }
 
 export function getBrawlerAvatarUrl(brawler) {
-  if (!brawler) return "assets/brawl/avatars/player_avatar.webp";
+  if (!brawler) return "assets/covers/brawl_stars.jpg";
   if (brawler.id) {
     return `https://cdn.brawlify.com/brawlers/borderless/${brawler.id}.png`;
   }
-  const slug = getBrawlerSlug(brawler.name);
-  return `https://brawltime.ninja/media/brawlers/${slug}/avatar.webp`;
+  return "assets/covers/brawl_stars.jpg";
 }
 
 function animateNumber(element, start, end, duration = 400) {
@@ -227,20 +177,15 @@ class BrawlStarsService {
     this.pollTimer = null;
     this.isPolling = false;
     this.lastSyncTime = null;
-    this.activeTab = "roster"; // "roster" | "battles" | "starr-drop"
+    this.activeTab = "roster"; // "roster" | "battles"
     this.brawlerFilter = "all"; // "all" | "1000" | "pwr11" | "rank" | "winstreak"
     this.searchQuery = "";
     this.selectedSpotlightBrawler = "LEON";
     this.lastTrophiesShown = 2136;
-
-    // Starr Drop Mini-Game State
-    this.starrDrop = {
-      rarityIndex: 0,
-      tapsRemaining: 4,
-      isOpened: false,
-      reward: null,
-      history: []
-    };
+    this._preloadedUrls = new Set();
+    this._imgCache = [];
+    this._preloadQueueRunning = false;
+    this._renderedGridSig = "";
 
     this.initBaselineData();
   }
@@ -262,13 +207,68 @@ class BrawlStarsService {
             this.player = d.result?.data?.json || d;
             this.lastSyncTime = new Date();
             this.exportTrophiesBridge();
+            if (typeof requestIdleCallback === "function") {
+              requestIdleCallback(() => this.preloadRosterPortraits(), { timeout: 1400 });
+            } else {
+              setTimeout(() => this.preloadRosterPortraits(), 300);
+            }
             if (this.isViewActive()) this.renderAll();
           }
         })
         .catch(() => {});
     } else {
       this.exportTrophiesBridge();
+      if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(() => this.preloadRosterPortraits(), { timeout: 1400 });
+      }
     }
+  }
+
+  preloadRosterPortraits(priorityList = null) {
+    const brawlers = this.player?.brawlers;
+    if (!brawlers || this._preloadQueueRunning) return;
+
+    const list = priorityList || Object.entries(brawlers)
+      .map(([id, b]) => ({ id, ...b }))
+      .sort((a, b) => (b.trophies || 0) - (a.trophies || 0));
+
+    const urls = list
+      .map((b) => getBrawlerAvatarUrl(b))
+      .filter((u) => u && !this._preloadedUrls.has(u));
+
+    if (urls.length === 0) return;
+
+    this._preloadQueueRunning = true;
+    let idx = 0;
+    const concurrency = 14;
+
+    const worker = () => {
+      if (idx >= urls.length) return;
+      const url = urls[idx++];
+      this._preloadedUrls.add(url);
+
+      const img = new Image();
+      img.referrerPolicy = "no-referrer";
+      img.decoding = "async";
+      img.src = url;
+      this._imgCache.push(img);
+
+      const finish = () => worker();
+      if (img.decode) {
+        img.decode().then(finish).catch(finish);
+      } else {
+        img.onload = finish;
+        img.onerror = finish;
+      }
+    };
+
+    for (let i = 0; i < Math.min(concurrency, urls.length); i++) {
+      worker();
+    }
+
+    setTimeout(() => {
+      this._preloadQueueRunning = false;
+    }, 3500);
   }
 
   isViewActive() {
@@ -282,7 +282,7 @@ class BrawlStarsService {
 
     let freshData = null;
 
-    // Tier 1: Local server proxy
+    // Tier 1: Local server profile endpoint
     try {
       const res = await fetch(`/api/brawl/player?t=${Date.now()}`, { cache: "no-store" });
       if (res.ok) {
@@ -291,11 +291,10 @@ class BrawlStarsService {
       }
     } catch (_) {}
 
-    // Tier 2: Public CORS gateway
+    // Tier 2: Verified offline snapshot fallback
     if (!freshData) {
       try {
-        const ninjaUrl = encodeURIComponent("https://brawltime.ninja/api/trpc/player.byTag?input=%7B%22json%22%3A%222RGUQJQ0R%22%7D");
-        const res = await fetch(`https://api.allorigins.win/raw?url=${ninjaUrl}&t=${Date.now()}`);
+        const res = await fetch("assets/brawl/initial_player_data.json");
         if (res.ok) {
           const json = await res.json();
           freshData = json.result?.data?.json || json;
@@ -392,6 +391,8 @@ class BrawlStarsService {
   }
 
   renderInlineStage() {
+    const view = document.getElementById("ps5BrawlStarsView");
+    if (view) view.scrollTop = 0;
     this.startPolling();
     this.renderAll();
   }
@@ -405,14 +406,69 @@ class BrawlStarsService {
     if (!view) return;
 
     view.hidden = false;
+    this.preloadRosterPortraits();
     this.renderHeaderBar();
+    this.renderProfileBanner();
     this.renderSpotlightHero(false);
     this.renderBrawlersGrid();
     this.renderBattleHistory();
-    this.renderStarrDropMiniGame();
     this.renderStatsBar();
     this.initViewTabListeners();
     this.updateBrawlIndicators();
+  }
+
+  renderProfileBanner() {
+    const banner = document.getElementById("brawlProfileBanner");
+    if (!banner || !this.player) return;
+
+    const p = this.player;
+    const nameEl = banner.querySelector(".brawl-profile-name");
+    if (nameEl) nameEl.textContent = p.name || "Cr1mnsx";
+
+    const bioEl = banner.querySelector(".brawl-profile-bio");
+    if (bioEl) {
+      const clubName = p.club?.name || "0.3.7|teams";
+      const clubTag = p.club?.tag || "80RYCLU9Q";
+      const trophies = (p.trophies || 42512).toLocaleString("ru-RU");
+      const count = Object.keys(p.brawlers || {}).length || 108;
+      bioEl.innerHTML = `Добавляйся ко мне в друзья по тегу <strong>#${escapeHtml(this.tag)}</strong> для совместных каток в 3v3 и Ранговом бою · ${trophies} 🏆 · ${count} бойцов · Клуб <strong>${escapeHtml(clubName)}</strong> (#${escapeHtml(clubTag)})`;
+    }
+  }
+
+  openAddFriendDialog() {
+    const modal = document.getElementById("modalBrawlInvite");
+    if (!modal) return;
+    try { SoundEngine.openDialog(); } catch (_) {}
+
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+
+    const qrBox = document.getElementById("brawlInviteQrBox");
+    if (qrBox && !qrBox.dataset.rendered) {
+      qrBox.innerHTML = "";
+      const inviteUrl = `https://link.brawlstars.com/invite/friend/ru?tag=${this.tag}`;
+      if (typeof window.qrcode === "function") {
+        try {
+          const qr = window.qrcode(0, "M");
+          qr.addData(inviteUrl);
+          qr.make();
+          qrBox.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true, title: `Brawl Stars QR ${this.tag}` });
+          qrBox.dataset.rendered = "1";
+        } catch (_) {
+          qrBox.textContent = `#${this.tag}`;
+        }
+      } else {
+        qrBox.textContent = `#${this.tag}`;
+      }
+    }
+  }
+
+  closeAddFriendDialog() {
+    const modal = document.getElementById("modalBrawlInvite");
+    if (!modal) return;
+    try { SoundEngine.cancel(); } catch (_) {}
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
   }
 
   updateBrawlIndicators() {
@@ -518,8 +574,6 @@ class BrawlStarsService {
     // Dynamic Rarity & Model
     const rarity = getBrawlerRarityInfo(name);
     const modelUrl = getBrawlerModelUrl(curBrawler);
-    const slug = getBrawlerSlug(name);
-    const ninjaModelUrl = `https://brawltime.ninja/media/brawlers/${slug}/model.webp`;
     const avatarUrl = getBrawlerAvatarUrl(curBrawler);
 
     // Abilities & Loadout
@@ -541,8 +595,10 @@ class BrawlStarsService {
                alt="${escapeHtml(name)}" 
                class="brawl-spotlight-hero-img ${animate ? "brawl-hero-entrance" : ""}" 
                id="brawlSpotlightHeroImg"
+               loading="eager"
+               decoding="async"
                referrerpolicy="no-referrer"
-               onerror="if (!this.dataset.ret1) { this.dataset.ret1='1'; this.src='${ninjaModelUrl}'; } else if (!this.dataset.ret2) { this.dataset.ret2='1'; this.src='${avatarUrl}'; } else { this.onerror=null; }" />
+               onerror="if (!this.dataset.ret1) { this.dataset.ret1='1'; this.src='${avatarUrl}'; } else { this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; }" />
           <div class="brawl-spotlight-pedestal"></div>
         </div>
 
@@ -700,6 +756,14 @@ class BrawlStarsService {
     const countEl = document.getElementById("brawlRosterCountText");
     if (countEl) countEl.textContent = `Показано ${list.length} из ${Object.keys(brawlers).length} бойцов`;
 
+    const sig = `${this.brawlerFilter}|${this.searchQuery.trim()}|${list.map((b) => `${b.id}:${b.trophies}`).join(",")}`;
+    if (this._renderedGridSig === sig && container.querySelector(".brawler-grid-card")) {
+      this.highlightSelectedBrawlerCard();
+      return;
+    }
+    this._renderedGridSig = sig;
+    this.preloadRosterPortraits(list);
+
     if (list.length === 0) {
       container.innerHTML = `
         <div class="brawl-empty-state">
@@ -709,7 +773,7 @@ class BrawlStarsService {
       return;
     }
 
-    container.innerHTML = list.map((b) => {
+    container.innerHTML = list.map((b, idx) => {
       const name = b.name || "BRAWLER";
       const trophies = (b.trophies || 0).toLocaleString("ru-RU");
       const power = b.power || 1;
@@ -719,10 +783,8 @@ class BrawlStarsService {
       const isSelected = name.toUpperCase() === this.selectedSpotlightBrawler.toUpperCase();
       const rarity = getBrawlerRarityInfo(name);
 
-      // Primary and fallback avatar images
       const avatarUrl = getBrawlerAvatarUrl(b);
-      const slug = getBrawlerSlug(name);
-      const ninjaAvatarUrl = `https://brawltime.ninja/media/brawlers/${slug}/avatar.webp`;
+      const priorityAttr = idx < 24 ? 'fetchpriority="high"' : "";
 
       return `
         <article class="brawler-grid-card ${b.trophies >= 1000 ? "is-legend" : ""} ${isSelected ? "is-selected" : ""}" 
@@ -734,9 +796,12 @@ class BrawlStarsService {
             <img src="${avatarUrl}" 
                  alt="${escapeHtml(name)}" 
                  class="brawler-card-avatar" 
-                 loading="lazy" 
+                 loading="eager" 
+                 decoding="async" 
+                 ${priorityAttr}
                  referrerpolicy="no-referrer"
-                 onerror="if (!this.dataset.ret) { this.dataset.ret='1'; this.src='${ninjaAvatarUrl}'; } else { this.onerror=null; this.src='assets/brawl/avatars/player_avatar.webp'; }" />
+                 onload="this.classList.add('is-loaded')"
+                 onerror="this.onerror=null; this.src='assets/covers/brawl_stars.jpg'; this.classList.add('is-loaded');" />
             <span class="brawler-card-pwr ${power === 11 ? "is-max" : ""}">PWR ${power}</span>
             <span class="brawler-card-rank">R${rank}</span>
             ${winStreak > 0 ? `<span class="brawler-card-streak">🔥 ${winStreak}</span>` : ""}
@@ -752,6 +817,11 @@ class BrawlStarsService {
         </article>
       `;
     }).join("");
+
+    // Mark cached/already-complete portraits immediately to avoid any fade flash
+    container.querySelectorAll(".brawler-card-avatar").forEach((imgEl) => {
+      if (imgEl.complete) imgEl.classList.add("is-loaded");
+    });
 
     // Clicking a brawler updates the spotlight with animation
     container.querySelectorAll(".brawler-grid-card").forEach((card) => {
@@ -800,9 +870,17 @@ class BrawlStarsService {
       return;
     }
 
+    const brawlerIdByName = new Map();
+    Object.entries(p.brawlers || {}).forEach(([key, br]) => {
+      const numericId = br?.id;
+      if (!numericId) return;
+      if (key) brawlerIdByName.set(String(key).toLowerCase().trim(), numericId);
+      if (br?.name) brawlerIdByName.set(String(br.name).toLowerCase().trim(), numericId);
+    });
+
     container.innerHTML = battles.map((b) => {
       const mode = b.event?.mode || "3v3";
-      const map = b.event?.map || "Арена Starr";
+      const map = b.event?.map || "Арена боя";
       const isVictory = b.victory === true || (b.result && b.result.toLowerCase().includes("victory")) || (b.result && b.result.includes("Rank 1"));
       const isDefeat = b.victory === false || (b.result && b.result.toLowerCase().includes("defeat"));
       const resultText = isVictory ? "ПОБЕДА" : (isDefeat ? "ПОРАЖЕНИЕ" : (b.result || "МАТЧ"));
@@ -825,8 +903,8 @@ class BrawlStarsService {
 
       const userBrawler = userEntry?.brawler || "leon";
       const userPwr = userEntry?.brawlerPower || 11;
-      const brawlerAvatar = `https://cdn.brawlify.com/brawlers/borderless/${userEntry?.id || "16000023"}.png`;
-      const ninjaAvatar = `https://brawltime.ninja/media/brawlers/${getBrawlerSlug(userBrawler)}/avatar.webp`;
+      const resolvedUserId = userEntry?.id || brawlerIdByName.get(userBrawler.toLowerCase().trim()) || brawlerIdByName.get(getBrawlerSlug(userBrawler)) || "16000023";
+      const brawlerAvatar = `https://cdn.brawlify.com/brawlers/borderless/${resolvedUserId}.png`;
 
       return `
         <article class="brawl-battle-card ${isVictory ? "is-win" : "is-loss"}">
@@ -845,7 +923,7 @@ class BrawlStarsService {
           </div>
 
           <div class="bbc-brawler-col">
-            <img src="${brawlerAvatar}" alt="${escapeHtml(userBrawler)}" class="bbc-brawler-thumb" onerror="this.onerror=null;this.src='${ninjaAvatar}';" />
+            <img src="${brawlerAvatar}" alt="${escapeHtml(userBrawler)}" class="bbc-brawler-thumb" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/brawl_stars.jpg';" />
             <div class="bbc-brawler-info">
               <strong class="bbc-bi-name">${escapeHtml(userBrawler.toUpperCase())}</strong>
               <span class="bbc-bi-pwr">PWR ${userPwr}</span>
@@ -857,10 +935,12 @@ class BrawlStarsService {
             ${(b.teams || []).map((team, tIdx) => `
               <div class="bbc-team-group ${tIdx === 0 ? "team-blue" : "team-red"}">
                 ${team.map((m) => {
-                  const mSlug = getBrawlerSlug(m.brawler);
+                  const mName = (m.brawler || "").toLowerCase().trim();
+                  const mId = m.id || brawlerIdByName.get(mName) || brawlerIdByName.get(getBrawlerSlug(mName));
+                  const mSrc = mId ? `https://cdn.brawlify.com/brawlers/borderless/${mId}.png` : "assets/covers/brawl_stars.jpg";
                   return `
                     <span class="bbc-team-member ${m.tag === this.tag ? "is-self" : ""}" title="${escapeHtml(m.name)} (${escapeHtml(m.brawler)})">
-                      <img src="https://brawltime.ninja/media/brawlers/${mSlug}/avatar.webp" onerror="this.onerror=null;this.src='assets/brawl/avatars/player_avatar.webp';" alt="${escapeHtml(m.brawler)}" />
+                      <img src="${mSrc}" loading="eager" decoding="async" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='assets/covers/brawl_stars.jpg';" alt="${escapeHtml(m.brawler)}" />
                     </span>
                   `;
                 }).join("")}
@@ -882,218 +962,33 @@ class BrawlStarsService {
   }
 
   /* ============================================================
-   * STARR DROP MINI-GAME
-   * ============================================================ */
-  renderStarrDropMiniGame() {
-    const arena = document.getElementById("brawlStarrDropArena");
-    if (!arena) return;
-
-    const currentRarity = STARR_DROP_RARITIES[this.starrDrop.rarityIndex] || STARR_DROP_RARITIES[0];
-
-    arena.innerHTML = `
-      <div class="starr-drop-box" id="starrDropBox" data-rarity="${currentRarity.id}" style="--sd-glow: ${currentRarity.glow}">
-        <div class="sd-ambient-pulse" aria-hidden="true"></div>
-
-        <div class="sd-emblem-wrap" id="sdEmblemWrap" role="button" tabindex="0" title="Нажмите, чтобы улучшить или открыть Starr Drop!">
-          <div class="sd-emblem" style="background: ${currentRarity.color}">
-            <svg viewBox="0 0 44 44" width="72" height="72" fill="#FFFFFF" aria-hidden="true">
-              <path d="M22 6l4.2 9.2 9.8 1.4-7.1 6.9 1.7 9.8-8.6-4.5-8.6 4.5 1.7-9.8-7.1-6.9 9.8-1.4z"/>
-              <circle cx="17.5" cy="20.5" r="2.5" fill="#181428"/>
-              <circle cx="26.5" cy="20.5" r="2.5" fill="#181428"/>
-              <path d="M18 26h8v2h-8z" fill="#181428"/>
-            </svg>
-          </div>
-          <div class="sd-taps-cue" id="sdTapsCue">
-            ${this.starrDrop.isOpened ? "ОТКРЫТО" : `ТАПОВ ОСТАЛОСЬ: ${this.starrDrop.tapsRemaining}`}
-          </div>
-        </div>
-
-        <div class="sd-status-panel">
-          <span class="sd-rarity-pill" style="background: ${currentRarity.color}">${currentRarity.name}</span>
-          <h3 class="sd-title">${this.starrDrop.isOpened ? "Награда получена!" : "Нажимайте для повышения редкости!"}</h3>
-          <p class="sd-desc">
-            ${this.starrDrop.isOpened
-              ? "Поздравляем! Награда добавлена в коллекцию аккаунта."
-              : "Каждое нажатие имеет шанс улучшить Starr Drop до Легендарного уровня!"}
-          </p>
-        </div>
-
-        ${this.starrDrop.isOpened && this.starrDrop.reward ? `
-          <div class="sd-reward-card is-opened">
-            <span class="sd-reward-icon">${this.starrDrop.reward.icon}</span>
-            <div class="sd-reward-meta">
-              <span class="sd-reward-tier">${currentRarity.name} НАГРАДА</span>
-              <strong class="sd-reward-title">${escapeHtml(this.starrDrop.reward.title)}</strong>
-            </div>
-            <button type="button" class="sd-reset-btn" id="btnStarrDropReset">
-              <span>Открыть ещё один Starr Drop</span>
-            </button>
-          </div>
-        ` : `
-          <div class="sd-actions-row">
-            <button type="button" class="sd-tap-btn" id="btnStarrDropTap">
-              <span>Нажать на Starr Drop (${this.starrDrop.tapsRemaining})</span>
-            </button>
-          </div>
-        `}
-
-        <div class="sd-rarity-ladder">
-          ${STARR_DROP_RARITIES.map((r, i) => `
-            <div class="sd-ladder-step ${i === this.starrDrop.rarityIndex ? "is-current" : (i < this.starrDrop.rarityIndex ? "is-past" : "")}">
-              <span class="sd-ls-dot" style="background: ${r.color}"></span>
-              <span class="sd-ls-name">${r.name}</span>
-            </div>
-          `).join("")}
-        </div>
-      </div>
-    `;
-
-    const emblem = document.getElementById("sdEmblemWrap");
-    const tapBtn = document.getElementById("btnStarrDropTap");
-    const resetBtn = document.getElementById("btnStarrDropReset");
-
-    if (emblem && !this.starrDrop.isOpened) {
-      emblem.addEventListener("click", () => this.handleStarrDropTap());
-      emblem.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          this.handleStarrDropTap();
-        }
-      });
-    }
-
-    if (tapBtn) {
-      tapBtn.addEventListener("click", () => this.handleStarrDropTap());
-    }
-
-    if (resetBtn) {
-      resetBtn.addEventListener("click", () => {
-        try { SoundEngine.enter(); } catch (_) {}
-        this.resetStarrDrop();
-      });
-    }
-
-    if (window.initSpotlightAndTilt) {
-      window.initSpotlightAndTilt();
-    }
-  }
-
-  handleStarrDropTap() {
-    if (this.starrDrop.isOpened) return;
-
-    const emblem = document.getElementById("sdEmblemWrap");
-    if (emblem) {
-      emblem.classList.remove("sd-wobble");
-      void emblem.offsetWidth;
-      emblem.classList.add("sd-wobble");
-    }
-
-    this.starrDrop.tapsRemaining--;
-
-    const curRarity = STARR_DROP_RARITIES[this.starrDrop.rarityIndex];
-    const canUpgrade = this.starrDrop.rarityIndex < STARR_DROP_RARITIES.length - 1;
-
-    let upgraded = false;
-    if (canUpgrade && Math.random() < curRarity.upgradeChance) {
-      this.starrDrop.rarityIndex++;
-      upgraded = true;
-      try { SoundEngine.switchOn(); } catch (_) {}
-      this.triggerFlashEffect();
-    } else {
-      try { SoundEngine.enter(); } catch (_) {}
-    }
-
-    if (this.starrDrop.tapsRemaining <= 0 || this.starrDrop.rarityIndex === STARR_DROP_RARITIES.length - 1) {
-      this.openStarrDrop();
-    } else {
-      this.renderStarrDropMiniGame();
-    }
-  }
-
-  openStarrDrop() {
-    this.starrDrop.isOpened = true;
-    const finalRarity = STARR_DROP_RARITIES[this.starrDrop.rarityIndex];
-    const pool = STARR_DROP_REWARDS[finalRarity.id] || STARR_DROP_REWARDS.rare;
-    const chosenReward = pool[Math.floor(Math.random() * pool.length)];
-    this.starrDrop.reward = chosenReward;
-
-    try {
-      SoundEngine.informativeToasts();
-    } catch (_) {}
-
-    this.triggerConfettiBurst();
-    this.renderStarrDropMiniGame();
-  }
-
-  resetStarrDrop() {
-    this.starrDrop = {
-      rarityIndex: 0,
-      tapsRemaining: 4,
-      isOpened: false,
-      reward: null,
-      history: this.starrDrop.history
-    };
-    this.renderStarrDropMiniGame();
-  }
-
-  triggerFlashEffect() {
-    const flash = document.createElement("div");
-    flash.className = "sd-screen-flash";
-    document.body.appendChild(flash);
-    setTimeout(() => flash.remove(), 400);
-  }
-
-  triggerConfettiBurst() {
-    const container = document.getElementById("starrDropBox");
-    if (!container) return;
-
-    for (let i = 0; i < 32; i++) {
-      const p = document.createElement("div");
-      p.className = "sd-confetti-particle";
-      const colors = ["#FFDD00", "#FF164A", "#2563EB", "#16A34A", "#9333EA", "#FFFFFF"];
-      p.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      p.style.setProperty("--tx", `${(Math.random() - 0.5) * 380}px`);
-      p.style.setProperty("--ty", `${(Math.random() - 0.5) * 340 - 80}px`);
-      p.style.setProperty("--rot", `${Math.random() * 720}deg`);
-      container.appendChild(p);
-      setTimeout(() => p.remove(), 1200);
-    }
-  }
-
-  /* ============================================================
-   * VIEW TABS AND FILTER CONTROLS
+   * VIEW TABS, PROFILE FRIEND ACTIONS & FILTER CONTROLS
    * ============================================================ */
   initViewTabListeners() {
     const btnRoster = document.getElementById("btnBrawlTabRoster");
     const btnBattles = document.getElementById("btnBrawlTabBattles");
-    const btnStarrDrop = document.getElementById("btnBrawlTabStarrDrop");
 
     const stageRoster = document.getElementById("brawlStageRoster");
     const stageBattles = document.getElementById("brawlStageBattles");
-    const stageStarrDrop = document.getElementById("brawlStageStarrDrop");
 
     const setTab = (tab) => {
-      this.activeTab = tab;
+      const normalized = tab === "battles" ? "battles" : "roster";
+      this.activeTab = normalized;
       try { SoundEngine.enter(); } catch (_) {}
 
       if (btnRoster) {
-        btnRoster.classList.toggle("is-active", tab === "roster");
-        btnRoster.setAttribute("aria-selected", String(tab === "roster"));
+        btnRoster.classList.toggle("is-active", normalized === "roster");
+        btnRoster.setAttribute("aria-selected", String(normalized === "roster"));
       }
       if (btnBattles) {
-        btnBattles.classList.toggle("is-active", tab === "battles");
-        btnBattles.setAttribute("aria-selected", String(tab === "battles"));
-      }
-      if (btnStarrDrop) {
-        btnStarrDrop.classList.toggle("is-active", tab === "starr-drop");
-        btnStarrDrop.setAttribute("aria-selected", String(tab === "starr-drop"));
+        btnBattles.classList.toggle("is-active", normalized === "battles");
+        btnBattles.setAttribute("aria-selected", String(normalized === "battles"));
       }
 
-      if (stageRoster) stageRoster.hidden = tab !== "roster";
-      if (stageBattles) stageBattles.hidden = tab !== "battles";
-      if (stageStarrDrop) stageStarrDrop.hidden = tab !== "starr-drop";
+      if (stageRoster) stageRoster.hidden = normalized !== "roster";
+      if (stageBattles) stageBattles.hidden = normalized !== "battles";
 
-      const targetStage = tab === "roster" ? stageRoster : (tab === "battles" ? stageBattles : stageStarrDrop);
+      const targetStage = normalized === "battles" ? stageBattles : stageRoster;
       if (targetStage && targetStage.animate) {
         targetStage.animate(
           [{ opacity: 0, transform: "translate3d(0, 10px, 0)" }, { opacity: 1, transform: "translate3d(0, 0, 0)" }],
@@ -1114,7 +1009,6 @@ class BrawlStarsService {
 
     if (btnRoster) btnRoster.onclick = () => setTab("roster");
     if (btnBattles) btnBattles.onclick = () => setTab("battles");
-    if (btnStarrDrop) btnStarrDrop.onclick = () => setTab("starr-drop");
 
     // Filter Pills
     document.querySelectorAll(".brawl-filter-pill").forEach((pill) => {
@@ -1137,7 +1031,13 @@ class BrawlStarsService {
       };
     }
 
-    // Header buttons
+    // Header & Profile Add Friend buttons
+    const copyTag = () => {
+      navigator.clipboard?.writeText(this.tag);
+      try { SoundEngine.enter(); } catch (_) {}
+      this.notifyChange("Тег скопирован", `#${this.tag} скопирован в буфер обмена`, "info");
+    };
+
     const btnSync = document.getElementById("btnBrawlSync");
     if (btnSync) {
       btnSync.onclick = () => {
@@ -1149,10 +1049,28 @@ class BrawlStarsService {
       };
     }
 
-    const btnNinja = document.getElementById("btnBrawlNinjaExternal");
-    if (btnNinja) {
-      btnNinja.onclick = () => {
-        window.open(`https://brawltime.ninja/profile/${this.tag}`, "_blank", "noopener");
+    const btnAddFriend = document.getElementById("btnBrawlAddFriend");
+    if (btnAddFriend) btnAddFriend.onclick = () => this.openAddFriendDialog();
+
+    const btnProfileQr = document.getElementById("btnBrawlProfileQr");
+    if (btnProfileQr) btnProfileQr.onclick = () => this.openAddFriendDialog();
+
+    const btnProfileInvite = document.getElementById("btnBrawlProfileInviteLink");
+    if (btnProfileInvite) {
+      btnProfileInvite.onclick = () => {
+        copyTag();
+        window.open(`https://link.brawlstars.com/invite/friend/ru?tag=${this.tag}`, "_blank", "noopener,noreferrer");
+      };
+    }
+
+    const btnProfileCopyTag = document.getElementById("btnBrawlProfileCopyTag");
+    if (btnProfileCopyTag) btnProfileCopyTag.onclick = copyTag;
+
+    const btnProfilePs5 = document.getElementById("btnBrawlProfilePs5Friend");
+    if (btnProfilePs5) {
+      btnProfilePs5.onclick = () => {
+        try { SoundEngine.openDialog(); } catch (_) {}
+        if (window.openAddFriendModal) window.openAddFriendModal();
       };
     }
 
@@ -1165,11 +1083,29 @@ class BrawlStarsService {
     }
 
     const tagCopyBtn = document.getElementById("brawlTagCopyBtn");
-    if (tagCopyBtn) {
-      tagCopyBtn.onclick = () => {
-        navigator.clipboard?.writeText(this.tag);
+    if (tagCopyBtn) tagCopyBtn.onclick = copyTag;
+
+    // Invite Modal controls
+    document.getElementById("btnCloseBrawlInvite")?.addEventListener("click", () => this.closeAddFriendDialog());
+    document.getElementById("backdropBrawlInvite")?.addEventListener("click", () => this.closeAddFriendDialog());
+    const btnModalCopyPlayer = document.getElementById("btnModalCopyPlayerTag");
+    if (btnModalCopyPlayer) btnModalCopyPlayer.onclick = copyTag;
+
+    const btnModalCopyClub = document.getElementById("btnModalCopyClubTag");
+    if (btnModalCopyClub) {
+      btnModalCopyClub.onclick = () => {
+        const clubTag = this.player?.club?.tag || "80RYCLU9Q";
+        navigator.clipboard?.writeText(clubTag);
         try { SoundEngine.enter(); } catch (_) {}
-        this.notifyChange("Тег скопирован", `#${this.tag} скопирован в буфер обмена`, "info");
+        this.notifyChange("Тег клуба скопирован", `#${clubTag} скопирован`, "info");
+      };
+    }
+
+    const btnModalPs5 = document.getElementById("btnModalOpenPs5Friend");
+    if (btnModalPs5) {
+      btnModalPs5.onclick = () => {
+        this.closeAddFriendDialog();
+        if (window.openAddFriendModal) window.openAddFriendModal();
       };
     }
   }
@@ -1197,9 +1133,9 @@ class BrawlStarsService {
       {
         trophyId: 1,
         trophyType: "platinum",
-        trophyName: "Легенда Starr Park",
+        trophyName: "Легенда Brawl Stars",
         trophyDetail: "Собрать все боевые трофеи и достижения Brawl Stars на аккаунте #2RGUQJQ0R.",
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
+        trophyIconUrl: "assets/covers/brawl_stars.jpg",
         earned: trophies >= 40000 && brawlerCount >= 100,
         earnedDateTime: "2026-11-20T18:00:00.000Z"
       },
@@ -1235,7 +1171,7 @@ class BrawlStarsService {
         trophyId: 5,
         trophyType: "gold",
         trophyName: "Абсолютная Армия (100+ Бойцов)",
-        trophyDetail: `Разблокировать 100+ бойцов в ростере Starr Park (Текущий ростер: ${brawlerCount} бойцов).`,
+        trophyDetail: `Разблокировать 100+ бойцов в ростере Арены (Текущий ростер: ${brawlerCount} бойцов).`,
         trophyIconUrl: "assets/brawl/brawlers/crow_model.webp",
         earned: brawlerCount >= 100,
         earnedDateTime: "2026-10-30T10:00:00.000Z"
@@ -1412,12 +1348,12 @@ class BrawlStarsService {
           "Хранитель Кристаллов", "Взломщик Сейфа", "Король Горячей Зоны",
           "Охотник за Головами", "Дуэлянт 1 на 1", "Роборубка: Эксперт",
           "Охота на Босса", "Звездный Игрок Матча", "Первый Гаджет в Бою",
-          "Звездная Сила Разблокирована", "Первый Starr Drop", "Коллекция Значков",
-          "Кредиты Starr Park", "Очки Силы Накоплены", "Сверкающие Блинги",
-          "Дружеский Батл", "Картограф Starr", "Винстрик 5 побед", "Мастер Ростера"
+          "Звездная Сила Разблокирована", "Редкая Награда Сезона", "Коллекция Значков",
+          "Кредиты Бойцов", "Очки Силы Накоплены", "Сверкающие Блинги",
+          "Дружеский Батл", "Мастер Режимов", "Винстрик 5 побед", "Мастер Ростера"
         ][idx] || `Боевой приз #${idx + 1}`,
         trophyDetail: `Достижение игрока Cr1mnsx в боевой системе Brawl Stars (#2RGUQJQ0R).`,
-        trophyIconUrl: "assets/brawl/avatars/player_avatar.webp",
+        trophyIconUrl: "assets/covers/brawl_stars.jpg",
         earned: true,
         earnedDateTime: "2026-05-15T10:00:00.000Z"
       }))
@@ -1429,7 +1365,7 @@ class BrawlStarsService {
     const gameEntry = {
       titleName: "Brawl Stars",
       npCommunicationId: "NPWR_BRAWL_STARS_2RGUQJQ0R",
-      trophyTitleIconUrl: "assets/brawl/avatars/player_avatar.webp",
+      trophyTitleIconUrl: "assets/covers/brawl_stars.jpg",
       progress: progressPct,
       earnedTrophies: {
         bronze: trophiesList.filter((t) => t.trophyType === "bronze" && t.earned).length,

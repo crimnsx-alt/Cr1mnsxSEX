@@ -428,7 +428,7 @@ function initSpotlightAndTilt() {
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (isTouch || reducedMotion) return;
 
-  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .starr-drop-box, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .lib-card-poster, .lib-card-list-item";
+  const selector = ".ps5-widget, .ps5-welcome-featured-game, .tc-game-card, .ps5-hero-trophy-card, .series-ep-card, .series-cast-card, .series-photo-card, .series-hero-card, .brawler-grid-card, .brawl-spotlight-inner, .brawl-battle-card, .yt-in-card, .twitch-in-card, .yt-series-drawer-spotlight, .lib-card-poster, .lib-card-list-item";
   document.querySelectorAll(selector).forEach((card) => {
     if (!card.classList.contains("tilt-card")) {
       card.classList.add("tilt-card");
@@ -437,7 +437,7 @@ function initSpotlightAndTilt() {
       let lastX = 0;
       let lastY = 0;
 
-      const isLargeCard = card.classList.contains("brawl-spotlight-inner") || card.classList.contains("series-hero-card") || card.classList.contains("starr-drop-box");
+      const isLargeCard = card.classList.contains("brawl-spotlight-inner") || card.classList.contains("series-hero-card");
       const maxTilt = isLargeCard ? 2.0 : 4.2;
 
       card.addEventListener("mouseenter", () => {
@@ -820,7 +820,7 @@ function renderRibbon(forceRebuild = false) {
   ribbonEl.innerHTML = "";
   const frag = document.createDocumentFragment();
 
-  items.forEach((item) => {
+  items.forEach((item, idx) => {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.tileId = item.id;
@@ -840,7 +840,7 @@ function renderRibbon(forceRebuild = false) {
       const img = document.createElement("img");
       img.src = safeThumb;
       img.alt = t(item.title);
-      img.loading = "lazy";
+      img.loading = idx < 5 ? "eager" : "lazy";
       img.decoding = "async";
       img.addEventListener("error", () => { img.src = fb; }, { once: true });
       artWrap.appendChild(img);
@@ -3895,13 +3895,12 @@ function handleAction(action) {
     SoundEngine.enter();
     return brawlService.fetchLiveProfile(true);
   }
-  if (action === "brawl:starr-drop") {
+  if (action === "brawl:add-friend" || action === "open:brawl-friends") {
     closeModal();
     if (state.category !== "games") switchCategory("games");
     selectTile("brawl-stars", true);
     setTimeout(() => {
-      const btn = document.getElementById("btnBrawlTabStarrDrop");
-      if (btn) btn.click();
+      brawlService.openAddFriendDialog();
     }, 120);
     return;
   }
@@ -4082,6 +4081,7 @@ function getTopbarItems() {
 
 function handleKeydown(e) {
   const sberOpen = $("#modalSberTips") && $("#modalSberTips").classList.contains("active");
+  const brawlInviteOpen = $("#modalBrawlInvite") && $("#modalBrawlInvite").classList.contains("active");
   const friendAddOpen = $("#modalAddFriend") && $("#modalAddFriend").classList.contains("active");
   const friendReqOpen = $("#modalFriendRequests") && $("#modalFriendRequests").classList.contains("active");
   const modalOpen = $("#modalOverlay") && $("#modalOverlay").classList.contains("active");
@@ -4125,6 +4125,7 @@ function handleKeydown(e) {
     if (inGameOpen) return closeInGameWindow();
     if (libOpen) return closeLibraryModal();
     if (friendAddOpen) return closeAddFriendModal();
+    if (brawlInviteOpen) return brawlService.closeAddFriendDialog();
     if (friendReqOpen) return closeFriendRequestsModal();
     if (sberOpen) return closeSberTips();
     if (modalOpen) return closeModal();
@@ -4135,7 +4136,7 @@ function handleKeydown(e) {
     return selectTile("welcome", true);
   }
 
-  if (sberOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen || twitchOpen || youtubeOpen || trailerOpen) return;
+  if (sberOpen || brawlInviteOpen || modalOpen || searchOpen || settingsOpen || friendAddOpen || friendReqOpen || libOpen || inGameOpen || tcOpen || tcDetailOpen || twitchOpen || youtubeOpen || trailerOpen) return;
 
   if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
 
@@ -5537,13 +5538,10 @@ function init() {
     } else if (initialHash === "brawl" || initialHash === "brawl-stars") {
       switchCategory("games");
       selectTile("brawl-stars", false);
-    } else if (initialHash === "starr-drop") {
+    } else if (initialHash === "brawl-friends" || initialHash === "add-friend") {
       switchCategory("games");
       selectTile("brawl-stars", false);
-      setTimeout(() => {
-        const btn = document.getElementById("btnBrawlTabStarrDrop");
-        if (btn) btn.click();
-      }, 120);
+      setTimeout(() => brawlService.openAddFriendDialog(), 150);
     } else if (initialHash === "vlad" || initialHash === "series" || initialHash === "vlad-klevye-mashiny") {
       switchCategory("media");
       selectTile("youtube", false);
@@ -5576,6 +5574,8 @@ function init() {
   window.closeTrophyCollectionModal = closeTrophyCollectionModal;
   window.openLibraryModal = openLibraryModal;
   window.closeLibraryModal = closeLibraryModal;
+  window.openAddFriendModal = openAddFriendModal;
+  window.closeAddFriendModal = closeAddFriendModal;
   window.openGameHub = openGameHub;
   window.closeGameHub = closeGameHub;
   window.youtubeService = youtubeService;

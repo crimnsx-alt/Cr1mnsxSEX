@@ -121,8 +121,7 @@ export const PS5Icons = {
   twitchTile: `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><path d="M9 7h26v17l-6 6h-6l-4 4v-4H9V7z" fill="#9146ff"/><rect x="23.5" y="14" width="3" height="7" fill="#ffffff"/><rect x="17.5" y="14" width="3" height="7" fill="#ffffff"/></svg>`,
 
   get brawlStarsTile() {
-    const gid = uid("bsGrad");
-    return `<svg viewBox="0 0 44 44" width="32" height="32" aria-hidden="true"><defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFDD00"/><stop offset="50%" stop-color="#FF9900"/><stop offset="100%" stop-color="#FF3300"/></linearGradient></defs><rect x="4" y="4" width="36" height="36" rx="10" fill="#181428"/><circle cx="22" cy="22" r="14" fill="url(#${gid})"/><path d="M22 10.5l3.2 6.5 7.1 1-5.1 5 1.2 7.1-6.4-3.4-6.4 3.4 1.2-7.1-5.1-5 7.1-1z" fill="#FFFFFF"/><circle cx="18.5" cy="21.5" r="2" fill="#181428"/><circle cx="25.5" cy="21.5" r="2" fill="#181428"/><path d="M19 25.5h6v1.5h-6z" fill="#181428"/></svg>`;
+    return `<img src="assets/covers/brawl_stars.jpg" alt="Brawl Stars" style="width:100%; height:100%; object-fit:cover; display:block;" loading="eager" decoding="async" />`;
   },
 
   avatarSvg: `<div class="ps5-topbar-avatar-circle" style="width:100%; height:100%; border-radius:50%; background:linear-gradient(135deg, #0284c7, #1e3a8a); display:flex; align-items:center; justify-content:center; color:#ffffff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div>`,
